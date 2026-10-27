@@ -26,8 +26,10 @@ article on hubss.com under **Projects**, and the social posts for it.
 ## What happens next
 
 - 21e8 writes the job up as a Projects article from your words and the
-  system's approved copy, nothing else, checks it, and schedules it. It is on
-  hubss.com within a few working days; its social posts follow.
+  system's approved copy, nothing else, and checks it. Then it is on your
+  review page (the link Vern sent you), every word and photo: tell Vern OK,
+  or what to change. It goes on hubss.com after your OK. Its social posts
+  follow, and they wait for your OK on the same page.
 - The first photo leads the article; the others close it under "The job in
   photographs", with your captions.
 - Once the article exists, the job post shows **The article written from

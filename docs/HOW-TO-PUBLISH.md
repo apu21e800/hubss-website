@@ -80,13 +80,12 @@ from the Product Portfolio Book, and roundups of documented jobs). Set one to **
 only when you want that one next; set one to **Not doing** if you don't want
 it.
 
-Every Tuesday and Thursday morning (13:00 UTC, 9 a.m. in Toronto during summer
-time) 21e8 takes the Ready idea with the highest priority, or, when
-none is Ready, the next Idea, and writes a draft. You get an email; it says
-which idea is next. The draft is in **Blog posts**, unpublished, with a fact
-check and a style check in **Notes for the editor**. Read the notes, check
-every sentence it flagged, edit as you would any draft and press Publish.
-Nothing reaches the site until you do.
+Every Tuesday and Thursday 21e8 takes the Ready idea with the highest
+priority, or, when none is Ready, the next Idea, and writes a draft. It is in
+**Blog posts**, unpublished, with 21e8's checks in **Notes for the editor**.
+Once 21e8 has read it, it shows on your review page (the link Vern sent
+you), every word and its photo: tell Vern OK, or what to change. Nothing
+reaches the site before your OK.
 
 To have it write up a real project, put the facts in the brief: where, when,
 which system, what the client needed. It only knows what the brief and the
@@ -103,33 +102,29 @@ Product Portfolio Book tell it.
   of its application when it names no system, as a stand-in, so swap in the
   real one when the article is about a particular job).
 
-## 6. After you publish
+## 6. Social posts
 
-The day after an article goes live, draft social posts for it appear in
-Buffer, one per channel, each with the photo and a tracked link. Nothing is
-posted until someone approves and schedules it in Buffer. The email, and
-**Sent to Buffer** in Studio, list any line in them that still breaks the
-house style (see 8): fix it in Buffer before you approve.
+The day after an article goes live, its social posts are written, one per
+channel (LinkedIn, Facebook, Instagram), each with the photo and a link to the
+article, and checked against the house style (see 8). They wait for your OK on
+your review page, under the article's name. Once you've said OK, 21e8 puts
+them out on the next posting days (Tuesdays, Wednesdays and Thursdays, 11 am
+Eastern).
 
-In Buffer: open a channel's **Drafts**, read the post and check the photo,
-then **Add to Queue**. Buffer posts it at the next slot of that channel's
-schedule (Tuesdays, Wednesdays and Thursdays, 11 am Eastern). A draft you don't want:
-delete it in Buffer; nothing else needs doing.
-
-Two more kinds of draft arrive the same way (docs/buffer-setup.md):
+Two more kinds arrive the same way:
 
 - **Job photos for social** (was "From the field"). When a job is finished,
   take 3 to 5 photos on your phone. In Studio, **Job photos for social** →
   **+**: add the photos (best one
   first, alt text on each), where it is ("Brantford, Ontario"), the system, and
-  one or two sentences of facts. Publish. The next morning the posts are in
-  Buffer, written from those facts and nothing else, linked to the system's
-  page. Fill in **The story** as well and 21e8 writes the job up as a
-  Projects article for the site: docs/DOUG-PROJECT-POSTS.md.
-- **From the library.** Every Monday morning, posts about one thing HUB has
-  already published: a job from the homepage map, or a system or application
-  from the Product Portfolio Book. Approve them like the others. A week with a new field
-  post skips it: your own photos go first.
+  one or two sentences of facts. Publish. The next morning its posts are
+  written from those facts and nothing else, linked to the system's page, and
+  wait for your OK on your review page. Fill in **The story** as well and 21e8
+  writes the job up as a Projects article for the site: docs/DOUG-PROJECT-POSTS.md.
+- **From the library.** Every Monday, posts about one thing HUB has already
+  published: a job from the homepage map, or a system or application from the
+  Product Portfolio Book. They wait for your OK like the others. A week with a
+  new job photos post skips it: your own photos go first.
 
 ## 7. Product and application pages
 
@@ -173,7 +168,7 @@ so a warning there is a suggestion: send Vern the change (see 7). If a warning
 is simply wrong (a name it doesn't know, read as Title Case), publish anyway
 and tell Vern; he can teach it the name.
 
-The article drafts and the social drafts go through the same check before you
+The article drafts and the social posts go through the same check before you
 see them: 21e8 rewrites any sentence that breaks these rules and lists
 whatever it couldn't fix in its notes.
 

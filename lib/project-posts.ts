@@ -38,6 +38,7 @@ import { markdownToPortableText } from "@/lib/markdown-to-portable-text";
 import { emailEditors } from "@/lib/editor-mail";
 import { SITE } from "@/lib/social-library";
 import { isConflict } from "@/lib/social-outcome";
+import { reviewFirst, reviewLink } from "@/lib/review-first";
 
 export const TORONTO = "America/Toronto";
 /** The daily run's hour (vercel.json, social-drafts): the time a scheduled article goes live. */
@@ -232,7 +233,7 @@ export function readyToGo(check: FactCheck, style?: StylePass): boolean {
   return check.verdict === "clean" && check.unsupported.length === 0 && (style?.left.length ?? 0) === 0;
 }
 
-export function buildProjectDocument(doc: ProjectSource, draft: Draft, check: FactCheck, slug: string, slot: string, style?: StylePass, today = new Date()) {
+export function buildProjectDocument(doc: ProjectSource, draft: Draft, check: FactCheck, slug: string, slot: string, style?: StylePass, today = new Date(), opts: { reviewFirst?: boolean } = {}) {
   const { blocks } = markdownToPortableText(draft.body, "k");
   // The drafter writes no photos; drop any it wrote anyway (they'd point nowhere).
   const body = blocks.filter((b) => b._type !== "image");
@@ -260,7 +261,10 @@ export function buildProjectDocument(doc: ProjectSource, draft: Draft, check: Fa
   // Read now as the run reads it on its day (contactProblemsForLive): a
   // draft that would be held then is never scheduled.
   const onTheDay = contactProblemsForLive({ _id: "", _type: "blogPost", title, excerpt, body: [...body, ...gallery], keywords: phrases.slice(0, 6), slug: { current: slug }, featuredImage });
-  const ready = readyToGo(check, style) && onTheDay.length === 0;
+  const clean = readyToGo(check, style) && onTheDay.length === 0;
+  // While Doug reviews first (lib/review-first.ts), a clean draft waits for
+  // his OK instead of going live by itself; its time stays in scheduledFor.
+  const ready = clean && !opts.reviewFirst;
 
   // The notes never quote a contact detail: they stay on the live post, in a
   // dataset anyone can read (maskContact). The job's place is masked as a
@@ -276,7 +280,9 @@ export function buildProjectDocument(doc: ProjectSource, draft: Draft, check: Fa
     "",
     ready
       ? `SCHEDULED for ${torontoWhen(slot)}. To move it, change "Goes live at". The day after it is live, its social posts go out.`
-      : `HELD: a check below found something. It waits here until 21e8 has read it (set for ${torontoWhen(slot)} once released; a time already past goes at the next morning's run).`,
+      : clean
+        ? `FOR REVIEW: checked by 21e8; it goes live once it has the OK (set for ${torontoWhen(slot)}; a time already past goes at the next morning's run).`
+        : `HELD: a check below found something. It waits here until 21e8 has read it (set for ${torontoWhen(slot)} once released; a time already past goes at the next morning's run).`,
     "",
     check.unsupported.length
       ? `FACT CHECK: ${check.unsupported.length} statement(s) the job's record and the Product Portfolio Book don't back up. Fix or remove them before it goes live:`
@@ -526,7 +532,7 @@ async function holdForContact(client: SanityClient, draft: ScheduledDraft, where
 
 // ── step 2: write the next article ──────────────────────────────────────────
 
-export interface Drafted { fieldPost: string; job: string; id: string; slug: string; title: string; /** When it goes live, or "held" when a check wants a read first. */ goesLive: string; factCheck: FactCheck["verdict"]; toCheck: number; style: { flagged: number; left: number }; notified: string[] }
+export interface Drafted { fieldPost: string; job: string; id: string; slug: string; title: string; /** When it goes live, "held" when a check wants a read first, or "for review" when Doug reviews first (lib/review-first.ts). */ goesLive: string; factCheck: FactCheck["verdict"]; toCheck: number; style: { flagged: number; left: number }; notified: string[] }
 export interface DraftOutcome {
   drafted: Drafted[];
   /** Job posts with a story still waiting for their article (tomorrow's run, or after a fix). */
@@ -668,7 +674,9 @@ async function writeArticle(client: SanityClient, doc: ProjectSource, now: Date)
   let slug = base;
   for (let n = 2; await client.fetch<number>(`count(*[_type == "blogPost" && slug.current == $slug])`, { slug }); n++) slug = `${base}-${n}`;
 
-  const document = buildProjectDocument(doc, draft, check, slug, slot, style, now);
+  // Doug reviews first (lib/review-first.ts): a clean draft waits for his OK.
+  const forDoug = reviewFirst();
+  const document = buildProjectDocument(doc, draft, check, slug, slot, style, now, { reviewFirst: forDoug });
   // Saved held, whatever the checks said: it is switched on only once the
   // editors have been told (below). A draft nobody knows about must never
   // go live by itself.
@@ -688,17 +696,32 @@ async function writeArticle(client: SanityClient, doc: ProjectSource, now: Date)
   // What buildProjectDocument read as the run will on the article's day.
   const onTheDay = contactProblemsForLive(document);
   const details = style.left.some((l) => l.contact) || onTheDay.length > 0;
+  // Clean, and held only because Doug reviews first.
+  const forReview = forDoug && !ready && readyToGo(check, style) && onTheDay.length === 0;
+  const page = reviewLink();
   const notified = await emailEditors(
-    ready ? `Goes live ${when.replace(/ at .*$/, "")} unless you hold it: ${document.title}` : `Needs a read before it goes: ${document.title}`,
+    ready
+      ? `Goes live ${when.replace(/ at .*$/, "")} unless you hold it: ${document.title}`
+      : forReview
+        ? `For Doug's review: ${document.title}`
+        : `Needs a read before it goes: ${document.title}`,
     [
       ready
         ? `A Projects article was written from the job photos post "${name}" and is scheduled to go on hubss.com on ${when}. Nothing is on the site until then; its social posts go to Buffer the day after it is live.`
-        : `A Projects article was written from the job photos post "${name}", but a check found something (below), so it is waiting in Studio → Blog posts and does not go live by itself. Fix the line, then switch "Scheduled" on or press Publish.`,
+        : forReview
+          ? `A Projects article was written from the job photos post "${name}". Both checks are clean, and Doug reviews first, so it waits in Studio → Blog posts and does not go live by itself.`
+          : `A Projects article was written from the job photos post "${name}", but a check found something (below), so it is waiting in Studio → Blog posts and does not go live by itself. Fix the line, then switch "Scheduled" on or press Publish.`,
       "",
       document.title,
       document.excerpt,
       "",
       `Read it: ${studioLink(liveId)}`,
+      ...(forReview
+        ? [
+            `- When it reads right, tick "Ready for Doug's review" in the draft. It then shows on his review page${page ? `: ${page}` : ""}`,
+            `- After his OK, switch "Scheduled" on (it goes live ${when}, or at the next morning's run if that has passed) or press Publish.`,
+          ]
+        : []),
       ...(ready
         ? [
             "- To change a line, edit it there. It still goes out on time.",
@@ -751,7 +774,7 @@ async function writeArticle(client: SanityClient, doc: ProjectSource, now: Date)
     id: document._id,
     slug,
     title: document.title,
-    goesLive: ready ? slot : "held",
+    goesLive: ready ? slot : forReview ? "for review" : "held",
     factCheck: check.verdict,
     toCheck: check.unsupported.length,
     style: { flagged: style.flagged, left: style.left.length },

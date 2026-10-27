@@ -3,24 +3,29 @@
 **What happens:** every day at 14:00 UTC the site checks for Insights articles that
 went live since the last run (`app/api/cron/social-drafts`,
 `lib/social-pipeline.ts`). For each one, Claude writes a post per network from
-the article (nothing it doesn't say), and each goes into that channel's Buffer
-**queue** with the post's photo and a tracked link, to post at the next free
-slot. An email goes to `BLOG_DRAFT_NOTIFY`. Delete a post in Buffer to stop it.
-(Until 19 Oct 2026 every post waited as a draft for approval; the switch below
-brings that back.)
+the article (nothing it doesn't say), and each goes into Buffer with the
+post's photo and a tracked link. An email goes to `BLOG_DRAFT_NOTIFY`.
 
-**The one switch (19 Oct 2026, Vern: "auto-queue on"):** the posts go into
-each channel's **queue**, and Buffer posts them at the next free slots unless
-someone deletes them there first. The emails say "queued" and link to the
-queue. `SOCIAL_AUTO_QUEUE=off` in Vercel (Production; a redeploy after
-setting it) puts them back to drafts for approval, as they were from 9 to
-19 Oct. A post whose copy the style pass couldn't fully fix (an em dash left,
-a machine tell) waits as a draft either way, and its email says so. Only Vern
-turns it (`lib/buffer.ts`, `socialAutoQueue`).
+**Doug reviews first (27 Oct 2026, the default):** every post waits in Buffer
+as a **draft**, all three streams below, and shows on Doug's review page
+(`app/review`, `lib/review-first.ts`; CLAUDE.md, "Doug reviews first"). After
+his OK: Buffer → Drafts → **Add to Queue** on each, and Buffer posts it at the
+next free slot. Nothing posts before someone does. `REVIEW_FIRST=off` in
+Vercel (Production, then a redeploy) is the switch back, once Doug leaves it
+to 21e8. Only Vern turns it.
+
+**With review first off (19 to 27 Oct 2026, Vern: "auto-queue on"):** the
+posts go into each channel's **queue**, and Buffer posts them at the next free
+slots unless someone deletes them there first. The emails say "queued" and
+link to the queue. `SOCIAL_AUTO_QUEUE=off` keeps them as drafts for approval,
+as they were from 9 to 19 Oct. A post whose copy the style pass couldn't fully
+fix (an em dash left, a machine tell) waits as a draft either way, and its
+email says so (`lib/buffer.ts`, `socialAutoQueue`).
 
 **Job photos with a story (19 Oct 2026):** a Job photos post whose **The
 story** field is filled in is not drafted by the field stream below. It becomes
-a scheduled Projects article instead (`lib/project-posts.ts`,
+a Projects article instead, held for Doug's review while he reviews first,
+else scheduled (`lib/project-posts.ts`,
 docs/DOUG-PROJECT-POSTS.md), and the article's posts carry the job the day
 after it is live, so a job goes out once. The same daily run publishes the
 scheduled drafts first, then drafts social, then writes the next article with

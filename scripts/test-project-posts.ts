@@ -175,6 +175,18 @@ check("an em dash the style pass couldn't fix holds the draft too", () => {
   const fixed = buildProjectDocument(source, draft, clean, "x", slot, { text: {}, flagged: 2, left: [] });
   assert.equal(fixed.scheduled, true, "rewritten sentences are fine");
 });
+check("while Doug reviews first, a clean draft waits for his OK, its time kept", () => {
+  // lib/review-first.ts, 27 Oct 2026: nothing goes live by itself.
+  const waiting = buildProjectDocument(source, draft, clean, "x", slot, undefined, new Date("2026-10-19T14:01:00Z"), { reviewFirst: true });
+  assert.equal(waiting.scheduled, false);
+  assert.equal(waiting.scheduledFor, slot);
+  assert.match(waiting.editorNotes, /FOR REVIEW: checked by 21e8; it goes live once it has the OK \(set for Wednesday 21 October at 10:00 Toronto time/);
+  assert.doesNotMatch(waiting.editorNotes, /SCHEDULED for|HELD:/);
+  assert.doesNotMatch(waiting.editorNotes, /Claude|by itself|turn.*off/, "the notes Doug can read name no machinery");
+  assert.deepEqual(lintCopy(waiting.editorNotes).map((i) => i.message), []);
+  const flagged = buildProjectDocument(source, draft, { verdict: "needs edits", unsupported: [{ quote: "a claim", reason: "not in the note" }] }, "x", slot, undefined, undefined, { reviewFirst: true });
+  assert.match(flagged.editorNotes, /HELD: a check below found something/, "a check's hold still reads as one");
+});
 check("readyToGo wants both checks clean", () => {
   assert.equal(readyToGo(clean), true);
   assert.equal(readyToGo(clean, { text: {}, flagged: 0, left: [] }), true);

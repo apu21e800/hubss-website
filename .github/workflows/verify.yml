@@ -83,6 +83,13 @@ jobs:
       - name: Lead counts test
         run: npm run test:leads
 
+      # Doug reviews first: nothing queues in Buffer while REVIEW_FIRST is on,
+      # the review page's key is the server's alone, only ticked drafts reach
+      # it, and the page names no machinery (lib/review-first.ts,
+      # lib/review-page.ts, components/review/ReviewView.tsx). No network.
+      - name: Review page test
+        run: npm run test:review
+
       # Studio's "Edit on the page" button opens the document's own page with
       # the intent Sanity's own links use, and an unpublished article is read
       # only in draft mode (sanity/studio-pages.ts, lib/blog.ts). No network.

@@ -31,6 +31,7 @@
  */
 
 import { Resend } from "resend";
+import { reviewFirst, reviewLink } from "@/lib/review-first";
 import { sanityWriteClient } from "@/lib/sanity.write";
 import { projectId, dataset } from "@/lib/sanity.client";
 import { markdownToPortableText } from "@/lib/markdown-to-portable-text";
@@ -241,6 +242,13 @@ async function notify(
         : "Style check: no em dashes or machine tells.",
     "",
     `Open it: ${link}`,
+    // Doug reviews first (lib/review-first.ts).
+    ...(reviewFirst()
+      ? [
+          "",
+          `Doug reviews first: when it reads right, tick "Ready for Doug's review" in the draft (that publishes nothing). It then shows on his review page${reviewLink() ? `: ${reviewLink()}` : ""}. Publish after his OK.`,
+        ]
+      : []),
   ].join("\n");
   const { error } = await new Resend(process.env.RESEND_API_KEY).emails.send({
     from: "HUB Surface Systems <noreply@hubss.com>",

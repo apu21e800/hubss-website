@@ -713,9 +713,9 @@ that nothing on the site used.
 Vern, 14 Oct: "automate as much as the social media as possible ... I don't
 want to write the blogs and do the social media". The daily cron
 (app/api/cron/social-drafts, 14:00 UTC) writes posts into Buffer from three
-streams; since 19 Oct 2026 they are queued and post by themselves unless
-deleted in Buffer (SOCIAL_AUTO_QUEUE=off brings approval back;
-docs/buffer-setup.md):
+streams; since 27 Oct 2026 they wait there as drafts for Doug's review
+("Doug reviews first", below); from 19 to 27 Oct they were queued and
+posted by themselves unless deleted in Buffer (docs/buffer-setup.md):
 - Articles: each newly published Insights post (lib/social-pipeline.ts).
 - From the field: a published Studio field post (sanity/schemas/fieldPost.ts,
   Studio → Job photos for social): job photos, place, system, one line of facts.
@@ -780,12 +780,15 @@ own and emailing BLOG_DRAFT_NOTIFY through lib/editor-mail.ts):
   day after it is live. Studio's Publish on a scheduled draft switches it off
   (sanity.config.ts datedPublish), so a later edit can't be
   published by the run.
-- lib/buffer.ts `socialAutoQueue()`: posts are queued in Buffer (posted at
-  the next slot unless deleted) by default since 19 Oct 2026 (Vern:
-  "auto-queue on"); `SOCIAL_AUTO_QUEUE=off` in Vercel puts them back to
-  drafts for approval. Copy the style pass couldn't fix always waits as a
-  draft, switch or no switch (`queued` on the result). Only Vern turns it;
-  the emails say which.
+- lib/buffer.ts `socialAutoQueue()`: never while Doug reviews first (the
+  default since 27 Oct 2026). With REVIEW_FIRST=off, posts are queued in
+  Buffer (posted at the next slot unless deleted), as from 19 to 27 Oct
+  (Vern: "auto-queue on"), and `SOCIAL_AUTO_QUEUE=off` keeps them drafts.
+  Copy the style pass couldn't fix always waits as a draft, switch or no
+  switch (`queued` on the result). Only Vern turns either; the emails say
+  which. A clean Projects article likewise waits held while Doug reviews
+  first (buildProjectDocument's `reviewFirst`: notes "FOR REVIEW", email
+  "For Doug's review").
 - blogPost gained `scheduled` ("Scheduled"; "Goes live by itself" until 23 Oct 2026), `scheduledFor`
   (hidden unless scheduled) and `fieldPost`; fieldPost gained `writeUp` and
   `article`. `npm run test:project-posts` (CI) covers scheduleSlot,
@@ -799,6 +802,43 @@ own and emailing BLOG_DRAFT_NOTIFY through lib/editor-mail.ts):
   notes) says 21e8 writes the job up, checks it and schedules it, and never
   "by itself", "Claude" or how to hold it. Doug's page is written the same
   way. Keep it so.
+
+## Doug reviews first (27 Oct 2026)
+Vern, 27 Oct: "in the beginning Doug want's to review the Blogs and Socials
+before they go out, but once we gain his trust not making mistakes and
+nailing the brand voice, he will leave it in our domain." lib/review-first.ts:
+- `reviewFirst()`, on unless REVIEW_FIRST=off in Vercel: every social post
+  waits in Buffer as a draft (all three streams), and a Projects article
+  written from Doug's job photos is saved held even when both checks are
+  clean. The Insights drafter's drafts wait for Publish as before. Nothing
+  goes out until someone releases it: Publish or "Scheduled" in Studio, Add
+  to Queue in Buffer. REVIEW_FIRST=off (then a redeploy) brings back the
+  19 Oct behaviour; only Vern turns it, when Doug leaves it to 21e8.
+- Doug's review page, /review/<key> (app/review/[key]/page.tsx,
+  components/review/ReviewView.tsx, lib/review-page.ts and its .server.ts):
+  the drafts ticked **Ready for Doug's review** (blogPost `forReview`; 21e8
+  ticks it after reading; it publishes nothing), never published, with every
+  word and the photo, "Waiting for your OK" or "Goes live <day, time>"; and
+  Buffer's own waiting and queued posts from the last 14 days
+  (bufferPostsForReview, read only, kept five minutes), grouped by their Sent
+  to Buffer record ("For the article", "From the job photos", "From HUB's
+  projects and the Product Portfolio Book", else "Other social posts").
+  Plain words to Doug: no Buffer, Studio, queue, AI or automation on it
+  (`npm run test:review` renders it and fails on any of them); a post's web
+  address prints as text, so his look is never a social visit in GA4.
+- The key: 32 characters of an HMAC of REVIEW_SECRET, else CRON_SECRET, else
+  the Sanity write token (`reviewKey`), checked in constant time; any other
+  key gets the site's 404. noindex, no-store and no-referrer
+  (next.config.ts), no analytics or chat (components/NotInStudio.tsx), not
+  in the sitemap, linked from nowhere. Setting or changing REVIEW_SECRET
+  changes the link.
+- The link reaches Vern by email, never Doug from the site: the daily run
+  sends it once per key (lib/review-link.ts; a private `review.link-<hash>`
+  record), and the drafter's, the social and the held-article emails repeat
+  it with the step to take. Vern sends Doug the link once; Doug keeps it.
+- Vern's loop: read the new draft, tick it; tell Doug it's ready; after his
+  OK, Publish (or Scheduled on) and Add to Queue in Buffer. The guide is
+  claude/HUBSS-content-review-2026-10.md in the Claude project.
 
 ## A customer's details hold the article (24 Oct 2026)
 Ported from Square One (its rule of 20 Oct 2026) before more job posts become

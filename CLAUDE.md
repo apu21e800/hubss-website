@@ -695,8 +695,9 @@ marked "[Screened]" with a banner saying why, and the visitor sees "sent".
   `leads.YYYY-MM-DD` (the dot keeps it out of the public API and its export).
   The daily run (app/api/cron/social-drafts, its first step) logs one line,
   `[leads] {...}`: the last 7 complete days and the 7 before, by form, today
-  so far, `countingSince`, and whether delivered leads reach GA4; the Monday
-  report reads that line. `npm run leads` on Vern's PC prints them day by
+  so far, `countingSince`, whether this deployment counts at all (`counting`:
+  production by the runtime's VERCEL_ENV, else the build's) and whether
+  delivered leads reach GA4; the Monday report reads that line. `npm run leads` on Vern's PC prints them day by
   day. Blocked and rejected requests stay in the log only. `npm run test:leads`.
 - phone_click and email_click (26 Oct 2026 audit): one document-level
   listener in the root layout (components/AnalyticsEvents.tsx) catches every

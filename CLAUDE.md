@@ -681,9 +681,11 @@ marked "[Screened]" with a banner saying why, and the visitor sees "sent".
   Params: form_type, project, session_id, lead_attribution; nothing personal.
   `npm run test:ga4` (`-- --live` asks GA4's validation server).
   On 26 Oct 2026 the production log showed `[contact] ga4 skipped: no
-  secret` for that day's delivered lead: GA4_API_SECRET was never set, so
-  GA4 has counted no form lead since 20 Oct. It is Vern's to add (GA4 Admin
-  → Data streams → Measurement Protocol API secrets; then Vercel, Production).
+  secret` for that day's delivered lead: the deployment had no
+  GA4_API_SECRET, though one was added in Vercel on 21 Oct (another
+  environment or another name, most likely), so GA4 has counted no form lead
+  since 20 Oct. Vern's to fix in Vercel (Production ticked, the exact name),
+  then a deploy. The daily `[leads]` line says whether it is set.
 - Lead counts by day (27 Oct 2026; the weekly leads report of 26 Oct: a
   search of the `[contact]` log times out over a week, often over a day).
   The route also adds one, in Sanity, for each delivered, held or failed

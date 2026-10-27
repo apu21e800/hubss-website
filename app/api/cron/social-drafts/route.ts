@@ -5,7 +5,13 @@
  * Vercel Cron calls it (vercel.json) with `Authorization: Bearer $CRON_SECRET`.
  * Run it now: Vercel → hubss-website → Settings → Cron Jobs → Run.
  *
- * Three steps, each on its own (a failure in one is emailed and the next
+ * First, the forms' counts (lib/lead-counts.ts, logLeadSummary): one
+ * `[leads]` log line with the last two weeks' delivered, held and failed
+ * messages by form, which the Monday report reads. A failure there is a log
+ * line only (no email, the run's status untouched): the counts themselves
+ * are safe in Sanity and tomorrow's line has them.
+ *
+ * Then three steps, each on its own (a failure in one is emailed and the next
  * still runs; the response carries all three):
  *  1. publishDueDrafts (lib/project-posts.ts): every blog draft set to go
  *     live by itself whose time has come is published, and the site rebuilds.
@@ -33,6 +39,7 @@ import { draftSocialForNewPosts, notifyRunFailure, socialJobHasRun } from "@/lib
 import { draftProjectArticles, publishDueDrafts } from "@/lib/project-posts";
 import { sanityWriteClient } from "@/lib/sanity.write";
 import { emailEditors } from "@/lib/editor-mail";
+import { logLeadSummary } from "@/lib/lead-counts";
 
 export const maxDuration = 300;
 export const dynamic = "force-dynamic";
@@ -59,6 +66,18 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   const out: Record<string, unknown> = {};
   let failed = false;
   const client = sanityWriteClient().withConfig({ timeout: 20_000 });
+
+  // 0. The forms' counts, for the Monday report. Seconds at most; never
+  //    stops the run.
+  try {
+    // No retries: while Sanity is down this step must not eat the run's time.
+    const leads = await logLeadSummary(client.withConfig({ timeout: 10_000, maxRetries: 0 }), now, Boolean(process.env.GA4_API_SECRET));
+    const { delivered, held, failed: notSent } = leads.last7;
+    out.leads = { last7: { delivered, held, failed: notSent } };
+  } catch (err) {
+    out.leads = { error: errorText(err) };
+    console.error(`[leads] summary failed: ${errorText(err)}`);
+  }
 
   // 1. The blog: scheduled drafts whose time has come.
   try {

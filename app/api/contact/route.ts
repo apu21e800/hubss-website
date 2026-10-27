@@ -3,6 +3,8 @@ import { Resend } from "resend";
 import { checkBotId } from "botid/server";
 import { screenSubmission } from "@/lib/form-screen";
 import { leadEvent, readGaIds, sendLeadEvent, type GaIds } from "@/lib/ga4-lead";
+import { addToLeadCount, countingOn, type CountedOutcome } from "@/lib/lead-counts";
+import { sanityWriteClient } from "@/lib/sanity.write";
 
 const TO_EMAIL = process.env.CONTACT_EMAIL ?? "info@hubss.com";
 // Printed-catalogue requests are fulfilment, not enquiries: Doug wants to see
@@ -204,6 +206,22 @@ function countLead(body: ContactPayload, ga: GaIds | undefined) {
 }
 
 /**
+ * One more in the day's count (lib/lead-counts.ts) for a message that went
+ * to an inbox, or that the mail service refused. Production only (a preview
+ * or a laptop never counts), by after(), once the visitor has the response:
+ * a count that fails is a log line, never the visitor's problem.
+ */
+function countOutcome(form: string, outcome: CountedOutcome) {
+  if (!countingOn()) return;
+  try {
+    const client = sanityWriteClient().withConfig({ timeout: 5000 });
+    after(() => addToLeadCount(client, form, outcome));
+  } catch (err) {
+    console.error(`[leads] count not scheduled: ${err instanceof Error ? err.message : "unknown error"}`);
+  }
+}
+
+/**
  * BotID's view of the request. "human": checked and fine. "bot": checked and
  * doubted. "unchecked": the check failed or took too long, or the browser
  * could not run it (a content blocker, a strict office network) and the form
@@ -314,11 +332,16 @@ export async function POST(req: NextRequest) {
 
     if (error) {
       console.error("[contact API] Resend error:", error);
+      // The visitor sees an error and may try again: counted as failed, so a
+      // run of them shows in the daily counts.
+      logOutcome(body.formType, "failed", gate, "mail service", error.name ?? "");
+      countOutcome(body.formType, "failed");
       return NextResponse.json({ error: "Failed to send message. Please try again." }, { status: 500 });
     }
 
     // The visitor sees the same "sent" either way, so a spammer learns nothing.
     logOutcome(body.formType, hold ? "held" : "delivered", gate, logBy, logReason);
+    countOutcome(body.formType, hold ? "held" : "delivered");
     // GA4 hears of delivered messages only: held ones are not leads.
     if (!hold) countLead(body, ga);
     return NextResponse.json({ success: true });

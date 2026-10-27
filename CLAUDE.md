@@ -680,6 +680,32 @@ marked "[Screened]" with a banner saying why, and the visitor sees "sent".
   counts under a server id, lead_attribution "none" (GA4 refuses "ga_" names).
   Params: form_type, project, session_id, lead_attribution; nothing personal.
   `npm run test:ga4` (`-- --live` asks GA4's validation server).
+  On 26 Oct 2026 the production log showed `[contact] ga4 skipped: no
+  secret` for that day's delivered lead: the deployment had no
+  GA4_API_SECRET, though one was added in Vercel on 21 Oct (another
+  environment or another name, most likely), so GA4 has counted no form lead
+  since 20 Oct. Vern's to fix in Vercel (Production ticked, the exact name),
+  then a deploy. The daily `[leads]` line says whether it is set.
+- Lead counts by day (27 Oct 2026; the weekly leads report of 26 Oct: a
+  search of the `[contact]` log times out over a week, often over a day).
+  The route also adds one, in Sanity, for each delivered, held or failed
+  message ("failed": the mail service refused it, the visitor saw an error,
+  logged with outcome "failed" since the same day), production only, by
+  after() (lib/lead-counts.ts). One private document per Toronto day,
+  `leads.YYYY-MM-DD` (the dot keeps it out of the public API and its export).
+  The daily run (app/api/cron/social-drafts, its first step) logs one line,
+  `[leads] {...}`: the last 7 complete days and the 7 before, by form, today
+  so far, `countingSince`, whether this deployment counts at all (`counting`:
+  production by the runtime's VERCEL_ENV, else the build's) and whether
+  delivered leads reach GA4; the Monday report reads that line. `npm run leads` on Vern's PC prints them day by
+  day. Blocked and rejected requests stay in the log only. `npm run test:leads`.
+- phone_click and email_click (26 Oct 2026 audit): one document-level
+  listener in the root layout (components/AnalyticsEvents.tsx) catches every
+  tel: and mailto: link, the header's phone menu, the footer, the product and
+  application pages and article links included. All 125 sitemap pages' links
+  are one of four forms (tel:+14165409287, tel:+16043098212 and the two
+  office emails); build a link with telHref / mailtoHref (lib/site-settings.ts)
+  and it is counted.
 /api/ai-chat answers 404: it was an open Claude Opus endpoint on HUB's key
 that nothing on the site used.
 

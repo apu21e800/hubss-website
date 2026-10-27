@@ -838,14 +838,19 @@ nailing the brand voice, he will leave it in our domain." lib/review-first.ts:
   the Sanity write token, one label per link, so neither can be made from the
   other; compared as bytes in constant time; any other key gets the site's
   404, titled "Page Not Found" (generateMetadata). noindex, no-store and
-  no-referrer (next.config.ts), no analytics or chat (NotInStudio), linked
-  from nowhere. Changing whichever secret is used changes both links; set
-  REVIEW_SECRET once to keep them steady.
+  Referrer-Policy strict-origin (next.config.ts: a referrer leaving the page
+  is only "https://hubss.com/", never the key; no-referrer would make the
+  button's form post send Origin null, which Next's server actions refuse),
+  no analytics or chat (NotInStudio), linked from nowhere. Changing whichever
+  secret is used changes both links; set REVIEW_SECRET once to keep them
+  steady.
 - The links reach Vern by email, never Doug from the site: the daily run
-  sends both once per key (lib/review-link.ts: the email first, then a
-  private `review.link-<hash>` record; new keys get "the old ones no longer
-  open"), and the drafter's, the social and the held-article emails repeat
-  Vern's link with the step to take. Vern sends Doug his link once.
+  sends them once per pair of keys (lib/review-link.ts: the emails first,
+  then a private `review.link-<hash>` record), as two emails, never one:
+  Doug's link alone with a note ready to paste (nothing about how the page
+  is made, safe to pass on whole), and Vern's, marked not to forward. New
+  keys get "the old one no longer opens". The drafter's, the social and the
+  held-article emails repeat Vern's link with the step to take.
 - Vern's loop: open his link, read, fix (Studio or Buffer), press Put on
   Doug's page; tell Doug; after his OK, Publish (or Scheduled on) and Add to
   Queue in Buffer. The guide: claude/HUBSS-content-review-2026-10.md in the

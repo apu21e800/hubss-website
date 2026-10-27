@@ -34,7 +34,7 @@ import {
   type ReviewData,
 } from "../lib/review-page";
 import { DUE_GRACE_MS as PUBLISH_GRACE_MS, RUN_HOUR_UTC as PUBLISH_HOUR } from "../lib/project-posts";
-import { reviewLinkEmail } from "../lib/review-link";
+import { reviewLinkEmails } from "../lib/review-link";
 import ReviewView from "../components/review/ReviewView";
 import { lintCopy } from "../lib/style-lint";
 
@@ -321,21 +321,31 @@ check("says so when nothing could be read, rather than \"nothing waiting\"", () 
   assert.doesNotMatch(out, /Nothing is waiting for your OK/, "an error never reads as nothing waiting");
 });
 
-console.log("The email with the links (lib/review-link.ts)");
-check("to Vern: both links, what each is for, the switch and how to keep them steady", () => {
-  const { subject, text } = reviewLinkEmail({ dougs: "https://hubss.com/review/abc", agency: "https://hubss.com/review/xyz" });
-  assert.equal(subject, "Doug's review page is ready");
-  assert.match(text, /^Doug's link \(send him this once; he keeps it\): https:\/\/hubss\.com\/review\/abc$/m);
-  assert.match(text, /^Your link \(keep it to yourself\): https:\/\/hubss\.com\/review\/xyz$/m);
-  assert.match(text, /Put on Doug's page/);
-  assert.match(text, /REVIEW_FIRST=off/);
-  assert.match(text, /REVIEW_SECRET/);
-  assert.ok(!text.includes("—"), "no em dash");
+console.log("The emails with the links (lib/review-link.ts)");
+const mails = reviewLinkEmails({ dougs: "https://hubss.com/review/DOUGSKEY", agency: "https://hubss.com/review/VERNSKEY" });
+check("Doug's link comes alone, with a note ready to paste, safe to pass on whole", () => {
+  assert.equal(mails.dougs.subject, "Doug's review link, to send him");
+  assert.ok(mails.dougs.text.includes("https://hubss.com/review/DOUGSKEY"));
+  assert.ok(!mails.dougs.text.includes("VERNSKEY"), "never Vern's link");
+  assert.match(mails.dougs.text, /^Hi Doug,$/m);
+  const banned = /\b(AI|Claude|automat\w*|Buffer|Studio|queue\w*|REVIEW_\w+|Vercel|21e8 only|style check|fact check|by itself)\b/i;
+  assert.equal(mails.dougs.text.match(banned), null, `Doug's email says "${mails.dougs.text.match(banned)?.[0]}"`);
 });
-check("when the keys changed, it says the old links are dead", () => {
-  const { subject, text } = reviewLinkEmail({ dougs: "d", agency: "a" }, true);
-  assert.match(subject, /New review links/);
-  assert.match(text, /the old ones now show a 404/);
+check("Vern's link comes in its own email, marked not to forward, with the switch and REVIEW_SECRET", () => {
+  assert.match(mails.agency.subject, /don't forward/);
+  assert.ok(mails.agency.text.includes("https://hubss.com/review/VERNSKEY"));
+  assert.ok(!mails.agency.text.includes("DOUGSKEY"), "Doug's link isn't repeated there");
+  assert.match(mails.agency.text, /Put on Doug's page/);
+  assert.match(mails.agency.text, /REVIEW_FIRST=off/);
+  assert.match(mails.agency.text, /REVIEW_SECRET/);
+});
+check("no em dash in either", () => {
+  assert.ok(!mails.dougs.text.includes("\u2014") && !mails.agency.text.includes("\u2014"));
+});
+check("when the keys changed, both say the old links are dead", () => {
+  const again = reviewLinkEmails({ dougs: "d", agency: "a" }, true);
+  assert.match(again.dougs.subject, /the old one no longer opens/);
+  assert.match(again.agency.text, /the old ones now show a 404/);
 });
 
 if (failures) {

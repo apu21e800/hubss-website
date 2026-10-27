@@ -49,9 +49,9 @@ export async function setOnDougsPage(formData: FormData): Promise<void> {
     console.warn("[review] a button press for an item the page doesn't have was refused");
   }
   // Back to the card, which now says where it stands: the page is drawn
-  // again from Sanity (revalidatePath; a redirect to the same page with only
-  // a new #card is a scroll to the router, which would keep the old page),
-  // and without scripts the redirect turns the POST into a plain GET.
+  // again (revalidatePath; a redirect to the same page with only a new #card
+  // is a scroll to the router, which would keep the old page), and a press
+  // made before scripts load ends as a plain GET of the page.
   revalidatePath(`/review/${key as string}`);
   redirect(`/review/${key as string}#${anchorFor(kind === "social" ? "social" : "article", id)}`);
 }

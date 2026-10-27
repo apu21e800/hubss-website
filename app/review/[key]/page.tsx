@@ -6,8 +6,9 @@
  * there (./actions.ts). Any other key, or a server without a secret, gets the
  * site's 404, titled as every 404 is. Never cached, never indexed (the
  * X-Robots-Tag in next.config.ts too), no analytics or chat on it
- * (components/NotInStudio.tsx), and no referrer leaves it, so a key stays in
- * the address bar it was typed into.
+ * (components/NotInStudio.tsx), and a referrer leaving it is only
+ * "https://hubss.com/" (strict-origin), so a key stays in the address bar it
+ * was typed into.
  */
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -20,7 +21,7 @@ export const dynamic = "force-dynamic";
 
 const PRIVATE: Metadata = {
   robots: { index: false, follow: false, nocache: true, googleBot: { index: false, follow: false } },
-  referrer: "no-referrer",
+  referrer: "strict-origin",
 };
 
 /** A wrong key's 404 is titled as the site's own, so nothing says what lives here. */

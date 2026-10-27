@@ -124,17 +124,20 @@ const nextConfig: NextConfig = {
       // URLs too.
       { source: "/studio", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
       { source: "/studio/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
-      // Doug's review page (app/review/[key]/page.tsx, 27 Oct 2026): unpublished
-      // drafts behind a key in the address. Never indexed or kept by a cache,
-      // and no referrer leaves it, so the key can't travel in a Referer header.
-      // Later rules win for the same header, so this one overrides the
-      // site-wide Referrer-Policy above.
+      // The review page (app/review/[key]/page.tsx, 27 Oct 2026): unpublished
+      // drafts behind a key in the address. Never indexed or kept by a cache.
+      // strict-origin: a link or a photo request leaving it carries only
+      // "https://hubss.com/", never the path with the key, and Vern's button
+      // (a form post) still sends this site's Origin, which Next's server
+      // actions require (no-referrer made it "null" and the press was refused;
+      // the second review of #104). Later rules win for the same header, so
+      // this one overrides the site-wide Referrer-Policy above.
       {
         source: "/review/:path*",
         headers: [
           { key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" },
           { key: "Cache-Control", value: "private, no-store, max-age=0" },
-          { key: "Referrer-Policy", value: "no-referrer" },
+          { key: "Referrer-Policy", value: "strict-origin" },
         ],
       },
     ];

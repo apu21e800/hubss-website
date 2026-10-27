@@ -31,7 +31,7 @@
  */
 
 import { Resend } from "resend";
-import { reviewFirst, reviewLink } from "@/lib/review-first";
+import { agencyLink, reviewFirst } from "@/lib/review-first";
 import { sanityWriteClient } from "@/lib/sanity.write";
 import { projectId, dataset } from "@/lib/sanity.client";
 import { markdownToPortableText } from "@/lib/markdown-to-portable-text";
@@ -246,7 +246,7 @@ async function notify(
     ...(reviewFirst()
       ? [
           "",
-          `Doug reviews first: when it reads right, tick "Ready for Doug's review" in the draft (that publishes nothing). It then shows on his review page${reviewLink() ? `: ${reviewLink()}` : ""}. Publish after his OK.`,
+          `Doug reviews first: read it on your review page${agencyLink() ? ` (${agencyLink()})` : ""} and, when it reads right, press "Put on Doug's page" (or tick "Ready for Doug's review" in the draft; neither publishes anything). Publish after his OK.`,
         ]
       : []),
   ].join("\n");

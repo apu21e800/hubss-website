@@ -10,10 +10,15 @@
  *  - a Projects article written from Doug's job photos is saved held, not
  *    scheduled (lib/project-posts.ts); "Scheduled" on, or Publish, releases it;
  *  - the Insights drafter's drafts wait for Publish, as they always have.
- * Doug reads what is waiting on his review page (app/review/[key]/page.tsx,
- * lib/review-page.ts), which needs no login: the address carries a key only
- * the server can make (reviewKey). The link reaches Vern by email, never Doug
- * from the site, and nothing on the site links to it.
+ *
+ * The review page (app/review/[key]/page.tsx, lib/review-page.ts) has two
+ * links, both made only by the server from one secret:
+ *  - Doug's (`client`): what 21e8 has put on his page, nothing else;
+ *  - Vern's (`agency`): everything waiting, with 21e8's notes, and a button on
+ *    each item that puts it on Doug's page or takes it off (the page's server
+ *    action). Nothing on either page publishes or posts.
+ * The links reach Vern by email (lib/review-link.ts), never Doug from the
+ * site, and nothing on the site links to them.
  *
  * REVIEW_FIRST=off in Vercel (Production, then a redeploy) is the one switch
  * back to how it ran from 19 to 27 Oct: posts queued in Buffer, articles
@@ -29,47 +34,84 @@ export function reviewFirst(): boolean {
   return !OFF.includes(v);
 }
 
-/** What the key is made from: REVIEW_SECRET when set (to change the link), else a secret the deployment already has. */
+/**
+ * What the keys are made from: REVIEW_SECRET when set, else a secret the
+ * deployment already has. Changing whichever is used changes both links (the
+ * next morning's run emails the new ones), so REVIEW_SECRET, set once, keeps
+ * them steady whatever else is rotated.
+ */
 function reviewSecret(): string | undefined {
   return process.env.REVIEW_SECRET?.trim() || process.env.CRON_SECRET?.trim() || process.env.SANITY_API_WRITE_TOKEN?.trim() || undefined;
 }
 
-/** Bumping it changes every link, as setting REVIEW_SECRET does. */
-const LABEL = "hubss-review-page-v1";
+/** Who a link is for: Doug, or 21e8. */
+export type ReviewAudience = "client" | "agency";
+
+/** Bumping a label changes that link, as setting REVIEW_SECRET changes both. */
+const LABEL: Record<ReviewAudience, string> = {
+  client: "hubss-review-page-v1",
+  agency: "hubss-review-page-v1-agency",
+};
 const KEY_LENGTH = 32;
 
 /**
- * The review page's key: 32 characters (192 bits) of an HMAC of a server
+ * A review link's key: 32 characters (192 bits) of an HMAC of the server's
  * secret, so the same deployment always makes the same link and nobody
- * without the secret can make one. Null when the server has no secret, and
- * then the page answers 404 to every key.
+ * without the secret can make one, nor one link from the other. Null when the
+ * server has no secret: then every key gets the site's 404.
  */
-export function reviewKey(secret = reviewSecret()): string | null {
+export function reviewKey(secret = reviewSecret(), audience: ReviewAudience = "client"): string | null {
   if (!secret) return null;
-  return createHmac("sha256", secret).update(LABEL).digest("base64url").slice(0, KEY_LENGTH);
+  return createHmac("sha256", secret).update(LABEL[audience]).digest("base64url").slice(0, KEY_LENGTH);
 }
 
-/** True only for the key reviewKey() makes, compared in constant time. */
+/** Compares bytes in constant time; a candidate of another length (or not text at all) never matches. */
+function sameKey(candidate: unknown, key: string | null): boolean {
+  if (!key || typeof candidate !== "string") return false;
+  const a = Buffer.from(candidate, "utf8");
+  const b = Buffer.from(key, "utf8");
+  return a.length === b.length && timingSafeEqual(a, b);
+}
+
+/** Whose key this is, or null for anything else. */
+export function reviewAudience(candidate: unknown, secret = reviewSecret()): ReviewAudience | null {
+  if (sameKey(candidate, reviewKey(secret, "client"))) return "client";
+  if (sameKey(candidate, reviewKey(secret, "agency"))) return "agency";
+  return null;
+}
+
+/** True only for Doug's key. */
 export function isReviewKey(candidate: unknown, secret = reviewSecret()): boolean {
-  const key = reviewKey(secret);
-  if (!key || typeof candidate !== "string" || candidate.length !== key.length) return false;
-  return timingSafeEqual(Buffer.from(candidate), Buffer.from(key));
+  return reviewAudience(candidate, secret) === "client";
 }
 
 export const REVIEW_SITE = "https://hubss.com";
 
-/** Doug's review page, or null when the server can't make a key. */
-export function reviewLink(secret = reviewSecret()): string | null {
-  const key = reviewKey(secret);
+/** A review link, or null when the server can't make a key. */
+export function reviewLink(secret = reviewSecret(), audience: ReviewAudience = "client"): string | null {
+  const key = reviewKey(secret, audience);
   return key ? `${REVIEW_SITE}/review/${key}` : null;
 }
 
+/** Vern's link: everything waiting, and the buttons that put it on Doug's page. */
+export function agencyLink(secret = reviewSecret()): string | null {
+  return reviewLink(secret, "agency");
+}
+
 /**
- * The private Sanity document that records the link was emailed to the
- * editors: one per key (a short hash of it, never the key), so a new key, made
- * by setting REVIEW_SECRET, is emailed again. The dot keeps it out of the
- * public API, as lead counts are kept (lib/lead-counts.ts).
+ * The private Sanity document that records the links were emailed: one per
+ * key (a short hash of Doug's key, never a key), so new keys are emailed
+ * again. The dot keeps it out of the public API, as lead counts are kept
+ * (lib/lead-counts.ts).
  */
 export function reviewLinkRecordId(key: string): string {
   return `review.link-${createHash("sha256").update(key).digest("hex").slice(0, 12)}`;
+}
+
+/**
+ * The private record that a group of social posts (one Sent to Buffer record,
+ * or a post made by hand in Buffer) is on Doug's page: 21e8 read it first.
+ */
+export function reviewTickId(groupKey: string): string {
+  return `review.ok-${createHash("sha256").update(groupKey).digest("hex").slice(0, 16)}`;
 }

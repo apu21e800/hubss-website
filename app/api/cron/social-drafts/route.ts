@@ -9,8 +9,8 @@
  * `[leads]` log line with the last two weeks' delivered, held and failed
  * messages by form, which the Monday report reads. A failure there is a log
  * line only (no email, the run's status untouched): the counts themselves
- * are safe in Sanity and tomorrow's line has them. Then Doug's review page's
- * link, emailed to the editors once per key (lib/review-link.ts).
+ * are safe in Sanity and tomorrow's line has them. Then the review page's
+ * two links, emailed to the editors once per key (lib/review-link.ts).
  *
  * Then three steps, each on its own (a failure in one is emailed and the next
  * still runs; the response carries all three):
@@ -84,7 +84,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     console.error(`[leads] summary failed: ${errorText(err)}`);
   }
 
-  // Doug's review page: its link goes to the editors once per key
+  // The review page's links go to the editors once per key
   // (lib/review-link.ts). Never stops the run.
   try {
     out.reviewLink = await sendReviewLinkOnce(client.withConfig({ timeout: 10_000, maxRetries: 0 }), now);

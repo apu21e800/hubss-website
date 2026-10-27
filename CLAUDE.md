@@ -814,31 +814,42 @@ nailing the brand voice, he will leave it in our domain." lib/review-first.ts:
   goes out until someone releases it: Publish or "Scheduled" in Studio, Add
   to Queue in Buffer. REVIEW_FIRST=off (then a redeploy) brings back the
   19 Oct behaviour; only Vern turns it, when Doug leaves it to 21e8.
-- Doug's review page, /review/<key> (app/review/[key]/page.tsx,
-  components/review/ReviewView.tsx, lib/review-page.ts and its .server.ts):
-  the drafts ticked **Ready for Doug's review** (blogPost `forReview`; 21e8
-  ticks it after reading; it publishes nothing), never published, with every
-  word and the photo, "Waiting for your OK" or "Goes live <day, time>"; and
-  Buffer's own waiting and queued posts from the last 14 days
-  (bufferPostsForReview, read only, kept five minutes), grouped by their Sent
-  to Buffer record ("For the article", "From the job photos", "From HUB's
-  projects and the Product Portfolio Book", else "Other social posts").
-  Plain words to Doug: no Buffer, Studio, queue, AI or automation on it
-  (`npm run test:review` renders it and fails on any of them); a post's web
-  address prints as text, so his look is never a social visit in GA4.
-- The key: 32 characters of an HMAC of REVIEW_SECRET, else CRON_SECRET, else
-  the Sanity write token (`reviewKey`), checked in constant time; any other
-  key gets the site's 404. noindex, no-store and no-referrer
-  (next.config.ts), no analytics or chat (components/NotInStudio.tsx), not
-  in the sitemap, linked from nowhere. Setting or changing REVIEW_SECRET
-  changes the link.
-- The link reaches Vern by email, never Doug from the site: the daily run
-  sends it once per key (lib/review-link.ts; a private `review.link-<hash>`
-  record), and the drafter's, the social and the held-article emails repeat
-  it with the step to take. Vern sends Doug the link once; Doug keeps it.
-- Vern's loop: read the new draft, tick it; tell Doug it's ready; after his
-  OK, Publish (or Scheduled on) and Add to Queue in Buffer. The guide is
-  claude/HUBSS-content-review-2026-10.md in the Claude project.
+- The review page, /review/<key> (app/review/[key]/page.tsx,
+  components/review/ReviewView.tsx, lib/review-page.ts and its .server.ts),
+  has two links. **Doug's** shows only what 21e8 has read and put on his
+  page: drafts with `forReview` ("Ready for Doug's review"; Studio's tick and
+  Vern's button write the same field; it publishes nothing) and social
+  groups with a private `review.ok-<hash>` record (reviewTickId; never a
+  change to the Sent to Buffer record), plus what is already set to go (a
+  scheduled article, a queued post), with the run that will really publish
+  it (publishRun: a past time shows the next run). **Vern's** shows every new
+  draft and every waiting post, with the checks' notes and the style check,
+  and a button on each item: Put on / Take off Doug's page
+  (app/review/[key]/actions.ts, a server action that takes only Vern's key
+  and writes only those two things). Buffer's waiting and queued posts from
+  the last 14 days (bufferPostsForReview, read only) are kept for the five
+  minutes they were read in and never served stale (the cache key is the
+  five-minute bucket); the page prints when they were read. Posts are
+  matched to their records by Buffer's ids. Plain words on Doug's page: no
+  Buffer, Studio, queue, AI or automation, no buttons (`npm run test:review`
+  renders it and fails on any); a post's web address prints as text, so his
+  look is never a social visit in GA4.
+- The keys: 32 characters of an HMAC of REVIEW_SECRET, else CRON_SECRET, else
+  the Sanity write token, one label per link, so neither can be made from the
+  other; compared as bytes in constant time; any other key gets the site's
+  404, titled "Page Not Found" (generateMetadata). noindex, no-store and
+  no-referrer (next.config.ts), no analytics or chat (NotInStudio), linked
+  from nowhere. Changing whichever secret is used changes both links; set
+  REVIEW_SECRET once to keep them steady.
+- The links reach Vern by email, never Doug from the site: the daily run
+  sends both once per key (lib/review-link.ts: the email first, then a
+  private `review.link-<hash>` record; new keys get "the old ones no longer
+  open"), and the drafter's, the social and the held-article emails repeat
+  Vern's link with the step to take. Vern sends Doug his link once.
+- Vern's loop: open his link, read, fix (Studio or Buffer), press Put on
+  Doug's page; tell Doug; after his OK, Publish (or Scheduled on) and Add to
+  Queue in Buffer. The guide: claude/HUBSS-content-review-2026-10.md in the
+  Claude project.
 
 ## A customer's details hold the article (24 Oct 2026)
 Ported from Square One (its rule of 20 Oct 2026) before more job posts become

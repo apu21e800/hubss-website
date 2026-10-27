@@ -32,7 +32,6 @@
     "test:images": "tsx scripts/test-image-names.ts",
     "test:ga4": "tsx scripts/test-ga4-lead.ts",
     "test:leads": "tsx scripts/test-lead-counts.ts",
-    "test:review": "tsx scripts/test-review.ts",
     "leads": "tsx scripts/leads.ts",
     "sync:products": "tsx scripts/sync-products-to-sanity.ts",
     "sync:products:dry": "tsx scripts/sync-products-to-sanity.ts --dry-run",
@@ -49,6 +48,7 @@
     "plan:seed": "tsx scripts/seed-field-notes-plan.ts",
     "indexnow": "node scripts/indexnow-submit.mjs",
     "test:project-posts": "tsx scripts/test-project-posts.ts",
+    "test:review": "tsx scripts/test-review.ts",
     "test:studio": "tsx scripts/test-edit-on-the-page.ts && tsx scripts/test-studio-words.ts"
   },
   "dependencies": {

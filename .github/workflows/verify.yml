@@ -57,6 +57,13 @@ jobs:
       - name: Social, planner, project-post and drafter tests
         run: npm run test:social && npm run test:planner && npm run test:project-posts && npm run test:drafter
 
+      # Doug reviews first: nothing queues in Buffer while REVIEW_FIRST is on,
+      # the two review links' keys are the server's alone, Doug's page shows
+      # only what 21e8 put there and names no machinery (lib/review-first.ts,
+      # lib/review-page.ts, components/review/ReviewView.tsx). No network.
+      - name: Review page test
+        run: npm run test:review
+
       # The Product Book edition covers every printed page exactly once and every
       # leaf's links resolve (lib/idea-book-edition.ts).
       - name: Product Book edition test
@@ -82,13 +89,6 @@ jobs:
       # messages count, in production (lib/lead-counts.ts). No network.
       - name: Lead counts test
         run: npm run test:leads
-
-      # Doug reviews first: nothing queues in Buffer while REVIEW_FIRST is on,
-      # the review page's key is the server's alone, only ticked drafts reach
-      # it, and the page names no machinery (lib/review-first.ts,
-      # lib/review-page.ts, components/review/ReviewView.tsx). No network.
-      - name: Review page test
-        run: npm run test:review
 
       # Studio's "Edit on the page" button opens the document's own page with
       # the intent Sanity's own links use, and an unpublished article is read

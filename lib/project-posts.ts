@@ -38,7 +38,7 @@ import { markdownToPortableText } from "@/lib/markdown-to-portable-text";
 import { emailEditors } from "@/lib/editor-mail";
 import { SITE } from "@/lib/social-library";
 import { isConflict } from "@/lib/social-outcome";
-import { reviewFirst, reviewLink } from "@/lib/review-first";
+import { agencyLink, reviewFirst } from "@/lib/review-first";
 
 export const TORONTO = "America/Toronto";
 /** The daily run's hour (vercel.json, social-drafts): the time a scheduled article goes live. */
@@ -46,7 +46,7 @@ export const RUN_HOUR_UTC = 14;
 /** A new article is scheduled for the first weekday at least this many days away. */
 export const LEAD_DAYS = 2;
 /** A draft is due this long before its time, so the run that starts at 14:00:00 publishes a 14:00 draft. */
-const DUE_GRACE_MS = 10 * 60_000;
+export const DUE_GRACE_MS = 10 * 60_000;
 /** Articles written per run: a job a day, like the field stream. */
 const MAX_ARTICLES_PER_RUN = 1;
 /** What one article needs of the route's time: three Claude calls, the writes, the email. */
@@ -698,7 +698,7 @@ async function writeArticle(client: SanityClient, doc: ProjectSource, now: Date)
   const details = style.left.some((l) => l.contact) || onTheDay.length > 0;
   // Clean, and held only because Doug reviews first.
   const forReview = forDoug && !ready && readyToGo(check, style) && onTheDay.length === 0;
-  const page = reviewLink();
+  const page = agencyLink();
   const notified = await emailEditors(
     ready
       ? `Goes live ${when.replace(/ at .*$/, "")} unless you hold it: ${document.title}`
@@ -718,7 +718,7 @@ async function writeArticle(client: SanityClient, doc: ProjectSource, now: Date)
       `Read it: ${studioLink(liveId)}`,
       ...(forReview
         ? [
-            `- When it reads right, tick "Ready for Doug's review" in the draft. It then shows on his review page${page ? `: ${page}` : ""}`,
+            `- Read it on your review page${page ? ` (${page})` : ""} and, when it reads right, press "Put on Doug's page" (or tick "Ready for Doug's review" in the draft).`,
             `- After his OK, switch "Scheduled" on (it goes live ${when}, or at the next morning's run if that has passed) or press Publish.`,
           ]
         : []),

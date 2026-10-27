@@ -7,12 +7,13 @@ the article (nothing it doesn't say), and each goes into Buffer with the
 post's photo and a tracked link. An email goes to `BLOG_DRAFT_NOTIFY`.
 
 **Doug reviews first (27 Oct 2026, the default):** every post waits in Buffer
-as a **draft**, all three streams below, and shows on Doug's review page
-(`app/review`, `lib/review-first.ts`; CLAUDE.md, "Doug reviews first"). After
-his OK: Buffer → Drafts → **Add to Queue** on each, and Buffer posts it at the
-next free slot. Nothing posts before someone does. `REVIEW_FIRST=off` in
-Vercel (Production, then a redeploy) is the switch back, once Doug leaves it
-to 21e8. Only Vern turns it.
+as a **draft**, all three streams below. Vern reads them on his review page
+(`app/review`, `lib/review-first.ts`; CLAUDE.md, "Doug reviews first"), fixes
+any line in Buffer, and presses **Put on Doug's page**; Doug reads them on his.
+After his OK: Buffer → Drafts → **Add to Queue** on each, and Buffer posts it
+at the next free slot. Nothing posts before someone does. `REVIEW_FIRST=off`
+in Vercel (Production, then a redeploy) is the switch back, once Doug leaves
+it to 21e8. Only Vern turns it.
 
 **With review first off (19 to 27 Oct 2026, Vern: "auto-queue on"):** the
 posts go into each channel's **queue**, and Buffer posts them at the next free

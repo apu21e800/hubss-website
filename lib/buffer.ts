@@ -192,13 +192,15 @@ export async function bufferPostsForReview(since: Date): Promise<BufferPost[]> {
   for (const org of account.organizations) {
     let after: string | null = null;
     for (let page = 0; page < 4; page++) {
-      const data: { posts: { edges: ({ node: BufferPost } | null)[]; pageInfo: { hasNextPage: boolean; endCursor?: string | null } } } = await gql(
+      const data: { posts?: { edges?: ({ node: BufferPost } | null)[] | null; pageInfo?: { hasNextPage: boolean; endCursor?: string | null } | null } | null } = await gql(
         REVIEW_POSTS_QUERY,
         { org: org.id, after, since: since.toISOString() }
       );
-      for (const edge of data.posts.edges) if (edge?.node) out.push(edge.node);
-      if (!data.posts.pageInfo.hasNextPage || !data.posts.pageInfo.endCursor) break;
-      after = data.posts.pageInfo.endCursor;
+      // The schema lets edges and pageInfo be null (no posts): read that as an empty last page.
+      for (const edge of data.posts?.edges ?? []) if (edge?.node) out.push(edge.node);
+      const next = data.posts?.pageInfo;
+      if (!next?.hasNextPage || !next.endCursor) break;
+      after = next.endCursor;
     }
   }
   return out;

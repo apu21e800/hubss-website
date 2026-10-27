@@ -1,7 +1,8 @@
 /**
  * Social posts, three streams into one Buffer queue. Since 27 Oct 2026 Doug
  * reviews first (lib/review-first.ts): every post waits in Buffer as a draft,
- * shown on his review page (app/review), until someone presses Add to Queue.
+ * which Vern reads on his review page and puts on Doug's (app/review), until
+ * someone presses Add to Queue.
  * With REVIEW_FIRST=off, as from 19 to 27 Oct (Vern: "auto-queue on"), a
  * post goes into the channel's queue and Buffer posts it at the next slot
  * unless someone deletes it there first, or waits as a draft with
@@ -59,7 +60,7 @@
 import { sanityWriteClient } from "@/lib/sanity.write";
 import { getAllPosts, getPost } from "@/lib/blog";
 import { bufferChannels, createBufferDraft, socialAutoQueue, type BufferChannel } from "@/lib/buffer";
-import { reviewFirst, reviewLink } from "@/lib/review-first";
+import { agencyLink, reviewFirst } from "@/lib/review-first";
 import { emailEditors as sendToEditors } from "@/lib/editor-mail";
 import { writeSocialCopy, polishSocialCopy, type SocialCopy, type SocialSource } from "@/lib/social-drafter";
 import { contactLeft, styleReport, withLeft } from "@/lib/field-note-drafter";
@@ -133,6 +134,8 @@ export interface SocialResult {
   skipped: ChannelSkip[];
   /** The style pass on the copy: "clean", or the sentences to fix in Buffer. */
   styleCheck: string;
+  /** Nothing was left for a person to fix in the copy (the style pass's `left` was empty). */
+  styleClean: boolean;
   /**
    * The posts went into Buffer's queue (review first off, SOCIAL_AUTO_QUEUE
    * on and the copy clean) rather than its drafts. Copy the style pass
@@ -400,6 +403,7 @@ async function draftItem(
     drafted: [],
     skipped: [],
     styleCheck: styleReport(style, "in Buffer before approving").join("\n"),
+    styleClean: style.left.length === 0,
     queued,
     outcome: "retry",
   };
@@ -550,7 +554,9 @@ async function notify(r: SocialResult) {
     // posts them at the next free slots unless someone deletes them there
     // first. Otherwise they wait as drafts, and the email says why.
     const queued = r.queued;
-    const heldForStyle = !queued && socialAutoQueue();
+    // Held for the copy, whichever switch is on: the style check left a line
+    // (the review of #104: under review first the switch alone can't tell).
+    const heldForStyle = !queued && !r.styleClean;
     await emailEditors(
       queued ? `Social posts queued in Buffer: ${r.title}${tag}` : `Social drafts ready in Buffer: ${r.title}${tag}`,
       [
@@ -563,7 +569,9 @@ async function notify(r: SocialResult) {
         ...(!queued && reviewFirst()
           ? [
               "",
-              `Doug reviews first: they are on his review page${reviewLink() ? ` (${reviewLink()})` : ""}. After his OK: Buffer → Drafts → Add to Queue on each.`,
+              heldForStyle
+                ? `Doug reviews first. Fix the line in Buffer, then put them on his page from your review page${agencyLink() ? ` (${agencyLink()})` : ""}. After his OK: Buffer → Drafts → Add to Queue on each.`
+                : `Doug reviews first. Read them on your review page${agencyLink() ? ` (${agencyLink()})` : ""} and press "Put on Doug's page". After his OK: Buffer → Drafts → Add to Queue on each.`,
             ]
           : []),
         "",

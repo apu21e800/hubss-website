@@ -1029,7 +1029,9 @@ don't replace it.
 - The tiles (components/sections/LunchLearnTopics.tsx) are six kinds of work
   with the applications' hero photos; "Book this topic" puts the topic into the
   form's chip (setLunchLearnTopic in LunchLearnV2.tsx, the same strings the
-  application pages send) and scrolls to the form.
+  application pages send) and scrolls to the form, clear of the sticky bar
+  (scrollIntoView keeps to html's scroll-padding-top; until 27 Oct 2026 it
+  looked for a <header>, found none, and parked the chip under the bar).
 - The questions, the FAQPage schema and `npm run sync:pages` share one source,
   lib/lunch-learn-content.ts, so they can't drift. The sync writes only what
   the page reads (lunchLearnFaqs, the FAQ heading); the other Lunch & Learn
@@ -1050,8 +1052,9 @@ don't replace it.
   screen. Vern, at 1519x790: "the bottom of the large callout cards gets cut
   off slightly at the bottom"; it was 48px past the fold there, 110 at
   1536x730. Measured after: inside the window at 1519x790, 1536x730, 1440x789,
-  1366x657, 1280x800 and 1024x768, chip or no chip. The homepage card is
-  unchanged (the rules hang off .ll-hero). Under the card, the Product
+  1366x657, 1280x800 and 1024x768, chip or no chip. The copy stays at the
+  top of its column: the chip mounts after load, and centred copy jumped 37px
+  when it did. The homepage card is unchanged (the rules hang off .ll-hero). Under the card, the Product
   Portfolio Book's large card (components/sections/IdeaBookCard.tsx; Vern:
   "Doug will want a large CTA ... under the L&L card"): the homepage strip's
   words, Studio first, Request a printed copy and Read it online.

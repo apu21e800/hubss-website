@@ -1718,7 +1718,6 @@ html {
   .ll-hero .ll-benefits > :not(:last-child) { margin-block-end: 0.625rem; }
   .ll-hero .ll-formcol { padding-top: 1.25rem; padding-bottom: 1.25rem; }
   .ll-hero .ll-panel { padding: 1.375rem; }
-  .ll-hero .ll-form-head { margin-bottom: 0.875rem; }
   .ll-hero .ll-form > :not(:last-child) { margin-block-end: 0.75rem; }
   .ll-hero .ll-form input:not([name="website"]) { padding-top: 0.625rem; padding-bottom: 0.625rem; }
 }
@@ -1729,14 +1728,12 @@ html {
   .ll-hero { padding-top: 1rem; }
   .ll-hero .ll-formcol { padding-top: 0.75rem; padding-bottom: 0.75rem; }
   .ll-hero .ll-panel { padding: 1rem 1.25rem; }
-  .ll-hero .ll-form-head { margin-bottom: 0.5rem; }
   .ll-hero .ll-form > :not(:last-child) { margin-block-end: 0.5rem; }
 }
-/* When the form is the taller column (a topic's chip, a short screen), the
-   copy sits in the middle of the card, not at its top. */
-@media (min-width: 1024px) {
-  .ll-hero .ll-copy { display: flex; flex-direction: column; justify-content: center; }
-}
+/* The form's first child is its heading, so the rule above sets its gap too.
+   The copy stays at the top of its column: the topic chip mounts after the
+   page loads, and copy centred in the column jumped 37px down when it did
+   (the review of #102, 27 Oct 2026: layout shift 0.029, live 0.006). */
 
 /* The phone menu on a phone turned on its side (23 Oct 2026, phone QA):
    under 500px tall the pinned offices and Lunch & Learn left the list 191

@@ -76,19 +76,25 @@ export const LL_TOPICS: LunchLearnTopic[] = [
  * put the cursor in its first field, gently unless the visitor asked for no
  * motion. Not to #book's top: on a phone the card's pitch fills the first
  * screen and the form sits under it, so a tapped topic showed no form and no
- * chip (QA sweep, 16 Oct 2026). Clear of the header when it stays on screen.
+ * chip (QA sweep, 16 Oct 2026). Clear of the sticky bar: scrollIntoView keeps
+ * to html's scroll-padding-top (app/globals.css), as an anchor link does. It
+ * looked for a <header> before, and the bar is a <nav>, so the form's heading
+ * and the chip landed under the bar (the review of #102, 27 Oct 2026). Two
+ * frames on, so the chip set just before is in the form: it makes the form
+ * taller, which can move the form's top (the panel sits in the middle of its
+ * column), and a scroll aimed before that left the heading 8px under the bar
+ * at 1366x657.
  */
 function goToForm() {
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const book = document.getElementById("book");
-  const target = book?.querySelector("form") ?? book;
-  if (!target) return;
-  const header = document.querySelector("header");
-  const covered = header && /fixed|sticky/.test(getComputedStyle(header).position) ? header.getBoundingClientRect().height : 0;
-  window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - covered - 16, behavior: reduce ? "auto" : "smooth" });
-  window.setTimeout(() => {
-    book?.querySelector<HTMLInputElement>('input[name="name"]')?.focus({ preventScroll: true });
-  }, reduce ? 0 : 500);
+  if (!book) return;
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    (book.querySelector("form") ?? book).scrollIntoView({ block: "start", behavior: reduce ? "auto" : "smooth" });
+    window.setTimeout(() => {
+      book.querySelector<HTMLInputElement>('input[name="name"]')?.focus({ preventScroll: true });
+    }, reduce ? 0 : 500);
+  }));
 }
 
 export default function LunchLearnTopics({ topics = LL_TOPICS }: { topics?: LunchLearnTopic[] }) {

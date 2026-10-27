@@ -447,7 +447,7 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                     <SuccessPanel message={f.submitState.message} />
                   ) : (
                     <form onSubmit={f.handleSubmit} className="ll-form space-y-3.5">
-                      <div className="ll-form-head mb-5">
+                      <div className="mb-5">
                         <FormTitle className="font-bold text-lg mb-1" style={{ color: "var(--text-primary)" }}>Book your session</FormTitle>
                         <p className="text-[14.5px]" style={{ color: "var(--ink-55)" }}>Confirmed within one business day.</p>
                       </div>

@@ -15,7 +15,7 @@ The spray park at Maple Ridge Park in Maple Ridge, British Columbia, opened in J
 
 A [splash pad](/applications/splash-pads) stays wet all season under bare feet and chemical treatment, and the book asks for a surface that is slip-resistant and cool underfoot. StreetBond is a pavement coating, a water-based, epoxy-modified acrylic for asphalt and concrete, and on a splash pad it goes down in a textured, slip-resistant build. It is designed to move with the pavement, which the book says avoids "the three failures of rigid coatings: cracking, premature wear, and being slippery in wet conditions." It comes in 63 standard colours or a custom match, with a service life of 8+ years, and it is easily refreshed: a worn pad is recoated between seasons.
 
-At Snug Cove on Bowen Island, British Columbia, the same coating makes a path into coloured asphalt with a sense of humour: four custom colours representing Forest, Sunset, Water and Earth, and caricatures of local fauna worked into the design. [The Snug Cove write-up](/blog/bowen-island-asphalt-path) gives the reason it holds on a path that carries art: the coating works with the normal expansion and contraction of the pavement, and it "will not peel, delaminate or shrink-crack" when installed to its specifications.
+At Snug Cove on Bowen Island, British Columbia, the same coating makes a path into coloured asphalt with a sense of humour: four custom colours representing Forest, Sunset, Water and Earth, and caricatures of local fauna worked into the design. [The Snug Cove write-up](/blog/bowen-island-asphalt-path) describes the coating it chose for a path that carries art: one that works with the normal expansion and contraction of the pavement, and that "will not peel, delaminate or shrink-crack" when installed to its specifications.
 
 ## A labyrinth on the hospital deck
 
@@ -41,7 +41,7 @@ It is [TrafficPatterns](/products/traffic-patterns), the preformed thermoplastic
 
 Dark asphalt absorbs most of the sun's energy and adds to the urban heat island, the measurable temperature difference between a city and the rural areas around it. Twelve [StreetBondSR](/products/streetbondsr) colours reflect sunlight rather than absorb it, so asphalt stays cooler underfoot. Each carries an initial solar reflectance of 0.33 or higher, which can count toward the LEED v5 [heat island credit](/applications/leed-urban-heat-island) for surfaces other than roofs, and the coating goes on asphalt, with a service life of 8+ years.
 
-The photograph beside the book's StreetBondSR page is a Canada Post fleet lot in Toronto, Ontario: parking, the first use that page lists. For a park path, the book's then-and-now pages show StreetBondSR at Jack Shaw Gardens in Osoyoos, British Columbia, when it went in and three years later, when the path "still reads as new, and runs cooler underfoot" ([the Osoyoos write-up](/blog/streetbondsr-solar-reflective-coatings)).
+The photograph beside the book's StreetBondSR page is a fleet lot in Toronto, Ontario: parking, the first use that page lists. For a park path, the book's then-and-now pages show StreetBondSR at Jack Shaw Gardens in Osoyoos, British Columbia, when it went in and three years later, when the path "still reads as new, and runs cooler underfoot" ([the Osoyoos write-up](/blog/streetbondsr-solar-reflective-coatings)).
 
 ## What landscape architects can specify
 

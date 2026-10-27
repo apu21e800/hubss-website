@@ -104,3 +104,8 @@ image-9a5a84c2eb4f12a3b52e11ffb909c167e300ea91-1966x1299-jpg, already in Studio 
 - Any surface temperature, SRI figure or LEED v4 credit (streetbond-leed-urban-heat-island, streetbondsr-solar-reflective-coatings): the book gives SR 0.33 and LEED v5, and wins.
 - The e-blast's StreetBondSR line "keep parking lots and plazas cooler" for the fleet lot in particular: nothing measures that lot.
 - The Indigenous design work on the public art page (HUB works with the artist, the municipality and the nation, lib/applications.ts:283): none of this piece's jobs is one.
+
+## Edits after the independent fact check (27 Oct 2026)
+- Snug Cove: "[The Snug Cove write-up] describes the coating it chose for a path that carries art: one that works with the normal expansion and contraction of the pavement, and that "will not peel, delaminate or shrink-crack" when installed to its specifications." (was "gives the reason it holds": the 2020 post, "recently installed", gives the coating's properties, not a result).
+- StreetBondSR: "a fleet lot in Toronto, Ontario" (was "a Canada Post fleet lot"): book p.28's caption says only "Toronto, Ontario" and lib/map-projects.ts says the site is not identified; the name came from the vans' livery. Doug may name it.
+- Oren Mizrahi's quote stays cut at "design ideas": the post continues "to the ground plane", which the style check stops on (lib/style-lint.ts). E-blast 2 prints it whole. If Doug wants the four words, add them in Studio after the draft is loaded (Studio only warns).

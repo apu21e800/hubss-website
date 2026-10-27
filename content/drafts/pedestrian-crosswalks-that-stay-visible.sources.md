@@ -109,3 +109,11 @@ image-52e14368c9d3256f5fa5623f2f5d9cd22f6c4e15-1200x848-jpg, already in Studio: 
 - The Spirit Trail's first crossing year: the post says the first "Spirit" crosswalks went in "over seven years ago", relative to a write-up with no date of its own, so no year is given.
 - DuraTherm's "Reflective options" (book p.35): docs/GLOSSARY.md:35 says DuraTherm is not beaded. The two disagree, so reflectivity is not mentioned.
 - Service lives for DuraTherm and DecoMark: the book gives none, so none is given.
+
+## Edits after the independent fact check (27 Oct 2026)
+- "HUB Surface Systems" at the first mention ("DecoMark is HUB Surface Systems' custom graphics system"), and the book's full name at its first mention ("the Product Portfolio Book · Volume 5 gives it 8+ years of service life"; "The Product Portfolio Book carries the crosswalk" after).
+- "Crosswalk" for the marking, never "crossing" (docs/GLOSSARY.md:51): the title, now "Five jobs show what keeps a pedestrian crosswalk visible", the excerpt ("Five jobs in ..."), and the body; "rail crossing" (a railway crossing) and quoted words are unchanged. The table's last column is "Jobs in this piece" (the DecoMark jobs are a sidewalk marking, wayfinding and a logo, not crosswalks).
+- Spirit Trail: "Wherever the trail crosses a principal roadway, it gets a DuraTherm "Spirit" crosswalk" (lib/map-projects.ts, north-van-spirit-trail; spirit-trail-wayfinding-vancouver).
+- Little Italy: "Square One Paving, HUB's certified installer in British Columbia" (hub-certified-installer-network: "British Columbia: Square One Paving"; decorative-crosswalk-commercial-drive: installed by Square One); "the neighbourhood's own logo in DecoMark at a corner, made to the business improvement association's artwork and Pantone colour" (the book's page; DecoMark bonds to the surface, so not "set into").
+- The four Vision Zero guide links are out: vision-zero-thermoplastic-crosswalks, vision-zero-surface-markings, pedestrian-safety-solutions and keeping-pedestrians-safe carry figures the book contradicts (90 mil, glass beads in TrafficPatterns, BPN 65+, 5–7 years).
+- Book p.105's caption (TrafficPatternsXD, where the page's text and two posts say TrafficPatterns) is still Doug's to settle; the piece does not rest on it.

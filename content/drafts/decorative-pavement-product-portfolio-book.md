@@ -2,34 +2,32 @@
 title: Four decorative pavement jobs inside the Product Portfolio Book
 slug: decorative-pavement-product-portfolio-book
 category: Guide
-excerpt: Kitchener, Woodbridge, Kleinburg and Mont-Mégantic, four decorative pavement jobs from Volume 5, the systems behind them and how to specify from the book.
-keywords: ["decorative pavement", "decorative crosswalks", "veterans crosswalk", "thermoplastic pavement markings", "product portfolio book volume 5"]
+excerpt: Four decorative pavement jobs from the Product Portfolio Book, in Kitchener, Woodbridge, Kleinburg and Mont-Mégantic, and how to specify their systems.
+keywords: ["decorative pavement", "decorative crosswalks", "veterans crosswalk", "product portfolio book volume 5"]
 relatedProducts: [traffic-patterns-xd, traffic-patterns, streetbondsr]
 relatedApplications: [crosswalks, community-branding, leed-urban-heat-island]
 cover: { ref: image-a256098ee9641fa08337f019db181b5d9c391cc9-2400x1800-jpg, alt: "Flag bearers beside the Lest We Forget veterans crosswalk in TrafficPatterns, Kitchener, Ontario", hotspot: { x: 0.5, y: 0.5, width: 0.8, height: 0.8 }, crop: null }
 ---
 
-At the East Avenue entrance to the Kitchener Memorial Auditorium in Kitchener, Ontario, a crosswalk reads "Lest We Forget". It is a veterans memorial in [TrafficPatterns](/products/traffic-patterns) preformed thermoplastic, and the Product Portfolio Book · Volume 5 prints it twice: as the photograph beside the TrafficPatterns page, and on a page of its own. Volume 5 is HUB Surface Systems' book of decorative pavement, a cross section of Canadian projects with the systems behind each one, and four of its favourites show how three of those systems divide the work.
+At the East Avenue entrance to the Kitchener Memorial Auditorium in Kitchener, Ontario, a crosswalk reads "Lest We Forget". It is a veterans memorial in [TrafficPatterns](/products/traffic-patterns) preformed thermoplastic, and the Product Portfolio Book · Volume 5 prints it twice: as the photograph beside the TrafficPatterns page, and on a page of its own. It is HUB Surface Systems' book of decorative pavement, a cross section of Canadian projects with the systems behind each one, and four of its favourites show how three of those systems divide the work.
 
 ## The veterans crosswalk in Kitchener
 
 The partners were the City of Kitchener, two Legion branches (Fred Gies #50 and Polish Veterans #412) and the Royal Highland Fusiliers, and the purpose, in the project's own words, was "a lasting Remembrance Day tribute embedded in daily life". [The write-up of Kitchener's veterans crosswalk](/blog/veterans-crosswalk-kitchener) gives the brief: the crosswalk had to be ready for the ceremony without a long closure, and the surface had to hold up through winter.
 
-TrafficPatterns met both. The design is made in the factory as preformed thermoplastic, 125 mil thick, then positioned on the asphalt and heat-applied, so it bonds to the surface, and the book gives its time to open to traffic as hours. MultiSeal did the work off-peak, and the crosswalk was back in service ahead of the Remembrance Day events.
+TrafficPatterns was chosen for both. The design is made in the factory as preformed thermoplastic, 125 mil thick, then positioned on the asphalt and heat-applied, so it bonds to the surface, and the book gives its time to open to traffic as hours. Multiseal did the work off-peak, and the crosswalk was back in service ahead of the Remembrance Day events.
 
 On page 115 the book sets it under the eyebrow Veterans memorial, with the line "In honour of those who served and sacrificed" and a photograph of flags raised over the crosswalk in front of the auditorium. The TrafficPatterns page says why the surface keeps its grip: anti-skid aggregate is intermixed through the full cross-section, "so the grip lasts as long as the colour". The same page gives 60 BPN skid resistance (ASTM E303) and a service life of 8+ years.
 
 ## Decorative crosswalks on Woodbridge Avenue and in Kleinburg
 
-The Village of Woodbridge, Ontario, is a designated Heritage Conservation District. When the City of Vaughan took on a streetscape improvement of Woodbridge Avenue, the crosswalk specification became one of the hardest details on the project, because real brick was ruled out at the intersections: brick pavers create raised edges that snowplow blades catch and displace.
-
-[TrafficPatternsXD](/products/traffic-patterns-xd) gives the look of brick without the units. The aggregate-reinforced sheets are heated on the prepared asphalt and a template presses the pattern through the material into the top of the asphalt, so there are no raised edges and no joints for a blade to catch. Shirley Marsh, Project Manager of Urban Design for the City of Vaughan, said the City "chose TrafficPatternsXD for all pedestrian crosswalks at intersections", and [the Woodbridge write-up](/blog/trafficpatternsxd-urban-design) carries her full statement. Thermo Design installed them. The book shows one on page 117, with snow at the curb, under the line "Plowed, salted, and heavy traffic."
+Woodbridge Avenue in Vaughan, Ontario, runs through a heritage district, and its intersections ruled out real brick: pavers leave raised edges that snowplow blades catch. [TrafficPatternsXD](/products/traffic-patterns-xd) gives the look of brick without the units. Its aggregate-reinforced sheets are heated on the prepared asphalt and a template presses the pattern through the material into the top of the asphalt, so there is no edge and no joint for a blade to find. The City chose it for every crosswalk at an intersection, Thermo Design did the installation, and [the Woodbridge write-up](/blog/trafficpatternsxd-urban-design) has the City's own account. Page 117 of the book shows one with snow at the curb, under the line "Plowed, salted, and heavy traffic."
 
 Kleinburg, Ontario, is the photograph beside the book's TrafficPatternsXD page: a red brick-pattern crosswalk in a new neighbourhood, holding its pattern through the first snow.
 
 The book calls TrafficPatternsXD "the toughest material in the product range, built for performance in Canada". It is 150 mil thick, with aggregate rated 8–9 on the Mohs scale through the full cross-section, 60 BPN skid resistance (ASTM E303) and a service life of 10+ years, and it goes on asphalt only. For a crosswalk on a plow route, [the guide to plow-safe surfaces](/blog/snowplow-safe-decorative-pavement) sets out the questions to put to any material, starting with whether it sits flush with the road.
 
-## Mont-Mégantic, a white surface under a dark sky
+## A white summit terrace at Mont-Mégantic
 
 The observatory on the summit of Mont-Mégantic, Québec, is inside the world's first International Dark Sky Reserve, where outdoor lighting is kept to a bare minimum. The summit terrace is white [StreetBondSR](/products/streetbondsr), and page 102 of the book gives the reason: "A white StreetBondSR surface reflects what little light there is, so the summit's paths and plazas can be seen by starlight."
 

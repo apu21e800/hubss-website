@@ -93,3 +93,11 @@ image-a256098ee9641fa08337f019db181b5d9c391cc9-2400x1800-jpg, already in Studio 
 - Whether the soldier silhouette and lettering in the Kitchener crosswalk are DecoMark pieces: the gallery sheet's eye note raises it, no record says it; the crosswalk is TrafficPatterns, as the book captions it.
 - "Moose, our gentle giant" from the e-blast's Lunch & Learn line: a reader who never saw the email would not know who Moose is.
 - The PDF's size (the e-blast says 14 MB, the site's label 14.3 MB): not needed.
+
+## Edits after the independent fact check (27 Oct 2026)
+- Excerpt: "Four decorative pavement jobs from the Product Portfolio Book, in Kitchener, Woodbridge, Kleinburg and Mont-Mégantic, and how to specify their systems." (151 characters; the book's full name, not "Volume 5" alone.) Keywords: "thermoplastic pavement markings" dropped (specifying-thermoplastic-pavement-markings targets it).
+- "It is HUB Surface Systems' book of decorative pavement" (was "Volume 5 is"): the same sources as before.
+- "TrafficPatterns was chosen for both." (was "met both"): veterans-crosswalk-kitchener gives the brief (ready for the ceremony without a long closure; a surface that holds up through winter) and the return to service before Remembrance Day; no record shows it through a winter yet (the post, Nov 2024, calls it new).
+- "Multiseal" (was "MultiSeal"): the book's installer page, p.89, and three published posts print Multiseal.
+- Woodbridge, reworded so it does not repeat specifying-thermoplastic-pavement-markings, and without Shirley Marsh's quote (that piece carries it): "Woodbridge Avenue in Vaughan, Ontario, runs through a heritage district" (trafficpatternsxd-urban-design: "The Village of Woodbridge is a designated Heritage Conservation District"); "its intersections ruled out real brick: pavers leave raised edges that snowplow blades catch" (the same post); "The City chose it for every crosswalk at an intersection" (the same post, Marsh: "chose TrafficPatternsXD for all pedestrian crosswalks at intersections"); "Thermo Design did the installation" (the same post); p.117 as before.
+- H2 "A white summit terrace at Mont-Mégantic" (was an "X, Y" heading): p.102 as before.

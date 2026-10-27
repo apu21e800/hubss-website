@@ -77,6 +77,12 @@ jobs:
       - name: GA4 lead test
         run: npm run test:ga4
 
+      # The forms' counts by day: Toronto days, the transaction that adds one,
+      # the weeks the daily run logs, and that only delivered, held and failed
+      # messages count, in production (lib/lead-counts.ts). No network.
+      - name: Lead counts test
+        run: npm run test:leads
+
       # Studio's "Edit on the page" button opens the document's own page with
       # the intent Sanity's own links use, and an unpublished article is read
       # only in draft mode (sanity/studio-pages.ts, lib/blog.ts). No network.

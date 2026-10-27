@@ -1699,6 +1699,45 @@ html {
   .hero-book:hover, .hero-book:focus-visible { transform: none; }
 }
 
+/* The Lunch & Learn card as /lunch-learn's first screen (27 Oct 2026), where
+   the MediaEdge display ads land. Vern, at 1519x790 (a 1920x1080 laptop at
+   125%): "the bottom of the large callout cards gets cut off slightly at the
+   bottom". It ran 669px tall from 169px down, 48px past the fold there, 110
+   at 1536x730. On /lunch-learn only (.ll-hero, LunchLearnV2.tsx Boardroom)
+   and on a laptop screen under 860px tall, the card draws in its spacing:
+   the title a size down, less air round the copy and the form, 44px fields.
+   Nothing is dropped. Measure a change at 1519x790, 1536x730, 1440x790,
+   1366x657, 1280x800 and 1920x950, with ?topic= set (the ads' links carry
+   one, and the chip makes the form taller). */
+@media (min-width: 1024px) and (max-height: 860px) {
+  .ll-hero .ll-copy { padding-top: 2.25rem; padding-bottom: 2.25rem; }
+  .ll-hero .ll-host { margin-bottom: 1rem; }
+  .ll-hero .ll-title { font-size: clamp(2.5rem, 3.4vw, 3.5rem); }
+  .ll-hero .ll-lede { margin-bottom: 1.5rem; }
+  .ll-hero .ll-benefits { margin-bottom: 1.5rem; }
+  .ll-hero .ll-benefits > :not(:last-child) { margin-block-end: 0.625rem; }
+  .ll-hero .ll-formcol { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+  .ll-hero .ll-panel { padding: 1.375rem; }
+  .ll-hero .ll-form-head { margin-bottom: 0.875rem; }
+  .ll-hero .ll-form > :not(:last-child) { margin-block-end: 0.75rem; }
+  .ll-hero .ll-form input:not([name="website"]) { padding-top: 0.625rem; padding-bottom: 0.625rem; }
+}
+/* Shorter still (a 1366x768 laptop leaves about 657px of window): the
+   ads' links carry a topic, and with its chip the form is the card's tallest
+   column. Less air above the card and inside the form. */
+@media (min-width: 1024px) and (max-height: 700px) {
+  .ll-hero { padding-top: 1rem; }
+  .ll-hero .ll-formcol { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+  .ll-hero .ll-panel { padding: 1rem 1.25rem; }
+  .ll-hero .ll-form-head { margin-bottom: 0.5rem; }
+  .ll-hero .ll-form > :not(:last-child) { margin-block-end: 0.5rem; }
+}
+/* When the form is the taller column (a topic's chip, a short screen), the
+   copy sits in the middle of the card, not at its top. */
+@media (min-width: 1024px) {
+  .ll-hero .ll-copy { display: flex; flex-direction: column; justify-content: center; }
+}
+
 /* The phone menu on a phone turned on its side (23 Oct 2026, phone QA):
    under 500px tall the pinned offices and Lunch & Learn left the list 191
    of 390px, about a row and a half. There the drawer scrolls as one, the

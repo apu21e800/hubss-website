@@ -1042,6 +1042,19 @@ don't replace it.
   minutes, then questions ..." for that answer: lib/copy-superseded.ts prints
   it as "Sixty minutes, ..." until scripts/studio-cleanup-2026-10-17.ts writes
   it on Vern's PC.
+- The first screen (27 Oct 2026; the MediaEdge display ads land here, with
+  ?topic= set, so the form wears its chip): the card starts 40px under the
+  bar (96 elsewhere) and, on a laptop under 860px tall, draws in its spacing
+  (.ll-hero in app/globals.css: the title a size down, less air, 44px
+  fields; a second step under 700px), so its bottom edge is on the first
+  screen. Vern, at 1519x790: "the bottom of the large callout cards gets cut
+  off slightly at the bottom"; it was 48px past the fold there, 110 at
+  1536x730. Measured after: inside the window at 1519x790, 1536x730, 1440x789,
+  1366x657, 1280x800 and 1024x768, chip or no chip. The homepage card is
+  unchanged (the rules hang off .ll-hero). Under the card, the Product
+  Portfolio Book's large card (components/sections/IdeaBookCard.tsx; Vern:
+  "Doug will want a large CTA ... under the L&L card"): the homepage strip's
+  words, Studio first, Request a printed copy and Read it online.
 - The booking form (useLunchLearnForm in LunchLearnV2.tsx, shared with the
   homepage card) sends form_sent to GA (generate_lead until 20 Oct 2026; the
   route sends the lead now, "Leads in GA4") and lunch_learn_submit to Vercel

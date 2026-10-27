@@ -4,10 +4,12 @@ import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearnFunnel from "@/components/sections/LunchLearnFunnel";
 import LunchLearn from "@/components/sections/LunchLearn";
+import IdeaBookCard from "@/components/sections/IdeaBookCard";
 import JsonLd from "@/components/ui/JsonLd";
 import { buildMetadata } from "@/lib/seo";
 import { getSanityPageContent } from "@/lib/sanity.queries";
 import { LUNCH_LEARN_FAQS } from "@/lib/lunch-learn-content";
+import { mergeHomepageCopy } from "@/lib/homepage-copy";
 
 export const metadata = buildMetadata({
   // The audience named in full since 26 Oct 2026: the MediaEdge display ads
@@ -44,7 +46,10 @@ const serviceSchema = {
 };
 
 export default async function LunchLearnPage() {
-  const sanityPage = await getSanityPageContent("lunch-learn");
+  // The homepage's sections too, for the Product Portfolio Book card's words
+  // (IdeaBookCard reads the homepage strip's heading and line, Studio first).
+  const [sanityPage, homePage] = await Promise.all([getSanityPageContent("lunch-learn"), getSanityPageContent("homepage")]);
+  const bookCopy = mergeHomepageCopy(homePage?.homepageSections).ideaBook;
   // Body-section shim (Aug 2026): Sanity's lunch-learn doc was seeded from
   // the launch-era defaults. If a section is untouched since the seed (every
   // title/question still matches), serve the revised copy from the component
@@ -116,6 +121,11 @@ export default async function LunchLearnPage() {
         {/* The card's heading is this page's h1 (QA, 28 Sep 2026: none). */}
         <LunchLearn titleAs="h1" />
       </div>
+
+      {/* The Product Portfolio Book's large call to action, right under the
+          card (Vern, 27 Oct 2026: "Doug will want a large CTA, I'd say under
+          the L&L card to the Product Portfolio book"). */}
+      <IdeaBookCard copy={bookCopy} />
 
       {/* Two sections under the card since 30 Sep 2026 (Vern: "clean up the
           lunch and learn page too. it's a bit messy"): the session topics

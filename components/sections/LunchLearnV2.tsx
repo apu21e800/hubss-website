@@ -301,10 +301,20 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
   // run h1, h2, h2, h3 with no level skipped (QA, 30 Sep 2026). Same look:
   // app/globals.css styles every heading level alike and the class sets the size.
   const FormTitle = Title === "h1" ? "h2" : "h3";
+  // On /lunch-learn (the h1) the card is the page's first screen, and since
+  // 27 Oct 2026 the MediaEdge display ads land on it: 40px under the bar
+  // instead of 96, the Product Portfolio Book's card right under it
+  // (IdeaBookCard), and on a short laptop screen the card draws in its
+  // spacing (.ll-hero in app/globals.css) so its bottom edge is on the first
+  // screen. Vern, 27 Oct, at 1519x790: "the bottom of the large callout
+  // cards gets cut off slightly at the bottom". Elsewhere it is unchanged.
+  const hero = Title === "h1";
   return (
     <section
       /* the brand's closing statement, not part of the reading */
-      data-surface="shell" className="relative py-16 sm:py-20 lg:py-24" style={{ background: "var(--bg-primary)" }}>
+      data-surface="shell"
+      className={hero ? "ll-hero relative pt-6 pb-5 sm:pt-8 sm:pb-6 lg:pt-10 lg:pb-8" : "relative py-16 sm:py-20 lg:py-24"}
+      style={{ background: "var(--bg-primary)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative">
           <motion.div
@@ -322,10 +332,10 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
 
             <div className="grid grid-cols-1 lg:grid-cols-12">
               {/* Copy side */}
-              <div className="lg:col-span-7 p-7 sm:p-10 lg:p-12 lg:pr-6">
+              <div className="ll-copy lg:col-span-7 p-7 sm:p-10 lg:p-12 lg:pr-6">
                 {/* Vernon (Aug 2026): corner Moose removed; the host avatar
                     carries him instead — bigger, ringed, face-first billing. */}
-                <div className="flex items-center gap-4 mb-6">
+                <div className="ll-host flex items-center gap-4 mb-6">
                   {/* Breakout avatar — Vernon: "make the dog bigger, or like
                       he's coming out of the circle." The ring clips nothing:
                       Moose is drawn unclipped and bottom-anchored, so his hard
@@ -366,18 +376,18 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                     2026: the page had none); a section heading everywhere
                     else. h1 and h2 share one rule in app/globals.css, so it
                     looks the same either way. */}
-                <Title className="h1-page mb-4" style={{ color: "var(--text-primary)" }}>
+                <Title className="ll-title h1-page mb-4" style={{ color: "var(--text-primary)" }}>
                   Specify with confidence.{" "}
                   <span style={{ background: "linear-gradient(92deg, #F97316 0%, #EAB308 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
                     Lunch is on us.
                   </span>
                 </Title>
-                <p className="text-[15px] leading-relaxed mb-8 max-w-xl" style={{ color: "var(--ink-70)" }}>
+                <p className="ll-lede text-[15px] leading-relaxed mb-8 max-w-xl" style={{ color: "var(--ink-70)" }}>
                   Sixty minutes with your engineering, landscape architecture or planning
                   team. Canadian case studies, spec language you can use, and samples you can hold.
                 </p>
 
-                <div className="space-y-3.5 mb-9">
+                <div className="ll-benefits space-y-3.5 mb-9">
                   {BENEFITS.map((b) => (
                     <div key={b} className="flex items-start gap-3">
                       <span className="flex-shrink-0 w-5 h-5 rounded-md flex items-center justify-center mt-0.5" style={{ background: "rgba(249,115,22,0.14)" }}>
@@ -411,8 +421,8 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
               </div>
 
               {/* Form side — inset panel */}
-              <div className="lg:col-span-5 p-5 sm:p-7 lg:p-8 lg:pl-2 flex">
-                <div className="relative w-full rounded-xl p-6 sm:p-7 self-center" style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}>
+              <div className="ll-formcol lg:col-span-5 p-5 sm:p-7 lg:p-8 lg:pl-2 flex">
+                <div className="ll-panel relative w-full rounded-xl p-6 sm:p-7 self-center" style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}>
                   {hideForm ? (
                     <div>
                       <FormTitle className="font-bold text-lg mb-1" style={{ color: "var(--text-primary)" }}>Book your session</FormTitle>
@@ -436,8 +446,8 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                   ) : f.submitState.status === "success" ? (
                     <SuccessPanel message={f.submitState.message} />
                   ) : (
-                    <form onSubmit={f.handleSubmit} className="space-y-3.5">
-                      <div className="mb-5">
+                    <form onSubmit={f.handleSubmit} className="ll-form space-y-3.5">
+                      <div className="ll-form-head mb-5">
                         <FormTitle className="font-bold text-lg mb-1" style={{ color: "var(--text-primary)" }}>Book your session</FormTitle>
                         <p className="text-[14.5px]" style={{ color: "var(--ink-55)" }}>Confirmed within one business day.</p>
                       </div>

@@ -3,7 +3,7 @@ import { Resend } from "resend";
 import { checkBotId } from "botid/server";
 import { screenSubmission } from "@/lib/form-screen";
 import { leadEvent, readGaIds, sendLeadEvent, type GaIds } from "@/lib/ga4-lead";
-import { addToLeadCount, type CountedOutcome } from "@/lib/lead-counts";
+import { addToLeadCount, countingOn, type CountedOutcome } from "@/lib/lead-counts";
 import { sanityWriteClient } from "@/lib/sanity.write";
 
 const TO_EMAIL = process.env.CONTACT_EMAIL ?? "info@hubss.com";
@@ -212,7 +212,7 @@ function countLead(body: ContactPayload, ga: GaIds | undefined) {
  * a count that fails is a log line, never the visitor's problem.
  */
 function countOutcome(form: string, outcome: CountedOutcome) {
-  if (process.env.VERCEL_ENV !== "production" || !process.env.SANITY_API_WRITE_TOKEN) return;
+  if (!countingOn()) return;
   try {
     const client = sanityWriteClient().withConfig({ timeout: 5000 });
     after(() => addToLeadCount(client, form, outcome));

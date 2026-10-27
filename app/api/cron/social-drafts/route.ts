@@ -70,7 +70,8 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   // 0. The forms' counts, for the Monday report. Seconds at most; never
   //    stops the run.
   try {
-    const leads = await logLeadSummary(client.withConfig({ timeout: 10_000 }), now, Boolean(process.env.GA4_API_SECRET));
+    // No retries: while Sanity is down this step must not eat the run's time.
+    const leads = await logLeadSummary(client.withConfig({ timeout: 10_000, maxRetries: 0 }), now, Boolean(process.env.GA4_API_SECRET));
     const { delivered, held, failed: notSent } = leads.last7;
     out.leads = { last7: { delivered, held, failed: notSent } };
   } catch (err) {

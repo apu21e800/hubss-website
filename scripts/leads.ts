@@ -57,11 +57,13 @@ async function main() {
   const now = new Date();
   const today = leadDay(now);
   const from = addDays(today, -(span - 1));
-  const { first, days } = await client.fetch<{ first: string | null; days: LeadDayDoc[] }>(LEAD_DAYS_QUERY, { from });
+  // The two weeks' totals need the 14 days before today, whatever the span shown.
+  const read = addDays(today, -Math.max(span - 1, 14));
+  const { first, days } = await client.fetch<{ first: string | null; days: LeadDayDoc[] }>(LEAD_DAYS_QUERY, { from: read });
   console.log(`Form messages by day (Toronto), ${from} to ${today}. Each cell: delivered/held/failed.`);
   console.log(first ? `Counting since ${first}.` : "Nothing counted yet: the counts begin with the first message or daily run after the change goes live.");
   console.log(["date      ", ...FORMS.map((f) => f.padEnd(15))].join("  "));
-  for (const doc of days ?? []) {
+  for (const doc of (days ?? []).filter((d) => d.date >= from)) {
     console.log([doc.date.padEnd(10), ...FORMS.map((f) => cell(doc, f).padEnd(15))].join("  "));
   }
   const s = summarize(days ?? [], first ?? null, now, true);

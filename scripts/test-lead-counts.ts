@@ -15,6 +15,7 @@ import {
   addDays,
   addToLeadCount,
   countTransaction,
+  countingOn,
   emptyLeadDay,
   isCountedForm,
   leadDay,
@@ -117,6 +118,32 @@ async function main() {
     assert.deepEqual(lines, ["[leads] count failed: Sanity said no"]);
   });
 
+  await check("counting is on in production with a token, from the runtime's VERCEL_ENV or the build's", () => {
+    const keep = { ...process.env };
+    try {
+      process.env.SANITY_API_WRITE_TOKEN = "t";
+      process.env.VERCEL_ENV = "production";
+      delete process.env.NEXT_PUBLIC_VERCEL_ENV;
+      assert.equal(countingOn(), true);
+      delete process.env.VERCEL_ENV;
+      process.env.NEXT_PUBLIC_VERCEL_ENV = "production";
+      assert.equal(countingOn(), true, "the build's value when the runtime has none");
+      process.env.VERCEL_ENV = "preview";
+      assert.equal(countingOn(), false, "a preview never counts");
+      delete process.env.VERCEL_ENV;
+      delete process.env.NEXT_PUBLIC_VERCEL_ENV;
+      assert.equal(countingOn(), false, "a laptop never counts");
+      process.env.VERCEL_ENV = "production";
+      delete process.env.SANITY_API_WRITE_TOKEN;
+      assert.equal(countingOn(), false, "no token, no count");
+    } finally {
+      for (const k of ["SANITY_API_WRITE_TOKEN", "VERCEL_ENV", "NEXT_PUBLIC_VERCEL_ENV"]) {
+        if (keep[k] === undefined) delete process.env[k];
+        else process.env[k] = keep[k];
+      }
+    }
+  });
+
   await check("the weeks add up by form, and say when a week was not all counted", () => {
     const docs: LeadDayDoc[] = [
       { date: "2026-11-01", contact: { delivered: 1, held: 2, failed: 0 }, cataloguePrint: { held: 1 } },
@@ -137,6 +164,8 @@ async function main() {
     assert.equal(s.prior7.complete, true);
     assert.equal(s.today.delivered, 9);
     assert.match(s.ga4, /not set/);
+    assert.equal(s.counting, "on");
+    assert.match(summarize(docs, "2026-10-28", new Date("2026-11-16T16:00:00Z"), true, false).counting, /^OFF/);
     const early = summarize(docs, "2026-11-05", new Date("2026-11-16T16:00:00Z"), true);
     assert.equal(early.prior7.complete, false);
     assert.equal(early.last7.complete, true);
@@ -161,7 +190,7 @@ async function main() {
     console.info = (...a: unknown[]) => lines.push(a.join(" "));
     let summary;
     try {
-      summary = await logLeadSummary(stub, new Date("2026-11-02T14:00:00Z"), true);
+      summary = await logLeadSummary(stub, new Date("2026-11-02T14:00:00Z"), true, true);
     } finally {
       console.info = info;
     }
@@ -180,7 +209,7 @@ async function main() {
     const route = read("app/api/contact/route.ts");
     assert.match(route, /countOutcome\(body\.formType, hold \? "held" : "delivered"\)/);
     assert.match(route, /countOutcome\(body\.formType, "failed"\)/);
-    assert.match(route, /process\.env\.VERCEL_ENV !== "production"/);
+    assert.match(route, /if \(!countingOn\(\)\) return;/);
     assert.match(route, /after\(\(\) => addToLeadCount\(/);
     // Never for blocked or rejected requests: no count before the mail is sent.
     const firstCount = route.indexOf("countOutcome(body.formType");
@@ -195,6 +224,7 @@ async function main() {
     const block = run.slice(step, run.indexOf("// 1. The blog"));
     assert.doesNotMatch(block, /failed = true/);
     assert.doesNotMatch(block, /emailEditors|notifyRunFailure/);
+    assert.match(block, /maxRetries: 0/, "no retries, so a Sanity outage can't eat the run's time");
     const crons = JSON.parse(read("vercel.json")).crons as { path: string }[];
     assert.equal(crons.length, 2, "the site's crons stay at two");
   });

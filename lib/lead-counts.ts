@@ -70,6 +70,17 @@ export function isCountedForm(form: string): form is CountedForm {
   return Object.prototype.hasOwnProperty.call(FORM_FIELDS, form);
 }
 
+/**
+ * Whether this deployment counts: production, with the Sanity token. The
+ * runtime's VERCEL_ENV, else the build's (next.config.ts inlines it as
+ * NEXT_PUBLIC_VERCEL_ENV), so a project that stops exposing system variables
+ * to functions doesn't quietly stop counting. The daily line says which.
+ */
+export function countingOn(): boolean {
+  const env = process.env.VERCEL_ENV || process.env.NEXT_PUBLIC_VERCEL_ENV;
+  return env === "production" && Boolean(process.env.SANITY_API_WRITE_TOKEN);
+}
+
 /** The calendar day in Toronto at `at`: "2026-10-27". */
 export function leadDay(at: Date): string {
   const parts = new Intl.DateTimeFormat("en-US", {
@@ -174,6 +185,8 @@ export interface LeadSummary {
   prior7: PeriodTotals;
   /** Today so far. */
   today: PeriodTotals;
+  /** Whether this deployment counts messages at all (countingOn). */
+  counting: string;
   /** Whether delivered leads reach GA4 as generate_lead (lib/ga4-lead.ts). */
   ga4: string;
 }
@@ -206,7 +219,8 @@ export function summarize(
   docs: LeadDayDoc[],
   countingSince: string | null,
   now: Date,
-  ga4SecretSet: boolean
+  ga4SecretSet: boolean,
+  counting = true
 ): LeadSummary {
   const today = leadDay(now);
   const yesterday = addDays(today, -1);
@@ -216,6 +230,9 @@ export function summarize(
     last7: totals(docs, addDays(yesterday, -6), yesterday, countingSince),
     prior7: totals(docs, addDays(yesterday, -13), addDays(yesterday, -7), countingSince),
     today: totals(docs, today, today, countingSince),
+    counting: counting
+      ? "on"
+      : "OFF: this deployment counts nothing (not production, or no SANITY_API_WRITE_TOKEN)",
     ga4: ga4SecretSet
       ? "delivered leads are sent to GA4 as generate_lead"
       : "GA4_API_SECRET is not set: delivered leads are not reaching GA4",
@@ -228,13 +245,18 @@ export function summarize(
  * fifteen days and logs the summary as one `[leads]` line, no personal
  * details. Throws on a Sanity error; the run logs it and carries on.
  */
-export async function logLeadSummary(client: SanityClient, now: Date, ga4SecretSet: boolean): Promise<LeadSummary> {
+export async function logLeadSummary(
+  client: SanityClient,
+  now: Date,
+  ga4SecretSet: boolean,
+  counting = countingOn()
+): Promise<LeadSummary> {
   const today = leadDay(now);
   await client.createIfNotExists(emptyLeadDay(today), { visibility: "async" });
   const { first, days } = await client.fetch<{ first: string | null; days: LeadDayDoc[] }>(LEAD_DAYS_QUERY, {
     from: addDays(today, -14),
   });
-  const summary = summarize(days ?? [], first ?? null, now, ga4SecretSet);
+  const summary = summarize(days ?? [], first ?? null, now, ga4SecretSet, counting);
   console.info(`[leads] ${JSON.stringify(summary)}`);
   return summary;
 }

@@ -174,5 +174,15 @@ export function describeVisitSource(s: VisitSource | undefined): { cameFrom?: st
     cameFrom = "direct (typed in, bookmarked or not recorded)";
     label = "direct";
   }
-  return { cameFrom, ...(s.landing ? { landing: s.landing } : {}), label: label.slice(0, 80) };
+  return { cameFrom, ...(s.landing ? { landing: s.landing } : {}), label: logLabel(label) };
+}
+
+/**
+ * The log line's label, in a log that holds nothing personal: lowercase
+ * letters, digits and . _ - / : only, 40 at most, and "tagged" when the tags
+ * carry a run of digits long enough to be a phone number (the review of #103).
+ */
+function logLabel(label: string): string {
+  const l = label.toLowerCase().replace(/[^a-z0-9._\-/:]+/g, "-").slice(0, 40);
+  return /\d{7}/.test(l.replace(/[-._/:]/g, "")) ? "tagged" : l;
 }

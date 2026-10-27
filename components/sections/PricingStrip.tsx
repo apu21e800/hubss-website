@@ -44,7 +44,7 @@ export default function PricingStrip({
           <span className="block text-[15px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.west.phone}</span>
         </a>
       </div>
-      <Link href={contactHref} className="link-arrow">
+      <Link href={contactHref} className="link-arrow mt-1">
         Send us the project
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
       </Link>

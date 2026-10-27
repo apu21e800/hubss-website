@@ -99,8 +99,11 @@ function buildEmailHtml(data: ContactPayload, hold?: Hold, source?: VisitSource)
     data.topic && `<tr><td><strong>Session topic</strong></td><td>${show(data.topic.slice(0, 80))}</td></tr>`,
     data.from && `<tr><td><strong>Booked from</strong></td><td>${show(data.from.slice(0, 40))}</td></tr>`,
     data.message && `<tr><td valign="top"><strong>Message</strong></td><td style="white-space:pre-wrap">${show(data.message)}</td></tr>`,
-    visit.cameFrom && `<tr><td valign="top"><strong>Came from</strong></td><td>${show(visit.cameFrom)}</td></tr>`,
-    visit.landing && `<tr><td><strong>Landing page</strong></td><td>${show(visit.landing)}</td></tr>`,
+    // Defanged in every mail, Doug's too: the tags come from a link anyone can
+    // write, and these rows read as the site's own, so a web address in one
+    // must not be a link (the review of #103).
+    visit.cameFrom && `<tr><td valign="top"><strong>Came from</strong></td><td>${esc(defang(visit.cameFrom))}</td></tr>`,
+    visit.landing && `<tr><td><strong>Landing page</strong></td><td>${esc(defang(visit.landing))}</td></tr>`,
     hold && data.website && `<tr><td valign="top"><strong>Hidden field</strong></td><td>${show(data.website)}</td></tr>`,
   ]
     .filter(Boolean)

@@ -153,6 +153,12 @@ check("the email's lines", () => {
   assert.deepEqual(describeVisitSource(undefined), { label: "unknown" });
 });
 
+check("the log label keeps to plain characters and drops anything like a phone number", () => {
+  assert.equal(describeVisitSource({ utm_source: "Google Ads", utm_medium: "CPC (west)" }).label, "google-ads/cpc-west-");
+  assert.equal(describeVisitSource({ utm_source: "call 416-555-0100", utm_medium: "x" }).label, "tagged");
+  assert.ok(describeVisitSource({ utm_source: "a".repeat(100), utm_medium: "b" }).label.length <= 40);
+});
+
 if (failures) {
   console.log(`\n${failures} failed`);
   process.exit(1);

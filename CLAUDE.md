@@ -1137,7 +1137,17 @@ don't replace it.
   when it did. The homepage card is unchanged (the rules hang off .ll-hero). Under the card, the Product
   Portfolio Book's large card (components/sections/IdeaBookCard.tsx; Vern:
   "Doug will want a large CTA ... under the L&L card"): the homepage strip's
-  words, Studio first, Request a printed copy and Read it online.
+  words, Studio first, Request a printed copy and Read it online. Since the
+  evening of 27 Oct 2026 (Vern: "the book graphic could be two of the
+  booklet pages (cover & another one stacked on top of and beside each
+  other), give a bit more vertical space the the main L&L forum card,
+  Booklet callout area could have a bit less vertical height"): the card
+  shows the cover over an inside page (p.129, the Bear Creek Park waterpark),
+  204px tall on a laptop (278 before), 48px under the Lunch & Learn card;
+  from 761 to 860px tall the booking panel has 32px round it (20 before),
+  and under 761 the steps are unchanged (measured at 1519x790, 1536x730,
+  1440x790, 1366x657, 1280x800, 1920x950 and 1024x768: the card ends on
+  the first screen at each).
 - The booking form (useLunchLearnForm in LunchLearnV2.tsx, shared with the
   homepage card) sends form_sent to GA (generate_lead until 20 Oct 2026; the
   route sends the lead now, "Leads in GA4") and lunch_learn_submit to Vercel

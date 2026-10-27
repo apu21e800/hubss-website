@@ -1734,6 +1734,29 @@ html {
    The copy stays at the top of its column: the topic chip mounts after the
    page loads, and copy centred in the column jumped 37px down when it did
    (the review of #102, 27 Oct 2026: layout shift 0.029, live 0.006). */
+/* Room for the form (27 Oct 2026, evening; Vern, at 1519x790: "give a bit
+   more vertical space the the main L&L forum card"). The steps above pressed
+   the booking panel to within 20px of the card's top and bottom edges; from
+   761px tall the window has the room for nearly the spacing a tall screen
+   gets (32px round the panel, 26px inside it), and the card still ends on
+   the first screen. Under 761px the steps above are unchanged. */
+@media (min-width: 1024px) and (min-height: 761px) and (max-height: 860px) {
+  .ll-hero .ll-formcol { padding-top: 2rem; padding-bottom: 2rem; }
+  .ll-hero .ll-panel { padding: 1.625rem; }
+}
+
+/* The Product Portfolio Book's two pages under the card (IdeaBookCard): the
+   inside page turned a little one way, the cover the other, and on a pointer
+   that hovers they fan apart a touch when the card is pointed at. */
+.ll-book-page { transform: rotate(5deg); transition: transform var(--dur-2) var(--ease-out); }
+.ll-book-cover { transform: rotate(-3deg); transition: transform var(--dur-2) var(--ease-out); }
+@media (hover: hover) {
+  .ll-book:hover .ll-book-page { transform: translate(4px, -3px) rotate(8deg); }
+  .ll-book:hover .ll-book-cover { transform: translate(-2px, 1px) rotate(-5deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ll-book-page, .ll-book-cover { transition: none; }
+}
 
 /* The phone menu on a phone turned on its side (23 Oct 2026, phone QA):
    under 500px tall the pinned offices and Lunch & Learn left the list 191

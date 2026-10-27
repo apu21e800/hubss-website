@@ -34,6 +34,7 @@ import { editAttr, isPreview } from "@/lib/sanity.preview";
 import { getSiteSettings } from "@/lib/sanity.queries";
 import { telHref } from "@/lib/site-settings";
 import { lunchLearnHref } from "@/lib/lunch-learn";
+import PricingStrip from "@/components/sections/PricingStrip";
 
 export const revalidate = 3600;
 
@@ -351,6 +352,13 @@ export default async function ProductPage({ params }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
           {/* Left: description + gallery */}
           <div className="lg:col-span-2 min-w-0">
+            {/* Phones and tablets only: the sidebar's way to a price, on the
+                first screen (components/sections/PricingStrip.tsx). */}
+            <PricingStrip
+              heading="Price a project"
+              offices={offices}
+              contactHref={`/contact?project=${encodeURIComponent(product.name)}&from=product`}
+            />
             {/* Lead with the catalogue's positioning spread where we have one.
                 The heading used to read "About <product>" — a filing label, in
                 the one position on the page where a specifier is still deciding

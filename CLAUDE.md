@@ -145,6 +145,18 @@ Primary CTA: "Request Spec Sheet" + "Book Lunch & Learn"
 Secondary: Project gallery browsing → contact form
 Lead capture: Name + Email + Phone (matches current form)
 
+The way to a price on a phone's first screen (27 Oct 2026, Google Ads
+readiness): the product and application pages put the sidebar's pricing card
+under the whole page on a phone, so components/sections/PricingStrip.tsx
+repeats its heading, the two offices' phones and "Send us the project" under
+the hero below lg (all of it on a 360x640 first screen). From lg up the
+sidebar card is on the first screen; on the application pages it comes before
+the systems card (the four pages without a spread had their phones under a
+laptop's first screen). Check a change on the ten pages an ad would land on
+(the six main products, crosswalks, bike lanes, bus lanes, regulatory
+markings) at 360x640, 375x667, 390x844, 768x1024, 1024x768 and 1440x900:
+both phones, and below lg the link too, inside the first screen.
+
 ## Commands
 npm run dev     # local development
 npm run build   # production build
@@ -668,8 +680,20 @@ marked "[Screened]" with a banner saying why, and the visitor sees "sent".
   error. `npm run test:forms` tests them, including the wordings a review
   caught; the prompt (SCREEN_SYSTEM) scored 25 of 25 on 6 Oct 2026. Keep its
   last line: when unsure, genuine.
-- One log line per request, `[contact] {"form","outcome","gate","by","reason"}`,
-  no personal details.
+- One log line per request, `[contact] {"form","outcome","gate","by","reason","src"}`,
+  no personal details (src since 27 Oct 2026, below).
+- Where a lead came from (27 Oct 2026, Google Ads readiness: "Make sure
+  UTM/gclid is preserved through to the form so a delivered lead can be tied
+  to the ad"). instrumentation-client.ts reads each full page load's address
+  once (lib/visit-source.ts): the five utm_ tags, whether it was a Google Ads
+  click (gclid, gbraid, wbraid: the fact only, never the id), the landing path
+  and the referring site's host. Kept in sessionStorage for the tab (no
+  cookie); a later arrival with tags of its own replaces it, a plain page
+  change doesn't. lib/post-form.ts sends it as `source`; the route checks it
+  again (known keys, allowed characters, nothing with an @) and prints "Came
+  from" and "Landing page" at the end of the office email, and `src`
+  ("google/cpc", "ref:google.ca", "direct", "unknown") in its log line. Not
+  sent to GA4: GA4 credits the ad from the visit's GA ids. `npm run test:source`.
 - Leads in GA4 (20 Oct 2026): GA4's two leads of 13 to 19 Oct were held spam;
   the browser sent generate_lead on every "sent". Now the route sends it,
   through GA4's Measurement Protocol, only for outcome "delivered", after the

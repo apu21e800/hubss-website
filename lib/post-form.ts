@@ -19,9 +19,14 @@
  * from the tag's cookies, when there are any: the route sends the lead to GA4
  * once the message is delivered (lib/ga4-lead.ts), and the ids let GA4 credit
  * the channel and the landing page that brought it.
+ *
+ * And `source`: where the visit came from (the utm_ tags, a Google Ads click,
+ * the landing page, the referring site; lib/visit-source.ts), which the route
+ * prints in the office's email as "Came from" and "Landing page".
  */
 
 import { GA_MEASUREMENT_ID, type GaIds } from "./ga4-lead";
+import { storedVisitSource, type VisitSource } from "./visit-source";
 
 const CHECKED_SEND_MS = 15_000;
 
@@ -66,6 +71,16 @@ function gaField(): { ga?: GaIds } {
   }
 }
 
+/** `source` for the body, when the visit has one. Nothing here can stop a form either. */
+function sourceField(): { source?: VisitSource } {
+  try {
+    const source = storedVisitSource();
+    return source ? { source } : {};
+  } catch {
+    return {};
+  }
+}
+
 type Fetch = typeof fetch;
 
 /** The browser's own fetch, saved before BotID wrapped it (instrumentation-client.ts). */
@@ -75,7 +90,7 @@ function unwrappedFetch(): Fetch {
 }
 
 export async function postForm(body: Record<string, unknown>): Promise<Response> {
-  const payload = JSON.stringify({ ...body, ...gaField() });
+  const payload = JSON.stringify({ ...body, ...gaField(), ...sourceField() });
   const init = (signal?: AbortSignal): RequestInit => ({
     method: "POST",
     headers: { "Content-Type": "application/json" },

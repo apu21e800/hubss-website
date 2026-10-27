@@ -1,4 +1,5 @@
 import { initBotId } from "botid/client/core";
+import { recordVisitSource } from "./lib/visit-source";
 
 // Vercel BotID: an invisible check that a form was sent from a real browser
 // on this site (6 Oct 2026, the spam Doug was getting; lib/form-screen.ts has
@@ -14,3 +15,9 @@ import { initBotId } from "botid/client/core";
 initBotId({
   protect: [{ path: "/api/contact", method: "POST" }],
 });
+
+// Where this visit came from (the utm_ tags, a Google Ads click, the site that
+// linked here), kept for the tab so a form can send it to the office
+// (lib/visit-source.ts). Once per full page load, after BotID is set up, so
+// nothing here can stand in its way; it never throws either.
+recordVisitSource();

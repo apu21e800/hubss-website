@@ -5,6 +5,7 @@ import { screenSubmission } from "@/lib/form-screen";
 import { leadEvent, readGaIds, sendLeadEvent, type GaIds } from "@/lib/ga4-lead";
 import { addToLeadCount, countingOn, type CountedOutcome } from "@/lib/lead-counts";
 import { sanityWriteClient } from "@/lib/sanity.write";
+import { describeVisitSource, readVisitSource, type VisitSource } from "@/lib/visit-source";
 
 const TO_EMAIL = process.env.CONTACT_EMAIL ?? "info@hubss.com";
 // Printed-catalogue requests are fulfilment, not enquiries: Doug wants to see
@@ -77,9 +78,12 @@ interface ContactPayload {
 
 type Hold = { by: string; reason: string };
 
-function buildEmailHtml(data: ContactPayload, hold?: Hold): string {
+function buildEmailHtml(data: ContactPayload, hold?: Hold, source?: VisitSource): string {
   // Held-back mail has its links defanged; Doug's mail is exactly as typed.
   const show = (v: string) => esc(hold ? defang(v) : v);
+  // Where the visit came from (lib/visit-source.ts): the ad, the search or the
+  // link, and the page it landed on. Last, after what the visitor wrote.
+  const visit = describeVisitSource(source);
   // City is folded into the address block for catalogue requests, so printing
   // it twice would just look like a mistake on a shipping label.
   const showCity = Boolean(data.city) && data.formType !== "catalogue-print";
@@ -95,6 +99,11 @@ function buildEmailHtml(data: ContactPayload, hold?: Hold): string {
     data.topic && `<tr><td><strong>Session topic</strong></td><td>${show(data.topic.slice(0, 80))}</td></tr>`,
     data.from && `<tr><td><strong>Booked from</strong></td><td>${show(data.from.slice(0, 40))}</td></tr>`,
     data.message && `<tr><td valign="top"><strong>Message</strong></td><td style="white-space:pre-wrap">${show(data.message)}</td></tr>`,
+    // Defanged in every mail, Doug's too: the tags come from a link anyone can
+    // write, and these rows read as the site's own, so a web address in one
+    // must not be a link (the review of #103).
+    visit.cameFrom && `<tr><td valign="top"><strong>Came from</strong></td><td>${esc(defang(visit.cameFrom))}</td></tr>`,
+    visit.landing && `<tr><td><strong>Landing page</strong></td><td>${esc(defang(visit.landing))}</td></tr>`,
     hold && data.website && `<tr><td valign="top"><strong>Hidden field</strong></td><td>${show(data.website)}</td></tr>`,
   ]
     .filter(Boolean)
@@ -185,9 +194,13 @@ function readPayload(raw: unknown): ContactPayload | { error: string; code: stri
   return { ...out, email: out.email.trim(), formType: formType as FormType };
 }
 
-/** One line per request, no names, addresses or messages: what happened and why. */
-function logOutcome(form: string, outcome: string, gate: string, by = "", reason = "") {
-  console.info(`[contact] ${JSON.stringify({ form, outcome, gate, by, reason: reason.slice(0, 160) })}`);
+/**
+ * One line per request, no names, addresses or messages: what happened and
+ * why, and where the visit came from (lib/visit-source.ts: "google/cpc",
+ * "ref:google.ca", "direct"; left out before the form is read).
+ */
+function logOutcome(form: string, outcome: string, gate: string, by = "", reason = "", src?: string) {
+  console.info(`[contact] ${JSON.stringify({ form, outcome, gate, by, reason: reason.slice(0, 160), ...(src ? { src } : {}) })}`);
 }
 
 /**
@@ -281,6 +294,10 @@ export async function POST(req: NextRequest) {
     // The visitor's GA ids (lib/post-form.ts), for the lead below: digits and
     // dots, or dropped. A form without them sends as before.
     const ga = readGaIds(raw);
+    // Where the visit came from, checked here again: tags of the allowed
+    // characters, a path, a host name, or nothing (lib/visit-source.ts).
+    const source = readVisitSource(raw);
+    const srcLabel = describeVisitSource(source).label;
 
     // 2. Who should read it? Doug, unless something says otherwise; then the
     //    screened inbox, with the reason on top. Never nobody.
@@ -314,7 +331,7 @@ export async function POST(req: NextRequest) {
 
     if (!process.env.RESEND_API_KEY) {
       // Dev fallback: no key, no mail. The log line still shows the decision.
-      logOutcome(body.formType, hold ? "held-not-sent" : "delivered-not-sent", gate, logBy, logReason);
+      logOutcome(body.formType, hold ? "held-not-sent" : "delivered-not-sent", gate, logBy, logReason, srcLabel);
       return NextResponse.json({ success: true });
     }
 
@@ -327,20 +344,20 @@ export async function POST(req: NextRequest) {
       to: [hold ? SCREENED_TO_EMAIL : body.formType === "catalogue-print" ? CATALOGUE_TO_EMAIL : TO_EMAIL],
       ...(replyTo ? { replyTo } : {}),
       subject: `${hold ? "[Screened] " : ""}${buildSubjectLine(body)}`,
-      html: buildEmailHtml(body, hold),
+      html: buildEmailHtml(body, hold, source),
     });
 
     if (error) {
       console.error("[contact API] Resend error:", error);
       // The visitor sees an error and may try again: counted as failed, so a
       // run of them shows in the daily counts.
-      logOutcome(body.formType, "failed", gate, "mail service", error.name ?? "");
+      logOutcome(body.formType, "failed", gate, "mail service", error.name ?? "", srcLabel);
       countOutcome(body.formType, "failed");
       return NextResponse.json({ error: "Failed to send message. Please try again." }, { status: 500 });
     }
 
     // The visitor sees the same "sent" either way, so a spammer learns nothing.
-    logOutcome(body.formType, hold ? "held" : "delivered", gate, logBy, logReason);
+    logOutcome(body.formType, hold ? "held" : "delivered", gate, logBy, logReason, srcLabel);
     countOutcome(body.formType, hold ? "held" : "delivered");
     // GA4 hears of delivered messages only: held ones are not leads.
     if (!hold) countLead(body, ga);

@@ -47,6 +47,7 @@ import { HERO_POSITION } from "@/lib/hero-framing";
 import navInsights from "@/lib/nav-insights.json";
 import { BLOG_NAME } from "@/lib/field-notes-taxonomy";
 import { altBesideTitle } from "@/lib/blog-taxonomy";
+import { APPLICATION_GROUPS } from "@/lib/application-groups";
 
 // Every Link in the panels carries prefetch={false} (QA F5, 30 Sep 2026): the
 // nav is on every page, and an open panel prefetched forty-odd routes at once.
@@ -62,33 +63,7 @@ export const RESOURCES = { href: "/resources", label: "Resources", line: "Spec s
 /** Lunch & Learn, in the words the site already uses (LunchLearnCard). */
 export const LL_LINE = "A free 60-minute session. Lunch is on us.";
 
-/**
- * Four groups a specifier would recognise, each named for the place, not the
- * buyer (28 Sep 2026). Residential lists one driveways page (30 Sep 2026):
- * /applications/private-driveways was merged into residential-driveways.
- */
-export const APPLICATION_GROUPS = [
-  {
-    label: "Streets & Safety",
-    note: "Crossings, lanes and calming",
-    slugs: ["crosswalks", "bike-lanes", "bus-lanes", "pedestrian-safety", "traffic-calming", "regulatory-markings"],
-  },
-  {
-    label: "Parks & Public Spaces",
-    note: "Paths, plazas, play and art",
-    slugs: ["parks-paths", "public-spaces", "playgrounds", "splash-pads", "public-art", "community-branding"],
-  },
-  {
-    label: "Commercial & Sustainability",
-    note: "Lots, courts, airports and cool pavement",
-    slugs: ["parking-lots", "commercial-spaces", "sport-courts", "airports", "leed-urban-heat-island"],
-  },
-  {
-    label: "Residential",
-    note: "Driveways and townhome streets",
-    slugs: ["residential-driveways", "townhomes"],
-  },
-];
+export { APPLICATION_GROUPS };
 
 export type MenuItem = {
   href: string;

@@ -35,6 +35,7 @@ import { currentBody, currentIn, currentPlain } from "@/lib/copy-superseded";
 import { sanityFetch, CACHE_VERSION } from "@/lib/sanity.queries";
 import { isPreview } from "@/lib/sanity.preview";
 import blogIndex from "@/lib/blog-index.json";
+import { POST_PLACES } from "@/lib/post-places";
 import { FIELD_NOTE_TYPES, SECTION_BY_KEY, isArchivedPost, type FieldNoteType, type InsightsSectionKey } from "@/lib/field-notes-taxonomy";
 import { countWords, datedForPreview, inferCategory, readTimeFor, scanProducts, type Hotspot } from "@/lib/blog-taxonomy";
 import type { PostBodyNode } from "@/components/blog/PostBody";
@@ -74,6 +75,8 @@ export interface PostMeta {
   keywords: string[];
   /** Words in the body, for schema.org wordCount. */
   wordCount: number;
+  /** Where the job is, for a written-up map job ("Kitchener, Ontario"): set by the pages that list posts (lib/post-places.ts). */
+  place?: string;
   /** Studio's "Search result overrides". */
   seoTitle?: string;
   seoDescription?: string;
@@ -275,9 +278,15 @@ const fetchPost = unstable_cache(
   { tags: ["blog"], revalidate: 3600 }
 );
 
-/** Every live post, newest first. */
+/**
+ * Every live post, newest first. A written-up map job carries its place
+ * (lib/post-places.ts), added here, outside the cached list, so a list cached
+ * before 27 Oct 2026 still gets it.
+ */
 export async function getAllPosts(): Promise<PostMeta[]> {
-  return (await fetchAllPosts()).filter((p) => BUILT.has(p.slug));
+  return (await fetchAllPosts())
+    .filter((p) => BUILT.has(p.slug))
+    .map((p) => (POST_PLACES[p.slug] ? { ...p, place: POST_PLACES[p.slug] } : p));
 }
 
 /** Every post listed in one section (Projects, Guides), newest first. */

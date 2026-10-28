@@ -331,7 +331,7 @@ export default async function ApplicationPage({ params }: Props) {
                   it, so those four sidebars read as a different design
                   (QA C25, 30 Sep 2026). The pricing card is now the same
                   card everywhere; the systems get their own. */}
-              <div className="lg:sticky lg:top-24 space-y-4">
+              <div className="follow-nav lg:sticky lg:top-[calc(var(--nav-offset)+32px)] space-y-4">
               {/* The way to a price first, then the systems (27 Oct 2026): on the
                   four pages without a spread the systems card came first and
                   pushed the phones under a laptop's first screen (regulatory

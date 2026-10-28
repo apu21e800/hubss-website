@@ -92,7 +92,10 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
       // tab or keystroke threw the reader off the filters (interaction
       // review, 17 Oct 2026). Next keeps useSearchParams in step with
       // replaceState, and nothing is fetched: the filter is client-side.
-      window.history.replaceState(window.history.state, "", qs ? `/blog?${qs}` : "/blog");
+      // null, never window.history.state: handed its own state, Next takes
+      // the call for its own and is not told of the new address (CLAUDE.md,
+      // 24 Oct 2026; Next's own example passes null).
+      window.history.replaceState(null, "", qs ? `/blog?${qs}` : "/blog");
     },
     [search, product, section, sort]
   );
@@ -106,7 +109,7 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
 
   function clearFilters() {
     setSearch(""); setProduct("all"); setSection("all"); setSort("newest");
-    window.history.replaceState(window.history.state, "", "/blog");
+    window.history.replaceState(null, "", "/blog");
   }
 
   const inSection = (p: PostMeta, key: InsightsSectionKey) => sectionFor(p.category).key === key;

@@ -477,7 +477,7 @@ export default async function ProductPage({ params }: Props) {
               and the way to a price. Sticky again from 28 Sep 2026, when the
               page stopped clipping with overflow hidden (app/globals.css). */}
           <aside className="min-w-0">
-            <div className="rounded-xl p-6 sm:p-7 lg:sticky lg:top-24 relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}>
+            <div className="follow-nav rounded-xl p-6 sm:p-7 lg:sticky lg:top-[calc(var(--nav-offset)+32px)] relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}>
               <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
               <h2 className="font-bold text-lg mb-1.5" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
                 Price a project

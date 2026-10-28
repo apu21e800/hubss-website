@@ -947,7 +947,9 @@ export default function CanadaMap({ revealOnMount = false }: { revealOnMount?: b
             </div>
           )}
 
-          <div ref={frameRef} className="cm-frame">
+          {/* data-nav-tuck: a press on the map tucks the site's bar away
+              (components/sections/useTuckAway.ts), so the map has the screen. */}
+          <div ref={frameRef} className="cm-frame" data-nav-tuck>
             <Map
               ref={mapRef}
               mapLib={maplibregl}

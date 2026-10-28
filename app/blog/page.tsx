@@ -8,7 +8,10 @@ import BlogCard, { StoryLead, pickLead } from "@/components/blog/BlogCard";
 import RuleLabel from "@/components/blog/RuleLabel";
 import JsonLd from "@/components/ui/JsonLd";
 import { getAllPosts } from "@/lib/blog";
-import { BLOG_NAME, INSIGHTS_SECTIONS } from "@/lib/field-notes-taxonomy";
+import Link from "next/link";
+import { BLOG_NAME, INSIGHTS_SECTIONS, sectionFor } from "@/lib/field-notes-taxonomy";
+import { ideaBook } from "@/lib/catalogue";
+import { showCatalogue } from "@/lib/feature-flags";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
@@ -36,7 +39,9 @@ export default async function BlogPage() {
 
   // The front page: the lead story, then the next four newest. The library
   // below continues after them (BlogFilter's frontSlugs).
-  const lead = pickLead(posts);
+  // The lead is a project when there is one (27 Oct 2026: the page is
+  // Projects, and it led with a guide); else the newest story, as before.
+  const lead = pickLead(posts.filter((p) => sectionFor(p.category).key === "projects")) ?? pickLead(posts);
   const latest = posts.filter((p) => p.slug !== lead?.slug).slice(0, 4);
   const frontSlugs = [...(lead ? [lead.slug] : []), ...latest.map((p) => p.slug)];
 
@@ -91,20 +96,37 @@ export default async function BlogPage() {
           front page): this page sat at x=104 with a 44px H1 while About,
           Gallery and Contact sat at x=112 with 56px. */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-24">
-        {/* Masthead: the title, and its one line beside it from lg. No
-            eyebrow over it: the title already says it. Since 17 Oct 2026 the
-            page is Projects (BLOG_NAME): the work first, the reading beside it. */}
-        <header className="mb-10 grid gap-y-4 sm:mb-12 lg:grid-cols-12 lg:items-end lg:gap-x-12">
-          <h1
-            className="h1-page text-balance lg:col-span-8"
-            style={{ color: "var(--text-primary)", maxWidth: "24ch" }}
-          >
-            Projects
-          </h1>
-          <p className="text-base leading-relaxed lg:col-span-4 lg:pb-1.5" style={{ color: "var(--text-secondary)", maxWidth: "44ch" }}>
-            Jobs across Canada: the town, the system, and how it has held up. Guides
-            for whoever writes the next spec.
-          </p>
+        {/* Masthead (27 Oct 2026; Vern: "Projects parent page also needs some
+            love and care"): the /products and /applications header, so the
+            three hubs read as one site. The section's name as the eyebrow, a
+            line as the title, and the two ways in a specifier asks for next:
+            the map and the book. No section chips here: the library's tabs
+            below name the same two sections and filter in place, and two
+            controls with one name that do different things is the repeat
+            Vern cut in August (the note under the header). */}
+        <header className="mb-12 sm:mb-16">
+          <div className="max-w-3xl">
+            <p className="eyebrow mb-3">{BLOG_NAME}</p>
+            <h1 className="h1-page mb-4 text-balance" style={{ color: "var(--text-primary)" }}>
+              Jobs across Canada
+            </h1>
+            <p className="max-w-2xl text-lg" style={{ color: "var(--text-secondary)" }}>
+              The town, the system, and how it has held up. Guides for whoever writes the next spec.
+            </p>
+          </div>
+
+          <div className="mt-8 flex flex-wrap gap-x-8 gap-y-0 text-sm font-semibold sm:gap-y-3">
+            <Link href="/#map" className="link-arrow">
+              See the jobs on the map
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+            </Link>
+            {showCatalogue() && (
+              <Link href={ideaBook.href} className="link-arrow">
+                Open the {ideaBook.short}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+              </Link>
+            )}
+          </div>
         </header>
 
         {/* The five type hubs used to sit here as a row of big count tiles.

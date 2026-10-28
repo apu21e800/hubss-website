@@ -1193,6 +1193,14 @@ search field at 320px (`min-w-0`: its default twenty-character width slid the
 panel sideways), `.h2-section` at 320px (30px under 360) and the photo
 archive's hover caption (two lines at most).
 
+## The gate photo (28 Oct 2026)
+public/images/products/streetprint/streetprint-86.jpg (the estate driveway
+between brick gate pillars: the StreetPrint card on the homepage, the
+StreetPrint gallery, the cover of "How stamped asphalt is installed") showed
+the house's number on the wall plaque. The file is retouched: the plaque is
+plain. Don't restore the original from history. Studio's copy is moved by
+`npx tsx scripts/redact-gate-photo.ts` on Vern's PC (`--dry-run` first).
+
 ## The product flyers (28 Oct 2026)
 Vern, 27 Oct: the May flyers in /resources "look like not much effort was put
 into them" (one page, the paragraph cut off with "...", "heat-fused", "6 Mohs",

@@ -118,7 +118,9 @@ function project(card: Omit<ProjectCard, "photo" | "mapId" | "post"> & { photo?:
   return {
     ...card,
     photo: card.photo ?? (card.fullBleed ? full(card.page, alt) : half(card.page, alt)),
-    post: card.post ?? map?.post,
+    // The pin's write-up once it is live (`slug`): since 28 Oct 2026 every pin
+    // names one (`post`), most of them drafts.
+    post: card.post ?? map?.slug,
   };
 }
 

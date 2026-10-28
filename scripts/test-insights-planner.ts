@@ -29,7 +29,11 @@ function check(name: string, fn: () => void) {
   }
 }
 
-const jobs = roundupJobs();
+// A roundup's material is the map's jobs with no write-up of their own.
+// Since 28 Oct 2026 every job names one (the 40 write-ups in content/drafts),
+// so the vetting below runs on the map's jobs with their write-ups set aside,
+// and the filter is checked on its own.
+const jobs = roundupJobs(mapProjects.map((p) => ({ ...p, post: undefined, slug: undefined })));
 const existing: Existing[] = [
   { title: "Bike boxes: what they are, and how the green stays green", phrases: ["bike box"] },
   { title: "Parking lot line painting vs thermoplastic markings", phrases: ["parking lot line painting"] },
@@ -52,7 +56,9 @@ const vet = (raw: RawIdea[], max = 10) => vetIdeas(raw, { existing, jobs, max })
 console.log("The jobs a roundup may use");
 check("only documented jobs with no article of their own", () => {
   assert.ok(jobs.length > 10, `${jobs.length} jobs`);
-  for (const j of jobs) assert.ok(!mapProjects.find((p) => p.id === j.id)?.post, j.id);
+  const written = mapProjects.filter((p) => p.post);
+  assert.ok(written.length > 0);
+  assert.equal(roundupJobs(written).length, 0, "a job with a write-up is never a roundup's");
 });
 check("places spelled out, systems known", () => {
   for (const j of jobs) {

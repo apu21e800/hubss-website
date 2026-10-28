@@ -95,6 +95,18 @@ hubss-website/
   relatedProducts and relatedApplications are set from their slugs, the alt
   text and "vs" are checked too, and the note in Studio says 21e8 wrote it,
   never how. Keep each piece's fact record beside it (<slug>.sources.md).
+  Since 28 Oct 2026 `forDoug:` in the front matter (a line or a list) adds
+  "To confirm before Publish: ..." lines to that note, in plain words, for
+  what only Doug can settle (a town, a system, an artist's credit).
+- The 40 map jobs without a write-up (Vern, 27 Oct: "every pin needs its own
+  landing page") have one each in content/drafts/ (28 Oct 2026), written from
+  the map record, the printed page and the published posts, checked by two
+  independent fact checks, every fix applied. Each pin's entry in
+  lib/map-projects.ts names its slug (`post:`), so its card links to the post
+  from the build after it is published, and not before. Five carry `forDoug`
+  questions (Oakville's ten years, the Every Child Matters town, Nanaimo's
+  system, Sheffield Park's system, the Circle of Life artists). On Vern's PC:
+  the dry runs, the real runs, then the review loop.
 - Article ideas: Studio → Blog ideas. The AI drafter (Tuesdays and
   Thursdays since 14 Oct 2026) takes the top Ready item, or the top Idea when
   none is Ready, and writes it up as an unpublished draft for review (never

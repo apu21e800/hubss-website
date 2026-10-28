@@ -337,7 +337,7 @@ export function LeafView({ leaf, index, settings, priority }: { leaf: Leaf; inde
       );
 
     case "application": {
-      const link = leaf.mapId ? jobHref({ mapId: leaf.mapId, post: mapProjects.find((p) => p.id === leaf.mapId)?.post }) : null;
+      const link = leaf.mapId ? jobHref({ mapId: leaf.mapId, post: mapProjects.find((p) => p.id === leaf.mapId)?.slug }) : null;
       return (
         <section {...common} aria-label={leaf.eyebrow}>
           <div className="ib-app-text">
@@ -364,7 +364,7 @@ export function LeafView({ leaf, index, settings, priority }: { leaf: Leaf; inde
     }
 
     case "then-now": {
-      const link = jobHref({ mapId: leaf.mapId, post: mapProjects.find((p) => p.id === leaf.mapId)?.post });
+      const link = jobHref({ mapId: leaf.mapId, post: mapProjects.find((p) => p.id === leaf.mapId)?.slug });
       // Both photographs at one shape, the wider of the two, so the pair reads as a pair.
       const fit = Math.max(photoBand(leaf.before).ratio, photoBand(leaf.after).ratio);
       return (
@@ -397,7 +397,7 @@ export function LeafView({ leaf, index, settings, priority }: { leaf: Leaf; inde
     }
 
     case "statement": {
-      const link = jobHref({ mapId: leaf.mapId, post: leaf.post ?? mapProjects.find((p) => p.id === leaf.mapId)?.post });
+      const link = jobHref({ mapId: leaf.mapId, post: leaf.post ?? mapProjects.find((p) => p.id === leaf.mapId)?.slug });
       return (
         <section {...common} aria-label={leaf.title}>
           <div className="ib-statement-photo">

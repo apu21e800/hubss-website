@@ -19,7 +19,8 @@
  *   keywords (six at most), relatedProducts and relatedApplications (slugs);
  *   cover: { ref, alt, hotspot, crop }, a photo already in Studio, or
  *   cover: <a path in the repo> with coverAlt (and coverHotspot, coverCrop),
- *   uploaded on the real run.
+ *   uploaded on the real run; forDoug (28 Oct 2026), a line or a list of
+ *   lines the note in Studio adds as "To confirm before Publish: ...".
  * The body goes through the same converter as the drafter's drafts
  * (lib/markdown-to-portable-text.ts) and the same style check
  * (lib/style-lint.ts), with the photo's alt text and no "vs" in a title or a
@@ -67,6 +68,9 @@ if (data.category && !FIELD_NOTE_TYPES.some((t) => t.label === data.category)) {
 }
 const keywords = Array.isArray(data.keywords) ? data.keywords.map(String) : [];
 if (keywords.length > 6) problems.push(`${keywords.length} keywords; six at most`);
+// What only Doug can settle (a town, a system, an artist's credit), printed in
+// the note he reads in Studio. Plain words: he reads them as they are.
+const forDoug = (Array.isArray(data.forDoug) ? data.forDoug : data.forDoug ? [data.forDoug] : []).map((q: unknown) => String(q).trim()).filter(Boolean);
 
 // The photo: one already in Studio (an object with its ref), or a file in the repo.
 const coverRef = data.cover && typeof data.cover === "object" ? (data.cover as { ref?: unknown; alt?: unknown; hotspot?: Hotspot | null; crop?: Crop | null }) : null;
@@ -88,6 +92,7 @@ const flags = [
   ...flagSentences(excerpt),
   ...flagSentences(content, { headings: "markdown" }),
   ...(alt ? flagSentences(alt) : []),
+  ...forDoug.flatMap((q) => flagSentences(q)),
 ];
 for (const f of flags) problems.push(`house style, "${f.text}": ${f.issues.map(describeIssue).join("; ")}`);
 for (const h of [title, ...content.split("\n").filter((l) => /^\s*#{1,6}\s/.test(l))]) {
@@ -160,6 +165,9 @@ async function main() {
     editorNotes: [
       `Written by 21e8 on ${new Date().toISOString().slice(0, 10)}: read it, then Publish.`,
       "Every statement about HUB is from the Product Portfolio Book or the site's own pages, and any outside source is linked where it is used.",
+      // `forDoug:` in the front matter (28 Oct 2026): what only Doug can
+      // settle before it goes live, in plain words, one line each.
+      ...forDoug.map((q) => `To confirm before Publish: ${q}`),
     ].join("\n"),
   };
 

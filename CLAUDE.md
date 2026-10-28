@@ -1151,6 +1151,19 @@ text-on-photo cards looked bad; /blog "needs love and care".
   `.kicker-parts` (app/globals.css) draws the dot between the two parts and
   drops it when the second wraps to its own line.
 
+## The footer on a phone (28 Oct 2026)
+Vern: "footer on mobile experience is an awkward long scroll", then "improve
+the footer is a moral to a story". Below lg the footer is the page's last
+word (components/sections/Footer.tsx): the logo, Studio's tagline and the
+Canadian line, the two offices with their number and address as 44px rows,
+then Products, Applications and Company folded under their names
+(`FoldedLinks`: `<details class="faq ft-fold" name="footer-links">`, one
+open at a time, each list starting with its own page), the social marks and
+the legal line. 925px on a 390px phone (1,943 before, forty 44px rows),
+741 on a tablet (1,536). From lg the five columns are unchanged. The lists
+come from one place for both layouts (footerProducts, footerApplications,
+companyLinks).
+
 ## Lunch & Learn page (30 Sep and 2 Oct 2026)
 - /lunch-learn is app/lunch-learn/page.tsx: the boardroom card (LunchLearn ->
   LunchLearnV2, whose title is the page's h1; #book is the card), then

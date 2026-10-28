@@ -163,13 +163,22 @@ export const thumbSrcSet = (base: string) => THUMB_SIZES.map((w) => `${base}-${w
 export const documentHasThumb = (fileUrl: string) => fileUrl.startsWith("/docs/") && /\.pdf($|\?)/i.test(fileUrl);
 
 /**
- * The two static pages with a picture that is unmistakably theirs: the Product
- * Book's cover and a stamping template. "All systems", "Contact" and the rest
- * are sections of the site, and the HUB wheel is the honest picture for them.
+ * The static pages with a picture of their own: the Product Book's cover, a
+ * stamping template, and the six places the start screen offers to jump to.
+ * "Contact", "About" and the rest keep the HUB wheel.
  */
 export const PAGE_THUMBS: Record<string, { src: string; treat: "photo" | "pattern" }> = {
   ...(catalogue.dir ? { "p-idea-book": { src: `${catalogue.dir}/p001-800.webp`, treat: "photo" as const } } : {}),
   "p-patterns": { src: patternSrc(PATTERN_TEMPLATES[0]), treat: "pattern" },
+  // The start screen's places to jump to (28 Oct 2026; Vern: the search "is
+  // clearly bland ... at least get the first impression right first"): each
+  // row shows a picture of where it goes, as a result row does.
+  "p-products": { src: "/images/products/traffic-patterns-xd/traffic-patterns-xd-01.jpg", treat: "photo" },
+  "p-apps": { src: "/images/applications/crosswalks/crosswalks-01.jpg", treat: "photo" },
+  "p-blog": { src: "/images/applications/traffic-calming/traffic-calming-01.jpg", treat: "photo" },
+  "p-resources": { src: "/resources/flyers/traffic-patterns-xd-preview.webp", treat: "photo" },
+  // The Lunch & Learn page's own picture (components/sections/LunchLearnV2.tsx IMG).
+  "p-ll": { src: "/images/products/streetbond/streetbond-112.jpg", treat: "photo" },
 };
 
 export interface SearchHit extends SearchEntry {
@@ -220,7 +229,7 @@ const PAGES: Omit<SearchEntry, "boost">[] = [
   { id: "p-projects", type: "Page", title: "Projects", subtitle: SECTION_BY_KEY.projects.blurb, href: `/blog/${SECTION_BY_KEY.projects.slug}`, keywords: "projects case studies case study project profiles installations portfolio outcomes evidence", body: "" },
   { id: "p-guides", type: "Page", title: "Guides", subtitle: SECTION_BY_KEY.guides.blurb, href: `/blog/${SECTION_BY_KEY.guides.slug}`, keywords: "guides how to specify comparison decision white papers white paper technical research engineering articles industry notes news blog", body: "" },
   { id: "p-resources", type: "Page", title: "Specification library", subtitle: "Spec sheets, data sheets, colour cards and submittals", href: "/resources", keywords: "resources downloads documents spec sheets pdf submittal data sheet", body: "" },
-  { id: "p-ll", type: "Page", title: "Lunch & Learn", subtitle: "Free spec session for engineers, planners and architects", href: "/lunch-learn", keywords: "lunch learn session training presentation cpd book booking teach", body: "" },
+  { id: "p-ll", type: "Page", title: "Lunch & Learn", subtitle: "Sixty minutes with your engineers, planners and architects", href: "/lunch-learn", keywords: "lunch learn session training presentation cpd book booking teach", body: "" },
   { id: "p-patterns", type: "Page", title: "Pattern library", subtitle: "Stamped asphalt patterns and border templates", href: "/patterns", keywords: "patterns templates stamps brick cobblestone herringbone", body: "" },
   { id: "p-about", type: "Page", title: "About HUB", subtitle: "Canadian decorative pavement since 1999", href: "/about", keywords: "about company history team offices who we are", body: "" },
   { id: "p-contact", type: "Page", title: "Contact", subtitle: "Milton, Ontario and Ladysmith, British Columbia", href: "/contact", keywords: "contact email phone offices rep quote enquiry sales", body: "" },

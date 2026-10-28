@@ -677,6 +677,12 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.03em;
   font-weight: 900;
 }
+/* The smallest phones (320px): "Where TrafficPatternsXD goes" ran 15px past
+   the screen at 36px, the system's name being one word (screen-size sweep,
+   28 Oct 2026). */
+@media (max-width: 359px) {
+  .h2-section { font-size: 1.875rem; }
+}
 .h2-sub {
   font-size: clamp(1.5rem, 2.2vw, 1.875rem);
   line-height: 1.12;

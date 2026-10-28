@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect, useMemo, useCallback, type CSSProperties, type ReactNode } from "react";
-import { BLOG_NAME } from "@/lib/field-notes-taxonomy";
+import { sectionFor } from "@/lib/field-notes-taxonomy";
+import navInsights from "@/lib/nav-insights.json";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { familiesFor } from "@/lib/colours";
@@ -60,19 +61,19 @@ import { withColours, search, groupHits, thumbSrc, thumbSrcSet, type SearchEntry
  * chip that repeated the typed letters ("se") back at the end of a row is gone.
  */
 
-// "Vancouver" earns its place by teaching the one thing nobody would guess:
-// the index knows where the work is. Fifty-nine installations across ten
-// provinces are searchable by city and by province name, and a visitor only
-// finds that out if something tells them.
-const QUICK: { label: string; href: string; hint: string }[] = [
-  { label: "All systems", href: "/products", hint: "Products" },
-  { label: "All applications", href: "/applications", hint: "Uses" },
-  { label: "Photo archive", href: "/gallery", hint: "Installations" },
-  { label: "Specification library", href: "/resources", hint: "Spec sheets" },
-  { label: BLOG_NAME, href: "/blog", hint: "Projects and guides" },
-  { label: "Lunch & Learn", href: "/lunch-learn", hint: "Book a session" },
-];
+/**
+ * The start screen's places to jump to, as the index's own page entries
+ * (lib/search.ts PAGES): each row shows its picture, its name and its line,
+ * as a result row does (28 Oct 2026; Vern: the search "is clearly bland, it
+ * could become a commanding feature of the website ... at least get the first
+ * impression right first").
+ */
+const QUICK = ["p-products", "p-apps", "p-blog", "p-idea-book", "p-resources", "p-ll"];
 
+// "Vancouver" earns its place by teaching the one thing nobody would guess:
+// the index knows where the work is: every documented installation is
+// searchable by city and by province name, and a visitor only finds that out
+// if something tells them.
 const TRY = ["stamped asphalt", "rainbow crosswalk", "150 mil", "Vancouver", "LEED heat island", "bike lane", "colour card"];
 
 /**
@@ -255,6 +256,29 @@ function Thumb({ entry, variant }: { entry: SearchEntry; variant: "row" | "tile"
   );
 }
 
+/**
+ * A row on the start screen: the place's picture, its name and one line, the
+ * shape of a result row, so the first thing the panel shows is what it finds.
+ */
+function StartRow({ entry, line, onPick }: { entry: SearchEntry; line?: string; onPick: () => void }) {
+  return (
+    <button
+      onClick={onPick}
+      className="group w-full min-w-0 text-left p-2 flex items-center gap-3 rounded-2xl transition-colors hover:bg-[var(--bg-card-surface)] focus-visible:bg-[var(--bg-card-surface)]"
+    >
+      <Thumb entry={entry} variant="row" />
+      <span className="min-w-0 flex-1">
+        <span className="text-sm font-semibold transition-colors group-hover:text-[var(--text-primary)]" style={{ ...ONE_LINE, color: "var(--text-body)" }}>
+          {entry.title}
+        </span>
+        <span className="text-xs mt-0.5" style={{ ...ONE_LINE, color: "var(--text-faint)" }}>
+          {line ?? entry.subtitle}
+        </span>
+      </span>
+    </button>
+  );
+}
+
 export default function SearchOverlay({ onClose }: { onClose: () => void }) {
   const router = useRouter();
   /** The query, and how many times it has been edited (see `chosen`). */
@@ -293,6 +317,17 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
     }
     return withColours(colours);
   }, []);
+
+  /** The start screen's rows: the pages to jump to, and the three newest posts. */
+  const quick = useMemo(() => QUICK.flatMap((id) => entries.filter((e) => e.id === id)), [entries]);
+  const latest = useMemo(
+    () =>
+      navInsights.latest.slice(0, 3).flatMap((p) => {
+        const entry = entries.find((e) => e.id === `post-${p.slug}`);
+        return entry ? [{ entry, line: `${sectionFor(p.type).singular} · ${p.date}` }] : [];
+      }),
+    [entries],
+  );
 
   const hits = useMemo(() => search(query, entries), [query, entries]);
   const groups = useMemo(() => groupHits(hits, query), [hits, query]);
@@ -444,7 +479,10 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
             // Short enough for a 262px field on a phone (phone review,
             // 17 Oct 2026: the old line was cut at "insight").
             placeholder="Search the site"
-            className="flex-1 bg-transparent outline-none"
+            // min-w-0: a text field is about twenty characters wide by default,
+            // which at 320px was wider than its room, so focusing it slid the
+            // whole panel sideways (screen-size sweep, 28 Oct 2026).
+            className="flex-1 min-w-0 bg-transparent outline-none"
             style={{
               color: "var(--text-primary)",
               // Accent 1: the caret. The smallest possible mark, on the exact
@@ -502,46 +540,42 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
         {/* Results */}
         <div>
           {!showResults && (
-            // The start screen: six places to jump to and seven things to try.
-            // On 2 Oct 2026 it was briefly a grid of the fourteen systems as
-            // square tiles; Vern: "I'm not a fan of these squares on the search
-            // function, the rest of it is fine." So the rows keep their
-            // thumbnails and the start screen is the quiet list again.
-            <div className="p-4">
-              <p className="text-[12px] font-bold uppercase tracking-[0.16em] mb-2.5" style={{ color: "var(--text-faint)" }}>Jump to</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 mb-5">
-                {QUICK.map((item) => (
-                  <button
-                    key={item.href} onClick={() => go(item.href)}
-                    className="group flex items-center justify-between gap-2 px-3 rounded-lg text-left hover:bg-[var(--ink-06)] transition-colors"
-                    style={{ minHeight: 44 }}
-                  >
-                    <span className="text-sm font-semibold flex items-center gap-2" style={{ color: "var(--text-body)" }}>
-                      {/* A two-pixel mark that appears under the cursor: the
-                          jump links are destinations; the mark says which one
-                          you are pointing at, in the site's own paint. */}
-                      <span
-                        aria-hidden="true"
-                        className="opacity-0 group-hover:opacity-100 transition-opacity"
-                        style={{ width: 3, height: 14, background: "#F97316", borderRadius: 2 }}
-                      />
-                      {item.label}
-                    </span>
-                    <span className="text-[12px]" style={{ color: "var(--text-faint)" }}>{item.hint}</span>
-                  </button>
-                ))}
-              </div>
-              <p className="text-[12px] font-bold uppercase tracking-[0.16em] mb-2.5" style={{ color: "var(--text-faint)" }}>Try</p>
-              <div className="flex flex-wrap gap-1.5">
-                {TRY.map((t) => (
-                  <button
-                    key={t} onClick={() => { setQuery(t); inputRef.current?.focus(); }}
-                    className="text-xs font-medium px-3 py-2 rounded-full transition-colors hover:bg-[var(--ink-06)] hover:border-orange-500/45 hover:text-[var(--text-primary)]"
-                    style={{ background: "var(--fill-subtle)", color: "var(--text-secondary)", border: "1px solid var(--border-color)" }}
-                  >
-                    {t}
-                  </button>
-                ))}
+            // The start screen (28 Oct 2026): where to go, with the picture of
+            // each place, then things to try and the newest work. Rows, as the
+            // results are: the fourteen systems as square tiles were tried on
+            // 2 Oct 2026 and dropped (Vern: "not a fan of these squares").
+            <div className="max-h-[62vh] overflow-y-auto px-2 pt-3 pb-2 sm:px-3">
+              <div className="grid gap-x-4 gap-y-3 sm:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
+                <section aria-labelledby="search-jump" className="min-w-0">
+                  <p id="search-jump" className="text-[12px] font-bold uppercase tracking-[0.16em] px-2 pb-1.5" style={{ color: "var(--text-faint)" }}>Jump to</p>
+                  {quick.map((e) => (
+                    <StartRow key={e.id} entry={e} onPick={() => go(e.href)} />
+                  ))}
+                </section>
+                <div className="flex min-w-0 flex-col gap-3">
+                  <section aria-labelledby="search-try" className="px-2">
+                    <p id="search-try" className="text-[12px] font-bold uppercase tracking-[0.16em] pb-2" style={{ color: "var(--text-faint)" }}>Try</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {TRY.map((t) => (
+                        <button
+                          key={t} onClick={() => { setQuery(t); inputRef.current?.focus(); }}
+                          className="text-xs font-medium px-3 py-2 rounded-full transition-colors hover:bg-[var(--ink-06)] hover:border-orange-500/45 hover:text-[var(--text-primary)]"
+                          style={{ background: "var(--fill-subtle)", color: "var(--text-secondary)", border: "1px solid var(--border-color)", minHeight: 36 }}
+                        >
+                          {t}
+                        </button>
+                      ))}
+                    </div>
+                  </section>
+                  {latest.length > 0 && (
+                    <section aria-labelledby="search-latest">
+                      <p id="search-latest" className="text-[12px] font-bold uppercase tracking-[0.16em] px-2 pb-1.5" style={{ color: "var(--text-faint)" }}>New on the site</p>
+                      {latest.map(({ entry, line }) => (
+                        <StartRow key={entry.id} entry={entry} line={line} onPick={() => go(entry.href)} />
+                      ))}
+                    </section>
+                  )}
+                </div>
               </div>
             </div>
           )}

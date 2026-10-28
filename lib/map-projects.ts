@@ -81,6 +81,7 @@ const curatedProjects: MapProject[] = [
     // TrafficPatterns". The Cultural Centre is in the photo; CBC places the crosswalks at
     // Front and Black Streets.
     id: "whitehorse-kwanlin-dun",
+    post: "kwanlin-dun-cultural-centre-crosswalks-whitehorse",
     title: "Kwanlin Dün Cultural Centre crosswalks",
     city: "Whitehorse",
     province: "YT",
@@ -102,6 +103,7 @@ const curatedProjects: MapProject[] = [
     // lists it as TrafficPatternsXD: the book is followed, and the difference is flagged
     // for Doug.
     id: "nanaimo-pride-intersection",
+    post: "nanaimo-pride-intersection",
     title: "Pride intersection, Commercial and Bastion",
     city: "Nanaimo",
     province: "BC",
@@ -174,6 +176,7 @@ const curatedProjects: MapProject[] = [
     // StreetPrint). Matched from imagery, not a source, to the Bell McKinnon Rd and Herd Rd
     // roundabout: approximate.
     id: "cowichan-roundabout",
+    post: "north-cowichan-roundabout-apron",
     title: "Roundabout apron",
     city: "North Cowichan",
     province: "BC",
@@ -290,6 +293,7 @@ const curatedProjects: MapProject[] = [
     // Product Book p.121: "Catholic Diocese of Vancouver | DuraTherm". The school sign is in
     // the photo: 3745 W 28th Ave, Dunbar.
     id: "vancouver-immaculate-conception",
+    post: "immaculate-conception-school-vancouver",
     title: "Immaculate Conception School",
     city: "Vancouver",
     province: "BC",
@@ -336,6 +340,7 @@ const curatedProjects: MapProject[] = [
     // TrafficPatternsXD". Square One published the same photo of its crossing at Granville
     // Island Brewing, 1441 Cartwright St.
     id: "vancouver-granville-island",
+    post: "granville-island-brewing-crosswalk",
     title: "Granville Island Brewing crosswalk",
     city: "Vancouver",
     province: "BC",
@@ -380,6 +385,7 @@ const curatedProjects: MapProject[] = [
     // (file: 18th and Cambie). The City's Cambie-18th plaza, W 18th Ave just west of
     // Cambie.
     id: "vancouver-cambie-18th",
+    post: "cambie-and-18th-plaza-vancouver",
     title: "Cambie and 18th plaza",
     city: "Vancouver",
     province: "BC",
@@ -490,6 +496,7 @@ const curatedProjects: MapProject[] = [
     // the Delta Hotels by Marriott at Cascades Casino Delta, 6005 Highway 17A, under
     // construction.
     id: "delta-cascades-casino",
+    post: "cascades-casino-delta-access-road",
     title: "Cascades Casino Delta",
     city: "Delta",
     province: "BC",
@@ -508,6 +515,7 @@ const curatedProjects: MapProject[] = [
     // Product Book p.118: "Burnaby, British Columbia | StreetBond". The park is not
     // identified: pin at city hall, approximate.
     id: "burnaby-basketball-court",
+    post: "burnaby-basketball-court-streetbond",
     title: "Basketball court",
     city: "Burnaby",
     province: "BC",
@@ -528,6 +536,7 @@ const curatedProjects: MapProject[] = [
     // Townhomes, 728 Ewen Ave, Queensborough; Square One records StreetPrint and StreetBond
     // on its laneways.
     id: "new-westminster-oxford",
+    post: "oxford-townhomes-laneways-new-westminster",
     title: "Oxford Townhomes laneways",
     city: "New Westminster",
     province: "BC",
@@ -570,6 +579,7 @@ const curatedProjects: MapProject[] = [
     // Product Book p.129: "Waterpark surface coating... Bear Creek Park, Surrey, British
     // Columbia | StreetBond". OpenStreetMap maps the splash pad here.
     id: "surrey-bear-creek-spray-park",
+    post: "bear-creek-park-spray-park-surrey",
     title: "Bear Creek Park spray park",
     city: "Surrey",
     province: "BC",
@@ -678,6 +688,7 @@ const curatedProjects: MapProject[] = [
     // Product Book pp.82–83: "Sheffield Park · Coquitlam, British Columbia". 3510 Sheffield
     // Ave.
     id: "coquitlam-sheffield-park",
+    post: "sheffield-park-coquitlam",
     title: "Sheffield Park",
     city: "Coquitlam",
     province: "BC",
@@ -721,6 +732,7 @@ const curatedProjects: MapProject[] = [
     // One's project page: "Circle of Life" in StreetBond, custom-mixed colours, on the
     // plaza by the stadium, 7888 200 St.
     id: "langley-events-centre",
+    post: "circle-of-life-langley-events-centre",
     title: "Circle of Life, Langley Events Centre",
     city: "Langley",
     province: "BC",
@@ -789,6 +801,7 @@ const curatedProjects: MapProject[] = [
     // StreetBond". The City's new spray park at Maple Ridge Park (232 St and 132 Ave), July
     // 2025.
     id: "maple-ridge-spray-park",
+    post: "maple-ridge-park-spray-park",
     title: "Maple Ridge Park spray park",
     city: "Maple Ridge",
     province: "BC",
@@ -809,6 +822,7 @@ const curatedProjects: MapProject[] = [
     // DecoMark". Matched from the photo, not a source, to the steps by salishan Place:
     // approximate.
     id: "fort-langley-land-recognition",
+    post: "fort-langley-first-nations-land-recognition",
     title: "First Nations land recognition",
     city: "Fort Langley",
     province: "BC",
@@ -829,6 +843,7 @@ const curatedProjects: MapProject[] = [
     // is behind the roundabout, on 112 Ave at Bosonworth Ave. The traffic calming page
     // shows the same photo as a stamped apron.
     id: "maple-ridge-kanaka-springs",
+    post: "kanaka-springs-roundabout-maple-ridge",
     title: "Kanaka Springs roundabout",
     city: "Maple Ridge",
     province: "BC",
@@ -848,6 +863,7 @@ const curatedProjects: MapProject[] = [
     // Square One's April 2025 job; the building is not named: pin at city hall,
     // approximate.
     id: "mission-herringbone-bays",
+    post: "herringbone-parking-bays-mission",
     title: "Herringbone parking bays",
     city: "Mission",
     province: "BC",
@@ -893,6 +909,7 @@ const curatedProjects: MapProject[] = [
     // decorative-paving-solutions calls Green Square a public plaza, which it is not, so
     // that post is not linked.
     id: "kelowna-green-square",
+    post: "green-square-courtyard-kelowna",
     title: "Green Square courtyard",
     city: "Kelowna",
     province: "BC",
@@ -967,6 +984,7 @@ const curatedProjects: MapProject[] = [
     // revitalization. Woodstock, Ontario | StreetPrint". City Hall is across the street in
     // the photo: pin on Dundas St at City Hall.
     id: "woodstock-dundas-street",
+    post: "dundas-street-woodstock-stamped-asphalt",
     title: "Downtown Dundas Street",
     city: "Woodstock",
     province: "ON",
@@ -1015,6 +1033,7 @@ const curatedProjects: MapProject[] = [
     // overhead sign, so the pin is in Kitchener. Flagged for Doug. Product from the facing
     // Creative Design spread (p.56: TrafficPatterns, custom designs).
     id: "kitchener-every-child-matters",
+    post: "every-child-matters-crosswalk-kitchener",
     title: "Every Child Matters crosswalk, Victoria Park",
     city: "Kitchener",
     province: "ON",
@@ -1035,6 +1054,7 @@ const curatedProjects: MapProject[] = [
     // TrafficPatterns". CTV (2019) describes crowns for King and Queen Streets at this
     // intersection.
     id: "kitchener-kings-queens",
+    post: "kings-and-queens-intersection-kitchener",
     title: "Kings and Queens intersection",
     city: "Kitchener",
     province: "ON",
@@ -1126,6 +1146,7 @@ const curatedProjects: MapProject[] = [
     // Product Book p.84 ("Collingwood, ON", on the StreetBond by GAF page). The Town lists
     // Awen' Waterplay at Harbourview Park, 1 Cedar St, opened August 2023.
     id: "collingwood-awen-waterplay",
+    post: "awen-waterplay-area-collingwood",
     title: "Awen' Waterplay Area",
     city: "Collingwood",
     province: "ON",
@@ -1145,6 +1166,7 @@ const curatedProjects: MapProject[] = [
     // Product Book p.59: "Hamilton, Ontario", on the Play Surfaces spread (StreetBond,
     // DecoMark, StreetBondSR). The park is not identified: pin at city hall.
     id: "hamilton-play-pad",
+    post: "compass-play-pad-hamilton",
     title: "Compass play pad",
     city: "Hamilton",
     province: "ON",
@@ -1217,6 +1239,7 @@ const curatedProjects: MapProject[] = [
     // photos show a grocery store; Oakville has two of that chain and the suburban one at
     // Dundas St W fits the Year 1 photo best, so the pin is approximate.
     id: "oakville-ten-years",
+    post: "oakville-crosswalk-ten-years",
     title: "Ten years of one crosswalk",
     city: "Oakville",
     province: "ON",
@@ -1237,6 +1260,7 @@ const curatedProjects: MapProject[] = [
     // Product Book p.47: "Brampton, Ontario". The canopy sign behind reads Brampton Transit,
     // Bramalea T[erminal]. Pin at Peel Centre Dr and Central Park Dr.
     id: "brampton-bramalea-terminal",
+    post: "bramalea-terminal-crosswalk-brampton",
     title: "Bramalea Terminal crosswalk",
     city: "Brampton",
     province: "ON",
@@ -1280,6 +1304,7 @@ const curatedProjects: MapProject[] = [
     // Product Book p.12, the TrafficPatternsXD page: "Kleinburg, Ontario". The street is a new
     // subdivision, not identified: pin at the village.
     id: "kleinburg-crosswalk",
+    post: "kleinburg-crosswalk-trafficpatternsxd",
     title: "Kleinburg crosswalk",
     city: "Kleinburg",
     province: "ON",
@@ -1327,6 +1352,7 @@ const curatedProjects: MapProject[] = [
     // Vaughan's new store is at 131 Four Valley Dr (the photo shows a new building; not
     // matched against imagery).
     id: "vaughan-audi",
+    post: "audi-vaughan-entrance",
     title: "Audi Vaughan entrance",
     city: "Vaughan",
     province: "ON",
@@ -1398,6 +1424,7 @@ const curatedProjects: MapProject[] = [
     // highlights the location of the new community centre... East Gwillimbury". The pylon
     // beside the crossing reads Health and Active Living Plaza (160 Jim Mortson Dr).
     id: "east-gwillimbury-halp",
+    post: "health-and-active-living-plaza-east-gwillimbury",
     title: "Health and Active Living Plaza",
     city: "East Gwillimbury",
     province: "ON",
@@ -1437,6 +1464,7 @@ const curatedProjects: MapProject[] = [
     // Toronto, Ontario | TrafficPatternsXD". The Rogers Centre is ahead in the photo
     // (Railway Lands, likely Bremner Blvd): approximate.
     id: "toronto-railway-lands",
+    post: "railway-lands-crosswalks-toronto",
     title: "Downtown crosswalks, Railway Lands",
     city: "Toronto",
     province: "ON",
@@ -1456,6 +1484,7 @@ const curatedProjects: MapProject[] = [
     // Product Book p.28, the StreetBondSR page: "Toronto, Ontario". The site is not
     // identified: pin near city hall, approximate.
     id: "toronto-fleet-lot",
+    post: "solar-reflective-fleet-lot-toronto",
     title: "Solar-reflective fleet lot",
     city: "Toronto",
     province: "ON",
@@ -1498,6 +1527,7 @@ const curatedProjects: MapProject[] = [
     // Product Book p.34, the DuraTherm page: "Toronto, Ontario". The street is not identified:
     // approximate.
     id: "toronto-traffic-calming-markings",
+    post: "duratherm-traffic-calming-toronto",
     title: "Traffic calming markings",
     city: "Toronto",
     province: "ON",
@@ -1517,6 +1547,7 @@ const curatedProjects: MapProject[] = [
     // Product Book p.88: "Toronto, Ontario | TrafficPatternsXD". The site is not identified:
     // approximate.
     id: "toronto-lot-crossing",
+    post: "parking-lot-crosswalk-toronto",
     title: "Parking lot crossing",
     city: "Toronto",
     province: "ON",
@@ -1593,6 +1624,7 @@ const curatedProjects: MapProject[] = [
     // the new primary school on Rue Saint-Isidore (401); the address is not mapped, so the
     // pin is approximate.
     id: "saint-lin-school-walkway",
+    post: "saint-lin-laurentides-school-walkway",
     title: "Primary school walkway",
     city: "Saint-Lin–Laurentides",
     province: "QC",
@@ -1612,6 +1644,7 @@ const curatedProjects: MapProject[] = [
     // Product Book p.131: "Long lasting parking lanes... Verdun, Québec | TrafficPatternsXD".
     // The street is not identified: pin at the borough hall, approximate.
     id: "verdun-parking-lanes",
+    post: "verdun-paver-pattern-parking-lane",
     title: "Paver-pattern parking lane",
     city: "Verdun",
     province: "QC",
@@ -1632,6 +1665,7 @@ const curatedProjects: MapProject[] = [
     // TrafficPatternsXD". The corner signs in the photo read Rue Gilberte-Dubé and Rue
     // Jacques-Lauzon (Île-des-Sœurs).
     id: "verdun-flush-medians",
+    post: "verdun-flush-medians-gilberte-dube",
     title: "Flush medians, Rue Gilberte-Dubé",
     city: "Verdun",
     province: "QC",
@@ -1651,6 +1685,7 @@ const curatedProjects: MapProject[] = [
     // StreetBond... Montréal, Québec | TrafficPatterns". The school is not identified (a
     // street sign reads Glen, which may put it in Rosemère): approximate.
     id: "montreal-school-crosswalk",
+    post: "montreal-school-crosswalk",
     title: "School crosswalk",
     city: "Montréal",
     province: "QC",
@@ -1694,6 +1729,7 @@ const curatedProjects: MapProject[] = [
     // Product Book p.49, the Sport Courts spread: "Montréal, Québec". The site is not
     // identified: approximate.
     id: "montreal-basketball-court",
+    post: "montreal-basketball-court-streetbond",
     title: "Basketball court",
     city: "Montréal",
     province: "QC",
@@ -1714,6 +1750,7 @@ const curatedProjects: MapProject[] = [
     // (StreetBond, StreetBondSR). The municipality's only jeux d'eau are at the Centre
     // communautaire, 1060 rue du Moulin-Payet.
     id: "saint-antoine-splash-pad",
+    post: "saint-antoine-sur-richelieu-splash-pad",
     title: "Community centre splash pad",
     city: "Saint-Antoine-sur-Richelieu",
     province: "QC",
@@ -1733,6 +1770,7 @@ const curatedProjects: MapProject[] = [
     // reflects what little light there is. Mont-Mégantic, Québec | StreetBondSR". Pin at
     // the public observatory terrace on the summit.
     id: "mont-megantic-observatory",
+    post: "mont-megantic-observatory-terrace",
     title: "Mont-Mégantic summit terrace",
     city: "Mont-Mégantic",
     province: "QC",
@@ -1754,6 +1792,7 @@ const curatedProjects: MapProject[] = [
     // The poles across the water are the new Fundy Quay extension; the building is the
     // Hilton at Market Square.
     id: "saint-john-harbour-passage",
+    post: "harbour-passage-saint-john",
     title: "Harbour Passage",
     city: "Saint John",
     province: "NB",
@@ -1775,6 +1814,7 @@ const curatedProjects: MapProject[] = [
     // in a herringbone basket-weave and sealed with StreetBond". Pin on the boardwalk
     // between the cruise berth and the marina.
     id: "charlottetown-cruise-terminal",
+    post: "charlottetown-cruise-terminal-walkway",
     title: "Cruise terminal and marina walkway",
     city: "Charlottetown",
     province: "PE",

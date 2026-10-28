@@ -40,8 +40,8 @@ const job = (id: string): MapProject => {
   if (!j) throw new Error(`no map job ${id}`);
   return j;
 };
-/** The brief's order: a write-up, then the tour's, then a year, then the rest. */
-const tier = (j: MapProject) => (j.post || j.slug ? 0 : TOUR_IDS.includes(j.id) ? 1 : j.year ? 2 : 3);
+/** The brief's order: a published write-up, then the tour's, then a year, then the rest. */
+const tier = (j: MapProject) => (j.slug ? 0 : TOUR_IDS.includes(j.id) ? 1 : j.year ? 2 : 3);
 const inOrder = (xs: number[]) => xs.every((x, i) => i === 0 || xs[i - 1] <= x);
 
 console.log("Documented jobs (lib/field-note-facts.ts)");
@@ -59,7 +59,7 @@ check("for parking lots: the map's parking lot jobs, found by the map's name for
 });
 check("jobs with a write-up first, then the tour's, then those with a year", () => {
   for (const list of [xd, lots]) assert.ok(inOrder(list.map(tier)), list.map((j) => j.id).join(", "));
-  assert.ok(lots[0].post && !lots[lots.length - 1].post, "posts first");
+  assert.ok(lots[0].slug && !lots[lots.length - 1].slug, "published write-ups first");
 });
 check("a job that matches a system and an application comes before one that matches only one", () => {
   const both = documentedJobs(["traffic-patterns-xd", "streetbond"], ["parking-lots"]);

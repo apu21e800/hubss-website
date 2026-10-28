@@ -133,7 +133,9 @@ export function documentedJobs(
   const named = (j: MapProject) => !!text && text.includes(fold(j.title)) && text.includes(fold(j.city));
   const bySystem = (j: MapProject) => [j.product, ...(j.systems ?? [])].some((n) => systems.has(n));
   const byApp = (j: MapProject) => apps.has(j.application);
-  const tier = (j: MapProject) => (j.post || j.slug ? 0 : tour.has(j.id) ? 1 : j.year ? 2 : 3);
+  // A published write-up first (`slug`, set only once the post is live): since
+  // 28 Oct 2026 every job names a write-up (`post`), most of them drafts.
+  const tier = (j: MapProject) => (j.slug ? 0 : tour.has(j.id) ? 1 : j.year ? 2 : 3);
   return projects
     .map((j, i) => ({ j, i, named: named(j), fit: (bySystem(j) ? 1 : 0) + (byApp(j) ? 1 : 0) }))
     .filter((x) => x.named || x.fit > 0)

@@ -1164,6 +1164,36 @@ the legal line. 925px on a 390px phone (1,943 before, forty 44px rows),
 come from one place for both layouts (footerProducts, footerApplications,
 companyLinks).
 
+## The product flyers (28 Oct 2026)
+Vern, 27 Oct: the May flyers in /resources "look like not much effort was put
+into them" (one page, the paragraph cut off with "...", "heat-fused", "6 Mohs",
+"73+ colours", the makers' names). The fourteen are two Letter pages each now,
+in the Product Portfolio Book's language, built by `npm run flyers`
+(scripts/flyers/build-flyers.ts; `--only=<slug>`, `--check` reports what would
+not fit, `--draft=<folder>` writes both pages as PNGs to look at). Same names
+in public/resources/flyers, so every link holds: HUBSS-Flyer-<slug>-v01.pdf,
+<slug>-preview.webp (page 1) and <slug>-share.jpg (1200x630).
+- The words and photos are scripts/flyers/flyer-content.ts, every line with
+  its source beside it (the printed page, lib/products.ts, a map job, a post's
+  own words) and `DEPARTURES`, each change from the printed page with its
+  reason, for the next print run. The page is scripts/flyers/flyer-template.ts.
+  Front: the job photo, the system's band, the headline, words and specs, a
+  quote where a published post has one, the uses strip. Back: how it goes in,
+  documented jobs, colours (lib/colours.ts) or a list, where it goes (the
+  book's SPECIFY notes with pages), the documents, then the close: both
+  offices from Site Settings, the Lunch & Learn offer and a QR code to the
+  product page.
+- Links carry utm_source=hubss-flyer, utm_campaign=product-flyers-2026,
+  utm_content=<slug>; utm_medium=pdf for a click in the file, qr for the code
+  scanned off a printed copy.
+- Photos are cut around their focus to each box at up to 300 dpi (AggreFill's
+  476px originals sit in a smaller frame, 159 dpi). Inter is embedded as
+  TrueType (scripts/flyers/fonts, Inter 4.1 under the OFL), never Type 3; check
+  with `pdffonts`. The StreetPrint hero is cut below the gate on page 18: the
+  house's number is on its pillar.
+- Needs qrcode (a dev dependency) and Playwright's Chromium. A Sanity photo is
+  fetched once into FLYER_CACHE (the system's temp folder by default).
+
 ## Lunch & Learn page (30 Sep and 2 Oct 2026)
 - /lunch-learn is app/lunch-learn/page.tsx: the boardroom card (LunchLearn ->
   LunchLearnV2, whose title is the page's h1; #book is the card), then

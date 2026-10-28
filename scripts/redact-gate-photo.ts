@@ -34,6 +34,13 @@ const TOKEN = process.env.SANITY_API_WRITE_TOKEN;
 const FILE = path.join(ROOT, "public/images/products/streetprint/streetprint-86.jpg");
 /** The asset the photo was first uploaded as, number and all. */
 const OLD = "image-58d95130447a89746727a9fedf0bc90f1ed82a77-1920x818-jpg";
+/**
+ * The SHA-1 of the retouched file this commit puts in the repo. Checked
+ * positively: Studio's old asset is a re-encode of the original, so its hash
+ * differs from the original file's, and a "not the old asset" check would let
+ * an un-pulled copy (the one with the number) through (review, PR #114).
+ */
+const RETOUCHED_SHA1 = "85c8126f709e90a434f5c3bc59b17171e54df3f7";
 const USES = [
   { id: "product-streetprint", field: "heroImage" },
   { id: "blogpost-how-stamped-asphalt-is-installed", field: "featuredImage" },
@@ -51,11 +58,11 @@ type Doc = { _id: string; _rev: string; [k: string]: unknown };
 const assetOf = (doc: Doc, field: string) => ((doc[field] as { asset?: { _ref?: string } } | undefined)?.asset?._ref ?? "");
 
 async function main() {
-  // Sanity names an image asset by the SHA-1 of its bytes: if the repo's file
-  // still hashes to the old asset, `git pull` hasn't brought the retouched one.
+  // Only the retouched file goes up: anything else (the original, before
+  // `git pull`, or a later edit) stops here.
   const sha = createHash("sha1").update(readFileSync(FILE)).digest("hex");
-  if (OLD.includes(sha)) {
-    console.error("The repo's streetprint-86.jpg is still the one with the number. Run `git pull` first. Nothing written.");
+  if (sha !== RETOUCHED_SHA1) {
+    console.error("The repo's streetprint-86.jpg isn't the retouched one (run `git pull` first). Nothing written.");
     process.exit(1);
   }
   if (!DRY && !TOKEN) {

@@ -32,7 +32,11 @@ type Block = string | string[];
 // email domain, project fields and the message, with phone numbers and email
 // addresses replaced, to Anthropic's Claude (lib/form-screen.ts). Never the
 // phone field, the full email or the mailing address (a Product Book request's
-// city included). Hence the new line.
+// city included). Hence the new line. 28 Oct 2026: Google Ads, for the
+// Western Canada campaign (claude/HUBSS-google-ads-plan-2026-10.md): it shows
+// the ads and, through GA4, counts the enquiries they bring. The cookie line
+// stays true only while personalised advertising is off in the GA4 to Google
+// Ads link and no remarketing list is made.
 // The contact lines carry the offices from Studio's Site Settings
 // (lib/site-settings.ts), so they match the footer.
 const buildSections = (offices: SiteSettings["offices"]): { heading: string; blocks: Block[] }[] => [
@@ -82,6 +86,7 @@ const buildSections = (offices: SiteSettings["offices"]): { heading: string; blo
         "Hosting: Vercel (hosts the site and checks that our forms are sent from a real browser; Vercel Web Analytics and Speed Insights measure page visits and loading speed)",
         "Spam screening: Anthropic (reads what you send through our forms, with phone numbers and email addresses taken out and never your mailing address, to keep spam out of our inbox)",
         "Analytics: Google Analytics (pages visited, time on site, browser type, and referring URL)",
+        "Advertising: Google Ads (shows our ads, and measures which of them lead to inquiries)",
         "Content: Sanity (stores the site's text and serves its photographs)",
         "Maps: CARTO (supplies the map on the homepage)",
       ],
@@ -97,7 +102,7 @@ const buildSections = (offices: SiteSettings["offices"]): { heading: string; blo
         "Collect analytics data",
         "Improve site performance",
       ],
-      "You can disable cookies in your browser settings. Disabling cookies may affect some site functionality. We do not use cookies for advertising or cross-site tracking.",
+      "You can disable cookies in your browser settings. Disabling cookies may affect some site functionality. We use Google Ads to show our ads and to measure which of them lead to inquiries. We don't use cookies for remarketing or to follow you across other sites.",
     ],
   },
   {
@@ -149,7 +154,7 @@ export default async function PrivacyPage() {
           Privacy policy
         </h1>
         <p className="text-sm mb-12" style={{ color: "var(--text-muted)" }}>
-          Last updated: Oct 6, 2026
+          Last updated: Oct 28, 2026
         </p>
 
         <p className="text-base leading-relaxed mb-12" style={{ color: "var(--text-muted)" }}>

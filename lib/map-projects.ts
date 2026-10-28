@@ -1204,11 +1204,11 @@ const curatedProjects: MapProject[] = [
     post: "toronto-premium-outlets-14-years",
     ideaBookPage: 86,
     excerpt:
-      "TrafficPatternsXD crossings at Toronto Premium Outlets in Halton Hills, fourteen years in service through shoppers, delivery trucks and Ontario winters, with StreetPrint on the lot.",
+      "TrafficPatternsXD crosswalks at Toronto Premium Outlets in Halton Hills, fourteen years in service through shoppers, delivery trucks and Ontario winters, with StreetPrint on the lot.",
     problem:
       "A retail parking lot combines everything that wears out markings (turning traffic, delivery vehicles, salt and plows) with an owner whose customers judge the property on how it looks.",
     solution:
-      "TrafficPatternsXD, 150 mil aggregate-reinforced thermoplastic heat-fused into the asphalt, in a pattern that reads as laid masonry and keeps its grip where the wheel paths cross it.",
+      "TrafficPatternsXD, 150 mil aggregate-reinforced thermoplastic, heated and stamped into the top of the asphalt, in a pattern that reads as laid masonry and keeps its grip where the wheel paths cross it.",
   },
   {
     // Post: pedestrian-channelization-public-spaces. The photo shows the blue

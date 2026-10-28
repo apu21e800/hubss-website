@@ -7,7 +7,7 @@
 export const PRODUCT_TAXONOMY = [
   {
     label: "Preformed Thermoplastics",
-    desc: "Factory-manufactured, heat-fused. Regulatory, decorative, and custom-graphic.",
+    desc: "Factory-manufactured, heat-applied. Regulatory, decorative, and custom-graphic.",
     slugs: ["traffic-patterns-xd", "traffic-patterns", "premark", "duratherm", "decomark", "airmark"],
   },
   {

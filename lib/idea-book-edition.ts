@@ -366,7 +366,7 @@ export const LEAVES: Leaf[] = [
   {
     kind: "projects", id: "vancouver-neighbourhoods", section: "projects", pages: [104, 105], items: [
       project({ page: 104, eyebrow: "Neighbourhood colour", title: "Where the neighbourhood starts.", caption: { place: "Vancouver, British Columbia", system: "StreetBond" }, mapId: "vancouver-cambie-18th" }),
-      project({ page: 105, eyebrow: "Community branding", title: "Highlighting communities.", body: "Little Italy's own logo, set into the corner in custom DecoMark: fabricated to the BIA's artwork and Pantone colour, then heat-fused into the road. Behind it, a TrafficPatterns crosswalk carries the same palette across The Drive: one identity, from the logo underfoot to the far curb.", caption: { place: "Vancouver, British Columbia", system: "TrafficPatternsXD and DecoMark" }, mapId: "vancouver-commercial-drive" }),
+      project({ page: 105, eyebrow: "Community branding", title: "Highlighting communities.", body: "Little Italy's own logo, set into the corner in custom DecoMark: fabricated to the BIA's artwork and Pantone colour, then heat-applied and bonded to the road. Behind it, a TrafficPatterns crosswalk carries the same palette across The Drive: one identity, from the logo underfoot to the far curb.", caption: { place: "Vancouver, British Columbia", system: "TrafficPatternsXD and DecoMark" }, mapId: "vancouver-commercial-drive" }),
     ],
   },
   {
@@ -389,7 +389,7 @@ export const LEAVES: Leaf[] = [
   },
   {
     kind: "projects", id: "look-listen-live-whitehorse", section: "projects", pages: [112, 113], items: [
-      project({ page: 112, eyebrow: "Pedestrian safety", title: "Look Listen Live.", body: "The Look Listen Live rail-safety campaign puts a visual reminder for pedestrians at the crossing approach. Bold, preformed thermoplastic, heat-fused into the asphalt, holds its contrast through freeze-thaw and plow seasons.", caption: { place: "National program", system: "DecoMark" }, mapId: "brantford-safety-village-look-listen-live" }),
+      project({ page: 112, eyebrow: "Pedestrian safety", title: "Look Listen Live.", body: "The Look Listen Live rail-safety campaign puts a visual reminder for pedestrians at the crossing approach. Bold preformed thermoplastic, heat-applied and bonded to the asphalt, holds its contrast through freeze-thaw and plow seasons.", caption: { place: "National program", system: "DecoMark" }, mapId: "brantford-safety-village-look-listen-live" }),
       project({ page: 113, eyebrow: "First Nations land acknowledgement", title: "Acknowledgement, cast in pavement.", caption: { place: "Whitehorse, Yukon", system: "TrafficPatterns" }, mapId: "whitehorse-kwanlin-dun" }),
     ],
   },
@@ -450,7 +450,7 @@ export const LEAVES: Leaf[] = [
   {
     kind: "projects", id: "granville-verdun", section: "projects", pages: [130, 131], items: [
       project({ page: 130, eyebrow: "Commercial spaces", title: "The first thing a customer walks on.", caption: { place: "Granville Island, Vancouver", system: "TrafficPatternsXD" }, mapId: "vancouver-granville-island", badge: "7 years old" }),
-      project({ page: 131, eyebrow: "Parking", title: "Long lasting parking lanes.", body: "A paver-pattern parking lane in TrafficPatternsXD, heat-fused onto the asphalt so it takes turning tires, delivery trucks and plow blades without the shifting and shoving of real pavers. The pattern also defines the lane visually, narrowing the roadway and calming roadway traffic.", caption: { place: "Verdun, Québec", system: "TrafficPatternsXD" }, mapId: "verdun-parking-lanes" }),
+      project({ page: 131, eyebrow: "Parking", title: "Long lasting parking lanes.", body: "A paver-pattern parking lane in TrafficPatternsXD, heated and stamped into the top of the asphalt so it takes turning tires, delivery trucks and plow blades without the shifting and shoving of real pavers. The pattern also defines the lane visually, narrowing the roadway and calming roadway traffic.", caption: { place: "Verdun, Québec", system: "TrafficPatternsXD" }, mapId: "verdun-parking-lanes" }),
     ],
   },
   {

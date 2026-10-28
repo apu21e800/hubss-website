@@ -29,7 +29,7 @@ export const productImages: Record<string, ImageConfig> = {
   'mmax':                { featured: '/images/products/mmax/mmax-04.jpg',                               fallback: '/images/products/mmax/mmax-01.jpg',                               alt: 'MMAX red bus-only lane: BUS ONLY legend on MMA methyl methacrylate coloured transit lane in London, Ontario' },
   // Kept (QA: good). decomark-56 is another shot of this medallion; the same file is also
   // traffic-patterns-22 and -62, so Doug should confirm which system it is.
-  'decomark':            { featured: '/images/applications/parks-paths/parks-paths-70.jpg',                      fallback: '/images/products/decomark/decomark-01.jpg',                       alt: 'DecoMark preformed thermoplastic public art: circular Indigenous medallion artwork fused into a concrete plaza at a building entrance' },
+  'decomark':            { featured: '/images/applications/parks-paths/parks-paths-70.jpg',                      fallback: '/images/products/decomark/decomark-01.jpg',                       alt: 'DecoMark preformed thermoplastic public art: circular Indigenous medallion artwork bonded to a concrete plaza at a building entrance' },
   // The Product Book photo (duratherm-01, a 1280px crop) at its full 3264px: traffic-calming-03 is the same frame.
   'duratherm':           { featured: '/images/applications/traffic-calming/traffic-calming-03.jpg',     fallback: '/images/products/duratherm/duratherm-01.jpg',                     alt: 'DuraTherm crosswalk inlaid flush in the asphalt, its yellow lines forming a random brick pattern, in front of a glass-fronted building' },
   // Was premark-01 (a worksite with cones and a dumpster). Nothing in the PreMark folder reaches

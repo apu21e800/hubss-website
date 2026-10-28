@@ -584,6 +584,7 @@ export const IMAGE_FACTS: Record<string, ImageFact> = {
   "/images/products/decomark/decomark-76.jpg": {"system":"DecoMark","source":"the captions sheet"},
   "/images/products/decomark/decomark-77.jpg": {"system":"DecoMark","source":"the captions sheet"},
   "/images/products/decomark/decomark-78.jpg": {"system":"DecoMark","source":"CHECK (a record names StreetBond for this DecoMark folder photo)"},
+  "/images/products/decomark/decomark-79.jpg": {"system":"DecoMark","place":"Fort Langley, British Columbia","source":"map: map job fort-langley-land-recognition: First Nations land recognition (Community Branding), book p.114 (DecoMark)"},
   "/images/products/durashield/durashield-02.jpg": {"system":"DuraShield","source":"the captions sheet"},
   "/images/products/durashield/durashield-04.jpg": {"system":"DuraShield","source":"the captions sheet"},
   "/images/products/durashield/durashield-05.jpg": {"system":"DuraShield","source":"the captions sheet"},

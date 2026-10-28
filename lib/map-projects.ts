@@ -836,7 +836,7 @@ const curatedProjects: MapProject[] = [
     ],
     ideaBookPage: 114,
     excerpt:
-      "A First Nations land recognition, cast in DecoMark and set into the ground in Fort Langley.",
+      "A First Nations land recognition in DecoMark, heat-applied to the asphalt in Fort Langley.",
   },
   {
     // Product Book p.132: "Maple Ridge, British Columbia". The Kanaka Springs community sign

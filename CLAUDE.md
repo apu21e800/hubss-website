@@ -1098,6 +1098,59 @@ don't replace it.
   hanging, so `networkidle` never comes on a second visit to "/"; hubss.com
   and the previews do not. QA scripts wait for `load` there.
 
+## The bar steps aside (28 Oct 2026)
+Vern, 28 Oct: "we might also consider hiding the top nav bar in some
+interactions, it can feel a bit overwhelming at times".
+components/sections/useTuckAway.ts (called by Nav.tsx):
+- The bar slides up out of the way while the visitor scrolls down and comes
+  back as soon as they scroll up (10px of travel either way). It always
+  shows at the top of a page (within 96px of it when the visitor scrolls
+  there), after a page change, after Back or Forward,
+  and while it holds the keyboard (`:focus-visible` inside it), a mouse
+  pointer, an open menu, the phone menu or search (the `locked` argument).
+- Only the visitor's own scrolling moves it: a wheel or trackpad, a finger
+  on the screen (and the glide after it lifts), a scroll key with the focus
+  on the page, the page's scrollbar. When the page moves by itself (the
+  Lunch & Learn topic tiles' scroll to the form, the browser showing a field
+  a form still needs, Tab moving the focus, a contents link) the bar stays
+  as it is, so what the page moved to is never left under a bar that
+  arrives after it. A finger is read from touchstart to touchend, not from
+  touchmove: a phone starts scrolling before it reports the finger's moves.
+- A link to a place lower down the same page tucks it first, so the place
+  lands 20px from the top; a link to a place higher up shows it first, so
+  the place lands under it. A press inside `[data-nav-tuck]` (the homepage
+  map's frame) tucks it.
+- html[data-nav="tucked"|"shown"] sets `--nav-offset` (the bar's measured
+  height `--nav-h`, or 0 tucked; app/globals.css). html's scroll-padding-top
+  is `calc(var(--nav-offset) + 20px)` (it was 84px), and the sticky sidebars
+  (`.follow-nav`: the product, application and post sidebars, the comparison
+  table's head) sit `--nav-offset` plus their gap from the top, so they rise
+  with it. A new sticky element under the bar takes `.follow-nav` and a top
+  of `calc(var(--nav-offset) + Npx)`, never a fixed 73px.
+- QA in a headless browser: move the mouse off the bar first (Playwright
+  parks it at 0,0, inside the bar, and the bar then holds it), and scroll
+  with the wheel, keys or CDP touch events, never scrollTo (the bar
+  ignores a page that moves by itself, on purpose).
+
+## Applications and Projects front pages (28 Oct 2026)
+Vern, 27 Oct: /applications "doesn't fit the rest of the site" and its
+text-on-photo cards looked bad; /blog "needs love and care".
+- /applications (app/applications/page.tsx): the page's header, then one band
+  per group, each with its name, its sentence (`intro`) and cards (photo
+  over words, never words on a photo) with the systems each specifies
+  (`dotted()`), then the Product Portfolio Book's tile. The four groups, their
+  menu captions (`note`) and their sentences are one list,
+  lib/application-groups.ts, which the menus read too: both for Doug to
+  approve.
+- /blog (app/blog/page.tsx): eyebrow, "Jobs across Canada", one sentence, the
+  map and the Product Portfolio Book as text links. The section chips are
+  gone (the library's tabs under the front page do that job). A project's
+  kicker names its town where the map places the job (lib/post-places.ts:
+  one pin, one post; the posts in MANY_PLACES cover several towns and keep
+  the date), the town alone on a card, "Town, Province" on the lead story.
+  `.kicker-parts` (app/globals.css) draws the dot between the two parts and
+  drops it when the second wraps to its own line.
+
 ## Lunch & Learn page (30 Sep and 2 Oct 2026)
 - /lunch-learn is app/lunch-learn/page.tsx: the boardroom card (LunchLearn ->
   LunchLearnV2, whose title is the page's h1; #book is the card), then

@@ -433,7 +433,7 @@ export default async function BlogPostPage({ params }: Props) {
               great here". It is held to the bottom of the sticky column and
               the contents scroll inside theirs if a post has many sections,
               so the card is never pushed off the screen. */}
-          <div className="sticky flex flex-col gap-6" style={{ top: "6rem", maxHeight: "calc(100vh - 7.5rem)" }}>
+          <div className="follow-nav sticky flex flex-col gap-6" style={{ top: "calc(var(--nav-offset) + 32px)", maxHeight: "calc(100vh - var(--nav-offset) - 56px)" }}>
             <div className="min-h-0 overflow-y-auto scrollbar-hide">
               <TableOfContents />
             </div>

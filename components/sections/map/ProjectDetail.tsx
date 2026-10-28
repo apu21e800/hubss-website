@@ -13,12 +13,8 @@ import Image from "next/image";
 import { mapLoader, mapPhotoSrc } from "@/lib/map-photo";
 import type { MapProject } from "@/lib/map-projects";
 
-const PROVINCE_NAME: Record<string, string> = {
-  YT: "Yukon", NT: "Northwest Territories", NU: "Nunavut", BC: "British Columbia", AB: "Alberta",
-  SK: "Saskatchewan", MB: "Manitoba", ON: "Ontario", QC: "Québec", NB: "New Brunswick",
-  NS: "Nova Scotia", PE: "Prince Edward Island", NL: "Newfoundland and Labrador",
-};
-export const provinceName = (code: string) => PROVINCE_NAME[code] ?? code;
+import { provinceName } from "@/lib/provinces";
+export { provinceName };
 
 /** Display name to product page slug; the fallback is the kebab-case the site uses. */
 const PRODUCT_SLUGS: Record<string, string> = {

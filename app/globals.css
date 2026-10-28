@@ -540,7 +540,34 @@ html {
      reduced-motion block below sets this back to auto. scroll-padding keeps
      an anchor's top clear of the fixed bar. */
   scroll-behavior: smooth;
-  scroll-padding-top: 84px;
+  /* The bar's height while it shows, 0 while it is tucked (28 Oct 2026,
+     components/sections/useTuckAway.ts), plus 20px. 84px before. */
+  scroll-padding-top: calc(var(--nav-offset) + 20px);
+}
+
+/* The bar steps aside (28 Oct 2026; Vern: "hiding the top nav bar in some
+   interactions, it can feel a bit overwhelming at times"). --nav-h is the
+   bar's measured height (useTuckAway writes it), --nav-offset what it covers
+   right now. Sticky sidebars use .follow-nav and top: calc(var(--nav-offset)
+   + gap), so they ride up into the room the bar leaves. */
+:root {
+  --nav-h: 64px;
+  --nav-offset: var(--nav-h);
+}
+:root[data-nav="tucked"] {
+  --nav-offset: 0px;
+}
+.nav-bar {
+  transition: transform 280ms var(--ease-out), border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.nav-bar[data-tucked="true"] {
+  transform: translate3d(0, -100%, 0);
+}
+.follow-nav {
+  transition: top 280ms var(--ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-bar, .follow-nav { transition: none; }
 }
 
 /* ─── Motion tokens (17 Oct 2026) ─────────────────────────────────────────
@@ -670,6 +697,35 @@ h1, h2, h3, h4, h5, h6 {
 }
 .eyebrow-muted {
   color: var(--text-muted);
+}
+/* A post's kicker, its parts joined by a dot (components/blog/BlogCard.tsx
+   StoryKicker). 27 Oct 2026: "Project · Brantford, Ontario" wraps in a
+   phone row, and the dot was left hanging at the end of the first line.
+   Each part after the first draws its dot in the space before it; the
+   container sits 14px left of its column and clips those 14px, so a part
+   that starts a line has its dot clipped and lines up with the column. */
+.kicker-parts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: 4px;
+  margin-left: -14px;
+  clip-path: inset(-6px -6px -6px 14px);
+}
+.kicker-parts > * {
+  position: relative;
+  margin-left: 14px;
+}
+.kicker-parts > * + *::before {
+  content: "";
+  position: absolute;
+  left: -8.5px;
+  top: 50%;
+  width: 3px;
+  height: 3px;
+  margin-top: -1.5px;
+  border-radius: 9999px;
+  background: var(--ink-30);
 }
 /* "Skip to content" (components/SkipLink.tsx): off screen until it has
    keyboard focus, then a pill under the bar's left edge. */

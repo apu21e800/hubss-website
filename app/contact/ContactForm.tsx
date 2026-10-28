@@ -63,7 +63,7 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
     background: "var(--bg-primary)",
     border: "1px solid var(--border-subtle)",
     color: "var(--text-primary)",
-    scrollMarginTop: 28, // on top of html's 84px scroll-padding
+    scrollMarginTop: 28, // on top of html's scroll-padding-top (the bar's height, or 0 tucked, plus 20px)
   } as const;
   const AUTOCOMPLETE: Record<string, string> = {
     name: "name", company: "organization", email: "email", phone: "tel",

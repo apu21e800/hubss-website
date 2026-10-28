@@ -17,6 +17,7 @@ import ChromeImg from "@/components/ui/ChromeImg";
 import { CHROME_PANELS } from "@/lib/chrome-images.mjs";
 import { BLOG_NAME } from "@/lib/field-notes-taxonomy";
 import { altBesideTitle } from "@/lib/blog-taxonomy";
+import { useTuckAway } from "@/components/sections/useTuckAway";
 import {
   ProductsPanel, ApplicationsPanel, ProjectsPanel, warmPanels, warmFeature,
   MooseAvatar, GalleryCard, InsightImg, PHOTO_GROUND, kindOf,
@@ -1028,6 +1029,15 @@ export default function Nav() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const navRef = useRef<HTMLElement>(null);
+  // The bar steps aside while the visitor reads down a page (useTuckAway).
+  // It stays while it has the keyboard (a focus ring, not a tap's leftover
+  // focus), the mouse pointer, an open panel, the phone menu or search.
+  const [keyboardInside, setKeyboardInside] = useState(false);
+  const [pointerInside, setPointerInside] = useState(false);
+  const tucked = useTuckAway(
+    openPanel !== null || mobileOpen || searchOpen || keyboardInside || pointerInside,
+    navRef,
+  );
   const productsBtnRef = useRef<HTMLButtonElement>(null);
   const applicationsBtnRef = useRef<HTMLButtonElement>(null);
   const insightsBtnRef = useRef<HTMLButtonElement>(null);
@@ -1159,7 +1169,12 @@ export default function Nav() {
   const handleNavBlur = useCallback((e: React.FocusEvent<HTMLElement>) => {
     if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
       setOpenPanel(null);
+      setKeyboardInside(false);
     }
+  }, []);
+  const handleNavFocus = useCallback((e: React.FocusEvent<HTMLElement>) => {
+    const el = e.target as HTMLElement;
+    setKeyboardInside(typeof el.matches === "function" && el.matches(":focus-visible"));
   }, []);
 
   // Scroll state — adds shadow + accent border on scroll
@@ -1241,20 +1256,27 @@ export default function Nav() {
            TOKENS have to be pinned dark too: without this the light theme gave
            it near-black links on near-black glass, a contrast ratio of 1.08. */
         data-surface="dark"
-        className="sticky top-0 z-50"
+        // .nav-bar (app/globals.css) slides it up while data-tucked is set.
+        className="nav-bar sticky top-0 z-50"
+        data-tucked={tucked ? "true" : undefined}
         style={{
           background: "rgba(7,11,18,0.96)",
           backdropFilter: "blur(12px)",
           borderBottom: scrolled
             ? "1px solid rgba(249,115,22,0.18)"
             : "1px solid var(--border-color)",
-          boxShadow: scrolled
+          // No shadow while tucked: it would hang below the screen's top edge.
+          boxShadow: scrolled && !tucked
             ? "0 4px 32px rgba(0,0,0,0.55), 0 1px 0 rgba(249,115,22,0.08)"
             : "none",
-          transition: "border-color 0.3s ease, box-shadow 0.3s ease",
         }}
         onMouseLeave={leaveNav}
         onMouseEnter={enterNav}
+        // A mouse over the bar keeps it; a finger's emulated mouse events
+        // would hold it for good, so only a real pointer counts.
+        onPointerEnter={(e) => { if (e.pointerType === "mouse") setPointerInside(true); }}
+        onPointerLeave={(e) => { if (e.pointerType === "mouse") setPointerInside(false); }}
+        onFocus={handleNavFocus}
         onBlur={handleNavBlur}
       >
         {/* Main bar */}

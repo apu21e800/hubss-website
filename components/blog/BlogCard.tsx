@@ -56,17 +56,31 @@ function photoFor(post: PostMeta) {
 
 /**
  * The kicker: the section (in the section's own colour, the way into it on
- * every surface) and the date, "Sep 8, 2026" as docs/STYLE.md prints dates.
+ * every surface) and the date, "Sep 8, 2026" as docs/STYLE.md prints dates,
+ * or a project's town.
  */
-export function StoryKicker({ post, className = "" }: { post: PostMeta; className?: string }) {
+export function StoryKicker({ post, className = "", full = false }: { post: PostMeta; className?: string; full?: boolean }) {
   const section = sectionFor(post.category);
+  // A project reads by its place (27 Oct 2026): "Project · Kitchener" where
+  // the job is on the map, the date everywhere else. The town alone on a
+  // card, so a row of kickers stays one line and its headlines line up (the
+  // review, 28 Oct 2026: 17 of 39 wrapped at 1024 with the province); the
+  // lead story, which has the room, prints "Kitchener, Ontario" (`full`).
+  const place = section.key === "projects" && post.place ? (full ? post.place : post.place.split(", ")[0]) : undefined;
   return (
-    <span className={`flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] font-bold uppercase tracking-[0.18em] ${className}`}>
+    // .kicker-parts (app/globals.css) draws the dot between the parts and
+    // drops it when the second part wraps to a line of its own.
+    <span className={`kicker-parts text-[12.5px] font-bold uppercase tracking-[0.18em] ${className}`}>
       <span style={{ color: section.text }}>{section.singular}</span>
-      <span aria-hidden="true" className="h-[3px] w-[3px] rounded-full" style={{ background: "var(--ink-30)" }} />
-      <span className="tabular-nums tracking-[0.1em]" style={{ color: "var(--text-muted)" }}>
-        {formatPostDate(post.date)}
-      </span>
+      {place ? (
+        <span className="tracking-[0.1em]" style={{ color: "var(--text-muted)" }}>
+          {place}
+        </span>
+      ) : (
+        <span className="tabular-nums tracking-[0.1em]" style={{ color: "var(--text-muted)" }}>
+          {formatPostDate(post.date)}
+        </span>
+      )}
     </span>
   );
 }
@@ -151,7 +165,7 @@ export function StoryLead({ post, headingLevel = "h2" }: { post: PostMeta; headi
         />
       </span>
       <span className="block lg:col-span-5">
-        <StoryKicker post={post} />
+        <StoryKicker post={post} full />
         <Heading
           className="font-display mt-3 text-balance transition-colors duration-200 group-hover:text-[var(--accent-text)]"
           style={{ color: "var(--text-primary)", fontSize: "clamp(1.6rem, 1.1rem + 1.5vw, 2.4rem)", fontWeight: 800, lineHeight: 1.08, letterSpacing: "-0.025em" }}

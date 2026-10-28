@@ -95,6 +95,18 @@ hubss-website/
   relatedProducts and relatedApplications are set from their slugs, the alt
   text and "vs" are checked too, and the note in Studio says 21e8 wrote it,
   never how. Keep each piece's fact record beside it (<slug>.sources.md).
+  Since 28 Oct 2026 `forDoug:` in the front matter (a line or a list) adds
+  "To confirm before Publish: ..." lines to that note, in plain words, for
+  what only Doug can settle (a town, a system, an artist's credit).
+- The 40 map jobs without a write-up (Vern, 27 Oct: "every pin needs its own
+  landing page") have one each in content/drafts/ (28 Oct 2026), written from
+  the map record, the printed page and the published posts, checked by two
+  independent fact checks, every fix applied. Each pin's entry in
+  lib/map-projects.ts names its slug (`post:`), so its card links to the post
+  from the build after it is published, and not before. Five carry `forDoug`
+  questions (Oakville's ten years, the Every Child Matters town, Nanaimo's
+  system, Sheffield Park's system, the Circle of Life artists). On Vern's PC:
+  the dry runs, the real runs, then the review loop.
 - Article ideas: Studio → Blog ideas. The AI drafter (Tuesdays and
   Thursdays since 14 Oct 2026) takes the top Ready item, or the top Idea when
   none is Ready, and writes it up as an unpublished draft for review (never
@@ -1180,6 +1192,36 @@ build` bakes them, a bare `next build` does not (`npm run gen:search-images --
 search field at 320px (`min-w-0`: its default twenty-character width slid the
 panel sideways), `.h2-section` at 320px (30px under 360) and the photo
 archive's hover caption (two lines at most).
+
+## The product flyers (28 Oct 2026)
+Vern, 27 Oct: the May flyers in /resources "look like not much effort was put
+into them" (one page, the paragraph cut off with "...", "heat-fused", "6 Mohs",
+"73+ colours", the makers' names). The fourteen are two Letter pages each now,
+in the Product Portfolio Book's language, built by `npm run flyers`
+(scripts/flyers/build-flyers.ts; `--only=<slug>`, `--check` reports what would
+not fit, `--draft=<folder>` writes both pages as PNGs to look at). Same names
+in public/resources/flyers, so every link holds: HUBSS-Flyer-<slug>-v01.pdf,
+<slug>-preview.webp (page 1) and <slug>-share.jpg (1200x630).
+- The words and photos are scripts/flyers/flyer-content.ts, every line with
+  its source beside it (the printed page, lib/products.ts, a map job, a post's
+  own words) and `DEPARTURES`, each change from the printed page with its
+  reason, for the next print run. The page is scripts/flyers/flyer-template.ts.
+  Front: the job photo, the system's band, the headline, words and specs, a
+  quote where a published post has one, the uses strip. Back: how it goes in,
+  documented jobs, colours (lib/colours.ts) or a list, where it goes (the
+  book's SPECIFY notes with pages), the documents, then the close: both
+  offices from Site Settings, the Lunch & Learn offer and a QR code to the
+  product page.
+- Links carry utm_source=hubss-flyer, utm_campaign=product-flyers-2026,
+  utm_content=<slug>; utm_medium=pdf for a click in the file, qr for the code
+  scanned off a printed copy.
+- Photos are cut around their focus to each box at up to 300 dpi (AggreFill's
+  476px originals sit in a smaller frame, 159 dpi). Inter is embedded as
+  TrueType (scripts/flyers/fonts, Inter 4.1 under the OFL), never Type 3; check
+  with `pdffonts`. The StreetPrint hero is cut below the gate on page 18: the
+  house's number is on its pillar.
+- Needs qrcode (a dev dependency) and Playwright's Chromium. A Sanity photo is
+  fetched once into FLYER_CACHE (the system's temp folder by default).
 
 ## Lunch & Learn page (30 Sep and 2 Oct 2026)
 - /lunch-learn is app/lunch-learn/page.tsx: the boardroom card (LunchLearn ->

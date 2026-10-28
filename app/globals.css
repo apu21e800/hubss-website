@@ -907,6 +907,16 @@ select:user-invalid {
   .faq { interpolate-size: allow-keywords; }
 }
 
+/* The footer's folded link lists on a phone or a tablet
+   (components/sections/Footer.tsx FoldedLinks): a hairline under each name,
+   no browser triangle, the plus turning to a cross when open. */
+.ft-fold { border-bottom: 1px solid var(--border-subtle); }
+.ft-fold > summary { list-style: none; }
+.ft-fold > summary::-webkit-details-marker { display: none; }
+.ft-fold > summary:focus-visible { outline-offset: 2px; }
+.ft-fold-mark { transition: transform var(--dur-2) var(--ease-out); }
+.ft-fold[open] .ft-fold-mark { transform: rotate(45deg); }
+
 /* The document row's download square (components/sections/DocumentDownloads.tsx,
    as /resources draws it): orange tint, darker under the pointer. */
 .doc-download {

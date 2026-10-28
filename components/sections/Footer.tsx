@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Mail, Phone, Plus } from "lucide-react";
 import { BLOG_NAME } from "@/lib/field-notes-taxonomy";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
@@ -32,6 +33,10 @@ const footerApplications = FOOTER_APPLICATION_SLUGS.flatMap((slug) => {
   return a ? [{ label: a.name, href: `/applications/${a.slug}` }] : [];
 });
 
+const footerProducts = products
+  .filter((p) => !p.comingSoon && !p.hideFromFooter)
+  .map((p) => ({ label: p.name, href: `/products/${p.slug}` }));
+
 // The pages the phone drawer reaches that the footer did not.
 const companyLinks = [
   { label: "About", href: "/about" },
@@ -59,6 +64,105 @@ const legalLink =
   "text-xs inline-flex items-center min-h-11 sm:min-h-0 transition-colors hover:text-[var(--text-primary)] underline-offset-4 hover:underline";
 
 
+type Office = { place: string; email: string; phone: string };
+
+/** "Canadian", then the two lines under it, as the brand column prints them. */
+function Provenance({ className = "" }: { className?: string }) {
+  return (
+    // Three deliberate lines (QA A22, 30 Sep 2026): the badge, then "Owned
+    // and operated", then "Coast to coast · Since 1999". As one wrapping flex
+    // line the column broke it into "Owned and operated · Coast to coast /
+    // · Since 1999", a dot at a line's start. Blocks never leave a dot at
+    // either end.
+    <p className={`text-[12px] ${className}`} style={{ color: "var(--text-muted)", lineHeight: 1.5 }}>
+      <span
+        className="mb-1 inline-flex items-center gap-1.5"
+        // role="img": an aria-label on a plain span is ignored
+        // (QA F17, 30 Sep 2026); the same fix as the nav's flag.
+        role="img"
+        aria-label="Canadian"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 9600 4800"
+          width={16}
+          height={8}
+          aria-hidden="true"
+          style={{ display: "block", flexShrink: 0, borderRadius: 1 }}
+        >
+          <path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z" />
+          <path fill="var(--text-primary)" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z" />
+        </svg>
+        <span className="text-[11px] font-bold tracking-[0.18em] uppercase" style={{ color: "var(--ink-55)", lineHeight: 1 }}>
+          Canadian
+        </span>
+      </span>
+      <span className="block">Owned and operated</span>
+      <span className="block whitespace-nowrap">Coast to coast · Since 1999</span>
+    </p>
+  );
+}
+
+/**
+ * An office on a phone or a tablet: its town, then its number and its
+ * address as rows a thumb can take (each 44px, with its mark).
+ */
+function OfficeRows({ label, office }: { label: string; office: Office }) {
+  const row = "flex items-center gap-3 min-h-11 transition-colors hover:text-[var(--text-primary)]";
+  return (
+    <div className="relative pl-4">
+      <span
+        aria-hidden="true"
+        className="absolute left-0 top-0 bottom-0 w-0.5"
+        style={{ background: "linear-gradient(180deg, #F97316 0%, #EAB308 100%)" }}
+      />
+      <p className="text-xs font-semibold tracking-widest uppercase" style={{ color: "var(--accent-text-lg)" }}>
+        {label}
+      </p>
+      <p className="mt-1 text-[15px]" style={{ color: "var(--text-primary)" }}>{office.place}</p>
+      <a href={telHref(office.phone)} className={`${row} mt-1 text-[15px]`} style={{ color: "var(--text-secondary)" }}>
+        <Phone size={16} strokeWidth={2} aria-hidden="true" style={{ color: "var(--accent-text-lg)", flexShrink: 0 }} />
+        {office.phone}
+      </a>
+      <a href={mailtoHref(office.email)} className={`${row} text-[14px] [overflow-wrap:anywhere]`} style={{ color: "var(--text-secondary)" }}>
+        <Mail size={16} strokeWidth={2} aria-hidden="true" style={{ color: "var(--accent-text-lg)", flexShrink: 0 }} />
+        {office.email}
+      </a>
+    </div>
+  );
+}
+
+/**
+ * A list of links folded under its name on a phone or a tablet (`.faq`
+ * eases it open; `name` keeps one open at a time). The first link is the
+ * section's own page.
+ */
+function FoldedLinks({ title, all, links }: { title: string; all?: { label: string; href: string }; links: { label: string; href: string }[] }) {
+  const items = all ? [all, ...links] : links;
+  return (
+    <details className="faq ft-fold" name="footer-links">
+      <summary className="flex min-h-[52px] cursor-pointer items-center justify-between gap-4">
+        <h2 className="text-[15px] font-semibold" style={{ color: "var(--text-primary)", letterSpacing: 0, lineHeight: 1.3 }}>{title}</h2>
+        <Plus size={18} strokeWidth={2} aria-hidden="true" className="ft-fold-mark" style={{ color: "var(--text-muted)", flexShrink: 0 }} />
+      </summary>
+      <ul className="grid grid-cols-2 gap-x-6 pb-4 sm:grid-cols-3">
+        {items.map((l, i) => (
+          <li key={l.href}>
+            <Link
+              prefetch={false}
+              href={l.href}
+              className="flex min-h-11 items-center text-[15px] transition-colors hover:text-[var(--accent-text-lg)]"
+              style={{ color: i === 0 && all ? "var(--accent-text-lg)" : "var(--text-secondary)" }}
+            >
+              {l.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </details>
+  );
+}
+
 export default async function Footer() {
   // The offices and the line under the logo, from Studio's Site Settings
   // (lib/site-settings.ts); the code's copy when Studio's is blank.
@@ -76,12 +180,47 @@ export default async function Footer() {
         }}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-10">
-        {/* Five columns from xl: brand, products, applications, company,
-            offices. At lg the company links stack over the offices in the
-            fourth column; below lg it is two columns, the lists side by side,
-            so the taller phone rows do not double the footer's length. */}
-        <div className="relative grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-[1.3fr_1fr_1fr_1fr_1.15fr] gap-x-6 sm:gap-x-10 lg:gap-x-12 gap-y-10 lg:gap-y-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-8 lg:pt-14 lg:pb-10">
+        {/* Below lg, the page's last word (28 Oct 2026; Vern: "footer on
+            mobile experience is an awkward long scroll", then "improve the
+            footer is a moral to a story"): who HUB is in a line, the two
+            offices to call or write to, then the link lists folded under
+            their names. 1,943px on a 390px phone before (2.3 screens, forty
+            44px rows); one screen now. */}
+        <div className="lg:hidden">
+          <ChromeImg
+            family="logo"
+            src={CHROME_MARKS.logo}
+            alt="HUB Surface Systems"
+            width={140}
+            height={44}
+            sizes="153px"
+            style={{ display: "block", height: 40, width: "auto" }}
+          />
+          <p className="mt-4 font-light tracking-wide text-pretty" style={{ color: "var(--text-primary)", fontSize: "0.9375rem", lineHeight: 1.45 }}>
+            {footerTagline}
+          </p>
+          <Provenance className="mt-3" />
+
+          <h2 className="sr-only">Offices</h2>
+          <div className="mt-7 grid gap-6 sm:grid-cols-2 sm:gap-8">
+            <OfficeRows label="West office" office={offices.west} />
+            <OfficeRows label="East office" office={offices.east} />
+          </div>
+
+          <div className="mt-8" style={{ borderTop: "1px solid var(--border-subtle)" }}>
+            <FoldedLinks title="Products" all={{ label: "All products", href: "/products" }} links={footerProducts} />
+            <FoldedLinks title="Applications" all={{ label: "All applications", href: "/applications" }} links={footerApplications} />
+            <FoldedLinks title="Company" links={companyLinks} />
+          </div>
+
+          <SocialLinks className="mt-6" />
+        </div>
+
+        {/* From lg: five columns from xl (brand, products, applications,
+            company, offices); at lg the company links stack over the offices
+            in the fourth column. */}
+        <div className="relative hidden lg:grid lg:grid-cols-4 xl:grid-cols-[1.3fr_1fr_1fr_1fr_1.15fr] gap-x-6 sm:gap-x-10 lg:gap-x-12 gap-y-10 lg:gap-y-12">
 
           {/* Wheel watermark, inside the grid (QA A24, D16, 30 Sep 2026). It
               used to hang off the footer's own corner, past the page grid
@@ -122,41 +261,10 @@ export default async function Footer() {
               {footerTagline}
             </p>
 
-            {/* Three deliberate lines (QA A22, 30 Sep 2026): the badge, then
-                "Owned and operated", then "Coast to coast · Since 1999". As
-                one wrapping flex line the column broke it into "Owned and
-                operated · Coast to coast / · Since 1999", a dot at a line's
-                start. Blocks never leave a dot at either end. */}
-            <p className="text-[12px] mb-5" style={{ color: "var(--text-muted)", lineHeight: 1.5 }}>
-              <span
-                className="mb-1 inline-flex items-center gap-1.5"
-                // role="img": an aria-label on a plain span is ignored
-                // (QA F17, 30 Sep 2026); the same fix as the nav's flag.
-                role="img"
-                aria-label="Canadian"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 9600 4800"
-                  width={16}
-                  height={8}
-                  aria-hidden="true"
-                  style={{ display: "block", flexShrink: 0, borderRadius: 1 }}
-                >
-                  <path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z" />
-                  <path fill="var(--text-primary)" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z" />
-                </svg>
-                <span className="text-[11px] font-bold tracking-[0.18em] uppercase" style={{ color: "var(--ink-55)", lineHeight: 1 }}>
-                  Canadian
-                </span>
-              </span>
-              <span className="block">Owned and operated</span>
-              <span className="block whitespace-nowrap">Coast to coast · Since 1999</span>
-            </p>
+            <Provenance className="mb-5" />
 
             <SocialLinks className="mt-1" />
 
-            {/* Earlier per-line flag removed — consolidated into the "Canadian | Owned and operated" treatment above for visual consistency with the nav + about page. */}
           </div>
 
           {/* Products. The column headings are h2 (QA sweep, 16 Oct 2026): as h4,
@@ -164,16 +272,16 @@ export default async function Footer() {
           <div>
             <h2 className="font-semibold text-sm mb-3.5" style={{ color: "var(--text-primary)" }}>Products</h2>
             <ul className="space-y-0.5">
-              {products.filter((p) => !p.comingSoon && !p.hideFromFooter).map((p) => (
-                <li key={p.slug}>
+              {footerProducts.map((p) => (
+                <li key={p.href}>
                   <Link
                     prefetch={false}
-                    href={`/products/${p.slug}`}
+                    href={p.href}
                     className={footerLink}
                     data-tap="44"
                     style={{ color: "var(--text-secondary)", paddingTop: 3, paddingBottom: 3 }}
                   >
-                    {p.name}
+                    {p.label}
                   </Link>
                 </li>
               ))}
@@ -274,7 +382,7 @@ export default async function Footer() {
         </div>
 
         <div
-          className="mt-12 pt-6 flex flex-col md:flex-row items-center justify-between gap-3"
+          className="mt-8 lg:mt-12 pt-5 lg:pt-6 flex flex-col md:flex-row items-center justify-between gap-1 md:gap-3"
           style={{ borderTop: "1px solid var(--border-subtle)" }}
         >
           <p className="text-xs" style={{ color: "var(--text-muted)" }}>

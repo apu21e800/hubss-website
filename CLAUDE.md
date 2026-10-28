@@ -1176,6 +1176,23 @@ the legal line. 925px on a 390px phone (1,943 before, forty 44px rows),
 come from one place for both layouts (footerProducts, footerApplications,
 companyLinks).
 
+## The search start screen (28 Oct 2026)
+Vern: the search "is clearly bland, it could become a commanding feature of
+the website ... at least get the first impression right first." Before
+anything is typed, the palette (components/sections/SearchOverlay.tsx) opens
+on "Jump to": six of the index's own page entries (`QUICK`: All systems, All
+applications, Projects, the Product Book, the Specification library, Lunch &
+Learn), each with its picture (`PAGE_THUMBS` in lib/search.ts, baked by
+scripts/gen-search-images.ts like every other thumbnail), then "Try" (seven
+queries) and "New on the site" (the three newest posts from
+lib/nav-insights.json `latest`, with section and date). Two columns from sm,
+one on a phone. A thumbnail that was never baked shows the HUB wheel: `npm run
+build` bakes them, a bare `next build` does not (`npm run gen:search-images --
+--thumbs-only` takes seconds). The same day's screen-size sweep fixed the
+search field at 320px (`min-w-0`: its default twenty-character width slid the
+panel sideways), `.h2-section` at 320px (30px under 360) and the photo
+archive's hover caption (two lines at most).
+
 ## The product flyers (28 Oct 2026)
 Vern, 27 Oct: the May flyers in /resources "look like not much effort was put
 into them" (one page, the paragraph cut off with "...", "heat-fused", "6 Mohs",
@@ -1372,8 +1389,9 @@ in public/resources/flyers, so every link holds: HUBSS-Flyer-<slug>-v01.pdf,
 - Site search (components/sections/SearchOverlay.tsx): every row has a
   thumbnail from public/images/search/thumbs (128 and 256 px WebPs baked by
   scripts/gen-search-images.ts, hash-skipped; posts and map pins fetch from
-  Sanity at build only); under two characters the palette shows the 14 systems
-  as a photo grid. The matched-keyword chip is gone.
+  Sanity at build only). The start screen is the list in "The search start
+  screen" above (the 14-system photo grid was tried and dropped on 2 Oct).
+  The matched-keyword chip is gone.
 - The print catalogue's photos (the Product Book's print set, 34 PNGs, kept on
   Vern's PC under _archive/design-assets/catalog-print-build/assets/booklet)
   now feed the Products and Applications menu panels and two product cards;

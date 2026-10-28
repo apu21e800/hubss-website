@@ -195,11 +195,13 @@ export default function GalleryArchive({ images, footer }: { images: GalleryImag
                       button's label says what it does. */}
                   <div
                     data-surface="dark"
-                    className="absolute inset-0 flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-300"
+                    className="absolute inset-0 flex flex-col justify-end p-3 sm:p-4 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-300"
                     style={{ background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 60%, transparent 100%)" }}
                   >
                     <p className="text-xs font-bold" style={{ color: "var(--accent-text-lg)" }}>{img.category.toUpperCase().replace("-", " ")}</p>
-                    <p className="text-sm font-semibold leading-tight" style={{ color: "var(--text-primary)" }}>{img.alt}</p>
+                    {/* Two lines at most: on a 320px phone a tile is 140px wide, and a long
+                        name ran out of the top of it (screen-size sweep, 28 Oct 2026). */}
+                    <p className="text-sm font-semibold leading-tight line-clamp-2" style={{ color: "var(--text-primary)" }}>{img.alt}</p>
                     {/* No place line where none is recorded (41 tiles said
                         "Canada" for a company that knows every job by its
                         town: copy review, 17 Oct 2026). */}

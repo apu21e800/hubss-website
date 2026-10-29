@@ -6,7 +6,7 @@ import Link from "next/link";
 // || instead of ?? guards against empty-string heroImageSrc from Sanity.
 import { heroAlt } from "@/lib/image-seo";
 import { HOME_HERO } from "@/lib/hero-framing";
-import { homeHeroSrc, isSanityImage, sanitySrcSet } from "@/lib/photos";
+import { HERO_QUALITY, homeHeroSrc, isSanityImage, sanitySrcSet } from "@/lib/photos";
 import { keepDots } from "@/lib/separators";
 import SeeTheWork from "@/components/sections/SeeTheWork";
 
@@ -55,9 +55,10 @@ interface HeroSlideshowProps {
   /**
    * Art-directed framings of the same photograph, by media query (app/page.tsx).
    * `kind: "wide"` marks the cut for windows 16:9 and wider, whose framing
-   * switches with it.
+   * switches with it. `srcSet`, when given, offers the cut at more than one
+   * width (the phone's: 800 and 1200), across the page's width.
    */
-  heroSources?: { file: string; media: string; kind?: "wide" | "phone" }[];
+  heroSources?: { file: string; media: string; kind?: "wide" | "phone"; srcSet?: string }[];
   /**
    * object-position of the photo, and of the wide cut. Default: the framing
    * chosen by hand for the default photo (HOME_HERO). A photo swapped in Studio
@@ -123,12 +124,12 @@ export default function HeroSlideshow({
           <source>s are absent and this is the plain <img> it always was. */}
       <picture>
         {heroSources.map((v) => (
-          <source key={v.file} media={v.media} srcSet={v.file} />
+          <source key={v.file} media={v.media} srcSet={v.srcSet ?? v.file} sizes={v.srcSet ? "100vw" : undefined} />
         ))}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={homeHeroSrc(src, alt)}
-          srcSet={fromSanity ? sanitySrcSet(src, undefined, undefined, alt) : undefined}
+          srcSet={fromSanity ? sanitySrcSet(src, undefined, HERO_QUALITY, alt) : undefined}
           sizes={fromSanity ? "100vw" : undefined}
           alt={alt}
           // @ts-ignore fetchPriority is valid HTML but TS types lag

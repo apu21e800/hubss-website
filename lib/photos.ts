@@ -17,7 +17,7 @@
  * Pure data and string functions: safe in server and client components.
  */
 
-import { sanityAssetFile, withFilename } from "./sanity-image";
+import { sanityAssetFile, withFilename } from "./image-filename";
 
 export interface Photo {
   /** https://cdn.sanity.io/images/... or a /images/... path in /public. */
@@ -212,14 +212,25 @@ export function sanitySrcSet(src: string, widths = [828, 1200, 1920, 2400], qual
 // (lib/page-photos.ts, lib/sitemap.ts), so these are the one place each is
 // spelled.
 
-/** A hero's <img src> (components/ui/HeroPhoto.tsx): 1920px at q82, named by its alt. */
+/**
+ * The quality every hero photo is cut at by Sanity's CDN: the product,
+ * application, post and About heroes (components/ui/HeroPhoto.tsx) and the
+ * homepage's (components/sections/HeroSlideshow.tsx, app/page.tsx). 75, as
+ * next/image serves everything else here (next.config.ts `qualities`); it was
+ * 80 to 82 until 28 Oct 2026, when the paid-traffic speed pass found the hero
+ * was the largest file on a phone's first screen. Under the heroes' colour
+ * grade and gradients the difference does not show; the bytes do.
+ */
+export const HERO_QUALITY = 75;
+
+/** A hero's <img src> (components/ui/HeroPhoto.tsx): 1920px at HERO_QUALITY, named by its alt. */
 export function heroImageSrc(photo: Pick<Photo, "src" | "alt">, name?: string | null): string {
-  return sanitySized(photo.src, 1920, 82, name ?? photo.alt);
+  return sanitySized(photo.src, 1920, HERO_QUALITY, name ?? photo.alt);
 }
 
-/** The homepage hero's <img src> (components/sections/HeroSlideshow.tsx): 1920px at q80. */
+/** The homepage hero's <img src> (components/sections/HeroSlideshow.tsx): 1920px at HERO_QUALITY. */
 export function homeHeroSrc(src: string, name?: string | null): string {
-  return isSanityImage(src) ? sanitySized(src, 1920, 80, name) : src;
+  return isSanityImage(src) ? sanitySized(src, 1920, HERO_QUALITY, name) : src;
 }
 
 /**

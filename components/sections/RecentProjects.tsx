@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { projects } from "@/lib/projects";
@@ -36,7 +36,7 @@ export default function RecentProjects() {
 
         {/* Featured project */}
         <Link href={`/projects/${featured.slug}`} className="block mb-3">
-          <motion.div
+          <m.div
             initial={{ y: 20 }}
             whileInView={{ y: 0 }}
             viewport={{ once: true }}
@@ -87,14 +87,14 @@ export default function RecentProjects() {
                 </svg>
               </span>
             </div>
-          </motion.div>
+          </m.div>
         </Link>
 
         {/* Two secondary projects */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {secondary.map((project, i) => (
             <Link key={project.slug} href={`/projects/${project.slug}`} className="block">
-              <motion.div
+              <m.div
                 initial={{ y: 16 }}
                 whileInView={{ y: 0 }}
                 viewport={{ once: true }}
@@ -139,7 +139,7 @@ export default function RecentProjects() {
                     </svg>
                   </span>
                 </div>
-              </motion.div>
+              </m.div>
             </Link>
           ))}
         </div>

@@ -68,13 +68,16 @@ const PRELOAD = 1;
  * used to be the only source, and in landscape on a phone the footer came out
  * 21px taller than its constant and sat on the bottom of the page.
  */
-// Measured on the built page, 17 Oct 2026 (the bars as they render at
-// 1280 to 1920 wide, and on a 390px phone): the CSS sizing before measure()
-// runs uses these, so a wrong guess paints the wrong stage for a second.
-const CHROME_TOP = 65;
-const CHROME_BOTTOM = 154;
-const CHROME_TOP_SM = 78;
-const CHROME_BOTTOM_SM = 159;
+// Measured on the built page (the bars as they render at 768 to 1920 wide,
+// and on a 390px phone): the CSS sizing before measure() runs uses these, so
+// a wrong guess paints the wrong stage for a second. Re-measured 28 Oct 2026:
+// since the type scale moved on 20 Oct the bars were 61 and 148 (72 and 157
+// on a phone), and the 17 Oct values (65, 154, 78, 159) moved the stage a few
+// pixels on every open.
+const CHROME_TOP = 61;
+const CHROME_BOTTOM = 148;
+const CHROME_TOP_SM = 72;
+const CHROME_BOTTOM_SM = 157;
 /**
  * Below this the stage shows one page. At 900px a spread gives each page ~450px
  * of width, which is where this book's smallest captions stop being readable.
@@ -362,6 +365,8 @@ export default function CatalogueViewer({
   }, [aspect]);
 
   const stageRatio = spreadMode ? aspect * 2 : aspect;
+  // measure() sets the stage, the bars and the mode together.
+  const measured = stageW !== null;
   // One page is half the stage in spread mode. The browser multiplies by the
   // device pixel ratio and picks from srcset; zooming widens the hint so the
   // largest raster is fetched on demand rather than up front.
@@ -705,18 +710,24 @@ export default function CatalogueViewer({
       {/* Stage. The outer element is never transformed, so its rect stays the
           reference frame for every zoom and pan calculation. */}
       <div
-        className="absolute inset-x-0 grid place-items-center"
-        style={{ top: chromeTop, bottom: chromeBottom }}
+        className="pb-frame absolute inset-x-0 grid place-items-center"
+        style={measured ? { top: chromeTop, bottom: chromeBottom } : { top: "var(--pb-top)", bottom: "var(--pb-bottom)" }}
       >
         {/* Before measure() has run, CSS does its arithmetic: the stage is
             as wide as the room between the bars allows at the book's shape,
             a spread from 900x600 up. Until 17 Oct 2026 it painted
             full-bleed ("min(100vw, 100%)") and snapped to 1362x681 a second
-            later, a 0.5 layout shift on every open (technical review). */}
+            later, a 0.5 layout shift on every open (technical review). The
+            room between the bars is CSS's too until then (28 Oct 2026: the
+            frame took the laptop's bars on a phone and moved 11px). */}
         <style>{`
-          .pb-stage { --pb-ratio: ${aspect.toFixed(4)}; --pb-top: ${CHROME_TOP_SM}px; --pb-bottom: ${CHROME_BOTTOM_SM}px; }
-          @media (min-width: 640px) { .pb-stage { --pb-top: ${CHROME_TOP}px; --pb-bottom: ${CHROME_BOTTOM}px; } }
-          @media (min-width: ${SPREAD_MIN_WIDTH}px) and (min-height: ${SPREAD_MIN_HEIGHT}px) { .pb-stage { --pb-ratio: ${(aspect * 2).toFixed(4)}; } }
+          .pb-frame { --pb-ratio: ${aspect.toFixed(4)}; --pb-top: ${CHROME_TOP_SM}px; --pb-bottom: ${CHROME_BOTTOM_SM}px; }
+          @media (min-width: 640px) { .pb-frame { --pb-top: ${CHROME_TOP}px; --pb-bottom: ${CHROME_BOTTOM}px; } }
+          @media (min-width: ${SPREAD_MIN_WIDTH}px) and (min-height: ${SPREAD_MIN_HEIGHT}px) {
+            .pb-frame { --pb-ratio: ${(aspect * 2).toFixed(4)}; }
+            .pb-lone-end { justify-content: flex-end !important; }
+            .pb-lone-start { justify-content: flex-start !important; }
+          }
         `}</style>
         <div
           ref={stageRef}
@@ -754,7 +765,7 @@ export default function CatalogueViewer({
               return (
                 <div
                   key={`v${i}-${group.join("-")}`}
-                  className="absolute inset-0 flex items-stretch"
+                  className={`absolute inset-0 flex items-stretch${measured ? "" : loneSideBeforeMeasure(group, total)}`}
                   style={{
                     justifyContent: lonePageSide(group, spreadMode),
                     opacity: shown ? 1 : 0,
@@ -1146,6 +1157,21 @@ export default function CatalogueViewer({
 function lonePageSide(group: number[], spreadMode: boolean): "center" | "flex-start" | "flex-end" {
   if (!spreadMode || group.length !== 1) return "center";
   return group[0] % 2 === 1 ? "flex-end" : "flex-start";
+}
+
+/**
+ * Before measure() has run the reader is in single-page mode, so the cover
+ * was drawn in the middle of the spread-shaped stage and jumped to the right
+ * half a moment later: a 0.19 layout shift on every laptop open (28 Oct 2026).
+ * A page that stands alone in a spread too (the cover, an even book's back
+ * cover) takes its spread side from CSS at the spread sizes (.pb-lone-end,
+ * .pb-lone-start), so its first paint is where it will stay.
+ */
+function loneSideBeforeMeasure(group: number[], total: number): string {
+  if (group.length !== 1) return "";
+  if (group[0] === 1) return " pb-lone-end";
+  if (group[0] === total && total % 2 === 0) return " pb-lone-start";
+  return "";
 }
 
 /**

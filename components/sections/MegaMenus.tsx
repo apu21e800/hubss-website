@@ -32,18 +32,16 @@
  */
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
-import { products } from "@/lib/products";
-import { applications } from "@/lib/applications";
-import { PRODUCT_CATEGORIES, PRODUCT_MENU_LINES } from "@/lib/product-categories";
+import { m, useReducedMotion } from "framer-motion";
+import { PATTERN_GALLERY_THUMB, PRODUCT_CATEGORIES } from "@/lib/product-categories";
 import { catalogue, catalogueReady, cataloguePageUrl, ideaBook } from "@/lib/catalogue";
 export { ideaBook };
 import { showCatalogue } from "@/lib/feature-flags";
 import { lunchLearnHref } from "@/lib/lunch-learn";
 import ChromeImg from "@/components/ui/ChromeImg";
 import { CHROME_MARKS, CHROME_PANELS, chromeImage } from "@/lib/chrome-images.mjs";
-import { productImages, applicationImages } from "@/lib/featured-images";
-import { HERO_POSITION } from "@/lib/hero-framing";
+import { familyItems, groupItems, useNavMenu } from "@/components/NavMenuProvider";
+import type { MenuItem, Picture } from "@/lib/nav-menu";
 import navInsights from "@/lib/nav-insights.json";
 import { BLOG_NAME } from "@/lib/field-notes-taxonomy";
 import { altBesideTitle } from "@/lib/blog-taxonomy";
@@ -65,19 +63,10 @@ export const LL_LINE = "A free 60-minute session. Lunch is on us.";
 
 export { APPLICATION_GROUPS };
 
-export type MenuItem = {
-  href: string;
-  name: string;
-  line?: string;
-  /** A picture for a destination beside the products (the pattern gallery): a card of its own. */
-  gallery?: string;
-  /** The page's hero, shown at the right of the desktop panel while the pointer is on this name. */
-  picture?: Picture;
-};
-
-/** One photograph the desktop panel's tall frame can show: a family's or group's, or a page's hero. */
-export type Picture = { label: string; note?: string; src: string; position?: [number, number] };
-const NO_ITEM_PICTURE: ReadonlySet<string> = new Set(["chipfill", "aggrefill", "fast-patch"]);
+// The names under each family and group, with their lines and pictures, are
+// worked out on the server (lib/nav-menu.ts) and reach the panels through
+// components/NavMenuProvider.tsx.
+export type { MenuItem, Picture };
 
 /**
  * The panel's pictures in one list: the columns' (so a column's index is
@@ -100,47 +89,6 @@ function panelPictures(columns: { label: string; note?: string; items: MenuItem[
     }
   }
   return { pictures, byHref };
-}
-
-/**
- * A product's or application's photograph for the panel (26 Oct 2026; Vern:
- * "choose stronger images for the mega menu ... different image for each
- * hover"): the page's own hero (lib/featured-images.ts, the photo editor's
- * picks), framed where lib/hero-framing.ts frames it, baked 4:5 by
- * scripts/gen-chrome-images.mjs. So the panel previews the page the visitor
- * is about to open; the family's or group's picture (CHROME_PANELS) shows
- * while the pointer is on the heading or between the names.
- */
-function heroPicture(kind: "product" | "application", slug: string, label: string, note?: string): Picture | undefined {
-  // The repair products' photographs are a bag and a patch of grey aggregate
-  // (lib/featured-images.ts: nothing on disk qualifies, and Fast Patch's
-  // carries a third party's copyright); the family's ChipFill pour stays up
-  // for those names.
-  if (kind === "product" && NO_ITEM_PICTURE.has(slug)) return undefined;
-  const cfg = (kind === "product" ? productImages : applicationImages)[slug];
-  if (!cfg) return undefined;
-  const src = cfg.featured ?? cfg.fallback;
-  const m = /^(\d+)% (\d+)%$/.exec(HERO_POSITION[src] ?? "");
-  return { label, note, src, position: m ? [Number(m[1]) / 100, Number(m[2]) / 100] : [0.5, 0.5] };
-}
-
-/** The pattern gallery's picture: a herringbone template drawing the search overlay bakes (256px WebP). */
-const GALLERY_THUMB = "/images/search/thumbs/pattern/herringbone-256.webp";
-
-export function productFamily(cat: (typeof PRODUCT_CATEGORIES)[number]): MenuItem[] {
-  const items: MenuItem[] = cat.slugs.flatMap((sl) => {
-    const p = products.find((x) => x.slug === sl);
-    return p ? [{ href: `/products/${p.slug}`, name: p.name, line: PRODUCT_MENU_LINES[p.slug], picture: heroPicture("product", p.slug, p.name, PRODUCT_MENU_LINES[p.slug]) }] : [];
-  });
-  if (cat.secondary) items.push({ href: cat.secondary.href, name: cat.secondary.label, line: cat.secondary.menuLine, gallery: GALLERY_THUMB });
-  return items;
-}
-
-export function applicationGroup(group: (typeof APPLICATION_GROUPS)[number]): MenuItem[] {
-  return group.slugs.flatMap((sl) => {
-    const a = applications.find((x) => x.slug === sl);
-    return a ? [{ href: `/applications/${a.slug}`, name: a.name, picture: heroPicture("application", a.slug, a.name) }] : [];
-  });
 }
 
 // ── Insights data (lib/nav-insights.json, written at build) ───────────
@@ -352,7 +300,7 @@ function ColumnHead({ label, note }: { label: string; note?: string }) {
 function Column({ label, note, items, index, onPoint, onPointItem }: { label: string; note?: string; items: MenuItem[]; index: number; onPoint: (i: number) => void; onPointItem?: (href: string) => void }) {
   const names = items.filter((it) => !it.gallery);
   return (
-    <motion.div
+    <m.div
       className="mm-col"
       onMouseEnter={() => onPoint(index)}
       // Focus bubbles in React: a name's own onFocus has already pointed at
@@ -386,7 +334,7 @@ function Column({ label, note, items, index, onPoint, onPointItem }: { label: st
           </li>
         ))}
       </ul>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -404,7 +352,7 @@ function Feature({ pictures, active }: { pictures: Picture[]; active: number }) 
   const [loaded, setLoaded] = useState<Record<string, true>>({});
   const shownRef = useRef(active);
   useEffect(() => {
-    setMounted((m) => (m.includes(active) ? m : [...m, active]));
+    setMounted((list) => (list.includes(active) ? list : [...list, active]));
   }, [active]);
   const activeSrc = pictures[active]?.src;
   if (activeSrc && loaded[activeSrc]) shownRef.current = active;
@@ -500,7 +448,7 @@ function GalleryRow() {
       href={link.href}
       mark={
         // eslint-disable-next-line @next/next/no-img-element -- a 2 KB baked drawing, lib/chrome-images.mjs
-        <img src={GALLERY_THUMB} alt="" width={36} height={36} loading="lazy" decoding="async" className="mm-mark mm-mark-pattern pattern-sheet" />
+        <img src={PATTERN_GALLERY_THUMB} alt="" width={36} height={36} loading="lazy" decoding="async" className="mm-mark mm-mark-pattern pattern-sheet" />
       }
       label={link.label}
       line={link.menuLine ?? ""}
@@ -581,7 +529,8 @@ const panelPhoto = (label: string) => {
 export function ProductsPanel() {
   // The families' pictures first, in column order (so a column's index is
   // its picture's), then every product's.
-  const families = PRODUCT_CATEGORIES.map((cat) => ({ cat, items: productFamily(cat) }));
+  const menu = useNavMenu();
+  const families = PRODUCT_CATEGORIES.map((cat) => ({ cat, items: familyItems(menu, cat.label) }));
   const { pictures, byHref } = panelPictures(families.map(({ cat, items }) => ({ label: cat.label, note: cat.menuNote, items })));
   const { active, onPoint, onPointItem } = usePointed(families.map(({ items }, index) => ({ index, items })), byHref);
   return (
@@ -623,7 +572,8 @@ export function ProductsPanel() {
 }
 
 export function ApplicationsPanel() {
-  const groups = APPLICATION_GROUPS.map((g) => ({ g, items: applicationGroup(g) }));
+  const menu = useNavMenu();
+  const groups = APPLICATION_GROUPS.map((g) => ({ g, items: groupItems(menu, g.label) }));
   const { pictures, byHref } = panelPictures(groups.map(({ g, items }) => ({ label: g.label, note: g.note, items })));
   const { active, onPoint, onPointItem } = usePointed(groups.map(({ items }, index) => ({ index, items })), byHref);
   return (
@@ -659,7 +609,7 @@ export function ApplicationsPanel() {
 /** One of the two sections of the blog, with its picture, at the left of Projects. */
 function SectionRow({ section: s, index }: { section: NavSection; index: number }) {
   return (
-    <motion.li
+    <m.li
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.06 + index * 0.04, duration: 0.36, ease: EASE_OUT }}
@@ -679,14 +629,14 @@ function SectionRow({ section: s, index }: { section: NavSection; index: number 
           <path d="M9 18l6-6-6-6" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </Link>
-    </motion.li>
+    </m.li>
   );
 }
 
 /** One of the three newest posts beside the cover: its 3:2 picture, its section, its title. */
 function PostRow({ post, index }: { post: NavPost; index: number }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.12 + index * 0.05, duration: 0.36, ease: EASE_OUT }}
@@ -706,7 +656,7 @@ function PostRow({ post, index }: { post: NavPost; index: number }) {
           <span className="mm-post-title font-display">{post.title}</span>
         </span>
       </Link>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -724,7 +674,7 @@ export function ProjectsPanel() {
           </ul>
         </div>
         {cover && (
-          <motion.div
+          <m.div
             className="mm-cover-wrap"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -745,7 +695,7 @@ export function ProjectsPanel() {
               <span className="eyebrow mm-kicker">{kindOf(cover.type)}</span>
               <span className="mm-cover-title font-display">{cover.title}</span>
             </Link>
-          </motion.div>
+          </m.div>
         )}
         <div className={`mm-posts ${cover ? "" : "mm-posts-wide"}`}>
           {stacked.map((p, i) => <PostRow key={p.slug} post={p} index={i} />)}

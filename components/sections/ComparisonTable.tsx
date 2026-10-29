@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 const rows = [
   { metric: "Snow plow resistance", trad: "Poor",                hub: "Excellent" },
@@ -27,7 +27,7 @@ export default function ComparisonTable() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
 
           {/* ── LEFT: Context + metric callout ─────────────────── */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, x: -16 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -86,10 +86,10 @@ export default function ComparisonTable() {
               See our projects
               <span className="text-base leading-none">→</span>
             </Link>
-          </motion.div>
+          </m.div>
 
           {/* ── RIGHT: Comparison table ─────────────────────── */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, x: 16 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -157,7 +157,7 @@ export default function ComparisonTable() {
             <p className="text-sm mt-6" style={{ color: "var(--text-secondary)" }}>
               Proven in 10 provinces, coast to coast, since 1999
             </p>
-          </motion.div>
+          </m.div>
 
         </div>
       </div>

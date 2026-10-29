@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import { m, useInView } from "framer-motion";
 import { useRef } from "react";
 
 const STATS = [
@@ -76,7 +76,7 @@ export default function WhyHubss() {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 lg:pt-28 pb-6">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.45 }}
@@ -104,14 +104,14 @@ export default function WhyHubss() {
           <p className="text-base leading-relaxed max-w-xl" style={{ color: "var(--text-muted)" }}>
             Understanding what works. Solutions for Canada. One standard: if it goes on the street, it stays on the street.
           </p>
-        </motion.div>
+        </m.div>
 
         <div
           className="grid grid-cols-2 sm:grid-cols-4 mb-12 rounded-xl overflow-hidden"
           style={{ border: "1px solid var(--ink-10)", background: "var(--ink-025)" }}
         >
           {STATS.map((s, i) => (
-            <motion.div
+            <m.div
               key={s.num}
               initial={{ opacity: 0, y: 10 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -131,13 +131,13 @@ export default function WhyHubss() {
               <span className="text-[11px] leading-snug" style={{ color: "var(--text-muted)" }}>
                 {s.sub}
               </span>
-            </motion.div>
+            </m.div>
           ))}
         </div>
 
         <div style={{ borderTop: "1px solid var(--border-color)" }}>
           {PROOF.map((p, i) => (
-            <motion.div
+            <m.div
               key={p.claim}
               initial={{ opacity: 0, y: 8 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -156,12 +156,12 @@ export default function WhyHubss() {
               <p className="text-sm leading-relaxed" style={{ color: "var(--text-muted)" }}>
                 {p.detail}
               </p>
-            </motion.div>
+            </m.div>
           ))}
         </div>
 
         {/* Bottom CTA */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 12 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.5, duration: 0.4 }}
@@ -191,7 +191,7 @@ export default function WhyHubss() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </a>
-        </motion.div>
+        </m.div>
 
         <p className="text-[11px] font-bold tracking-[0.2em] uppercase mt-10 mb-5" style={{ color: "var(--ink-18)" }}>
           Trusted by

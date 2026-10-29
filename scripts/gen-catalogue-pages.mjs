@@ -67,6 +67,13 @@ const QUALITY = 82;
  * raster would have been 71 KB for a 56px thumb.
  */
 const COVER_THUMB = 240;
+/**
+ * Inside pages the site shows as small as the cover, at COVER_THUMB too, as
+ * p<NNN>-240.webp beside their full widths: p.129 under the Lunch & Learn card
+ * (components/sections/IdeaBookCard.tsx, INSIDE_PAGE), drawn about 110px wide,
+ * where the 800px raster was 82 KB (28 Oct 2026).
+ */
+const PAGE_THUMBS = [129];
 const FORCE = process.argv.includes("--force");
 /** Redo the alt text and both manifests without re-rasterising anything. */
 const REMANIFEST = process.argv.includes("--remanifest");
@@ -406,6 +413,14 @@ async function main() {
     .webp({ quality: 80, effort: 6 })
     .toFile(path.join(outDir, coverThumb));
   log(`cover    ${coverThumb} (${Math.round(fs.statSync(path.join(outDir, coverThumb)).size / 1024)} KB)`);
+  for (const n of PAGE_THUMBS.filter((p) => p <= total)) {
+    const thumb = pageFile(n, COVER_THUMB);
+    await sharp(path.join(outDir, pageFile(n, WIDTHS[0])))
+      .resize({ width: COVER_THUMB, kernel: "lanczos3" })
+      .webp({ quality: 80, effort: 6 })
+      .toFile(path.join(outDir, thumb));
+    log(`thumb    ${thumb} (${Math.round(fs.statSync(path.join(outDir, thumb)).size / 1024)} KB)`);
+  }
 
   log("reading page text for alt attributes...");
   const pages = [];

@@ -106,6 +106,9 @@ export const PRODUCT_CATEGORIES: ProductCategory[] = [
  * menu column at 1440. Sanity does not override these: they are menu labels,
  * not product copy.
  */
+/** The pattern gallery's picture in the menus: a herringbone template drawing the search overlay bakes (256px WebP). */
+export const PATTERN_GALLERY_THUMB = "/images/search/thumbs/pattern/herringbone-256.webp";
+
 export const PRODUCT_MENU_LINES: Record<string, string> = {
   // Book subhead: "Aggregate-reinforced, preformed thermoplastic."
   "traffic-patterns-xd": "Aggregate-reinforced thermoplastic",

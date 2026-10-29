@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Image from "next/image";
 import { heroImages, resolveImage } from "@/lib/featured-images";
 
@@ -55,7 +55,7 @@ export default function Hero() {
       {/* ── Main content ────────────────────────────────────────────────── */}
       <div className="relative z-10 flex-1 w-full pt-20 sm:pt-24 lg:pt-28 pb-16 sm:pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65 }}
@@ -102,7 +102,7 @@ export default function Hero() {
           </p>
 
           {/* ── CTAs ─────────────────────────────────────────────────── */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.22, duration: 0.55 }}
@@ -129,10 +129,10 @@ export default function Hero() {
             >
               Book Lunch &amp; Learn
             </a>
-          </motion.div>
+          </m.div>
 
           {/* ── Trust signals ────────────────────────────────────────────────── */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.42, duration: 0.55 }}
@@ -181,8 +181,8 @@ export default function Hero() {
                 </div>
               ))}
             </div>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
         </div>
       </div>
 
@@ -198,7 +198,7 @@ export default function Hero() {
               "linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%)",
           }}
         >
-          <motion.div
+          <m.div
             className="flex gap-8 whitespace-nowrap"
             animate={{ x: [0, -2000] }}
             transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
@@ -223,7 +223,7 @@ export default function Hero() {
                 />
               </span>
             ))}
-          </motion.div>
+          </m.div>
         </div>
       </div>
 

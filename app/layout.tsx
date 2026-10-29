@@ -20,6 +20,9 @@ import SkipLink from "@/components/SkipLink";
 import HistoryScroll from "@/components/HistoryScroll";
 import FieldValidity from "@/components/FieldValidity";
 import NotInStudio from "@/components/NotInStudio";
+import MotionProvider from "@/components/MotionProvider";
+import { NavMenuProvider } from "@/components/NavMenuProvider";
+import { NAV_MENU } from "@/lib/nav-menu";
 import { getSiteSettings } from "@/lib/sanity.queries";
 
 // Runs before first paint. Order: ?theme= in the URL (persisted, so a link
@@ -142,14 +145,25 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <link rel="dns-prefetch" href="https://basemaps.cartocdn.com" />
         {/* Sanity's image CDN serves the product, application and Insights
             photos on nearly every page (lib/photos.ts); warming it too saves
-            the TLS handshake before the first card photo (QA F13, 30 Sep 2026). */}
-        <link rel="preconnect" href="https://cdn.sanity.io" crossOrigin="anonymous" />
+            the TLS handshake before the first card photo (QA F13, 30 Sep 2026).
+            No crossOrigin (28 Oct 2026): the photos are plain <img>s, which
+            never use a connection opened for CORS requests, so with it the
+            hero of every product and application page still waited for a
+            connection of its own. The map's CORS hosts keep theirs. */}
+        <link rel="preconnect" href="https://cdn.sanity.io" />
         {/* The line under the bar while the next page loads; useSearchParams
             needs the boundary. */}
         <Suspense fallback={null}>
           <NavigationProgress />
         </Suspense>
-        <SiteSettingsProvider settings={settings}>{children}</SiteSettingsProvider>
+        {/* The animation engine arrives after the first screen
+            (components/MotionProvider.tsx); the menus' names come from
+            the server (lib/nav-menu.ts), not from the product copy. */}
+        <MotionProvider>
+          <SiteSettingsProvider settings={settings}>
+            <NavMenuProvider menu={NAV_MENU}>{children}</NavMenuProvider>
+          </SiteSettingsProvider>
+        </MotionProvider>
         {/* The scroll-up sticky bar (components/StickyBar.tsx) is off since
             25 Sep 2026: with the header's Lunch & Learn button and the band at
             the foot of every page it was the same ask a third time. */}

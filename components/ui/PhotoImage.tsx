@@ -2,7 +2,7 @@
 
 import Image, { type ImageProps } from "next/image";
 import { isSanityImage, sanityLoader } from "@/lib/photos";
-import { withFilename } from "@/lib/sanity-image";
+import { withFilename } from "@/lib/image-filename";
 
 /**
  * next/image for any photo, from Sanity or /public.

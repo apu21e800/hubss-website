@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import type { Application } from "@/lib/applications";
@@ -135,7 +135,7 @@ export default function ApplicationsGrid({ applications: source, copy = HOMEPAGE
           {featured.map((app, i) => {
             const hidden = reveal[app.slug] === "hidden";
             return (
-            <motion.div
+            <m.div
               key={app.slug}
               ref={(el) => { cards.current[app.slug] = el; }}
               data-slug={app.slug}
@@ -204,7 +204,7 @@ export default function ApplicationsGrid({ applications: source, copy = HOMEPAGE
                   </p>
                 </div>
               </Link>
-            </motion.div>
+            </m.div>
             );
           })}
         </div>

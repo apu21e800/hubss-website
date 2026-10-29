@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 const stats = [
   { value: "1,000+", label: "Streets transformed" },
@@ -17,7 +17,7 @@ export default function StatsBar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-4">
           {stats.map((stat, i) => (
-            <motion.div
+            <m.div
               key={stat.label}
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -38,7 +38,7 @@ export default function StatsBar() {
               <p className="text-sm text-[var(--text-muted)]">
                 {stat.label}
               </p>
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </div>

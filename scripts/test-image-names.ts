@@ -9,7 +9,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { parseCsv } from "./lib/csv";
 import { FILENAME_MAX, imageFilename, sanityAssetFile, slugForFilename, withFilename } from "../lib/sanity-image";
-import { GALLERY, galleryImageSrc, heroImageSrc, sanityCrop, sanityLoader, sanitySized, sanitySrcSet, sanityTurn } from "../lib/photos";
+import { GALLERY, HERO_QUALITY, galleryImageSrc, heroImageSrc, sanityCrop, sanityLoader, sanitySized, sanitySrcSet, sanityTurn } from "../lib/photos";
 import { honestPhoto, seoAlt } from "../lib/image-seo";
 import { IMAGE_FACTS } from "../lib/image-facts";
 
@@ -83,7 +83,7 @@ test("the builders keep their widths and parameters; only the path gains the nam
   const named = sanitySrcSet(ASSET, [828, 1200, 1920, 2560], 82, "UBC Musqueam crosswalk");
   assert.equal(named, bare.split(`${ASSET}?`).join(`${ASSET}/ubc-musqueam-crosswalk.jpg?`));
   assert.equal(sanityCrop(ASSET, 780, 878, { x: 0.4, y: 0.6 }, 80, "UBC"), sanityCrop(ASSET, 780, 878, { x: 0.4, y: 0.6 }, 80).replace(".jpg?", ".jpg/ubc.jpg?"));
-  assert.equal(heroImageSrc({ src: ASSET, alt: "UBC" }), `${ASSET}/ubc.jpg?w=1920&q=82&auto=format&fit=max`);
+  assert.equal(heroImageSrc({ src: ASSET, alt: "UBC" }), `${ASSET}/ubc.jpg?w=1920&q=${HERO_QUALITY}&auto=format&fit=max`);
 });
 
 test("a gallery photo's address is the one its tile or fallback <img> carries", () => {

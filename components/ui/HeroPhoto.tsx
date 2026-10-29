@@ -21,7 +21,7 @@
  * for the page (lib/sitemap.ts).
  */
 import PhotoImage from "@/components/ui/PhotoImage";
-import { heroImageSrc, isSanityImage, sanityCrop, sanitySrcSet, sanityTurn, type Hotspot, type Photo } from "@/lib/photos";
+import { HERO_QUALITY, heroImageSrc, isSanityImage, sanityCrop, sanitySrcSet, sanityTurn, type Hotspot, type Photo } from "@/lib/photos";
 
 /** "50% 62%" as a focal point; the middle when it cannot be read. */
 function focalOf(position: string | undefined, hotspot?: Hotspot): Hotspot {
@@ -68,9 +68,9 @@ export default function HeroPhoto({
   // plain srcset too.
   const turned = sanityTurn(photo.src) !== 0;
   const phoneSet = turned
-    ? sanitySrcSet(photo.src, [828, 1200], 82, words)
+    ? sanitySrcSet(photo.src, [828, 1200], HERO_QUALITY, words)
     : [780, 1170]
-        .map((w) => `${sanityCrop(photo.src, w, Math.round(w / phoneRatio), fp, 80, words)} ${w}w`)
+        .map((w) => `${sanityCrop(photo.src, w, Math.round(w / phoneRatio), fp, HERO_QUALITY, words)} ${w}w`)
         .join(", ");
   return (
     <picture>
@@ -78,7 +78,7 @@ export default function HeroPhoto({
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={heroImageSrc(photo, words)}
-        srcSet={sanitySrcSet(photo.src, [828, 1200, 1920, 2560], 82, words)}
+        srcSet={sanitySrcSet(photo.src, [828, 1200, 1920, 2560], HERO_QUALITY, words)}
         sizes="100vw"
         alt={photo.alt}
         fetchPriority={priority ? "high" : undefined}

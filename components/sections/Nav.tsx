@@ -7,8 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { usePathname, useRouter } from "next/navigation";
-import { motion, AnimatePresence, MotionConfig, useReducedMotion, type Variants } from "framer-motion";
-import { products } from "@/lib/products";
+import { m, AnimatePresence, MotionConfig, useReducedMotion, type Variants } from "framer-motion";
 import { PRODUCT_CATEGORIES } from "@/lib/product-categories";
 import { lunchLearnHref } from "@/lib/lunch-learn";
 import { scrollWindowInstantly } from "@/lib/scroll";
@@ -22,8 +21,9 @@ import {
   ProductsPanel, ApplicationsPanel, ProjectsPanel, warmPanels, warmFeature,
   MooseAvatar, GalleryCard, InsightImg, PHOTO_GROUND, kindOf,
   RESOURCES, APPLICATION_GROUPS, INSIGHTS, NAV_SECTIONS, showIdeaBook, ideaBook, ideaBookCover, ideaBookCoverSet,
-  productFamily, applicationGroup, type MenuItem, type NavSection,
+  type MenuItem, type NavSection,
 } from "@/components/sections/MegaMenus";
+import { familyItems, groupItems, useNavMenu } from "@/components/NavMenuProvider";
 // Nothing the menus draw goes through /_next/image. Family and group photos
 // and Moose are ChromeImg (baked at build time); Insights photos are Sanity
 // CDN addresses (or, for the fallback cover, baked chrome files) written at
@@ -470,9 +470,9 @@ function BurgerCross() {
   const line = "absolute left-[3px] h-[2px] w-[18px] rounded-full bg-current";
   return (
     <span aria-hidden="true" className="relative block h-6 w-6">
-      <motion.span className={`${line} top-[5px]`} variants={{ hidden: { y: 0, rotate: 0 }, closed: { y: 0, rotate: 0 }, open: { y: 6, rotate: 45 } }} transition={t} />
-      <motion.span className={`${line} top-[11px]`} variants={{ hidden: { opacity: 1, scaleX: 1 }, closed: { opacity: 1, scaleX: 1 }, open: { opacity: 0, scaleX: 0.3 } }} transition={t} />
-      <motion.span className={`${line} top-[17px]`} variants={{ hidden: { y: 0, rotate: 0 }, closed: { y: 0, rotate: 0 }, open: { y: -6, rotate: -45 } }} transition={t} />
+      <m.span className={`${line} top-[5px]`} variants={{ hidden: { y: 0, rotate: 0 }, closed: { y: 0, rotate: 0 }, open: { y: 6, rotate: 45 } }} transition={t} />
+      <m.span className={`${line} top-[11px]`} variants={{ hidden: { opacity: 1, scaleX: 1 }, closed: { opacity: 1, scaleX: 1 }, open: { opacity: 0, scaleX: 0.3 } }} transition={t} />
+      <m.span className={`${line} top-[17px]`} variants={{ hidden: { y: 0, rotate: 0 }, closed: { y: 0, rotate: 0 }, open: { y: -6, rotate: -45 } }} transition={t} />
     </span>
   );
 }
@@ -480,14 +480,14 @@ function BurgerCross() {
 // The first screen's rows rise in one after another as it opens.
 function RiseIn({ index, on, className, children }: { index: number; on: boolean; className?: string; children: React.ReactNode }) {
   return (
-    <motion.div
+    <m.div
       className={className}
       initial={on ? { opacity: 0, y: 14 } : false}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1 + index * 0.03, duration: 0.34, ease: EASE_OUT }}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -562,6 +562,7 @@ function MenuCover({ pathname, onClose }: { pathname: string; onClose: () => voi
 
 // What an open section holds, under its "All" link.
 function SectionPanel({ section, pathname, onClose }: { section: (typeof ROOT_SECTIONS)[number]; pathname: string; onClose: () => void }) {
+  const menu = useNavMenu();
   return (
     <div className="pb-6">
       <div className="-mt-1">
@@ -570,7 +571,7 @@ function SectionPanel({ section, pathname, onClose }: { section: (typeof ROOT_SE
       {section.level === "products" && (
         <>
           {PRODUCT_CATEGORIES.map((cat) => (
-            <MenuGroup key={cat.label} label={cat.label} note={cat.menuNote} items={productFamily(cat)} pathname={pathname} onClose={onClose} />
+            <MenuGroup key={cat.label} label={cat.label} note={cat.menuNote} items={familyItems(menu, cat.label)} pathname={pathname} onClose={onClose} />
           ))}
           <div className="mt-5" style={{ borderTop: "1px solid var(--ink-06)" }}>
             <MobileResourcesRow pathname={pathname} onClose={onClose} />
@@ -579,7 +580,7 @@ function SectionPanel({ section, pathname, onClose }: { section: (typeof ROOT_SE
       )}
       {section.level === "applications" &&
         APPLICATION_GROUPS.map((group) => (
-          <MenuGroup key={group.label} label={group.label} items={applicationGroup(group)} pathname={pathname} onClose={onClose} />
+          <MenuGroup key={group.label} label={group.label} items={groupItems(menu, group.label)} pathname={pathname} onClose={onClose} />
         ))}
       {section.level === "insights" && (
         <>
@@ -597,6 +598,7 @@ function SectionPanel({ section, pathname, onClose }: { section: (typeof ROOT_SE
 
 function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: boolean; scrolled: boolean; onClose: () => void; onSearchOpen: () => void }) {
   const { offices } = useSiteSettings();
+  const menu = useNavMenu();
   const overlayRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const panelRefs = useRef<Partial<Record<MenuSection, HTMLDivElement | null>>>({});
@@ -742,8 +744,8 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
   // The session topic: the family or group the open page belongs to (on
   // /products/streetprint, Stamped Asphalt), else the section open.
   const here =
-    PRODUCT_CATEGORIES.find((cat) => productFamily(cat).some((it) => it.href === pathname))?.label ??
-    APPLICATION_GROUPS.find((g) => applicationGroup(g).some((it) => it.href === pathname))?.label ??
+    PRODUCT_CATEGORIES.find((cat) => familyItems(menu, cat.label).some((it) => it.href === pathname))?.label ??
+    APPLICATION_GROUPS.find((g) => groupItems(menu, g.label).some((it) => it.href === pathname))?.label ??
     null;
   const llTopic = here ?? (openSection === "applications" ? "your application" : "HUB systems");
   // The current section, marked as the bar marks it (QA A4, 30 Sep 2026).
@@ -764,7 +766,7 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div
+        <m.div
           ref={overlayRef}
           role="dialog"
           aria-modal="true"
@@ -835,7 +837,7 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
                     <circle cx="11" cy="11" r="8" strokeWidth={2} /><path d="M21 21l-4.35-4.35" strokeWidth={2} strokeLinecap="round" />
                   </svg>
                 </button>
-                <motion.button
+                <m.button
                   type="button"
                   onClick={onClose}
                   aria-label="Close navigation menu"
@@ -845,13 +847,13 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
                   transition={{ duration: 0.32, ease: EASE_OUT }}
                 >
                   <BurgerCross />
-                </motion.button>
+                </m.button>
               </div>
             </div>
           </div>
 
           {/* ── The sheet: the sections and the pinned Lunch & Learn ───── */}
-          <motion.div
+          <m.div
             className="drawer-sheet flex min-h-0 flex-1 flex-col"
             style={{ background: "var(--bg-deepest)" }}
             variants={reduce ? SHEET_FADE : SHEET_WIPE}
@@ -884,7 +886,7 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
                             <span className="mt-1.5 block text-[13.5px] leading-snug text-balance" style={{ color: "var(--ink-50)" }}>{s.line}</span>
                           </span>
                           {/* The chevron turns down as the section opens. */}
-                          <motion.span
+                          <m.span
                             aria-hidden="true"
                             className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-full"
                             style={{ color: isOpenRow ? "var(--accent-text-lg)" : "var(--ink-30)", background: isOpenRow ? "rgba(249,115,22,0.12)" : "transparent" }}
@@ -892,11 +894,11 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
                             transition={reduce ? { duration: 0 } : { duration: OPEN_MS, ease: EASE_OUT }}
                           >
                             <Chevron className="w-5 h-5" />
-                          </motion.span>
+                          </m.span>
                         </button>
                         <AnimatePresence initial={false}>
                           {isOpenRow && (
-                            <motion.div
+                            <m.div
                               key={panelId}
                               id={panelId}
                               role="region"
@@ -910,7 +912,7 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
                               style={{ overflow: "hidden" }}
                             >
                               <SectionPanel section={s} pathname={pathname} onClose={onClose} />
-                            </motion.div>
+                            </m.div>
                           )}
                         </AnimatePresence>
                       </div>
@@ -1015,8 +1017,8 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
                 </svg>
               </Link>
             </div>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       )}
     </AnimatePresence>
   );
@@ -1486,7 +1488,7 @@ export default function Nav() {
             fade. */}
         <AnimatePresence>
           {openPanel && (
-            <motion.div
+            <m.div
               key="mega"
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
@@ -1512,7 +1514,7 @@ export default function Nav() {
                   {openPanel === "insights" && <ProjectsPanel />}
                 </div>
               </div>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
 
@@ -1527,7 +1529,7 @@ export default function Nav() {
           on and off between panels). */}
       <AnimatePresence>
         {openPanel && (
-          <motion.div
+          <m.div
             key="mega-scrim"
             aria-hidden="true"
             initial={{ opacity: 0 }}

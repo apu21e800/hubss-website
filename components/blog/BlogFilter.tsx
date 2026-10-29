@@ -4,7 +4,8 @@ import { useState, useMemo, useCallback, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Search, X, ChevronDown, ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
+import { wantMotion } from "@/components/MotionProvider";
 import BlogCard from "./BlogCard";
 import LunchLearnTile from "./LunchLearnTile";
 import type { PostMeta } from "@/lib/blog";
@@ -77,6 +78,11 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
   const [product, setProduct]   = useState(() => searchParams.get("product") ?? "all");
   const [section, setSection]   = useState<InsightsSectionKey | "all">(() => sectionFromParams(searchParams));
   const [sort, setSort]         = useState<"newest" | "oldest" | "az">(() => (searchParams.get("sort") as "newest" | "oldest" | "az") ?? "newest");
+
+  // The cards' entrance can be on the first screen (a section page), so the
+  // animation engine comes now, not at the visitor's first touch
+  // (components/MotionProvider.tsx).
+  useEffect(() => { wantMotion(); }, []);
 
   const pushParams = useCallback(
     (overrides: Record<string, string>) => {
@@ -339,7 +345,7 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
         <>
           <div className="grid grid-cols-1 gap-x-6 gap-y-7 sm:grid-cols-2 sm:gap-y-12 lg:grid-cols-3 lg:gap-x-8">
             {shown.map((post, index) => (
-              <motion.div
+              <m.div
                 key={post.slug}
                 initial={{ opacity: 0, y: 14 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -350,7 +356,7 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
                 transition={{ duration: 0.35, delay: Math.min(index % 6, 5) * 0.04 }}
               >
                 <BlogCard post={post} priority={index < 3 && frontSlugs.length === 0} />
-              </motion.div>
+              </m.div>
             ))}
             {/* Once the whole list is out, the Lunch & Learn fills the last
                 row's gap, if it has one; with a system chosen, a session on

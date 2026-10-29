@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 const cities = [
   'Vancouver', 'Calgary', 'Edmonton', 'Saskatoon', 'Winnipeg',
@@ -13,7 +13,7 @@ export default function HeroCityTicker() {
 
   return (
     <div className="w-full overflow-hidden bg-[var(--bg-card-neutral)] border-t border-[var(--border-strong)] py-3">
-      <motion.div
+      <m.div
         className="flex items-center whitespace-nowrap"
         animate={{ x: ['0%', '-50%'] }}
         transition={{ duration: 55, repeat: Infinity, ease: 'linear' }}
@@ -26,7 +26,7 @@ export default function HeroCityTicker() {
             <span aria-hidden="true" style={{ color: 'var(--accent-text-lg)', fontSize: '0.5rem', lineHeight: 1 }}>·</span>
           </span>
         ))}
-      </motion.div>
+      </m.div>
     </div>
   );
 }

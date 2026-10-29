@@ -39,7 +39,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import PhotoImage from "@/components/ui/PhotoImage";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 
 export interface LightboxPhoto {
   src: string;
@@ -173,7 +173,7 @@ export default function PhotoLightbox({
 
   return (
     <AnimatePresence>
-      <motion.div
+      <m.div
         key="lightbox"
         ref={dialogRef}
         role="dialog"
@@ -285,7 +285,7 @@ export default function PhotoLightbox({
             <PhotoImage key={p.src} src={p.src} alt="" filename={p.name ?? p.alt} fill sizes="92vw" loading="eager" />
           ))}
         </div>
-      </motion.div>
+      </m.div>
     </AnimatePresence>
   );
 }
@@ -313,7 +313,7 @@ function Frame({
   const w = Math.round(Math.min(maxW, maxH * ratio));
   const h = Math.round(w / ratio);
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, scale: 0.975 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
@@ -355,6 +355,6 @@ function Frame({
       </div>
 
       {children}
-    </motion.div>
+    </m.div>
   );
 }

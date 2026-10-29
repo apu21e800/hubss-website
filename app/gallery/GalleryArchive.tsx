@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import Nav from "@/components/sections/Nav";
 import PhotoImage from "@/components/ui/PhotoImage";
 import PhotoLightbox from "@/components/ui/PhotoLightbox";
@@ -143,7 +143,7 @@ export default function GalleryArchive({ images, footer }: { images: GalleryImag
         {/* Uniform app grid: stable pagination (new tiles append at the end,
             nothing reflows), 2-up on phones like a native photo app */}
         <AnimatePresence mode="wait">
-          <motion.div
+          <m.div
             key={active}
             initial={mounted ? { opacity: 0, y: 8 } : false}
             animate={{ opacity: 1, y: 0 }}
@@ -210,7 +210,7 @@ export default function GalleryArchive({ images, footer }: { images: GalleryImag
                 </div>
               </button>
             ))}
-          </motion.div>
+          </m.div>
         </AnimatePresence>
 
         {/* Load more: sentinel auto-loads as it approaches; button as backup */}

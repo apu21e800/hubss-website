@@ -86,13 +86,16 @@ export default function GalleryGrid({ images: given }: { images: GalleryImage[] 
       </p>
 
       {/* ── Hero — first image, full width, 16:9 ──────────────────── */}
+      {/* Lazy like the rest (28 Oct 2026): the gallery sits far down the
+          product and application pages, and as `priority` its first photo
+          was preloaded beside the page's hero, sharing a phone's bandwidth
+          with the photo the visitor actually sees first. */}
       {hero && (
         <GalleryTile
           img={hero}
           globalIdx={0}
           aspect="aspect-[16/9]"
           onClick={() => setLightboxIndex(0)}
-          priority
         />
       )}
 

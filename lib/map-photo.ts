@@ -9,7 +9,7 @@
  * Anything else is returned as it is.
  */
 import { isSanityImage, sanityLoader } from "@/lib/photos";
-import { withFilename } from "@/lib/sanity-image";
+import { withFilename } from "@/lib/image-filename";
 
 /**
  * A map photo's src with its descriptive filename (lib/sanity-image.ts): the

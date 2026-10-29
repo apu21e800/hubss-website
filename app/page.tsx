@@ -16,7 +16,7 @@ import { buildMetadata } from "@/lib/seo";
 import CanadaMapWrapper from "@/components/sections/CanadaMapWrapper";
 import { SITE_FLAGS } from "@/lib/site-flags";
 import { getSanityPageContent, getSiteSettings } from "@/lib/sanity.queries";
-import { hotspotPosition, isSanityImage, sanityCrop, toPhoto } from "@/lib/photos";
+import { HERO_QUALITY, hotspotPosition, isSanityImage, sanityCrop, toPhoto } from "@/lib/photos";
 import { heroAlt } from "@/lib/image-seo";
 import { editAttr, isPreview } from "@/lib/sanity.preview";
 import { getMergedApplications } from "@/lib/applications.server";
@@ -108,12 +108,20 @@ const organizationSchema = ({ offices, social }: SiteSettings) => ({
  */
 const WIDE_MEDIA = "(min-aspect-ratio: 16/9) and (min-width: 768px)";
 const PHONE_MEDIA = "(max-width: 639px)";
-const HERO_SOURCES: { file: string; media: string; kind: "wide" | "phone" }[] = [
+const HERO_SOURCES: { file: string; media: string; kind: "wide" | "phone"; srcSet?: string }[] = [
   // A wide, short window (a laptop, a 21:9 monitor): a 1.8:1 frame (2 Oct 2026 re-cut).
   { file: "/images/hero/hero-1-wide.jpg", media: WIDE_MEDIA, kind: "wide" },
   // A phone: the whole scene as a 4:3 picture above the headline
   // (HeroSlideshow.tsx lays the hero out that way below the sm breakpoint).
-  { file: "/images/hero/hero-1-mobile.jpg", media: PHONE_MEDIA, kind: "phone" },
+  // At 800 and 1200 px (28 Oct 2026): the 1200 px file alone (237 KB) is
+  // what a 3x iPhone needs, and every other phone downloaded it too; most
+  // take the 800 px one (105 KB), the largest file on their first screen.
+  {
+    file: "/images/hero/hero-1-mobile.jpg",
+    srcSet: "/images/hero/hero-1-mobile-800.jpg 800w, /images/hero/hero-1-mobile.jpg 1200w",
+    media: PHONE_MEDIA,
+    kind: "phone",
+  },
 ];
 
 /**
@@ -171,8 +179,13 @@ export default async function Home() {
   const heroWords = studioHero ? studioHero.alt || heroAlt(studioHero.src) : undefined;
   const heroSources = studioHero
     ? [
-        { file: sanityCrop(studioHero.src, 2400, 1333, studioHero.hotspot, 80, heroWords), media: WIDE_MEDIA, kind: "wide" as const },
-        { file: sanityCrop(studioHero.src, 1200, 960, studioHero.hotspot, 80, heroWords), media: PHONE_MEDIA, kind: "phone" as const },
+        { file: sanityCrop(studioHero.src, 2400, 1333, studioHero.hotspot, HERO_QUALITY, heroWords), media: WIDE_MEDIA, kind: "wide" as const },
+        {
+          file: sanityCrop(studioHero.src, 1200, 960, studioHero.hotspot, HERO_QUALITY, heroWords),
+          srcSet: [800, 1200].map((w) => `${sanityCrop(studioHero.src, w, (w * 4) / 5, studioHero.hotspot, HERO_QUALITY, heroWords)} ${w}w`).join(", "),
+          media: PHONE_MEDIA,
+          kind: "phone" as const,
+        },
       ]
     : HERO_SOURCES;
   const hero = {

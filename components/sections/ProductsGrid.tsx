@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import type { Product } from "@/lib/products";
@@ -153,7 +153,7 @@ export default function ProductsGrid({ products: source, copy = HOMEPAGE_COPY.sy
             const what = product.homepageBlurb || product.shortDesc;
 
             return (
-              <motion.div
+              <m.div
                 key={product.slug}
                 initial={{ y: 16 }}
                 whileInView={{ y: 0 }}
@@ -248,7 +248,7 @@ export default function ProductsGrid({ products: source, copy = HOMEPAGE_COPY.sy
                     }}
                   />
                 </Link>
-              </motion.div>
+              </m.div>
             );
           })}
         </div>

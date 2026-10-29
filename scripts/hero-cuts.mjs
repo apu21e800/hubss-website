@@ -24,6 +24,7 @@
  *   public/images/hero/hero-1.jpg           16:10, 1920 px wide  (Studio, every screen by default)
  *   public/images/hero/hero-1-wide.jpg      1.8:1, 1920 px wide  (windows 16:9 and wider)
  *   public/images/hero/hero-1-mobile.jpg     5:4,  1200 px wide  (the phone's picture, above the headline, closer)
+ *   public/images/hero/hero-1-mobile-800.jpg  the same at 800 px (the phone <source>'s smaller rung)
  *
  * app/page.tsx offers the wide and mobile files through <picture> when
  * they exist; the 16:10 file is the one to push to Studio with
@@ -89,7 +90,10 @@ const CUTS = [
   // width, 5:4. 2 Oct 2026: the sign keeps that size; the window starts at
   // row 110 instead of the top of the photo, so the crosswalk's band and the
   // salmon's fin show at the foot where the building was.
-  { file: "hero-1-mobile.jpg", aspect: 5 / 4, width: 1200, quality: 76, place: [0.5, 0.319], zoom: 0.62, centre: true },
+  // `rungs`: smaller copies beside it, named hero-1-mobile-<width>.jpg, that
+  // app/page.tsx offers in the phone <source>'s srcset (28 Oct 2026: most
+  // phones need 800 px, and the 1200 px file was 237 KB of their first screen).
+  { file: "hero-1-mobile.jpg", aspect: 5 / 4, width: 1200, quality: 76, place: [0.5, 0.319], zoom: 0.62, centre: true, rungs: [800] },
 ];
 
 // A light grade on every cut (Vern: "add more colour and realism, it feels
@@ -152,4 +156,9 @@ for (const cut of CUTS) {
     .toFile(target);
   const kb = Math.round(fs.statSync(target).size / 1024);
   console.log(`${cut.file}: crop ${w}x${h} at ${left},${top} -> ${outW}x${outH}, ${kb} KB${outW < cut.width ? " (master smaller than the target width)" : ""}`);
+  for (const rw of cut.rungs ?? []) {
+    const rung = target.replace(/\.jpg$/, `-${rw}.jpg`);
+    await sharp(target).resize(rw, Math.round(rw / cut.aspect)).jpeg({ quality: cut.quality ?? 88, mozjpeg: true }).toFile(rung);
+    console.log(`  ${path.basename(rung)}: ${rw}x${Math.round(rw / cut.aspect)}, ${Math.round(fs.statSync(rung).size / 1024)} KB`);
+  }
 }

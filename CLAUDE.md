@@ -1231,6 +1231,55 @@ in public/resources/flyers, so every link holds: HUBSS-Flyer-<slug>-v01.pdf,
 - Needs qrcode (a dev dependency) and Playwright's Chromium. A Sanity photo is
   fetched once into FLYER_CACHE (the system's temp folder by default).
 
+## Speed on a phone, for the paid traffic (28 Oct 2026)
+The MediaEdge display ads land on /lunch-learn from 1 Nov and Google Ads on
+ten pages (the six main products, crosswalks, bike lanes, bus lanes,
+regulatory markings); Google scores landing-page experience. Measured with
+Lighthouse (mobile) on a local production build, three runs a page, before and
+after; nothing visible changed (screenshots at 390 and 1440, diffed). The
+table is in the PR. What later work must keep:
+- Every animated element is framer's `m`, never `motion`, under
+  components/MotionProvider.tsx (LazyMotion; strict outside /studio, whose own
+  `motion` elements share the layout). The engine (lib/motion-features.ts)
+  loads on the visitor's first touch, scroll, key, wheel or mouse movement, or
+  3 s after load. No ad page animates its first screen. A component whose
+  entrance can be on a first screen calls `wantMotion()` when it mounts
+  (BlogFilter does). A `motion` element brings back the whole engine, 41 KB
+  compressed on every page.
+- The menus' names, lines and pictures are worked out on the server
+  (lib/nav-menu.ts) and reach the bar through components/NavMenuProvider.tsx
+  in app/layout.tsx. Nav.tsx and MegaMenus.tsx never import lib/products.ts,
+  lib/applications.ts, lib/featured-images.ts or lib/hero-framing.ts (that put
+  the whole product and application copy in every page's JavaScript), and
+  nothing a client component imports may import lib/nav-menu.ts.
+- The photo filename helpers are lib/image-filename.ts, a file with no imports;
+  client code imports them from there. lib/sanity-image.ts re-exports them and
+  keeps the @sanity/image-url builder off the browser.
+- Every Sanity hero is cut at HERO_QUALITY (lib/photos.ts, 75; it was 80 to
+  82). The homepage's phone hero is 800 and 1200 px (hero-1-mobile-800.jpg;
+  scripts/hero-cuts.mjs makes it, `rungs`). The gallery's first photo is lazy
+  like the rest, never `priority`: it is far down the page.
+- Small pictures get small files: the inside page under the Lunch & Learn card
+  is p129-240.webp (scripts/gen-catalogue-pages.mjs, PAGE_THUMBS), the
+  /products pattern card herringbone-800.webp, About's GAF logo
+  gaf-logo-96.png. A smaller copy keeps the original's exact shape: a 640px
+  herringbone (640x494) moved everything under the card by a pixel.
+- /product-book paints where it stays: the bars' heights before measure() are
+  CSS (.pb-frame) from CHROME_TOP and friends, re-measured 28 Oct (61 and 148,
+  72 and 157 on a phone; re-measure when the bars change), and the cover sits
+  on the spread's right from the first paint (.pb-lone-end). Laptop CLS was
+  0.20.
+- The preconnect to cdn.sanity.io has no crossOrigin: the photos are plain
+  <img>s, which never use a connection opened for CORS.
+- Measuring: Sanity's CDN serves a new image address as WebP until it has made
+  the AVIF, so a quality or size change looks worse on its first runs. Warm
+  the addresses (load each page once) before the runs that count.
+- Not done: framer's core (about 19 KB compressed) still loads on every page
+  for the bar, the lightbox and the Lunch & Learn card; making those load it on
+  the first tap is the next step. The product pages' HTML (350 to 500 KB,
+  35 to 58 KB compressed) is mostly the image-search JSON-LD, the crawlable
+  gallery and React's copy of the page, all there on purpose.
+
 ## Lunch & Learn page (30 Sep and 2 Oct 2026)
 - /lunch-learn is app/lunch-learn/page.tsx: the boardroom card (LunchLearn ->
   LunchLearnV2, whose title is the page's h1; #book is the card), then

@@ -20,7 +20,7 @@
 import { useSiteSettings } from "@/components/SiteSettingsProvider";
 import { telHref } from "@/lib/site-settings";
 import { useEffect, useId, useState, FormEvent } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -245,7 +245,7 @@ function Honeypot({ value, onChange }: { value: string; onChange: (e: React.Chan
 
 function SuccessPanel({ message }: { message?: string }) {
   return (
-    <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-10">
+    <m.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-10">
       <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style={{ background: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.3)" }}>
         <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "var(--ok-text)" }}>
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
@@ -253,15 +253,15 @@ function SuccessPanel({ message }: { message?: string }) {
       </div>
       <h3 className="font-bold text-lg mb-2" style={{ color: "var(--text-primary)" }}>Request received.</h3>
       <p className="text-sm leading-relaxed max-w-sm mx-auto" style={{ color: "var(--ok-text)" }}>{message}</p>
-    </motion.div>
+    </m.div>
   );
 }
 
 function ErrorNote({ message }: { message?: string }) {
   return (
-    <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="p-4 rounded-xl text-sm" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.25)", color: "var(--err-text)" }}>
+    <m.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="p-4 rounded-xl text-sm" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.25)", color: "var(--err-text)" }}>
       {message}
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -317,7 +317,7 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
       style={{ background: "var(--bg-primary)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative">
-          <motion.div
+          <m.div
             // On /lunch-learn the card holds the page's h1: it paints with
             // the page instead of waiting for the script to fade it in (QA,
             // 23 Oct 2026: the heading was the largest paint, at 1 to 2 s).
@@ -494,7 +494,7 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                 </div>
               </div>
             </div>
-          </motion.div>
+          </m.div>
         </div>
       </div>
     </section>
@@ -525,7 +525,7 @@ function Ticket() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-stretch">
           {/* The ticket */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, x: -16 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -550,11 +550,11 @@ function Ticket() {
               </div>
 
               <div className="space-y-3 mb-6">
-                {TICKET_META.map((m) => (
-                  <div key={m.k} className="flex items-baseline justify-between gap-4">
-                    <span className="text-[12px] font-bold tracking-[0.14em] uppercase flex-shrink-0" style={{ color: "var(--ink-45)" }}>{m.k}</span>
+                {TICKET_META.map((row) => (
+                  <div key={row.k} className="flex items-baseline justify-between gap-4">
+                    <span className="text-[12px] font-bold tracking-[0.14em] uppercase flex-shrink-0" style={{ color: "var(--ink-45)" }}>{row.k}</span>
                     <span className="flex-1" style={{ borderBottom: "1px dotted var(--ink-12)", transform: "translateY(-4px)" }} />
-                    <span className="text-[14.5px] font-semibold text-right" style={{ color: "var(--text-primary)" }}>{m.v}</span>
+                    <span className="text-[14.5px] font-semibold text-right" style={{ color: "var(--text-primary)" }}>{row.v}</span>
                   </div>
                 ))}
               </div>
@@ -573,10 +573,10 @@ function Ticket() {
                 <MoreLink />
               </div>
             </div>
-          </motion.div>
+          </m.div>
 
           {/* The booking panel */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, x: 16 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -637,7 +637,7 @@ function Ticket() {
                 {f.submitState.status === "error" && <ErrorNote message={f.submitState.message} />}
               </form>
             )}
-          </motion.div>
+          </m.div>
         </div>
       </div>
     </section>
@@ -654,7 +654,7 @@ function Proof() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center mb-10 lg:mb-12">
           {/* Copy */}
-          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+          <m.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
             <p className="text-[12px] font-bold tracking-[0.22em] uppercase mb-4" style={{ color: "var(--accent-text)" }}>Lunch &amp; Learn</p>
             <h2 className="font-black mb-5" style={{ fontSize: "clamp(2.1rem, 4.5vw, 3.4rem)", lineHeight: 0.98, letterSpacing: "-0.03em", color: "var(--text-primary)" }}>
               The teams that specify Canada&apos;s streets{" "}
@@ -684,10 +684,10 @@ function Proof() {
               <span className="hidden sm:block" style={{ color: "var(--ink-15)" }}>|</span>
               <span className="text-[14.5px] font-semibold" style={{ color: "var(--ink-45)" }}>Samples and spec sheets included</span>
             </div>
-          </motion.div>
+          </m.div>
 
           {/* Photo with caption bar + Moose */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -709,11 +709,11 @@ function Proof() {
             <div className="absolute -bottom-2 -right-1 sm:-right-4 pointer-events-none select-none" style={{ width: "34%", maxWidth: 175 }}>
               <Image src={MOOSE.src} alt={MOOSE.alt} width={320} height={400} className="w-full h-auto drop-shadow-2xl" sizes="(max-width: 640px) 42vw, 190px" />
             </div>
-          </motion.div>
+          </m.div>
         </div>
 
         {/* Slim wide form */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -747,7 +747,7 @@ function Proof() {
               {f.submitState.status === "error" && <ErrorNote message={f.submitState.message} />}
             </form>
           )}
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

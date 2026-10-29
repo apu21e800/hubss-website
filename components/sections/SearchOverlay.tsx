@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useMemo, useCallback, type CSSProperties, 
 import { sectionFor } from "@/lib/field-notes-taxonomy";
 import navInsights from "@/lib/nav-insights.json";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { familiesFor } from "@/lib/colours";
 import { withColours, search, groupHits, thumbSrc, thumbSrcSet, type SearchEntry, type SearchHit } from "@/lib/search";
 
@@ -416,7 +416,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
   let index = -1;
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}
       className="fixed inset-0 z-[9999] flex items-start justify-center pt-[8vh] px-4"
       style={{ background: "rgba(0,0,0,0.82)", backdropFilter: "blur(14px)" }}
@@ -426,7 +426,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
       // one (interaction review, 17 Oct 2026).
       data-surface="dark"
     >
-      <motion.div
+      <m.div
         ref={dialogRef}
         role="dialog" aria-modal="true" aria-label="Site search"
         initial={{ opacity: 0, scale: 0.98, y: -10 }} animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -782,7 +782,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
             </span>
           </div>
         </div>
-      </motion.div>
-    </motion.div>
+      </m.div>
+    </m.div>
   );
 }

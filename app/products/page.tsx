@@ -300,9 +300,14 @@ function SecondaryTile({ secondary }: { secondary: NonNullable<ProductCategory["
         {/* The herringbone template sheet — the real dimensioned CAD drawing
             from the catalogue's template pages. The file is white line-work
             for dark UI; inverted, it reads as ink on paper. Decorative. */}
+        {/* Drawn 240 to 325px wide: an 800px copy (22 KB, exactly the
+            sheet's shape, so the card's height holds) for most screens, the
+            1600px sheet (92 KB) only for a 3x phone (28 Oct 2026). */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/images/patterns/herringbone.png"
+          srcSet="/images/patterns/herringbone-800.webp 800w, /images/patterns/herringbone.png 1600w"
+          sizes="(min-width: 1280px) 323px, (min-width: 1024px) 24vw, (min-width: 640px) 37vw, 80vw"
           width={1600}
           height={1236}
           alt=""

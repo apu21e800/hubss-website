@@ -24,8 +24,8 @@ import { DOT } from "@/lib/separators";
  * other)", and the callout "a bit less vertical height"). The inside page is
  * p.129, the Bear Creek Park waterpark (StreetBond), the book's most colourful
  * spread and one of the jobs on the map. Both are the book's own rasters,
- * plain <img>s that never route through /_next/image (lib/catalogue.ts); the
- * cover offers its 240px thumbnail to a 1x screen. On a pointer that hovers,
+ * plain <img>s that never route through /_next/image (lib/catalogue.ts); each
+ * offers its 240px thumbnail to a 1x or 2x screen. On a pointer that hovers,
  * the two pages fan apart a little when the card is pointed at.
  */
 const INSIDE_PAGE = 129;
@@ -35,6 +35,9 @@ export default function IdeaBookCard({ copy = HOMEPAGE_COPY.ideaBook }: { copy?:
   const width = catalogue.widths[0];
   const height = Math.round(width / catalogue.aspect);
   const coverSet = [catalogue.coverThumb ? `${catalogue.coverThumb} 240w` : null, `${cataloguePageUrl(1, width)} ${width}w`].filter(Boolean).join(", ");
+  // The inside page's 240px thumbnail too (scripts/gen-catalogue-pages.mjs,
+  // PAGE_THUMBS): 11 KB where the 800px raster was 82 KB for a 110px page.
+  const insideSet = `${cataloguePageUrl(INSIDE_PAGE, 240)} 240w, ${cataloguePageUrl(INSIDE_PAGE, width)} ${width}w`;
 
   return (
     // No background of its own and not positioned: it would paint over the
@@ -56,6 +59,8 @@ export default function IdeaBookCard({ copy = HOMEPAGE_COPY.ideaBook }: { copy?:
               <div className="ll-book-stack relative h-[124px] w-[166px] sm:h-[134px] sm:w-[180px] lg:h-[146px] lg:w-[196px]">
                 <img
                   src={cataloguePageUrl(INSIDE_PAGE, width)}
+                  srcSet={insideSet}
+                  sizes="(min-width: 1024px) 118px, (min-width: 640px) 108px, 100px"
                   alt="An inside page of the book: StreetBond at the Bear Creek Park waterpark, Surrey, British Columbia"
                   width={width}
                   height={height}

@@ -79,6 +79,7 @@ const buildSections = (offices: SiteSettings["offices"]): { heading: string; blo
       "We use the following third-party services that may process your data:",
       [
         "Email delivery: Resend (sends the forms on this site to our inbox)",
+        "Email newsletters: Constant Contact (sends our e-blasts to the contacts on our list; every e-blast has an unsubscribe link)",
         "Hosting: Vercel (hosts the site and checks that our forms are sent from a real browser; Vercel Web Analytics and Speed Insights measure page visits and loading speed)",
         "Spam screening: Anthropic (reads what you send through our forms, with phone numbers and email addresses taken out and never your mailing address, to keep spam out of our inbox)",
         "Analytics: Google Analytics (pages visited, time on site, browser type, and referring URL)",
@@ -149,7 +150,7 @@ export default async function PrivacyPage() {
           Privacy policy
         </h1>
         <p className="text-sm mb-12" style={{ color: "var(--text-muted)" }}>
-          Last updated: Oct 6, 2026
+          Last updated: Oct 29, 2026
         </p>
 
         <p className="text-base leading-relaxed mb-12" style={{ color: "var(--text-muted)" }}>

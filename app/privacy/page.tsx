@@ -34,9 +34,15 @@ type Block = string | string[];
 // phone field, the full email or the mailing address (a Product Book request's
 // city included). Hence the new line. 30 Oct 2026: Google Ads, for the
 // Western Canada campaign (claude/HUBSS-google-ads-plan-2026-10.md): it shows
-// the ads and, through GA4, counts the enquiries they bring. The cookie line
-// stays true only while personalised advertising is off in the GA4 to Google
-// Ads link and no remarketing list is made.
+// the ads and, through GA4, counts the enquiries they bring. Later the same
+// day (Vern: "add the new line on the privacy page if it does not hurt"), the
+// cookie section says we may use remarketing, with what Google requires a site
+// to disclose for it (support.google.com/analytics/answer/2700409): the
+// feature, the GA cookie working with Google's advertising cookies, and the
+// opt-outs. "May" keeps it true while remarketing is off (personalised
+// advertising off in the GA4 to Google Ads link, no remarketing list). Before
+// switching it on: Quebec's Law 25 expects profiling to be off until a visitor
+// opts in, so Quebec visitors need a consent step first.
 // The contact lines carry the offices from Studio's Site Settings
 // (lib/site-settings.ts), so they match the footer.
 const buildSections = (offices: SiteSettings["offices"]): { heading: string; blocks: Block[] }[] => [
@@ -87,7 +93,7 @@ const buildSections = (offices: SiteSettings["offices"]): { heading: string; blo
         "Hosting: Vercel (hosts the site and checks that our forms are sent from a real browser; Vercel Web Analytics and Speed Insights measure page visits and loading speed)",
         "Spam screening: Anthropic (reads what you send through our forms, with phone numbers and email addresses taken out and never your mailing address, to keep spam out of our inbox)",
         "Analytics: Google Analytics (pages visited, time on site, browser type, and referring URL)",
-        "Advertising: Google Ads (shows our ads, and measures which of them lead to inquiries)",
+        "Advertising: Google Ads (shows our ads, measures which of them lead to inquiries, and may show our ads to people who have visited this site)",
         "Content: Sanity (stores the site's text and serves its photographs)",
         "Maps: CARTO (supplies the map on the homepage)",
       ],
@@ -102,8 +108,10 @@ const buildSections = (offices: SiteSettings["offices"]): { heading: string; blo
         "Remember your preferences and session state",
         "Collect analytics data",
         "Improve site performance",
+        "Measure our advertising and, if we use remarketing, show our ads to people who have visited the site",
       ],
-      "You can disable cookies in your browser settings. Disabling cookies may affect some site functionality. We use Google Ads to show our ads and to measure which of them lead to inquiries. We don't use cookies for remarketing or to follow you across other sites.",
+      "You can disable cookies in your browser settings. Disabling cookies may affect some site functionality.",
+      "We use Google Ads to show our ads and to measure which of them lead to inquiries. We may also use remarketing, a Google Analytics and Google Ads feature: Google may then show our ads on other websites to people who have visited hubss.com. To do this, our Google Analytics cookie and Google's advertising cookies work together to recognize a browser that has been here before. To opt out, turn off personalized ads in Google's ad settings (adssettings.google.com), install Google's opt-out add-on for Google Analytics (tools.google.com/dlpage/gaoptout), or opt out of interest-based ads from participating companies at youradchoices.ca.",
     ],
   },
   {

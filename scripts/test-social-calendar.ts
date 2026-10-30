@@ -11,8 +11,9 @@
  */
 import assert from "node:assert/strict";
 import { CALENDAR } from "../lib/social-calendar-data";
-import { calendarDue, calendarEmail, calendarLink, calendarText, entryBudgetMs, HORIZON_MS, LEAD_MS, type CalendarNetwork } from "../lib/social-calendar";
-import { BUFFER_TIMEOUT_MS } from "../lib/buffer";
+import { calendarChannelProblem, calendarDue, calendarEmail, calendarLink, calendarText, entryBudgetMs, HORIZON_MS, LEAD_MS, mayHaveReachedBuffer, type CalendarNetwork } from "../lib/social-calendar";
+import { BUFFER_TIMEOUT_MS, BufferApiError } from "../lib/buffer";
+import { libraryPick, libraryQueue } from "../lib/social-library";
 import { SOCIAL_WINDOW_DAYS } from "../lib/review-page";
 import { lintCopy } from "../lib/style-lint";
 
@@ -115,7 +116,7 @@ check("every entry gets its turn: one daily run lands inside each entry's window
   assert.ok(HORIZON_MS - LEAD_MS > 2 * 24 * 60 * 60 * 1000, "the window is wider than two missed daily runs");
 });
 check("an entry starts only with time left for every channel's Buffer call, the claim and the log", () => {
-  for (const n of [1, 3, 5]) assert.ok(entryBudgetMs(n) >= n * BUFFER_TIMEOUT_MS + 20_000, `${n} channels: ${entryBudgetMs(n)} ms`);
+  for (const n of [1, 3, 5]) assert.ok(entryBudgetMs(n) >= n * BUFFER_TIMEOUT_MS + 40_000, `${n} channels: ${entryBudgetMs(n)} ms`);
 });
 check("an entry already logged is never scheduled again", () => {
   const { schedule } = calendarDue(CALENDAR, new Set([first.key]), before);
@@ -132,11 +133,42 @@ check("Instagram's text is the copy as written; the others get their tagged link
   assert.match(calendarText(first, "linkedin"), /utm_source=linkedin&utm_medium=social&utm_campaign=archive&utm_content=/);
 });
 check("the editors' email lists what was scheduled and what wasn't", () => {
-  const [subject, body] = calendarEmail({ scheduled: [{ key: first.key, dueAt: first.dueAt, channels: ["linkedin", "facebook"], failed: ["instagram"] }], late: [], retry: [{ key: "x", why: "no channel took it" }] });
-  assert.equal(subject, "1 calendar post scheduled in Buffer");
+  const [subject, body] = calendarEmail({
+    scheduled: [{ key: first.key, dueAt: first.dueAt, channels: ["linkedin", "facebook"], failed: [{ network: "instagram", why: "disconnected in Buffer: reconnect it there" }] }],
+    check: [{ key: "y", dueAt: first.dueAt, why: "no clear answer from Buffer" }],
+    retry: [{ key: "x", why: "no channel took it" }],
+    stuck: [{ key: "z", why: "its record couldn't be cleared" }],
+    missed: [{ key: "w", dueAt: first.dueAt }],
+  });
+  assert.equal(subject, "1 calendar post scheduled in Buffer, and some need a look");
   assert.match(body, new RegExp(first.key));
-  assert.match(body, /not on instagram/);
+  assert.match(body, /Not on instagram: disconnected/);
+  assert.match(body, /may or may not be in it/);
   assert.match(body, /tried again at the next run/);
+  assert.match(body, /stuck until its record is deleted/);
+  assert.match(body, /Missed, not sent/);
+  assert.equal(calendarEmail({ scheduled: [{ key: first.key, dueAt: first.dueAt, channels: ["linkedin"], failed: [] }], check: [], retry: [], stuck: [], missed: [] })[0], "1 calendar post scheduled in Buffer");
+});
+check("a timeout or a server error may have reached Buffer; a refusal didn't", () => {
+  assert.equal(mayHaveReachedBuffer(new BufferApiError("Buffer API unreachable: timeout", 0)), true);
+  assert.equal(mayHaveReachedBuffer(new BufferApiError("Buffer API 502", 502)), true);
+  assert.equal(mayHaveReachedBuffer(new BufferApiError("Buffer API 401", 401)), false);
+  assert.equal(mayHaveReachedBuffer(new BufferApiError("Buffer rate limit", 429)), false);
+  assert.equal(mayHaveReachedBuffer(new Error("Buffer refused the post: no")), false);
+});
+check("a paused queue is never posted to (Buffer would move the post to a later slot)", () => {
+  assert.match(calendarChannelProblem({ isQueuePaused: true }) ?? "", /paused/);
+  assert.match(calendarChannelProblem({ isDisconnected: true }) ?? "", /disconnected/);
+  assert.equal(calendarChannelProblem({}), null);
+});
+check("the weekly library never picks a job the calendar posts", () => {
+  const calendarKeys = new Set(CALENDAR.map((e) => e.key));
+  const queue = libraryQueue();
+  for (let d = 0; d < 70; d += 7) {
+    const now = new Date(Date.parse("2026-11-02T14:00:00Z") + d * 86_400_000);
+    const pick = libraryPick(queue, calendarKeys, now);
+    assert.ok(!pick?.post || !calendarKeys.has(pick.post), `${now.toISOString().slice(0, 10)}: ${pick?.key}`);
+  }
 });
 
 if (failures) {

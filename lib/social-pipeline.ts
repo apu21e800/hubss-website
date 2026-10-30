@@ -70,6 +70,7 @@ import { PRODUCT_CATALOGUE } from "@/lib/product-catalogue";
 import { getMergedProduct } from "@/lib/products.server";
 import { getMergedApplication } from "@/lib/applications.server";
 import { absolute, idFor, imageFor, libraryDue, libraryPick, libraryQueue, SITE, type LibraryItem } from "@/lib/social-library";
+import { CALENDAR } from "@/lib/social-calendar-data";
 import {
   daysSince,
   decideOutcome,
@@ -305,8 +306,10 @@ export async function draftSocialForNewPosts(now = new Date(), opts: { deadline?
     }),
     (item) => item.key
   );
-  // An article drafted today counts as posted: the library mustn't pick its job too.
-  const posted = new Set([...logged, ...articles.map((p) => p.slug)]);
+  // An article drafted today counts as posted: the library mustn't pick its job
+  // too. Nor a job the calendar posts (lib/social-calendar-data.ts): its entry
+  // is logged only twelve days before its time, too late to stop the library.
+  const posted = new Set([...logged, ...articles.map((p) => p.slug), ...CALENDAR.map((e) => e.key)]);
   // A field post not tried before takes the week's turn; one that keeps
   // failing doesn't, so it can't hold the library up for its 14 days of retries.
   const fieldPostToday = fields.some((f) => !failing.has(f.key));

@@ -780,8 +780,14 @@ Buffer first, as from 19 to 27 Oct (docs/buffer-setup.md):
   never a draft, never late; HORIZON_MS stays inside the 14 days Doug's review
   page reads, so a post is on his page the whole time it waits, and an edit
   here reaches every post not yet in Buffer; its log is
-  `socialLog-<the article's slug>`, source "Calendar", so the library skips
-  the job) and emails the editors the list. The first fourteen
+  `socialLog-<the article's slug>`, source "Calendar"; the library skips
+  every calendar job from the start, lib/social-pipeline.ts `posted`) and
+  emails the editors the list. Nothing is ever sent twice or late: an entry
+  no channel took for certain is tried again next run, but one Buffer gave
+  no clear answer on (a timeout, a 5xx) keeps its record and the email says
+  to look in Buffer; a paused channel is skipped; a missed entry is logged
+  once and reported, never sent. A channel an entry missed is not retried
+  (the email says so). The first fourteen
   run 6 Nov to 21 Dec 2026, ten of them Ontario jobs or guides. Only articles
   from the 26 Oct review's "improve" or "fine" lists, never a claim flagged
   there for Doug, links tagged utm_campaign=archive. To add a month, append

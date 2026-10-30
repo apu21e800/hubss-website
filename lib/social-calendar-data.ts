@@ -61,7 +61,7 @@ For a parks department, the useful part comes later. The surface is maintained a
 Read the project, and ${ASK}: {link}
 
 #placemaking #parks #urbandesign`,
-      facebook: `At Geary Works in Toronto, the walkway carries its identity in the surface. The name and gear motif are DecoMark preformed thermoplastic, cut to the artwork and heat-applied so it bonds to the asphalt, and the path is maintained as pavement. Read the project and book a 60-minute Lunch & Learn for your team: {link} #placemaking #Toronto`,
+      facebook: `At Geary Works in Toronto, Ontario, the walkway carries its identity in the surface. The name and gear motif are DecoMark preformed thermoplastic, cut to the artwork and heat-applied so it bonds to the asphalt, and the path is maintained as pavement. Read the project and book a 60-minute Lunch & Learn for your team: {link} #placemaking #Toronto`,
       instagram: `At Geary Works in Toronto, Ontario, the walkway carries its identity in the surface itself.
 
 The name and its gear motif read straight off the path, with no plinth and no interpretive panel. It's DecoMark preformed thermoplastic, cut to the vector artwork and heat-applied so it bonds to the asphalt, and it holds grip in wet weather.
@@ -81,17 +81,17 @@ Link in bio for the project, and to book a 60-minute Lunch & Learn for your team
     image: `${CDN}/a256098ee9641fa08337f019db181b5d9c391cc9-2400x1800.jpg`,
     imageAlt: "Kitchener's veterans crosswalk in red and white TrafficPatterns, with a maple leaf, a soldier's silhouette and the words Lest We Forget, during a ceremony",
     copy: {
-      linkedin: `Kitchener's Veterans Crosswalk puts a Remembrance Day tribute on an everyday route.
+      linkedin: `The Veterans Crosswalk in Kitchener, Ontario, puts a Remembrance Day tribute on an everyday route.
 
 It's TrafficPatterns preformed thermoplastic, heat-applied so it bonds to the asphalt, with crisp edges and true colour. The City of Kitchener needed it ready for the ceremony without long closures, and needed a surface that holds up through winter. Preformed panels made a precise layout possible, installed off-peak.
 
-With Remembrance Day on Wednesday, it's a good example of how a crosswalk can carry meaning for years, through every snowplow pass and every Remembrance Day service.
+A crosswalk like this can carry meaning for years, through every snowplow pass and every Remembrance Day service.
 
-See the project, and ${ASK}: {link}
+See the project, and book a 60-minute Lunch & Learn for your team: {link}
 
-#RemembranceDay #communitybranding #crosswalks`,
-      facebook: `Kitchener's Veterans Crosswalk puts a Remembrance Day tribute on an everyday route. It's TrafficPatterns preformed thermoplastic, heat-applied so it bonds to the asphalt and holds up through winter, with crisp edges and true colour. See the project and book a 60-minute Lunch & Learn for your team: {link} #RemembranceDay #Kitchener`,
-      instagram: `Kitchener's Veterans Crosswalk puts a Remembrance Day tribute on an everyday route.
+#Kitchener #communitybranding #crosswalks`,
+      facebook: `The Veterans Crosswalk in Kitchener, Ontario, puts a Remembrance Day tribute on an everyday route. It's TrafficPatterns preformed thermoplastic, heat-applied so it bonds to the asphalt and holds up through winter, with crisp edges and true colour. See the project and book a 60-minute Lunch & Learn for your team: {link} #Kitchener #crosswalks`,
+      instagram: `The Veterans Crosswalk in Kitchener, Ontario, puts a Remembrance Day tribute on an everyday route.
 
 It's TrafficPatterns preformed thermoplastic, heat-applied so it bonds to the asphalt, with crisp edges and true colour. The City needed it ready for the ceremony without long closures, and a surface that holds up through winter.
 
@@ -99,7 +99,7 @@ A crosswalk like this can carry meaning for years, through every snowplow pass a
 
 Link in bio to see the project and to book a 60-minute Lunch & Learn for your team.
 
-#remembranceday #kitchener #ontario #crosswalks #communitybranding #trafficpatterns #publicspace #urbandesign #canada`,
+#kitchener #ontario #crosswalks #communitybranding #trafficpatterns #publicspace #urbandesign #canada`,
     },
   },
   {
@@ -109,7 +109,7 @@ Link in bio to see the project and to book a 60-minute Lunch & Learn for your te
     pageUrl: `${SITE}/blog/how-stamped-asphalt-is-installed`,
     // Not the article's cover: that photo is a private driveway (CLAUDE.md, "The gate photo").
     image: `${CDN}/cce74ceb9fe8b2ffbc6a127275eb666599525db1-2400x1800.jpg`,
-    imageAlt: "Light grey StreetPrint stamped asphalt on downtown Dundas Street in Woodstock, Ontario, in front of a stone heritage building",
+    imageAlt: "Light grey StreetPrint stamped asphalt on a parking lane of Dundas Street in Woodstock, Ontario, with City Hall across the street",
     copy: {
       linkedin: `StreetPrint stamped asphalt goes into the pavement that's already there. The installation has three steps.
 
@@ -131,7 +131,7 @@ The finished surface is level with the road, so there's nothing for a plow blade
 
 Link in bio for the guide, and to book a 60-minute Lunch & Learn for your team.
 
-#streetprint #stampedasphalt #streetscape #landscapearchitecture #urbandesign #publicspace #asphalt #woodstock #pavement #canada`,
+#streetprint #stampedasphalt #streetscape #landscapearchitecture #urbandesign #publicspace #asphalt #municipal #pavement #canada`,
     },
   },
   {
@@ -139,8 +139,8 @@ Link in bio for the guide, and to book a 60-minute Lunch & Learn for your team.
     dueAt: "2026-11-16T16:00:00Z",
     title: "Heritage crosswalks in Woodbridge with TrafficPatternsXD",
     pageUrl: `${SITE}/blog/trafficpatternsxd-urban-design`,
-    image: `${CDN}/c48c9a5d9252afef9e5dde62e2ed4c135ea994a6-2400x1800.jpg`,
-    imageAlt: "A snowplow blade passing over a red brick-pattern TrafficPatternsXD crosswalk in winter",
+    image: `${CDN}/5f2e91e7833e468e0d8720bda9e3a67bcc30f11e-1200x750.jpg`,
+    imageAlt: "A red brick-pattern TrafficPatternsXD crosswalk with light grey bands at an intersection in Woodbridge, Ontario",
     copy: {
       linkedin: `Woodbridge Avenue in Vaughan, Ontario, runs through a designated Heritage Conservation District, and snowplows work its streets from November to April.
 
@@ -149,7 +149,7 @@ When the City of Vaughan improved the streetscape, real brick at the intersectio
 Read the case study, and ${ASK}: {link}
 
 #heritage #streetscape #crosswalks`,
-      facebook: `Woodbridge Avenue in Vaughan runs through a designated Heritage Conservation District. For its intersections, the City chose TrafficPatternsXD crosswalks: the look of brick and cobblestone, stamped into the asphalt, with no raised edges for a snowplow to catch. Read the case study and book a 60-minute Lunch & Learn for your team: {link} #Vaughan #heritage`,
+      facebook: `Woodbridge Avenue in Vaughan, Ontario, runs through a designated Heritage Conservation District. For its intersections, the City chose TrafficPatternsXD crosswalks: the look of brick and cobblestone, stamped into the asphalt, with no raised edges for a snowplow to catch. Read the case study and book a 60-minute Lunch & Learn for your team: {link} #Vaughan #heritage`,
       instagram: `Woodbridge Avenue in Vaughan, Ontario, runs through a designated Heritage Conservation District, and it's plowed from November to April.
 
 Brick pavers at intersections leave raised edges a plow blade can catch. So the City of Vaughan chose TrafficPatternsXD for the pedestrian crosswalks at its intersections: aggregate-reinforced preformed thermoplastic in brick and cobblestone patterns, stamped into the asphalt. There are no raised edges or grout joints. The brick look comes from texture and colour.
@@ -165,7 +165,7 @@ Link in bio for the case study, and to book a 60-minute Lunch & Learn for your t
     title: "The plow came through. The pattern stayed.",
     pageUrl: `${SITE}/blog/snowplow-safe-decorative-pavement`,
     image: `${CDN}/a06cb995d5ca80d38e15c68e8695e4a03e526f0c-1800x2400.jpg`,
-    imageAlt: "A red brick-pattern preformed thermoplastic surface beside a road after a snowfall",
+    imageAlt: "A red brick-pattern surface beside a road after a snowfall",
     copy: {
       linkedin: `Every decorative pavement product looks good in July. A Canadian municipality needs to know what it looks like in April.
 
@@ -181,7 +181,7 @@ Read the guide, and ${ASK}: {link}
       facebook: `Every decorative pavement product looks good in July. On a plow route, the surface that lasts sits flush with the road and is bonded to the asphalt, with the anti-skid aggregate mixed right through it. Read why, and book a 60-minute Lunch & Learn for your team: {link} #winter #pavement`,
       instagram: `What a decorative surface looks like in April is the real test in Canada.
 
-A plow blade finds anything that stands proud of the road, so the surfaces that last a winter sit flush with it. Their anti-skid aggregate runs through the full thickness, so the grip lasts as long as the colour.
+A plow blade finds anything that stands proud of the road, so the surfaces that last a winter sit flush with it. In TrafficPatterns and TrafficPatternsXD preformed thermoplastic, the anti-skid aggregate runs through the full thickness, so the grip lasts as long as the colour.
 
 StreetPrint stamps the pattern into the asphalt. DuraTherm sets thermoplastic into a stamped impression, flush with the road.
 
@@ -206,8 +206,8 @@ In the bus lanes: red MMAX, a methyl methacrylate (MMA) lane treatment that cure
 
 Read the project, and ${ASK}: {link}
 
-#BRT #transit #CompleteStreets`,
-      facebook: `On the East London Link BRT in London, Ontario, each material does its own job: TrafficPatternsXD at the crosswalks, and red MMAX in the bus lanes, curing traffic-ready in 45 to 60 minutes. Read the project and book a 60-minute Lunch & Learn for your team: {link} #LdnOnt #transit`,
+#BRT #transit #buslanes`,
+      facebook: `On the East London Link bus rapid transit (BRT) corridor in London, Ontario, each material does its own job. TrafficPatternsXD is at the crosswalks, and red MMAX is in the bus lanes, curing traffic-ready in 45 to 60 minutes. Read the project and book a 60-minute Lunch & Learn for your team: {link} #LdnOnt #transit`,
       instagram: `The East London Link in London, Ontario, uses two materials in one bus rapid transit corridor.
 
 The crosswalks are TrafficPatternsXD, aggregate-reinforced preformed thermoplastic stamped into the asphalt, built for the wear that concentrates where buses brake and turn.
@@ -216,7 +216,7 @@ The bus lanes are red MMAX, a methyl methacrylate lane treatment that cures traf
 
 Link in bio for the project, and to book a 60-minute Lunch & Learn for your team.
 
-#ldnont #londonontario #ontario #brt #buslanes #transit #mmax #trafficpatternsxd #completestreets #canada`,
+#ldnont #londonontario #ontario #brt #buslanes #transit #mmax #trafficpatternsxd #crosswalks #canada`,
     },
   },
   {
@@ -230,7 +230,7 @@ Link in bio for the project, and to book a 60-minute Lunch & Learn for your team
     copy: {
       linkedin: `The crosswalks at Toronto Premium Outlets in Halton Hills, Ontario, have been in service for fourteen years.
 
-They're TrafficPatternsXD, aggregate-reinforced preformed thermoplastic stamped into the asphalt, in a pattern that reads as laid masonry. In a retail lot that does real work: a driver registers the pedestrian route as different ground. The aggregate runs through the full cross-section, so the surface hasn't gone slick where the wheel paths cross it.
+They're TrafficPatternsXD, aggregate-reinforced preformed thermoplastic stamped into the asphalt, in a pattern that reads as laid masonry. In a retail lot, that look does real work: a driver registers the pedestrian route as different ground. The aggregate runs through the full cross-section, so the surface hasn't gone slick where the wheel paths cross it.
 
 Fourteen years is the record of one installation, still in service, that anyone can go and stand on.
 
@@ -255,7 +255,7 @@ Link in bio to see the project, and to book a 60-minute Lunch & Learn for your t
     title: "Choosing colour from the thermoplastic, coating and MMA palettes",
     pageUrl: `${SITE}/blog/thermoplastic-colour-selection`,
     image: `${CDN}/160c5daf2482b37a41234bde5efb39732cdfabd4-2400x1800.jpg`,
-    imageAlt: "A green and blue tree-and-roots design in preformed thermoplastic at a street corner",
+    imageAlt: "Pavement artwork of green roots and a blue water drop across a street-corner plaza",
     copy: {
       linkedin: `Colour is usually the first decision a project makes about a decorative surface. It's worth making it second.
 
@@ -286,7 +286,7 @@ Link in bio for the guide, and to book a 60-minute Lunch & Learn for your team.
     image: `${CDN}/e57aef10de8411b5d3e2023d4480ba9badd73b8f-800x600.jpg`,
     imageAlt: "A truck crossing Emery Village's blue TrafficPatternsXD gateway in Toronto",
     copy: {
-      linkedin: `Emery Village BIA in Toronto had unit pavers in the neighbourhood's own Emery Blue at its entrance gateway. Heavy truck traffic broke them down, and patching them only held for a while.
+      linkedin: `Emery Village BIA in Toronto, Ontario, had unit pavers in the neighbourhood's own Emery Blue at its entrance gateway. Heavy truck traffic broke them down, and patching them only held for a while.
 
 In 2020 the BIA replaced them with TrafficPatternsXD across 440 m², keeping the colour and the paver grid design.
 
@@ -295,7 +295,7 @@ In 2020 the BIA replaced them with TrafficPatternsXD across 440 m², keeping the
 Read the case study, and ${ASK}: {link}
 
 #BIA #Toronto #streetscape`,
-      facebook: `Emery Village BIA in Toronto replaced its gateway pavers with TrafficPatternsXD across 440 m², keeping the neighbourhood's own Emery Blue and the original paver grid. Read the case study and book a 60-minute Lunch & Learn for your team: {link} #EmeryVillage #BIA`,
+      facebook: `Emery Village BIA in Toronto, Ontario, replaced its gateway pavers with TrafficPatternsXD across 440 m², keeping the neighbourhood's own Emery Blue and the original paver grid. Read the case study and book a 60-minute Lunch & Learn for your team: {link} #EmeryVillage #BIA`,
       instagram: `Emery Village, Toronto, Ontario.
 
 The BIA's gateway pavers, in the neighbourhood's own Emery Blue, couldn't take the heavy truck traffic. In 2020 they were replaced with TrafficPatternsXD across 440 m², keeping the colour and the paver grid design.
@@ -317,17 +317,17 @@ Link in bio for the case study, and to book a 60-minute Lunch & Learn for your t
     copy: {
       linkedin: `Every specification for a decorative surface assumes somebody within driving distance knows how to install it.
 
-For preformed thermoplastic, the difference between a crosswalk that lasts a decade and one that lifts at the edges is almost entirely in the application. That's why HUB works through certified installers, trained and authorized by HUB to install each system to specification: Square One Paving in British Columbia, ULS Landscaping in Alberta, Virtue Construction in Saskatchewan, Multiseal in Ontario and Thermo Design in Québec.
+For preformed thermoplastic, the difference between a crosswalk that lasts a decade and one that lifts at the edges is almost entirely in the application. That's why HUB Surface Systems works through certified installers, trained and authorized by HUB to install each system to specification: Square One Paving in British Columbia, ULS Landscaping in Alberta, Virtue Construction in Saskatchewan, Multiseal in Ontario and Thermo Design in Québec.
 
 A line worth putting in your tender: "Installed by a HUB-certified installer to manufacturer specification."
 
 Read the article, and ${ASK}: {link}
 
 #specification #procurement #landscapearchitecture`,
-      facebook: `HUB's systems go in through certified installers, trained and authorized by HUB to install each one to specification, with Multiseal in Ontario and Square One Paving in British Columbia among them. Read how the network works, and book a 60-minute Lunch & Learn for your team: {link} #specification #construction`,
+      facebook: `At HUB Surface Systems, each system goes in through certified installers, trained and authorized by HUB to install it to specification, with Multiseal in Ontario and Square One Paving in British Columbia among them. Read how the network works, and book a 60-minute Lunch & Learn for your team: {link} #specification #construction`,
       instagram: `Every specification assumes somebody nearby knows how to install it.
 
-HUB's certified installers are trained and authorized by HUB to install each system to specification. In Ontario, that's Multiseal. In British Columbia, Square One Paving. Alberta has ULS Landscaping, Saskatchewan has Virtue Construction, and Québec has Thermo Design.
+HUB Surface Systems' certified installers are trained and authorized by HUB to install each system to specification: Square One Paving in British Columbia, ULS Landscaping in Alberta, Virtue Construction in Saskatchewan, Multiseal in Ontario and Thermo Design in Québec.
 
 Behind them are HUB's two regional offices, in Milton, Ontario, and Ladysmith, British Columbia.
 
@@ -346,13 +346,13 @@ Link in bio to read how the network works, and to book a 60-minute Lunch & Learn
     copy: {
       linkedin: `Most laneways serve only as service corridors. The Laneway Project, a non-profit of planners, designers and placemakers, works with the City of Toronto to turn them into public space.
 
-In the Leslieville laneway, the surface does that work. StreetBond pavement coating in bold shapes and deep colours makes it a space where families and children feel welcome, and it needs little upkeep. A coating in a place like this has to be hard enough for heavy foot traffic and flexible enough not to crack.
+In the Leslieville laneway in Toronto, Ontario, the surface does that work. StreetBond pavement coating in bold shapes and deep colours makes it a space where families and children feel welcome, and it needs little upkeep. A coating in a place like this has to be hard enough for heavy foot traffic and flexible enough not to crack.
 
 Read the case study, and ${ASK}: {link}
 
 #placemaking #Toronto #publicspace`,
-      facebook: `In Toronto's Leslieville, a laneway became a public space with StreetBond pavement coating in bold shapes and deep colours. It's part of the Laneway Project, a non-profit working with the City of Toronto. See the case study and book a 60-minute Lunch & Learn for your team: {link} #Leslieville #placemaking`,
-      instagram: `A laneway in Leslieville, Toronto, became a public space.
+      facebook: `In Leslieville, Toronto, Ontario, a laneway became a public space with StreetBond pavement coating in bold shapes and deep colours. It's part of the Laneway Project, a non-profit working with the City of Toronto. See the case study and book a 60-minute Lunch & Learn for your team: {link} #Leslieville #placemaking`,
+      instagram: `A laneway in Leslieville, Toronto, Ontario, became a public space.
 
 The Laneway Project, a non-profit working with the City of Toronto, turns service corridors into places people want to be. Here, StreetBond pavement coating in bold shapes and deep colours makes a laneway where families and children feel welcome, and it needs little upkeep.
 
@@ -370,7 +370,7 @@ Link in bio to see the case study, and to book a 60-minute Lunch & Learn for you
     image: `${CDN}/44401860b10a412b05dd329a1e1ae60ff120e597-2400x1800.jpg`,
     imageAlt: "A labyrinth in StreetBond coating on a hospital deck in Vancouver, with DecoMark animal icons in the paving",
     copy: {
-      linkedin: `At BC Women & Children's Hospital in Vancouver, the outdoor spaces off the wards were designed to be playful and meditative.
+      linkedin: `At BC Women & Children's Hospital in Vancouver, British Columbia, the outdoor spaces off the wards were designed to be playful and meditative.
 
 The DecoMark icons show female animals native to British Columbia with their young. Some were applied to precast concrete tiles off-site, then delivered, lifted to the upper floors and placed, which made for efficient installation and high quality control. On one deck, a labyrinth is laid out in StreetBond pavement coating.
 
@@ -379,16 +379,16 @@ Landscape architect: Connect Landscape Architecture. Installer: Square One Pavin
 See the project, and ${ASK}: {link}
 
 #healthcaredesign #landscapearchitecture #Vancouver`,
-      facebook: `At BC Women & Children's Hospital in Vancouver, the outdoor spaces off the wards carry DecoMark icons of female animals native to British Columbia with their young, and a labyrinth in StreetBond pavement coating. See the project and book a 60-minute Lunch & Learn for your team: {link} #Vancouver #healthcaredesign`,
-      instagram: `A labyrinth and a family of animals, off the wards at BC Women & Children's Hospital in Vancouver.
+      facebook: `At BC Women & Children's Hospital in Vancouver, British Columbia, the outdoor spaces off the wards carry DecoMark icons of female animals native to British Columbia with their young, and a labyrinth in StreetBond pavement coating. See the project and book a 60-minute Lunch & Learn for your team: {link} #Vancouver #healthcaredesign`,
+      instagram: `A labyrinth, and animals with their young, off the wards at BC Women & Children's Hospital in Vancouver, British Columbia.
 
 The DecoMark icons show female animals native to British Columbia with their young. Several were applied to precast concrete tiles off-site, then lifted to the upper floors and set in place. On one deck, a labyrinth is laid out in StreetBond pavement coating.
 
-Designed with Connect Landscape Architecture and installed by Square One Paving.
+Designed by Connect Landscape Architecture and installed by Square One Paving.
 
 Link in bio to see the project, and to book a 60-minute Lunch & Learn for your team.
 
-#bcchildrens #vancouver #britishcolumbia #healthcaredesign #landscapearchitecture #decomark #streetbond #labyrinth #urbandesign #canada`,
+#vancouver #britishcolumbia #healthcaredesign #landscapearchitecture #decomark #streetbond #labyrinth #urbandesign #canada`,
     },
   },
   {
@@ -407,7 +407,7 @@ See the project, and ${ASK}: {link}
 
 #UBC #campusdesign #crosswalks`,
       facebook: `At UBC's main gateway, the crosswalk at University Boulevard and Wesbrook Mall weaves together the crests of UBC and Musqueam, who designed it together. It's TrafficPatterns preformed thermoplastic. See the project and book a 60-minute Lunch & Learn for your team: {link} #UBC #Vancouver`,
-      instagram: `University Boulevard and Wesbrook Mall, at the main gateway to UBC in Vancouver.
+      instagram: `University Boulevard and Wesbrook Mall, at the main gateway to UBC in Vancouver, British Columbia.
 
 UBC and Musqueam designed this crosswalk together to mark the arrival to campus. Their crests are woven together, acknowledging that UBC is on the ancestral, traditional and unceded territory of Musqueam.
 
@@ -415,7 +415,7 @@ It's TrafficPatterns preformed thermoplastic, heat-applied so it bonds to the as
 
 Link in bio to see the project, and to book a 60-minute Lunch & Learn for your team.
 
-#ubc #musqueam #vancouver #britishcolumbia #crosswalks #trafficpatterns #campusdesign #publicspace #urbandesign #canada`,
+#ubc #vancouver #britishcolumbia #crosswalks #trafficpatterns #campusdesign #publicspace #urbandesign #canada`,
     },
   },
   {
@@ -433,7 +433,7 @@ The Complete Streets redevelopment, completed in 2017, turned the old Frontage R
 See the project, and ${ASK}: {link}
 
 #CompleteStreets #landscapearchitecture #NewWestminster`,
-      facebook: `Front Street Mews in New Westminster runs one surface across street and sidewalk: TrafficPatterns on the road and StreetBond pavement coating on the concrete sidewalk, in contrasting grey bands. See the project and book a 60-minute Lunch & Learn for your team: {link} #NewWest #CompleteStreets`,
+      facebook: `Front Street Mews in New Westminster, British Columbia, runs one surface across street and sidewalk. Its contrasting grey bands are TrafficPatterns on the road and StreetBond pavement coating on the concrete sidewalk. See the project and book a 60-minute Lunch & Learn for your team: {link} #NewWest #CompleteStreets`,
       instagram: `Front Street Mews, New Westminster, British Columbia.
 
 The Complete Streets redevelopment, completed in 2017, made the old Frontage Road into a mews. Contrasting grey bands run across the street and the sidewalk as one surface: TrafficPatterns preformed thermoplastic on the roadway and StreetBond pavement coating on the concrete.

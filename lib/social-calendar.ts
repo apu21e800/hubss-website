@@ -14,9 +14,11 @@
  *
  * The record is the same socialLog-<key> the other streams write (Studio,
  * Sent to Buffer), keyed by the article's slug, so the library never posts
- * the same job again. Claimed before anything goes to Buffer; dropped again
- * if no channel took it, so the next run tries again; kept, with what failed,
- * if some did, so nothing is ever sent twice.
+ * the same job again (lib/social-pipeline.ts also skips every job in the
+ * calendar before its turn). Claimed before anything goes to Buffer; dropped
+ * again when no channel took it for certain, so the next run tries again;
+ * kept, with what failed, when some did or Buffer gave no clear answer (a
+ * timeout, a server error), so nothing is ever sent twice.
  *
  * Never late: an entry is scheduled only while its time is more than LEAD_MS
  * away. One that missed its time is logged and left; it is never sent late.
@@ -25,7 +27,7 @@
  */
 
 import { CALENDAR, type CalendarEntry } from "@/lib/social-calendar-data";
-import { BUFFER_TIMEOUT_MS, bufferChannels, createBufferScheduledPost } from "@/lib/buffer";
+import { BUFFER_TIMEOUT_MS, BufferApiError, bufferChannels, createBufferScheduledPost, type BufferChannel } from "@/lib/buffer";
 import { idFor, imageFor } from "@/lib/social-library";
 import { isConflict, unusableReason } from "@/lib/social-outcome";
 import { emailEditors } from "@/lib/editor-mail";
@@ -60,7 +62,7 @@ export const HORIZON_MS = 12 * 24 * 60 * 60 * 1000;
  * between the claim and the log, which would leave a claim that is never
  * tried again.
  */
-const ENTRY_BASE_MS = 30_000;
+const ENTRY_BASE_MS = 50_000;
 export const entryBudgetMs = (channels: number) => ENTRY_BASE_MS + channels * BUFFER_TIMEOUT_MS;
 
 export const calendarLink = (entry: Pick<CalendarEntry, "pageUrl" | "key">, network: string) =>
@@ -86,96 +88,173 @@ export function calendarDue(entries: CalendarEntry[], logged: Set<string>, now: 
   };
 }
 
+/**
+ * Why the calendar can't post to a channel today, or null. Beyond what stops
+ * every stream (lib/social-outcome.ts), a paused queue: Buffer holds a paused
+ * channel's posts and, unpaused, moves them to its next free slots, so a dated
+ * post (Kitchener's, before Remembrance Day) could go out late.
+ */
+export function calendarChannelProblem(ch: Pick<BufferChannel, "isDisconnected" | "isLocked" | "isQueuePaused">): string | null {
+  return unusableReason(ch) ?? (ch.isQueuePaused ? "its queue is paused in Buffer: unpause it there" : null);
+}
+
+/**
+ * True when Buffer may have made the post although the call failed: no answer
+ * in time (status 0) or a server error. Such an entry keeps its record, so no
+ * later run makes the same post again; the email says to look in Buffer.
+ */
+export function mayHaveReachedBuffer(err: unknown): boolean {
+  return err instanceof BufferApiError && (err.status === 0 || err.status >= 500);
+}
+
 export interface CalendarResult {
-  scheduled: { key: string; dueAt: string; channels: string[]; failed: string[] }[];
-  late: string[];
+  /** In Buffer on at least one channel; `failed` names the channels it isn't on, and why. */
+  scheduled: { key: string; dueAt: string; channels: string[]; failed: { network: string; why: string }[] }[];
+  /** On no channel for certain, but Buffer may have made some: kept, never tried again. */
+  check: { key: string; dueAt: string; why: string }[];
+  /** Nothing reached Buffer: the next run tries again. */
   retry: { key: string; why: string }[];
+  /** Nothing reached Buffer and its record couldn't be cleared, so no run tries again until it is. */
+  stuck: { key: string; why: string }[];
+  /** Its time came before a run could schedule it: logged, reported once, never sent late. */
+  missed: { key: string; dueAt: string }[];
 }
 
 const errorText = (err: unknown) => (err instanceof Error ? err.message : String(err));
 
+type Draft = { _key: string; _type: "bufferDraft"; service: string; channel: string; bufferPostId: string };
+type Skip = { _key: string; _type: "skippedChannel"; service: string; channel: string; why: string };
+
 export async function scheduleCalendarPosts(client: Client, now = new Date(), opts: { deadline?: number; entries?: CalendarEntry[] } = {}): Promise<CalendarResult> {
-  const out: CalendarResult = { scheduled: [], late: [], retry: [] };
+  const out: CalendarResult = { scheduled: [], check: [], retry: [], stuck: [], missed: [] };
   const logged = new Set(await client.fetch<string[]>(`*[_type == "socialLog"].slug`));
   const { schedule, late } = calendarDue(opts.entries ?? CALENDAR, logged, now);
-  for (const e of late) {
-    out.late.push(e.key);
-    console.warn(`[calendar] ${e.key}: due ${e.dueAt}, too close or past before it was scheduled; not sent`);
-  }
-  if (!schedule.length) return out;
-
-  const channels = (await bufferChannels()).filter((c) => c.service.toLowerCase() in CALENDAR_NETWORKS);
-  if (!channels.length) throw new Error("Buffer has no LinkedIn, Facebook or Instagram channel for the calendar");
-
-  for (const entry of schedule) {
-    // Start an entry only with its worst case left; the next run goes on from here.
-    if (opts.deadline && Date.now() > opts.deadline - entryBudgetMs(channels.length)) {
-      console.log(`[calendar] out of time; ${entry.key} and later wait for the next run`);
-      break;
+  try {
+    // A missed entry gets a record, so it is reported once and the library never posts its job.
+    for (const e of late) {
+      try {
+        await client.create({
+          _id: idFor("socialLog", e.key),
+          _type: "socialLog",
+          slug: e.key,
+          title: e.title,
+          source: "Calendar",
+          createdAt: now.toISOString(),
+          drafts: [],
+          skipped: [{ _key: "missed", _type: "skippedChannel", service: "all", channel: "all", why: `Missed: its time (${e.dueAt}) came before a run could schedule it. Not sent late.` }],
+          styleCheck: "Missed: not sent.",
+        });
+        out.missed.push({ key: e.key, dueAt: e.dueAt });
+        console.warn(`[calendar] ${e.key}: due ${e.dueAt}, missed before it was scheduled; logged, not sent`);
+      } catch (err) {
+        if (!isConflict(err)) console.error(`[calendar] ${e.key}: missed, and its record couldn't be written: ${errorText(err)}`);
+      }
     }
-    const logId = idFor("socialLog", entry.key);
-    try {
-      await client.create({
-        _id: logId,
-        _type: "socialLog",
-        slug: entry.key,
-        title: entry.title,
-        source: "Calendar",
-        createdAt: now.toISOString(),
-        drafts: [],
-        skipped: [],
-        styleCheck: `Written ahead and checked by 21e8. Buffer sends it at ${entry.dueAt}.`,
-      });
-    } catch (err) {
-      if (isConflict(err)) continue;
-      throw err;
-    }
+    if (!schedule.length) return out;
 
-    const drafts: { _key: string; _type: "bufferDraft"; service: string; channel: string; bufferPostId: string }[] = [];
-    const skipped: { _key: string; _type: "skippedChannel"; service: string; channel: string; why: string }[] = [];
-    for (const ch of channels) {
-      const service = ch.service.toLowerCase() as CalendarNetwork;
-      const rule = CALENDAR_NETWORKS[service];
-      const label = ch.displayName || ch.name;
-      const unusable = unusableReason(ch);
-      if (unusable) {
-        skipped.push({ _key: `s${skipped.length}`, _type: "skippedChannel", service, channel: label, why: unusable });
-        continue;
+    const channels = (await bufferChannels()).filter((c) => c.service.toLowerCase() in CALENDAR_NETWORKS);
+    if (!channels.length) throw new Error("Buffer has no LinkedIn, Facebook or Instagram channel for the calendar");
+
+    for (const entry of schedule) {
+      // Start an entry only with its worst case left; the next run goes on from here.
+      if (opts.deadline && Date.now() > opts.deadline - entryBudgetMs(channels.length)) {
+        console.log(`[calendar] out of time; ${entry.key} and later wait for the next run`);
+        break;
       }
       try {
-        const id = await createBufferScheduledPost({
-          channelId: ch.id,
-          text: calendarText(entry, service),
-          imageUrl: imageFor(entry.image, rule.image, entry.imageHotspot),
-          imageAlt: entry.imageAlt,
-          metadata: rule.metadata,
-          dueAt: entry.dueAt,
-        });
-        drafts.push({ _key: ch.id, _type: "bufferDraft", service, channel: label, bufferPostId: id });
+        await scheduleEntry(client, entry, channels, now, out);
       } catch (err) {
-        skipped.push({ _key: `s${skipped.length}`, _type: "skippedChannel", service, channel: label, why: errorText(err) });
+        // One entry's failure (its claim couldn't be written) never stops the rest.
+        out.retry.push({ key: entry.key, why: errorText(err) });
+        console.error(`[calendar] ${entry.key}: ${errorText(err)}; the next run tries again`);
       }
     }
-
-    const reasons = skipped.map((s) => `${s.channel} (${s.service}): ${s.why}`).join("; ");
-    if (!drafts.length) {
-      // Nothing reached Buffer: drop the claim so the next run tries again.
-      await client.delete(logId).catch((err) => console.error(`[calendar] ${entry.key}: nothing scheduled, and the claim couldn't be dropped: ${errorText(err)}`));
-      out.retry.push({ key: entry.key, why: reasons || "no channel took it" });
-      console.warn(`[calendar] ${entry.key}: nothing scheduled; the next run tries again. ${reasons}`);
-      continue;
+  } finally {
+    // Whatever stopped the run, what it did reaches the editors.
+    if (out.scheduled.length || out.check.length || out.retry.length || out.stuck.length || out.missed.length) {
+      await emailEditors(...calendarEmail(out), "calendar").catch((err) => console.error(`[calendar] the editors' email failed: ${errorText(err)}`));
     }
-    await client
-      .patch(logId)
-      .set({ drafts, skipped })
-      .commit()
-      .catch((err) => console.error(`[calendar] ${entry.key}: scheduled, but the log couldn't be filled in: ${errorText(err)}`));
-    out.scheduled.push({ key: entry.key, dueAt: entry.dueAt, channels: drafts.map((d) => d.service), failed: skipped.map((s) => s.service) });
-    console.log(`[calendar] ${entry.key}: scheduled for ${entry.dueAt} on ${drafts.map((d) => d.service).join(", ")}${reasons ? `; not on ${reasons}` : ""}`);
+  }
+  return out;
+}
+
+/** One entry: its claim, a post per channel, then its record or, when nothing reached Buffer for certain, no record. */
+async function scheduleEntry(client: Client, entry: CalendarEntry, channels: BufferChannel[], now: Date, out: CalendarResult): Promise<void> {
+  const logId = idFor("socialLog", entry.key);
+  try {
+    await client.create({
+      _id: logId,
+      _type: "socialLog",
+      slug: entry.key,
+      title: entry.title,
+      source: "Calendar",
+      createdAt: now.toISOString(),
+      drafts: [],
+      skipped: [],
+      // Vern's review page reads this line as the style check's verdict (lib/review-page.ts, styleIsClean).
+      styleCheck: `STYLE CHECK: clean. Written ahead and checked by 21e8; Buffer sends it at ${entry.dueAt}.`,
+    });
+  } catch (err) {
+    if (isConflict(err)) return; // another run has it
+    throw err;
   }
 
-  if (out.scheduled.length || out.retry.length) await emailEditors(...calendarEmail(out), "calendar");
-  return out;
+  const drafts: Draft[] = [];
+  const skipped: Skip[] = [];
+  let unsure = false;
+  for (const ch of channels) {
+    const service = ch.service.toLowerCase() as CalendarNetwork;
+    const rule = CALENDAR_NETWORKS[service];
+    const label = ch.displayName || ch.name;
+    const problem = calendarChannelProblem(ch);
+    if (problem) {
+      skipped.push({ _key: `s${skipped.length}`, _type: "skippedChannel", service, channel: label, why: problem });
+      continue;
+    }
+    try {
+      const id = await createBufferScheduledPost({
+        channelId: ch.id,
+        text: calendarText(entry, service),
+        imageUrl: imageFor(entry.image, rule.image, entry.imageHotspot),
+        imageAlt: entry.imageAlt,
+        metadata: rule.metadata,
+        dueAt: entry.dueAt,
+      });
+      drafts.push({ _key: ch.id, _type: "bufferDraft", service, channel: label, bufferPostId: id });
+    } catch (err) {
+      const maybe = mayHaveReachedBuffer(err);
+      if (maybe) unsure = true;
+      const why = maybe ? `no clear answer from Buffer (${errorText(err)}): it may be there, so look in Buffer before posting it by hand` : errorText(err);
+      skipped.push({ _key: `s${skipped.length}`, _type: "skippedChannel", service, channel: label, why });
+    }
+  }
+
+  const reasons = skipped.map((x) => `${x.channel} (${x.service}): ${x.why}`).join("; ");
+  if (!drafts.length && !unsure) {
+    // Nothing reached Buffer, for certain: drop the claim so the next run tries again.
+    try {
+      await client.delete(logId);
+      out.retry.push({ key: entry.key, why: reasons || "no channel took it" });
+      console.warn(`[calendar] ${entry.key}: nothing scheduled; the next run tries again. ${reasons}`);
+    } catch (err) {
+      out.stuck.push({ key: entry.key, why: `${reasons || "no channel took it"}. Its record (${logId}) couldn't be cleared (${errorText(err)}), so no run tries again until it is deleted.` });
+      console.error(`[calendar] ${entry.key}: nothing scheduled, and the claim couldn't be dropped: ${errorText(err)}`);
+    }
+    return;
+  }
+  // Something is (or may be) in Buffer: keep the record, so no run makes these posts again.
+  await client
+    .patch(logId)
+    .set({ drafts, skipped })
+    .commit()
+    .catch((err) => console.error(`[calendar] ${entry.key}: the log couldn't be filled in: ${errorText(err)}`));
+  if (drafts.length) {
+    out.scheduled.push({ key: entry.key, dueAt: entry.dueAt, channels: drafts.map((d) => d.service), failed: skipped.map((x) => ({ network: x.service, why: x.why })) });
+    console.log(`[calendar] ${entry.key}: scheduled for ${entry.dueAt} on ${drafts.map((d) => d.service).join(", ")}${reasons ? `; not on ${reasons}` : ""}`);
+  } else {
+    out.check.push({ key: entry.key, dueAt: entry.dueAt, why: reasons });
+    console.warn(`[calendar] ${entry.key}: Buffer gave no clear answer; kept, not tried again. ${reasons}`);
+  }
 }
 
 const toronto = (iso: string) =>
@@ -185,15 +264,33 @@ const toronto = (iso: string) =>
 export function calendarEmail(r: CalendarResult): [string, string] {
   const lines: string[] = [];
   if (r.scheduled.length) {
-    lines.push(`Scheduled in Buffer (it sends each at the time shown, Toronto time; edit or delete any of them in Buffer before then):`);
-    for (const s of r.scheduled) lines.push(`- ${toronto(s.dueAt)}: ${s.key} on ${s.channels.join(", ")}${s.failed.length ? ` (not on ${s.failed.join(", ")}: post those by hand or leave them)` : ""}`);
+    lines.push("Scheduled in Buffer (it sends each at the time shown, Toronto time; edit or delete any of them in Buffer before then):");
+    for (const s of r.scheduled) {
+      lines.push(`- ${toronto(s.dueAt)}: ${s.key} on ${s.channels.join(", ")}`);
+      for (const f of s.failed) lines.push(`  Not on ${f.network}: ${f.why}`);
+    }
+    if (r.scheduled.some((s) => s.failed.length)) lines.push("A channel a post missed isn't tried again: post it there by hand, or leave it.");
+  }
+  if (r.check.length) {
+    lines.push("", "Buffer gave no clear answer, so these may or may not be in it. Look in Buffer; they aren't tried again, since a second try could post them twice:");
+    for (const x of r.check) lines.push(`- ${toronto(x.dueAt)}: ${x.key}: ${x.why}`);
   }
   if (r.retry.length) {
     lines.push("", "Not scheduled, tried again at the next run:");
     for (const x of r.retry) lines.push(`- ${x.key}: ${x.why}`);
   }
-  const subject = r.retry.length && !r.scheduled.length
-    ? "Calendar posts didn't reach Buffer"
-    : `${r.scheduled.length} calendar post${r.scheduled.length === 1 ? "" : "s"} scheduled in Buffer`;
+  if (r.stuck.length) {
+    lines.push("", "Not scheduled, and stuck until its record is deleted (tell 21e8):");
+    for (const x of r.stuck) lines.push(`- ${x.key}: ${x.why}`);
+  }
+  if (r.missed.length) {
+    lines.push("", "Missed, not sent (its time came before a run could schedule it; a calendar post never goes out late):");
+    for (const x of r.missed) lines.push(`- ${toronto(x.dueAt)}: ${x.key}`);
+  }
+  const n = r.scheduled.length;
+  const needsLook = r.check.length + r.retry.length + r.stuck.length + r.missed.length + r.scheduled.filter((s) => s.failed.length).length;
+  const subject = n
+    ? `${n} calendar post${n === 1 ? "" : "s"} scheduled in Buffer${needsLook ? ", and some need a look" : ""}`
+    : "Calendar posts need a look";
   return [subject, lines.join("\n")];
 }

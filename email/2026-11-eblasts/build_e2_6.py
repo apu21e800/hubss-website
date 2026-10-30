@@ -193,7 +193,7 @@ def build(b, base):
 
     def row(img, h, alt, kicker, title, href, left, right, line=None, upper=True):
         ln = f'<p style="margin:8px 0 0;font-family:{F};font-size:15px;line-height:23px;color:{BODY};">{e(line)}</p>' if line else ""
-        cap = e(left) + (f'<span style="color:{OR};">&nbsp;|&nbsp;</span>' + e(right) if right else "")
+        cap = e(left) + (f' <span style="color:{OR};">&nbsp;|&nbsp;</span> ' + e(right) if right else "")
         tt = "text-transform:uppercase;" if upper else ""
         return f'''<tr><td style="padding:18px 0;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>

@@ -241,6 +241,12 @@ async function main() {
     console.error(`\n${failures.length} flyer(s) do not fit: ${failures.join(", ")}`);
     process.exit(1);
   }
+  // The /resources preview shows page images, not the PDF: without fresh
+  // ones a phone gets the raw file, blank on Android and zoomed in on an
+  // iPhone (30 Oct 2026). The images are made in Python, so it's a second step.
+  if (!CHECK && !DRAFT) {
+    console.log("\nNext: python scripts/gen-pdf-previews.py --only resources/flyers  (the preview pages /resources shows)");
+  }
 }
 
 main().catch((e) => {

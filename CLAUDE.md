@@ -1233,6 +1233,12 @@ in public/resources/flyers, so every link holds: HUBSS-Flyer-<slug>-v01.pdf,
   house's number is on its pillar.
 - Needs qrcode (a dev dependency) and Playwright's Chromium. A Sanity photo is
   fetched once into FLYER_CACHE (the system's temp folder by default).
+- After a rebuild, `python scripts/gen-pdf-previews.py --only resources/flyers`
+  (PyMuPDF and Pillow) remakes the page images the /resources preview shows
+  (public/doc-previews/resources/flyers, lib/pdf-previews.json). Until 30 Oct
+  2026 the flyers had none, so on a phone the preview fell back to the PDF
+  itself: blank on Android, the first page zoomed in on an iPhone (Vern: "they
+  are zoomed in"). The build prints the reminder.
 
 ## Speed on a phone, for the paid traffic (28 Oct 2026)
 The MediaEdge display ads land on /lunch-learn from 1 Nov and Google Ads on

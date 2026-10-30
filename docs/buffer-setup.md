@@ -62,10 +62,18 @@ from three sources, in this order, and every draft waits for approval:
 
 ## Buffer's posting schedule
 
-Each channel's schedule (Buffer → the channel → ⚙️) is Tuesdays, Wednesdays
-and Thursdays at 11:00 AM, timezone Toronto (Tuesdays and Thursdays set by
-Vern on 14 Oct 2026; Wednesday added for three posts a week). "Add to Queue" puts an
-approved draft in the next free slot; a channel with no times can't queue.
+Each channel's schedule (Buffer → the channel → ⚙️) is Tuesdays and
+Thursdays at 11:00 AM, timezone Toronto (set by Vern on 14 Oct 2026; checked
+on all three channels on 30 Oct 2026, when Facebook's Tuesday slot was 11:00
+PM and was set to 11:00 AM; the Wednesday slot this page once listed was never
+set). "Add to Queue" puts an approved draft in the next free slot; a channel
+with no times can't queue.
+
+The calendar (lib/social-calendar.ts, since 30 Oct 2026) schedules its posts
+for their own times, Mondays and Fridays at 11:00 Toronto, outside those
+slots, so a new article's posts still take the next free Tuesday or
+Thursday. Each goes into Buffer twelve days before its time, so Buffer shows
+the next two weeks of the calendar, not all of it.
 
 Every link carries UTM tags (`utm_source` = network, `utm_medium=social`,
 `utm_campaign=insights`, `utm_content` = the post's slug), and every post

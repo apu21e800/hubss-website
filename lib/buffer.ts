@@ -30,7 +30,8 @@ const ENDPOINT = "https://api.buffer.com";
  * stops the function (300 s), and the job could no longer settle or report
  * the article it was on (lib/social-pipeline.ts).
  */
-const TIMEOUT_MS = 20_000;
+export const BUFFER_TIMEOUT_MS = 20_000;
+const TIMEOUT_MS = BUFFER_TIMEOUT_MS;
 
 export interface BufferChannel {
   id: string;
@@ -47,10 +48,13 @@ export interface BufferChannel {
 /** A refusal from Buffer's API, with the HTTP status (401: the key). */
 export class BufferApiError extends Error {
   readonly status: number;
-  constructor(message: string, status: number) {
+  /** Buffer answered OK but the answer was cut off: the request may have done its work. */
+  readonly answerLost: boolean;
+  constructor(message: string, status: number, answerLost = false) {
     super(message);
     this.name = "BufferApiError";
     this.status = status;
+    this.answerLost = answerLost;
   }
 }
 
@@ -74,6 +78,7 @@ async function gql<T>(query: string, variables?: Record<string, unknown>): Promi
     data?: T;
     errors?: { message: string; extensions?: { code?: string } }[];
   } | null;
+  if (res.ok && !json) throw new BufferApiError(`Buffer API ${res.status}: the answer was cut off`, res.status, true);
   if (!res.ok || !json || json.errors?.length) {
     const why = json?.errors?.map((e) => (e.extensions?.code ? `${e.message} (${e.extensions.code})` : e.message)).join("; ");
     throw new BufferApiError(`Buffer API ${res.status}: ${why || "no response body"}`, res.status);
@@ -151,6 +156,47 @@ export async function createBufferDraft(input: DraftPostInput): Promise<string> 
     variables
   );
   if (!data.createPost?.post?.id) throw new Error(`Buffer refused the draft: ${data.createPost?.message ?? "no reason given"}`);
+  return data.createPost.post.id;
+}
+
+export interface ScheduledPostInput extends Omit<DraftPostInput, "draft"> {
+  /** When Buffer sends it: ISO 8601, UTC. */
+  dueAt: string;
+}
+
+/**
+ * One post Buffer sends at a set time (mode customScheduled, never a draft):
+ * the calendar of posts written ahead (lib/social-calendar.ts). It sits
+ * outside the channel's queue slots, so new articles still take the next
+ * free slot. Returns Buffer's post id.
+ */
+export async function createBufferScheduledPost(input: ScheduledPostInput): Promise<string> {
+  const variables = {
+    input: {
+      channelId: input.channelId,
+      text: input.text,
+      schedulingType: "automatic",
+      mode: "customScheduled",
+      dueAt: input.dueAt,
+      saveToDraft: false,
+      aiAssisted: true,
+      source: "hubss.com",
+      assets: input.imageUrl
+        ? [{ image: { url: input.imageUrl, ...(input.imageAlt ? { metadata: { altText: input.imageAlt } } : {}) } }]
+        : [],
+      ...(input.metadata ? { metadata: input.metadata } : {}),
+    },
+  };
+  const data = await gql<{ createPost: { post?: { id: string }; message?: string } }>(
+    `mutation CreateScheduled($input: CreatePostInput!) {
+      createPost(input: $input) {
+        ... on PostActionSuccess { post { id } }
+        ... on MutationError { message }
+      }
+    }`,
+    variables
+  );
+  if (!data.createPost?.post?.id) throw new Error(`Buffer refused the post: ${data.createPost?.message ?? "no reason given"}`);
   return data.createPost.post.id;
 }
 

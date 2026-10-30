@@ -752,9 +752,11 @@ that nothing on the site used.
 Vern, 14 Oct: "automate as much as the social media as possible ... I don't
 want to write the blogs and do the social media". The daily cron
 (app/api/cron/social-drafts, 14:00 UTC) writes posts into Buffer from three
-streams; since 27 Oct 2026 they wait there as drafts for Doug's review
-("Doug reviews first", below); from 19 to 27 Oct they were queued and
-posted by themselves unless deleted in Buffer (docs/buffer-setup.md):
+streams; from 27 to 30 Oct 2026 they waited there as drafts for Doug's
+review ("Doug reviews first", below), and since 30 Oct (Vern: "let's auto
+scedule the posts, doug can read the qued drafts, so they can change on the
+fly") they are queued and posted by themselves unless edited or deleted in
+Buffer first, as from 19 to 27 Oct (docs/buffer-setup.md):
 - Articles: each newly published Insights post (lib/social-pipeline.ts).
 - From the field: a published Studio field post (sanity/schemas/fieldPost.ts,
   Studio → Job photos for social): job photos, place, system, one line of facts.
@@ -765,7 +767,31 @@ posted by themselves unless deleted in Buffer (docs/buffer-setup.md):
   field post takes the week's turn (libraryDue).
 - Cadence (14 Oct 2026, Vern: "a blog or two a week"): two articles a week
   (the drafter runs Tuesdays and Thursdays) plus one job post makes three
-  posts a week on each channel; Buffer's slots are Tue, Wed, Thu 11:00 Toronto.
+  posts a week on each channel; Buffer's queue slots are Tue and Thu 11:00
+  Toronto on all three channels (checked in Buffer 30 Oct 2026: there was no
+  Wednesday slot, and Facebook's Tuesday was 11 PM until it was set to 11 AM).
+- The calendar (30 Oct 2026; Vern: "schedule a couple months posts in
+  advance, we will continue to improve the social media post quality over
+  time"): posts written ahead from published articles, in
+  lib/social-calendar-data.ts, each with its LinkedIn, Facebook and Instagram
+  copy, its photo and its time (Mondays and Fridays 11:00 Toronto, outside
+  the queue slots). The daily run schedules each one once in Buffer for its
+  own time, twelve days ahead (lib/social-calendar.ts, mode customScheduled,
+  never a draft, never late; HORIZON_MS stays inside the 14 days Doug's review
+  page reads, so a post is on his page the whole time it waits, and an edit
+  here reaches every post not yet in Buffer; its log is
+  `socialLog-<the article's slug>`, source "Calendar"; the library skips
+  every calendar job from the start, lib/social-pipeline.ts `posted`) and
+  emails the editors the list. Nothing is ever sent twice or late: an entry
+  no channel took for certain is tried again next run, but one Buffer gave
+  no clear answer on (a timeout, a 5xx) keeps its record and the email says
+  to look in Buffer; a paused channel is skipped; a missed entry is logged
+  once and reported, never sent. A channel an entry missed is not retried
+  (the email says so). The first fourteen
+  run 6 Nov to 21 Dec 2026, ten of them Ontario jobs or guides. Only articles
+  from the 26 Oct review's "improve" or "fine" lists, never a claim flagged
+  there for Doug, links tagged utm_campaign=archive. To add a month, append
+  entries; `npm run test:social` lints every post and checks the limits.
 - The plan never runs dry: lib/insights-planner.ts adds Ideas when fewer than
   six are left: guides whose brief is neutral questions under QUESTIONS_BRIEF,
   which factsBlock (lib/field-note-facts.ts) files apart from the facts, and

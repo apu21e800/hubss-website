@@ -48,10 +48,13 @@ export interface BufferChannel {
 /** A refusal from Buffer's API, with the HTTP status (401: the key). */
 export class BufferApiError extends Error {
   readonly status: number;
-  constructor(message: string, status: number) {
+  /** Buffer answered OK but the answer was cut off: the request may have done its work. */
+  readonly answerLost: boolean;
+  constructor(message: string, status: number, answerLost = false) {
     super(message);
     this.name = "BufferApiError";
     this.status = status;
+    this.answerLost = answerLost;
   }
 }
 
@@ -75,6 +78,7 @@ async function gql<T>(query: string, variables?: Record<string, unknown>): Promi
     data?: T;
     errors?: { message: string; extensions?: { code?: string } }[];
   } | null;
+  if (res.ok && !json) throw new BufferApiError(`Buffer API ${res.status}: the answer was cut off`, res.status, true);
   if (!res.ok || !json || json.errors?.length) {
     const why = json?.errors?.map((e) => (e.extensions?.code ? `${e.message} (${e.extensions.code})` : e.message)).join("; ");
     throw new BufferApiError(`Buffer API ${res.status}: ${why || "no response body"}`, res.status);

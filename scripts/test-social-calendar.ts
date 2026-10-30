@@ -152,6 +152,8 @@ check("the editors' email lists what was scheduled and what wasn't", () => {
 check("a timeout or a server error may have reached Buffer; a refusal didn't", () => {
   assert.equal(mayHaveReachedBuffer(new BufferApiError("Buffer API unreachable: timeout", 0)), true);
   assert.equal(mayHaveReachedBuffer(new BufferApiError("Buffer API 502", 502)), true);
+  assert.equal(mayHaveReachedBuffer(new BufferApiError("Buffer API 200: the answer was cut off", 200, true)), true);
+  assert.equal(mayHaveReachedBuffer(new BufferApiError("Buffer API 200: Invalid input (BAD_USER_INPUT)", 200)), false);
   assert.equal(mayHaveReachedBuffer(new BufferApiError("Buffer API 401", 401)), false);
   assert.equal(mayHaveReachedBuffer(new BufferApiError("Buffer rate limit", 429)), false);
   assert.equal(mayHaveReachedBuffer(new Error("Buffer refused the post: no")), false);

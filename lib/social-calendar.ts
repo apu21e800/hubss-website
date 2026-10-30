@@ -100,11 +100,12 @@ export function calendarChannelProblem(ch: Pick<BufferChannel, "isDisconnected" 
 
 /**
  * True when Buffer may have made the post although the call failed: no answer
- * in time (status 0) or a server error. Such an entry keeps its record, so no
- * later run makes the same post again; the email says to look in Buffer.
+ * in time (status 0), a server error, or an OK whose answer was cut off. Such
+ * an entry keeps its record, so no later run makes the same post again; the
+ * email says to look in Buffer.
  */
 export function mayHaveReachedBuffer(err: unknown): boolean {
-  return err instanceof BufferApiError && (err.status === 0 || err.status >= 500);
+  return err instanceof BufferApiError && (err.status === 0 || err.status >= 500 || err.answerLost);
 }
 
 export interface CalendarResult {

@@ -34,9 +34,33 @@ type Block = string | string[];
 // phone field, the full email or the mailing address (a Product Book request's
 // city included). Hence the new line. 30 Oct 2026: Google Ads, for the
 // Western Canada campaign (claude/HUBSS-google-ads-plan-2026-10.md): it shows
-// the ads and, through GA4, counts the enquiries they bring. The cookie line
-// stays true only while personalised advertising is off in the GA4 to Google
-// Ads link and no remarketing list is made.
+// the ads and, through GA4, counts the enquiries they bring. Later the same
+// day (Vern: "add the new line on the privacy page if it does not hurt"), the
+// cookie section says we may use remarketing, with what Google requires a site
+// to disclose (support.google.com/analytics/answer/2700409 and
+// support.google.com/google-ads/answer/2549063). The measurement sentence is
+// true now: with GA4 linked to Google Ads the tag sends each page view to
+// stats.g.doubleclick.net and each key event to
+// www.google.com/measurement/conversion (seen 30 Oct 2026). "May" keeps the
+// remarketing sentence true while it is off (personalised advertising off in
+// the link, no list of ours, Google signals off). The same review added how a
+// form says where the visitor came from (lib/visit-source.ts) and that the
+// services above may process data in the US. Before switching remarketing on:
+// - PIPEDA (OPC guidance gl_ba_1112): a notice outside this page, at or before
+//   collection, with the opt-outs one click away (a first-visit notice or an
+//   "Ad choices" footer link, and these addresses as links), and a stated
+//   list duration.
+// - Quebec (Law 25 s. 8.1): profiling off until the visitor turns it on, so
+//   consent defaults (ad_storage, ad_user_data, ad_personalization) denied
+//   for Quebec visitors (x-vercel-ip-country-region QC) until they agree.
+// - EEA, UK, Switzerland (Google's EU user consent policy): ads
+//   personalization off for them in GA4's advanced settings, or consent.
+// - Lists from all visitors or product and application pages, never from
+//   posts on sensitive subjects (the Pride or Every Child Matters posts). No
+//   Google-engaged audience on a campaign until this is done.
+// - Then "may also use" becomes "also use" and the date changes. If Google
+//   signals is turned on, say Google may recognize signed-in visitors on
+//   other devices.
 // The contact lines carry the offices from Studio's Site Settings
 // (lib/site-settings.ts), so they match the footer.
 const buildSections = (offices: SiteSettings["offices"]): { heading: string; blocks: Block[] }[] => [
@@ -49,6 +73,7 @@ const buildSections = (offices: SiteSettings["offices"]): { heading: string; blo
         "Mailing address: the address you give us when you request a printed Product Portfolio Book",
         "Project information: location, project type, and details you provide in form submissions",
         "Usage data: pages visited, time on site, browser type, and referring URL (collected via cookies and analytics tools)",
+        "How you reached us: when you send a form, the ad, search or website that brought you to hubss.com and the first page you landed on, sent with your message",
         "Communications: records of email correspondence or form submissions",
       ],
       "We collect this information only when you voluntarily provide it, or when it is automatically collected through your use of the site.",
@@ -87,23 +112,26 @@ const buildSections = (offices: SiteSettings["offices"]): { heading: string; blo
         "Hosting: Vercel (hosts the site and checks that our forms are sent from a real browser; Vercel Web Analytics and Speed Insights measure page visits and loading speed)",
         "Spam screening: Anthropic (reads what you send through our forms, with phone numbers and email addresses taken out and never your mailing address, to keep spam out of our inbox)",
         "Analytics: Google Analytics (pages visited, time on site, browser type, and referring URL)",
-        "Advertising: Google Ads (shows our ads, and measures which of them lead to inquiries)",
+        "Advertising: Google Ads (shows our ads, measures which of them lead to inquiries, and may show our ads to people who have visited this site)",
         "Content: Sanity (stores the site's text and serves its photographs)",
         "Maps: CARTO (supplies the map on the homepage)",
       ],
-      "Each service operates under its own privacy policy. We choose partners who maintain data protection standards consistent with PIPEDA.",
+      "Each service operates under its own privacy policy. We choose partners who maintain data protection standards consistent with PIPEDA. Some of these services store or process data outside Canada, including in the United States, where it may be accessible to courts and authorities there.",
     ],
   },
   {
-    heading: "5. Cookies",
+    heading: "5. Cookies and advertising",
     blocks: [
       "hubss.com uses cookies to:",
       [
         "Remember your preferences and session state",
         "Collect analytics data",
         "Improve site performance",
+        "Measure our advertising and, if we use remarketing, show our ads to people who have visited the site",
       ],
-      "You can disable cookies in your browser settings. Disabling cookies may affect some site functionality. We use Google Ads to show our ads and to measure which of them lead to inquiries. We don't use cookies for remarketing or to follow you across other sites.",
+      "You can disable cookies in your browser settings. Disabling cookies may affect some site functionality.",
+      "We use Google Ads to show our ads and to measure which of them lead to inquiries. To measure them, our Google Analytics cookies work with Google's own advertising cookies, where your browser allows them, so Google can connect a visit or an inquiry to one of our ads. We may also use remarketing, a Google Analytics and Google Ads feature: Google may then show our ads to people who have visited hubss.com, on other websites and apps, including Google's own, such as Search and YouTube. Remarketing uses the same cookies to recognize a browser that has been here before.",
+      "To opt out of remarketing, turn off personalized ads in Google's ad settings (adssettings.google.com), or opt out of interest-based ads from participating companies, Google included, at youradchoices.ca. To stop Google Analytics in your browser, and with it the ad measurement above, install Google's opt-out add-on for Google Analytics (tools.google.com/dlpage/gaoptout). When you send one of our forms, our server still tells Google Analytics that an inquiry arrived, without your name or contact details, so we can count it.",
     ],
   },
   {

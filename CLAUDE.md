@@ -741,7 +741,10 @@ marked "[Screened]" with a banner saying why, and the visitor sees "sent".
   application pages and article links included. All 125 sitemap pages' links
   are one of four forms (tel:+14165409287, tel:+16043098212 and the two
   office emails); build a link with telHref / mailtoHref (lib/site-settings.ts)
-  and it is counted.
+  and it is counted. Since 30 Oct 2026 the events carry `office` ("east",
+  "west", "other"; the layout maps Site Settings' offices to their hrefs),
+  never the number or the address: Google Analytics' terms forbid sending
+  what it could read as personal information.
 /api/ai-chat answers 404: it was an open Claude Opus endpoint on HUB's key
 that nothing on the site used.
 

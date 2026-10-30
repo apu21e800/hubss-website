@@ -24,6 +24,7 @@ import MotionProvider from "@/components/MotionProvider";
 import { NavMenuProvider } from "@/components/NavMenuProvider";
 import { NAV_MENU } from "@/lib/nav-menu";
 import { getSiteSettings } from "@/lib/sanity.queries";
+import { mailtoHref, telHref } from "@/lib/site-settings";
 
 // Runs before first paint. Order: ?theme= in the URL (persisted, so a link
 // sticks as the reader navigates) → localStorage → the server's own
@@ -106,6 +107,14 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   // The offices, social accounts and footer line from Studio, for the client
   // components that print them (components/SiteSettingsProvider.tsx).
   const settings = await getSiteSettings();
+  // Which office a tel: or mailto: link reaches, so a phone_click or
+  // email_click says "east" or "west", never the number or the address
+  // (components/AnalyticsEvents.tsx).
+  const officeByHref: Record<string, "east" | "west"> = {};
+  for (const office of ["east", "west"] as const) {
+    officeByHref[telHref(settings.offices[office].phone)] = office;
+    officeByHref[mailtoHref(settings.offices[office].email).toLowerCase()] = office;
+  }
   return (
     // suppressHydrationWarning: the theme bootstrap below sets data-theme on
     // <html> before React hydrates, and that attribute is not in the server
@@ -186,7 +195,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             {/* Google Analytics for people: not for browsers driven by a
                 program (components/HumanAnalytics.tsx, 15 Oct 2026). */}
             <HumanAnalytics gaId={GA_MEASUREMENT_ID} />
-            <AnalyticsEvents />
+            <AnalyticsEvents officeByHref={officeByHref} />
           </NotInStudio>
         )}
       </body>

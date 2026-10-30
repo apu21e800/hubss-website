@@ -12,8 +12,8 @@
  * are safe in Sanity and tomorrow's line has them. Then the review page's
  * two links, emailed to the editors once per key (lib/review-link.ts).
  *
- * Then three steps, each on its own (a failure in one is emailed and the next
- * still runs; the response carries all three):
+ * Then the steps below, each on its own (a failure in one is emailed and the
+ * next still runs; the response carries them all):
  *  1. publishDueDrafts (lib/project-posts.ts): every blog draft set to go
  *     live by itself whose time has come is published, and the site rebuilds.
  *  2. draftSocialForNewPosts (lib/social-pipeline.ts): Buffer posts for new
@@ -23,6 +23,9 @@
  *     SOCIAL_AUTO_QUEUE=off, lib/buffer.ts). The copy gets the house
  *     style pass (lib/style-lint.ts); what it can't fix is in the email and in
  *     Studio under Sent to Buffer.
+ *  2b. scheduleCalendarPosts (lib/social-calendar.ts): the posts written
+ *     ahead (lib/social-calendar-data.ts), each scheduled once in Buffer for
+ *     its own time, outside the queue slots (since 30 Oct 2026).
  *  3. draftProjectArticles (lib/project-posts.ts): one job photos post with
  *     its story becomes a Projects article (held for Doug's review while he
  *     reviews first, else scheduled), with whatever time the
@@ -45,6 +48,7 @@ import { sanityWriteClient } from "@/lib/sanity.write";
 import { emailEditors } from "@/lib/editor-mail";
 import { logLeadSummary } from "@/lib/lead-counts";
 import { sendReviewLinkOnce } from "@/lib/review-link";
+import { scheduleCalendarPosts } from "@/lib/social-calendar";
 
 export const maxDuration = 300;
 export const dynamic = "force-dynamic";
@@ -128,6 +132,23 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       out.social = { error: errorText(err) };
       console.error(`[social] run failed: ${errorText(err)}`);
       await notifyRunFailure(err);
+    }
+  }
+
+  // 2b. The calendar: posts written ahead (lib/social-calendar-data.ts), each
+  //     scheduled in Buffer once, for its own time.
+  if (process.env.BUFFER_API_KEY) {
+    try {
+      out.calendar = await scheduleCalendarPosts(client, now, { deadline });
+    } catch (err) {
+      failed = true;
+      out.calendar = { error: errorText(err) };
+      console.error(`[calendar] run failed: ${errorText(err)}`);
+      await emailEditors(
+        "Calendar posts didn't run",
+        `Today's run couldn't schedule the calendar's posts in Buffer. Nothing was sent, and the next run tries again.\n\nWhat happened: ${errorText(err)}`,
+        "calendar"
+      );
     }
   }
 

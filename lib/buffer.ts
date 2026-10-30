@@ -154,6 +154,47 @@ export async function createBufferDraft(input: DraftPostInput): Promise<string> 
   return data.createPost.post.id;
 }
 
+export interface ScheduledPostInput extends Omit<DraftPostInput, "draft"> {
+  /** When Buffer sends it: ISO 8601, UTC. */
+  dueAt: string;
+}
+
+/**
+ * One post Buffer sends at a set time (mode customScheduled, never a draft):
+ * the calendar of posts written ahead (lib/social-calendar.ts). It sits
+ * outside the channel's queue slots, so new articles still take the next
+ * free slot. Returns Buffer's post id.
+ */
+export async function createBufferScheduledPost(input: ScheduledPostInput): Promise<string> {
+  const variables = {
+    input: {
+      channelId: input.channelId,
+      text: input.text,
+      schedulingType: "automatic",
+      mode: "customScheduled",
+      dueAt: input.dueAt,
+      saveToDraft: false,
+      aiAssisted: true,
+      source: "hubss.com",
+      assets: input.imageUrl
+        ? [{ image: { url: input.imageUrl, ...(input.imageAlt ? { metadata: { altText: input.imageAlt } } : {}) } }]
+        : [],
+      ...(input.metadata ? { metadata: input.metadata } : {}),
+    },
+  };
+  const data = await gql<{ createPost: { post?: { id: string }; message?: string } }>(
+    `mutation CreateScheduled($input: CreatePostInput!) {
+      createPost(input: $input) {
+        ... on PostActionSuccess { post { id } }
+        ... on MutationError { message }
+      }
+    }`,
+    variables
+  );
+  if (!data.createPost?.post?.id) throw new Error(`Buffer refused the post: ${data.createPost?.message ?? "no reason given"}`);
+  return data.createPost.post.id;
+}
+
 /** A post's state in Buffer (its PostStatus): draft and needs_approval wait for someone, scheduled is in a queue. */
 export type BufferPostStatus = "draft" | "needs_approval" | "scheduled" | "sending" | "sent" | "error";
 

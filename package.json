@@ -23,7 +23,7 @@
     "check:copy": "node scripts/check-copy.mjs",
     "test:copy": "tsx scripts/check-copy.mjs --test",
     "test:forms": "tsx scripts/test-form-screen.ts",
-    "test:social": "tsx scripts/test-social-outcome.ts && tsx scripts/test-social-library.ts",
+    "test:social": "tsx scripts/test-social-outcome.ts && tsx scripts/test-social-library.ts && tsx scripts/test-social-calendar.ts",
     "test:planner": "tsx scripts/test-insights-planner.ts",
     "test:drafter": "tsx scripts/test-drafter-standard.ts",
     "test:idea-book": "tsx scripts/test-idea-book.ts",

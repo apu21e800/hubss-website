@@ -776,9 +776,12 @@ Buffer first, as from 19 to 27 Oct (docs/buffer-setup.md):
   lib/social-calendar-data.ts, each with its LinkedIn, Facebook and Instagram
   copy, its photo and its time (Mondays and Fridays 11:00 Toronto, outside
   the queue slots). The daily run schedules each one once in Buffer for its
-  own time (lib/social-calendar.ts, mode customScheduled, never a draft, never
-  late; its log is `socialLog-<the article's slug>`, source "Calendar", so the
-  library skips the job) and emails the editors the list. The first fourteen
+  own time, twelve days ahead (lib/social-calendar.ts, mode customScheduled,
+  never a draft, never late; HORIZON_MS stays inside the 14 days Doug's review
+  page reads, so a post is on his page the whole time it waits, and an edit
+  here reaches every post not yet in Buffer; its log is
+  `socialLog-<the article's slug>`, source "Calendar", so the library skips
+  the job) and emails the editors the list. The first fourteen
   run 6 Nov to 21 Dec 2026, ten of them Ontario jobs or guides. Only articles
   from the 26 Oct review's "improve" or "fine" lists, never a claim flagged
   there for Doug, links tagged utm_campaign=archive. To add a month, append

@@ -72,7 +72,8 @@ with no times can't queue.
 The calendar (lib/social-calendar.ts, since 30 Oct 2026) schedules its posts
 for their own times, Mondays and Fridays at 11:00 Toronto, outside those
 slots, so a new article's posts still take the next free Tuesday or
-Thursday.
+Thursday. Each goes into Buffer twelve days before its time, so Buffer shows
+the next two weeks of the calendar, not all of it.
 
 Every link carries UTM tags (`utm_source` = network, `utm_medium=social`,
 `utm_campaign=insights`, `utm_content` = the post's slug), and every post

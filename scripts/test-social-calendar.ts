@@ -11,7 +11,8 @@
  */
 import assert from "node:assert/strict";
 import { CALENDAR } from "../lib/social-calendar-data";
-import { calendarDue, calendarEmail, calendarLink, calendarText, LEAD_MS, type CalendarNetwork } from "../lib/social-calendar";
+import { calendarDue, calendarEmail, calendarLink, calendarText, HORIZON_MS, LEAD_MS, type CalendarNetwork } from "../lib/social-calendar";
+import { SOCIAL_WINDOW_DAYS } from "../lib/review-page";
 import { lintCopy } from "../lib/style-lint";
 
 let failures = 0;
@@ -98,11 +99,19 @@ for (const e of CALENDAR) {
 console.log("Scheduling");
 const first = CALENDAR[0];
 const before = new Date(Date.parse(first.dueAt) - 3 * LEAD_MS);
-check("before the first post, everything within the horizon is scheduled, earliest first", () => {
+check("before the first post, everything within the horizon is scheduled, earliest first, and nothing further out", () => {
   const { schedule, late } = calendarDue(CALENDAR, new Set(), before);
   assert.equal(late.length, 0);
   assert.equal(schedule[0].key, first.key);
-  assert.ok(schedule.length >= 10, `only ${schedule.length}`);
+  for (const e of schedule) assert.ok(Date.parse(e.dueAt) - before.getTime() <= HORIZON_MS, `${e.key} is past the horizon`);
+  const further = CALENDAR.filter((e) => Date.parse(e.dueAt) - before.getTime() > HORIZON_MS);
+  assert.ok(further.length > 0 && further.every((e) => !schedule.includes(e)), "entries past the horizon wait for a later run");
+});
+check("a post goes into Buffer inside the 14 days Doug's review page reads, so it stays on his page until it goes", () => {
+  assert.ok(HORIZON_MS < SOCIAL_WINDOW_DAYS * 24 * 60 * 60 * 1000, `horizon ${HORIZON_MS / 86_400_000} days, review window ${SOCIAL_WINDOW_DAYS}`);
+});
+check("every entry gets its turn: one daily run lands inside each entry's window", () => {
+  assert.ok(HORIZON_MS - LEAD_MS > 2 * 24 * 60 * 60 * 1000, "the window is wider than two missed daily runs");
 });
 check("an entry already logged is never scheduled again", () => {
   const { schedule } = calendarDue(CALENDAR, new Set([first.key]), before);

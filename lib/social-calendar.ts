@@ -20,6 +20,8 @@
  *
  * Never late: an entry is scheduled only while its time is more than LEAD_MS
  * away. One that missed its time is logged and left; it is never sent late.
+ * Never early either: an entry goes into Buffer within HORIZON_MS (twelve
+ * days) of its time, so it is on Doug's review page the whole time it waits.
  */
 
 import { CALENDAR, type CalendarEntry } from "@/lib/social-calendar-data";
@@ -41,8 +43,23 @@ export type CalendarNetwork = keyof typeof CALENDAR_NETWORKS;
 
 /** Never schedule a post due sooner than this: it would go out before anyone could look. */
 export const LEAD_MS = 2 * 60 * 60 * 1000;
-/** Nor one further out than this. */
-export const HORIZON_MS = 75 * 24 * 60 * 60 * 1000;
+/**
+ * Nor one further out than this: twelve days. Doug's review page reads the
+ * Buffer posts made in the last 14 days (lib/review-page.ts,
+ * SOCIAL_WINDOW_DAYS), so a post put into Buffer any earlier would drop off
+ * his page while it still waits to go; the test keeps the two in step. Until
+ * then an entry is only in this file, so an improvement to its copy reaches
+ * it (Vern: "we will continue to improve the social media post quality over
+ * time"). The daily run puts each one into Buffer twelve days ahead.
+ */
+export const HORIZON_MS = 12 * 24 * 60 * 60 * 1000;
+/**
+ * The time one entry can take: three Buffer calls at their 20-second limit
+ * (lib/buffer.ts), the claim and the log. An entry is started only with this
+ * much of the run left, so the run is never stopped between the claim and the
+ * log, which would leave a claim that is never tried again.
+ */
+const ENTRY_MS = 90_000;
 
 export const calendarLink = (entry: Pick<CalendarEntry, "pageUrl" | "key">, network: string) =>
   `${entry.pageUrl}?utm_source=${network}&utm_medium=social&utm_campaign=archive&utm_content=${encodeURIComponent(entry.key)}`;
@@ -89,8 +106,8 @@ export async function scheduleCalendarPosts(client: Client, now = new Date(), op
   if (!channels.length) throw new Error("Buffer has no LinkedIn, Facebook or Instagram channel for the calendar");
 
   for (const entry of schedule) {
-    // Each entry takes a few seconds; stop with a minute to spare and let the next run go on.
-    if (opts.deadline && Date.now() > opts.deadline - 60_000) {
+    // Start an entry only with its worst case left; the next run goes on from here.
+    if (opts.deadline && Date.now() > opts.deadline - ENTRY_MS) {
       console.log(`[calendar] out of time; ${entry.key} and later wait for the next run`);
       break;
     }

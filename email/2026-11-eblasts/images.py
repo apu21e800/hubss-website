@@ -24,7 +24,7 @@ E1 = [('192-6','hero-volume-5.jpg',1200,750,BG_ROW),('192-104','woodbridge-plow.
       ('494-879','trafficpatterns.jpg',600,438,BG_ROW),('501-111','streetbond-joyce-collingwood.jpg',600,438,BG_ROW),
       ('282-22','streetbondsr-canada-post-lot.jpg',600,450,BG_ROW),('292-3','printed-copy.jpg',480,640,BG_SPLIT)]
 SETS = {
- 2: [('497-890','hero-maple-ridge.jpg',1200,760,BG_ROW),('284-3','bc-childrens-labyrinth.jpg',480,640,BG_SPLIT),
+ 2: [('497-890','hero-sheffield-park.jpg',1200,760,BG_ROW),('284-3','bc-childrens-labyrinth.jpg',480,640,BG_SPLIT),
      ('284-15','kitchener-kings-queens.jpg',600,450,BG_ROW),('284-22','toronto-geary-works.jpg',600,450,BG_ROW),
      ('284-29','bowen-island-snug-cove.jpg',400,300,BG_ROW),('284-47','streetbond.jpg',400,300,BG_ROW),
      ('284-55','streetbondsr-canada-post-lot.jpg',600,450,BG_ROW),('284-63','decomark.jpg',400,300,BG_ROW)],
@@ -35,7 +35,7 @@ SETS = {
      ('501-119','streetbond-parking.jpg',600,450,BG_ROW)],
  4: [('223-6','hero-toronto-ttc-bus-lane.jpg',1200,750,BG_ROW),('285-72','woodbridge-avenue-crosswalk.jpg',480,640,BG_SPLIT),
      ('285-84','toronto-emery-village.jpg',600,450,BG_ROW),('285-91','verdun-flush-medians.jpg',400,300,BG_ROW),
-     ('496-885','georgina-every-child-matters.jpg',600,450,BG_ROW),('285-116','mmax.jpg',400,300,BG_ROW),
+('285-116','mmax.jpg',400,300,BG_ROW),
      ('285-124','trafficpatternsxd.jpg',400,300,BG_ROW),('498-895','trafficpatterns-langley.jpg',600,450,BG_ROW)],
  5: [('224-6','hero-london-east-link.jpg',1200,750,BG_ROW),('285-141','richmond-brighouse-station.jpg',480,640,BG_SPLIT),
      ('285-153','waterloo-ion-crosswalk.jpg',600,450,BG_ROW),('285-160','york-region-highway-7.jpg',600,450,BG_ROW),
@@ -79,5 +79,11 @@ for n, items in SETS.items():
     for src, name, w, h, bg in items:
         im = fit(flat(os.path.join(EX, src + '.png'), bg), w, h)
         save_jpg(im, os.path.join(d, name), q=80 if w >= 960 else 82)
+    if n == 4:
+        # Not the Figma photo (gallery public-art-03, a marina crosswalk no record places in
+        # Georgina): the Georgina post's own photo, Sanity 7c3010ae926cf9a936510231ddfc12b297a7861c-562x315.jpg,
+        # saved in the exports folder as georgina-post.jpg; centre crop to 4:3.
+        im = Image.open(os.path.join(EX, 'georgina-post.jpg')).convert('RGB'); w, h = im.size; cw = round(h * 4 / 3); x = (w - cw) // 2
+        save_jpg(im.crop((x, 0, x + cw, h)).resize((400, 300), Image.LANCZOS), os.path.join(d, 'georgina-every-child-matters.jpg'))
     tot = sum(os.path.getsize(os.path.join(d, f)) for f in os.listdir(d))
     print(f'e{n}: {len(items)} files, {tot // 1024} KB')

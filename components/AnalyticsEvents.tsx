@@ -28,20 +28,33 @@ function sameSitePath(href: string): string | null {
   }
 }
 
-export default function AnalyticsEvents() {
+// A phone_click or email_click names the office it reaches ("east", "west",
+// or "other" for any other number or address), never the number or the
+// address itself: Google Analytics' terms forbid sending anything it could
+// read as personal information, email addresses first (30 Oct 2026 review:
+// the events carried ep.phone_number and the office emails). The layout
+// passes the map from Studio's Site Settings, so it follows the offices.
+type Office = "east" | "west" | "other";
+
+function officeOf(officeByHref: Record<string, "east" | "west">, href: string): Office {
+  const key = href.split("?")[0].trim().toLowerCase();
+  return officeByHref[key] ?? "other";
+}
+
+export default function AnalyticsEvents({ officeByHref = {} }: { officeByHref?: Record<string, "east" | "west"> }) {
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       const anchor = (e.target as Element).closest("a[href]") as HTMLAnchorElement | null;
       if (!anchor) return;
       const href = anchor.getAttribute("href") ?? "";
       if (href.startsWith("tel:")) {
-        const number = href.slice(4);
-        window.gtag?.("event", "phone_click", { event_category: "engagement", phone_number: number });
-        track("phone_click", { phone_number: number });
+        const office = officeOf(officeByHref, href);
+        window.gtag?.("event", "phone_click", { event_category: "engagement", office });
+        track("phone_click", { office });
       } else if (href.startsWith("mailto:")) {
-        const email = href.slice(7).split("?")[0];
-        window.gtag?.("event", "email_click", { event_category: "engagement", email_address: email });
-        track("email_click", { email_address: email });
+        const office = officeOf(officeByHref, href);
+        window.gtag?.("event", "email_click", { event_category: "engagement", office });
+        track("email_click", { office });
       } else {
         const to = sameSitePath(href);
         const from = window.location.pathname;
@@ -55,6 +68,6 @@ export default function AnalyticsEvents() {
     }
     document.addEventListener("click", handleClick);
     return () => document.removeEventListener("click", handleClick);
-  }, []);
+  }, [officeByHref]);
   return null;
 }

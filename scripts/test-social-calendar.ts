@@ -11,7 +11,8 @@
  */
 import assert from "node:assert/strict";
 import { CALENDAR } from "../lib/social-calendar-data";
-import { calendarDue, calendarEmail, calendarLink, calendarText, HORIZON_MS, LEAD_MS, type CalendarNetwork } from "../lib/social-calendar";
+import { calendarDue, calendarEmail, calendarLink, calendarText, entryBudgetMs, HORIZON_MS, LEAD_MS, type CalendarNetwork } from "../lib/social-calendar";
+import { BUFFER_TIMEOUT_MS } from "../lib/buffer";
 import { SOCIAL_WINDOW_DAYS } from "../lib/review-page";
 import { lintCopy } from "../lib/style-lint";
 
@@ -112,6 +113,9 @@ check("a post goes into Buffer inside the 14 days Doug's review page reads, so i
 });
 check("every entry gets its turn: one daily run lands inside each entry's window", () => {
   assert.ok(HORIZON_MS - LEAD_MS > 2 * 24 * 60 * 60 * 1000, "the window is wider than two missed daily runs");
+});
+check("an entry starts only with time left for every channel's Buffer call, the claim and the log", () => {
+  for (const n of [1, 3, 5]) assert.ok(entryBudgetMs(n) >= n * BUFFER_TIMEOUT_MS + 20_000, `${n} channels: ${entryBudgetMs(n)} ms`);
 });
 check("an entry already logged is never scheduled again", () => {
   const { schedule } = calendarDue(CALENDAR, new Set([first.key]), before);

@@ -30,7 +30,8 @@ const ENDPOINT = "https://api.buffer.com";
  * stops the function (300 s), and the job could no longer settle or report
  * the article it was on (lib/social-pipeline.ts).
  */
-const TIMEOUT_MS = 20_000;
+export const BUFFER_TIMEOUT_MS = 20_000;
+const TIMEOUT_MS = BUFFER_TIMEOUT_MS;
 
 export interface BufferChannel {
   id: string;

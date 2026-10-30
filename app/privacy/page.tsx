@@ -131,7 +131,7 @@ const buildSections = (offices: SiteSettings["offices"]): { heading: string; blo
       ],
       "You can disable cookies in your browser settings. Disabling cookies may affect some site functionality.",
       "We use Google Ads to show our ads and to measure which of them lead to inquiries. To measure them, our Google Analytics cookies work with Google's own advertising cookies, where your browser allows them, so Google can connect a visit or an inquiry to one of our ads. We may also use remarketing, a Google Analytics and Google Ads feature: Google may then show our ads to people who have visited hubss.com, on other websites and apps, including Google's own, such as Search and YouTube. Remarketing uses the same cookies to recognize a browser that has been here before.",
-      "To opt out of remarketing, turn off personalized ads in Google's ad settings (adssettings.google.com), or opt out of interest-based ads from participating companies, Google included, at youradchoices.ca. To stop Google Analytics, and with it the ad measurement above, install Google's opt-out add-on for Google Analytics (tools.google.com/dlpage/gaoptout).",
+      "To opt out of remarketing, turn off personalized ads in Google's ad settings (adssettings.google.com), or opt out of interest-based ads from participating companies, Google included, at youradchoices.ca. To stop Google Analytics in your browser, and with it the ad measurement above, install Google's opt-out add-on for Google Analytics (tools.google.com/dlpage/gaoptout). When you send one of our forms, our server still tells Google Analytics that an inquiry arrived, without your name or contact details, so we can count it.",
     ],
   },
   {

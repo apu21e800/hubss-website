@@ -7,7 +7,7 @@ import BlogFilter from "@/components/blog/BlogFilter";
 import BlogCard, { StoryLead, pickLead } from "@/components/blog/BlogCard";
 import RuleLabel from "@/components/blog/RuleLabel";
 import JsonLd from "@/components/ui/JsonLd";
-import { getAllPosts } from "@/lib/blog";
+import { getAllPosts, pinnedPost } from "@/lib/blog";
 import Link from "next/link";
 import { BLOG_NAME, INSIGHTS_SECTIONS, sectionFor } from "@/lib/field-notes-taxonomy";
 import { ideaBook } from "@/lib/catalogue";
@@ -41,7 +41,10 @@ export default async function BlogPage() {
   // below continues after them (BlogFilter's frontSlugs).
   // The lead is a project when there is one (27 Oct 2026: the page is
   // Projects, and it led with a guide); else the newest story, as before.
-  const lead = pickLead(posts.filter((p) => sectionFor(p.category).key === "projects")) ?? pickLead(posts);
+  // A post pinned in Studio ("Pin to top", 3 Nov 2026) leads before either,
+  // whatever its photo's size, and wears a "Pinned" label.
+  const pinned = pinnedPost(posts);
+  const lead = pinned ?? pickLead(posts.filter((p) => sectionFor(p.category).key === "projects")) ?? pickLead(posts);
   const latest = posts.filter((p) => p.slug !== lead?.slug).slice(0, 4);
   const frontSlugs = [...(lead ? [lead.slug] : []), ...latest.map((p) => p.slug)];
 
@@ -142,7 +145,7 @@ export default async function BlogPage() {
             first HTML and is the page's largest paint. */}
         {lead && (
           <section aria-label={`Latest ${BLOG_NAME.toLowerCase()}`} className="mb-16 sm:mb-24">
-            <StoryLead post={lead} />
+            <StoryLead post={lead} pinned={lead === pinned} />
             {latest.length > 0 && (
               <>
                 <RuleLabel className="mt-12 mb-7 sm:mt-16">Latest</RuleLabel>

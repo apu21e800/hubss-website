@@ -4,6 +4,7 @@ import type { PostMeta } from "@/lib/blog";
 import { isSanityImage } from "@/lib/photos";
 import { sectionFor } from "@/lib/field-notes-taxonomy";
 import { altBesideTitle, clipExcerpt, focalObjectPosition, formatPostDate } from "@/lib/blog-taxonomy";
+import PinnedLabel from "@/components/blog/PinnedLabel";
 
 /**
  * How Insights shows a post, everywhere a post is listed: the /blog front
@@ -143,7 +144,7 @@ export default function BlogCard({
  * headline and deck (the excerpt, cut to one or two lines). The /blog front
  * page and each section page open with one.
  */
-export function StoryLead({ post, headingLevel = "h2" }: { post: PostMeta; headingLevel?: "h2" | "h3" }) {
+export function StoryLead({ post, headingLevel = "h2", pinned = false }: { post: PostMeta; headingLevel?: "h2" | "h3"; pinned?: boolean }) {
   const photo = photoFor(post);
   const Heading = headingLevel;
   return (
@@ -165,6 +166,8 @@ export function StoryLead({ post, headingLevel = "h2" }: { post: PostMeta; headi
         />
       </span>
       <span className="block lg:col-span-5">
+        {/* Studio's "Pin to top" (3 Nov 2026): the label sits over the kicker. */}
+        {pinned && <PinnedLabel className="mb-3 flex" />}
         <StoryKicker post={post} full />
         <Heading
           className="font-display mt-3 text-balance transition-colors duration-200 group-hover:text-[var(--accent-text)]"

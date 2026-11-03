@@ -35,6 +35,8 @@ import { currentBody, currentIn, currentPlain } from "@/lib/copy-superseded";
 import { sanityFetch, CACHE_VERSION } from "@/lib/sanity.queries";
 import { isPreview } from "@/lib/sanity.preview";
 import blogIndex from "@/lib/blog-index.json";
+// Studio's "Pin to top" (3 Nov 2026): which post leads. A file of its own, with no imports, so its test needs no build.
+export { pinnedPost } from "@/lib/pinned-post";
 import { POST_PLACES } from "@/lib/post-places";
 import { FIELD_NOTE_TYPES, SECTION_BY_KEY, isArchivedPost, type FieldNoteType, type InsightsSectionKey } from "@/lib/field-notes-taxonomy";
 import { countWords, datedForPreview, inferCategory, readTimeFor, scanProducts, type Hotspot } from "@/lib/blog-taxonomy";
@@ -45,7 +47,8 @@ export type PostCategory = FieldNoteType;
 // The projections below grew the photo's size and focal point on 28 Sep 2026.
 // A new cache key, so a cached list from before can't hand the pages posts
 // without them.
-const QUERY_VERSION = `${CACHE_VERSION}:hotspot-0928`;
+// Bumped again on 3 Nov 2026 for the pin (pinned, pinnedAt).
+const QUERY_VERSION = `${CACHE_VERSION}:pin-1103`;
 
 export interface PostMeta {
   slug: string;
@@ -77,6 +80,9 @@ export interface PostMeta {
   wordCount: number;
   /** Where the job is, for a written-up map job ("Kitchener, Ontario"): set by the pages that list posts (lib/post-places.ts). */
   place?: string;
+  /** Studio's "Pin to top", and when it was switched on (pinnedPost). */
+  pinned?: boolean;
+  pinnedAt?: string;
   /** Studio's "Search result overrides". */
   seoTitle?: string;
   seoDescription?: string;
@@ -124,6 +130,8 @@ export const META_FIELDS = `
   keywords,
   tags,
   seo,
+  pinned,
+  pinnedAt,
   "featured": featuredImage{ alt, hotspot, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": select(originAsset == asset._ref => origin, asset->source.url) },
   "declaredProducts": relatedProducts[]->name,
   "applications": relatedApplications[]->name,
@@ -156,6 +164,8 @@ export interface RawPost {
   keywords?: (string | null)[] | null;
   tags?: (string | null)[] | null;
   seo?: { metaTitle?: string | null; metaDescription?: string | null } | null;
+  pinned?: boolean | null;
+  pinnedAt?: string | null;
   featured?: {
     alt?: string | null;
     url?: string | null;
@@ -238,6 +248,7 @@ export function toMeta(r: RawPost): PostMeta | null {
     wordCount: words,
     seoTitle: r.seo?.metaTitle?.trim() || undefined,
     seoDescription: r.seo?.metaDescription?.trim() || undefined,
+    ...(r.pinned === true ? { pinned: true, pinnedAt: r.pinnedAt ?? undefined } : {}),
   };
 }
 

@@ -48,6 +48,11 @@ appear together; no card ever links to a page that doesn't exist yet.
 - **Systems this post is about**: they lead the "Systems in this piece" rail;
   any other HUB system named in the text is added after them automatically.
 - **Read time**: leave blank; the site works it out at 225 words a minute.
+- **Pin to top** (3 Nov 2026): the post leads the homepage blog section and
+  the top of /blog, with a small "Pinned" label, and isn't repeated under it.
+  One at a time: switching it on records the moment ("Pinned at"), the site
+  shows the post pinned last, and Studio warns while another post is pinned.
+  Switch it off (then Publish) to go back to the newest post first.
 
 ## AI drafts (every Tuesday and Thursday)
 

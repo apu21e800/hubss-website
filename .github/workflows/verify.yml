@@ -64,6 +64,10 @@ jobs:
       - name: Review page test
         run: npm run test:review
 
+      # Pin to top: the post pinned last leads (lib/pinned-post.ts). No network.
+      - name: Pinned post test
+        run: npm run test:pin
+
       # The Product Book edition covers every printed page exactly once and every
       # leaf's links resolve (lib/idea-book-edition.ts).
       - name: Product Book edition test

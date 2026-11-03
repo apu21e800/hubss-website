@@ -50,6 +50,7 @@
     "indexnow": "node scripts/indexnow-submit.mjs",
     "test:project-posts": "tsx scripts/test-project-posts.ts",
     "test:review": "tsx scripts/test-review.ts",
+    "test:pin": "tsx scripts/test-pinned-post.ts",
     "test:studio": "tsx scripts/test-edit-on-the-page.ts && tsx scripts/test-studio-words.ts",
     "flyers": "tsx scripts/flyers/build-flyers.ts"
   },

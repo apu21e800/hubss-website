@@ -2,6 +2,7 @@ import { defineArrayMember, defineField, defineType } from "sanity";
 import { EditIcon, InsertAboveIcon, ThListIcon } from "@sanity/icons";
 import { FIELD_NOTE_TYPES } from "../../lib/field-notes-taxonomy";
 import { bodyStyle, copyStyle, headingStyle } from "./_shared";
+import PinToTopInput from "../components/PinToTopInput";
 
 /**
  * A Field Notes post. Since Sep 2026 this is the only copy of the blog: the
@@ -104,6 +105,44 @@ export default defineType({
           if (scheduled && !value) return "Say when it should go live, or turn \"Scheduled\" off";
           return true;
         }),
+    }),
+    // Pin to top (3 Nov 2026): the pinned post leads the homepage's blog
+    // section and /blog (lib/blog.ts, pinnedPost). One at a time: the switch
+    // stamps `pinnedAt` (sanity/components/PinToTopInput.tsx) and the site
+    // shows the newest pin; Studio warns while another post is pinned.
+    defineField({
+      name: "pinned",
+      title: "Pin to top",
+      type: "boolean",
+      group: "content",
+      initialValue: false,
+      description: "Shows this post first in the homepage blog section and at the top of /blog. One pinned post at a time.",
+      components: { input: PinToTopInput },
+      validation: (r) =>
+        r
+          .custom(async (value, ctx) => {
+            if (value !== true || !ctx.document?._id) return true;
+            const id = ctx.document._id.replace(/^drafts\./, "");
+            const others = await ctx
+              .getClient({ apiVersion: "2024-01-01" })
+              .fetch<string[]>(
+                `*[_type == "blogPost" && pinned == true && !(_id in path("drafts.**")) && _id != $id] | order(pinnedAt desc).title`,
+                { id }
+              );
+            if (!others.length) return true;
+            const names = others.map((t) => `"${t}"`).join(", ");
+            return `Also pinned: ${names}. The site shows only the post pinned last. Switch the other one off so Studio matches the site.`;
+          })
+          .warning(),
+    }),
+    defineField({
+      name: "pinnedAt",
+      title: "Pinned at",
+      type: "datetime",
+      group: "content",
+      readOnly: true,
+      hidden: ({ parent }) => !parent?.pinned,
+      description: "Set when Pin to top is switched on. If two posts are pinned, the site shows the one pinned last.",
     }),
     // Doug reads first (27 Oct 2026, lib/review-first.ts): 21e8 ticks this
     // once it has read the draft, and the draft then shows, words and photo,
@@ -375,10 +414,11 @@ export default defineType({
   ],
 
   preview: {
-    select: { title: "title", publishedAt: "publishedAt", category: "category", media: "featuredImage", scheduled: "scheduled", scheduledFor: "scheduledFor" },
-    prepare: ({ title, publishedAt, category, media, scheduled, scheduledFor }) => ({
+    select: { title: "title", publishedAt: "publishedAt", category: "category", media: "featuredImage", scheduled: "scheduled", scheduledFor: "scheduledFor", pinned: "pinned" },
+    prepare: ({ title, publishedAt, category, media, scheduled, scheduledFor, pinned }) => ({
       title,
       subtitle: [
+        pinned ? "Pinned" : undefined,
         category,
         scheduled && scheduledFor
           ? `goes live ${new Date(scheduledFor).toLocaleString("en-CA", { timeZone: "America/Toronto", weekday: "short", day: "numeric", month: "short", hour: "numeric", minute: "2-digit" })}`

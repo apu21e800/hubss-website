@@ -500,10 +500,29 @@ these elements, and never draw a button, label or card by hand again:
   26 Oct 2026; the test fails a new pair that reads that way). The sheet's
   "proposed line" is the site's own line: scripts/gen-image-facts.ts fills
   it from seoAlt after writing the facts, and the test fails if they part.
-- The home page leads with the newest post that has a photo; nothing is
-  pinned. The client ticker (TrustedByMarquee) lists only names the Product
+- The home page leads with the newest post that has a photo, unless a post
+  is pinned (below, "Pin to top"). The client ticker (TrustedByMarquee) lists only names the Product
   Portfolio Book lists. The White Rock Pier pin has no photo until a real one
   arrives (the post's cover is 206px).
+
+## Pin to top (3 Nov 2026)
+Vern: a "Pin to top" switch on blog posts, one pin at a time, the site uses
+the newest. sanity/schemas/blogPost.ts `pinned` ("Pin to top", off by
+default) and `pinnedAt` (read only, shown while pinned):
+- sanity/components/PinToTopInput.tsx stamps `pinnedAt` when the switch is
+  turned on in the form and clears it when turned off, in the draft, so the
+  stamp goes live with the switch by any route (Publish, the daily run).
+  Opening an already pinned post writes nothing.
+- The switch warns (a warning, never a block) while another published post
+  is pinned, naming it. The list shows "Pinned" before the type.
+- lib/pinned-post.ts `pinnedPost` (no imports; `npm run test:pin`, CI): of
+  the pinned posts, the latest `pinnedAt`; a pin with no stamp ranks below
+  any stamped one. Nothing pinned, nothing changes.
+- The pinned post leads the homepage blog section (FeaturedBlogPost) and the
+  /blog front page (StoryLead, whatever its photo's size, ahead of pickLead's
+  rules), with components/blog/PinnedLabel.tsx, and is left out of the rows
+  under it and the library (frontSlugs), so it shows once. The section pages
+  (/blog/projects, /blog/guides) and the menu's cover story are unchanged.
 
 ## The blog's copy review (26 Oct 2026)
 Vern, 26 Oct: "a DDB AAAA creative agency QA pass ... make sure the

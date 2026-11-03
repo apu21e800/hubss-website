@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { BLOG_NAME } from "@/lib/field-notes-taxonomy";
 import PhotoImage from "@/components/ui/PhotoImage";
-import { getAllPosts } from "@/lib/blog";
+import { getAllPosts, pinnedPost } from "@/lib/blog";
+import PinnedLabel from "@/components/blog/PinnedLabel";
 import { badgeFor } from "@/lib/field-notes-taxonomy";
 import { altBesideTitle } from "@/lib/blog-taxonomy";
 import { HOMEPAGE_COPY, type SectionCopy } from "@/lib/homepage-copy";
@@ -23,7 +24,10 @@ export default async function FeaturedBlogPost({ copy = HOMEPAGE_COPY.insights }
   // driveway. That's a maintenance project.") and it claimed a 20-year
   // StreetBond life the product page does not. The newest project leads
   // instead, as on /blog.
-  const hero = posts.find((p) => p.featuredImage) ?? posts[0];
+  // Since 3 Nov 2026 a post pinned in Studio ("Pin to top") leads first,
+  // with a "Pinned" label; the newest post with a photo when none is.
+  const pinned = pinnedPost(posts);
+  const hero = pinned ?? posts.find((p) => p.featuredImage) ?? posts[0];
 
   // Next three posts for the secondary row
   const secondary = posts
@@ -131,7 +135,8 @@ export default async function FeaturedBlogPost({ copy = HOMEPAGE_COPY.insights }
             {/* Content — 2/5 on desktop */}
             <div className="md:col-span-2 p-6 md:p-10 flex flex-col justify-center">
               {/* Category + read time */}
-              <div className="flex items-center gap-3 mb-5">
+              <div className="flex flex-wrap items-center gap-3 mb-5">
+                {hero === pinned && <PinnedLabel />}
                 <span
                   className="text-xs font-semibold px-3 py-1 rounded-full"
                   style={{

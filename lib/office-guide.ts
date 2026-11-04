@@ -61,7 +61,8 @@ export const OFFICE_GUIDE: OfficeGuideContent = {
       when: "You have a job or a topic worth a page of its own.",
       steps: [
         "**Blog posts**, then the **+** at the top.",
-        "Give it a **Title** (under 70 characters if you can) and pick the **Type**: Case Study, Project Profile, Guide, White Paper or Article.",
+        "Give it a **Title** (under 70 characters if you can), then press **Generate** beside **URL slug**: that makes the page's address from the title.",
+        "Pick the **Type**: Case Study, Project Profile, Guide, White Paper or Article.",
         "**Excerpt**: two or three sentences. It is the text on the card and the opening line under the headline.",
         "Write the **Body**. A Heading 2 for each section, and no headings in capitals.",
         "**Featured photo**: HUB's own photo of the job, and in **Alt text** say in one line what is in it.",

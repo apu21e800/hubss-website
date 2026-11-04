@@ -14,6 +14,7 @@
 import type { SanityClient } from "@sanity/client";
 import { emailEditors } from "@/lib/editor-mail";
 import { agencyLink, reviewFirst, reviewKey, reviewLink, reviewLinkRecordId } from "@/lib/review-first";
+import { DOUGS_LINK_ID, DOUGS_LINK_TYPE } from "@/lib/review-link-record";
 
 export interface ReviewEmail {
   subject: string;
@@ -92,4 +93,25 @@ export async function sendReviewLinkOnce(client: SanityClient, now = new Date())
   await client.createIfNotExists({ _id: id, _type: "reviewLinkSent", sentAt: now.toISOString() });
   console.log("[review] the review links went to the editors");
   return "sent";
+}
+
+export type StudioLinkOutcome = "kept" | "written" | "no key";
+
+/**
+ * Doug's link in the Studio (4 Nov 2026): the private record the "Start
+ * here" pane reads (lib/review-link-record.ts, sanity/components/GuidePane.tsx),
+ * written only when the link it holds is not today's, so a secret changed in
+ * Vercel reaches his button the next morning and nothing is written on an
+ * ordinary day. Doug's link only, never Vern's: the agency link shows the
+ * drafts before they are read and the buttons that put things on Doug's
+ * page, and stays email-only.
+ */
+export async function keepDougsLinkInStudio(client: SanityClient, now = new Date()): Promise<StudioLinkOutcome> {
+  const url = reviewLink();
+  if (!url) return "no key";
+  const current = await client.fetch<string | null>(`*[_id == $id][0].url`, { id: DOUGS_LINK_ID });
+  if (current === url) return "kept";
+  await client.createOrReplace({ _id: DOUGS_LINK_ID, _type: DOUGS_LINK_TYPE, url, updatedAt: now.toISOString() });
+  console.log("[review] Doug's link is in the Studio");
+  return "written";
 }

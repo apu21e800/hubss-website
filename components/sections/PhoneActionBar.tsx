@@ -43,20 +43,29 @@ export default function PhoneActionBar({
   const [callOpen, setCallOpen] = useState(false);
   const officesId = useId();
 
+  // Read on every scroll (one frame at a time), not with an
+  // IntersectionObserver: an observer only reports a change of state, so a
+  // jump that carried the card from below the screen to above it between two
+  // frames (a link to a place far down the page, a restored scroll position)
+  // would have left the bar hidden for good (the review of #129).
   useEffect(() => {
     const card = document.querySelector("[data-pricing-strip]");
-    if (!card || typeof IntersectionObserver === "undefined") return;
-    const watchCard = new IntersectionObserver(
-      ([e]) => setPast(!e.isIntersecting && e.boundingClientRect.bottom < 0),
-      { threshold: 0 }
-    );
-    watchCard.observe(card);
+    if (!card) return;
     const foot = document.querySelector("footer");
-    const watchFoot = foot ? new IntersectionObserver(([e]) => setAtFoot(e.isIntersecting), { threshold: 0 }) : null;
-    if (foot && watchFoot) watchFoot.observe(foot);
+    let frame = 0;
+    const read = () => {
+      frame = 0;
+      setPast(card.getBoundingClientRect().bottom < 0);
+      setAtFoot(foot ? foot.getBoundingClientRect().top < window.innerHeight : false);
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(read); };
+    read();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
     return () => {
-      watchCard.disconnect();
-      watchFoot?.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame) cancelAnimationFrame(frame);
     };
   }, []);
 

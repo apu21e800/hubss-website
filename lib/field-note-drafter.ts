@@ -175,7 +175,13 @@ async function toolCall<T>(client: Anthropic, system: string, user: string, tool
  */
 export const WRITE_TIMEOUT_MS = 150_000;
 export const SHORT_TIMEOUT_MS = 60_000;
-export const draftClient = (timeout: number) => new Anthropic({ timeout, maxRetries: 1 });
+/**
+ * No retries (the review of #127): the SDK retries a timeout too, so a
+ * stalled write would have waited 150 s twice and the 300 s function died
+ * before the failure email. One attempt each: 150 + 60 + 60 at worst fits,
+ * and a failed attempt emails and the next run writes.
+ */
+export const draftClient = (timeout: number) => new Anthropic({ timeout, maxRetries: 0 });
 
 export async function writeDraft(brief: DraftBrief, facts: string, relatedPosts: string[]): Promise<Draft> {
   const client = draftClient(WRITE_TIMEOUT_MS);

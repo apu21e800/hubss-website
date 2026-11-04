@@ -330,7 +330,11 @@ export async function POST(req: NextRequest) {
     const logReason = hold?.reason ?? "";
 
     if (!process.env.RESEND_API_KEY) {
-      if (process.env.VERCEL_ENV === "production") {
+      // Production by the runtime's VERCEL_ENV, else the build's (next.config.ts
+      // inlines NEXT_PUBLIC_VERCEL_ENV), as lib/lead-counts.ts reads it: a
+      // project that stops exposing system variables to functions must not
+      // fall back to the dev path and say "sent" to a visitor.
+      if ((process.env.VERCEL_ENV || process.env.NEXT_PUBLIC_VERCEL_ENV) === "production") {
         // In production a missing key is an outage, never a quiet "sent" (4 Nov
         // 2026 audit): the visitor sees the same error as a refused message
         // and may call, and the daily counts show it as failed.

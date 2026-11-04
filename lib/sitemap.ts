@@ -74,22 +74,25 @@ export function buildSitemap(photos?: PhotoSources, posts: PostMeta[] = []): Met
     ? [abs(homeHeroSrc(homeHero.src, homeHero.alt || heroAlt(homeHero.src)))]
     : [abs("/images/hero/hero-1.jpg")];
 
+  // No lastModified on the pages below (4 Nov 2026): it was the build's
+  // clock, so every static page, product and application changed "today" on
+  // every deploy, and Google stops trusting a lastmod that moves without the
+  // page (and then ignores it for the posts too, whose dates are real).
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: BASE_URL,
-      lastModified: new Date(),
       changeFrequency: "daily",
       priority: 1.0,
       images: homeImages,
     },
-    { url: `${BASE_URL}/products`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
-    { url: `${BASE_URL}/applications`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
+    { url: `${BASE_URL}/products`, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${BASE_URL}/applications`, changeFrequency: "weekly", priority: 0.9 },
     // /applications/public-art is in lib/applications.ts since round 3, so the
     // application routes below list it with its own photos. Its hand-made entry
     // here listed it twice (QA, 28 Sep 2026).
-    { url: `${BASE_URL}/gallery`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
-    { url: `${BASE_URL}/patterns`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE_URL}/blog`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE_URL}/gallery`, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE_URL}/patterns`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE_URL}/blog`, changeFrequency: "weekly", priority: 0.8 },
     // The Insights sections (Projects and Guides; three, with Articles, from
     // 28 Sep to 26 Oct 2026; the five type hubs before). Each is an indexable collection page
     // carrying its own CollectionPage/ItemList schema, so they belong in the
@@ -97,26 +100,25 @@ export function buildSitemap(photos?: PhotoSources, posts: PostMeta[] = []): Met
     // The old hub addresses redirect, so they are not listed.
     ...INSIGHTS_SECTIONS.map((s) => ({
       url: `${BASE_URL}/blog/${s.slug}`,
-      lastModified: new Date(),
       changeFrequency: "weekly" as const,
       priority: 0.75,
     })),
-    { url: `${BASE_URL}/resources`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE_URL}/resources`, changeFrequency: "monthly", priority: 0.7 },
     // The edition (every word of the book in HTML) and the printed reader's
     // first page: two entries, not 144. Every page route exists and is
     // prerendered, but they are 144 near-identical images of one book and
     // listing them all would drown the rest of the sitemap in them.
     ...(catalogueReady
       ? [
-          { url: `${BASE_URL}${ideaBook.href}`, lastModified: new Date(), changeFrequency: "yearly" as const, priority: 0.7 },
+          { url: `${BASE_URL}${ideaBook.href}`, changeFrequency: "yearly" as const, priority: 0.7 },
         ]
       : []),
-    { url: `${BASE_URL}${ideaBook.requestHref}`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.5 },
-    { url: `${BASE_URL}/about`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.6 },
-    { url: `${BASE_URL}/contact`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.6 },
-    { url: `${BASE_URL}/lunch-learn`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE_URL}/privacy`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.2 },
-    { url: `${BASE_URL}/terms`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.2 },
+    { url: `${BASE_URL}${ideaBook.requestHref}`, changeFrequency: "yearly", priority: 0.5 },
+    { url: `${BASE_URL}/about`, changeFrequency: "yearly", priority: 0.6 },
+    { url: `${BASE_URL}/contact`, changeFrequency: "yearly", priority: 0.6 },
+    { url: `${BASE_URL}/lunch-learn`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE_URL}/privacy`, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${BASE_URL}/terms`, changeFrequency: "yearly", priority: 0.2 },
   ];
 
   const productRoutes: MetadataRoute.Sitemap = products
@@ -140,7 +142,6 @@ export function buildSitemap(photos?: PhotoSources, posts: PostMeta[] = []): Met
       const images = onePerPhoto([...heroUrls.map(abs), ...sitemapImages(galleryUrls(gallery))]);
       return {
         url: `${BASE_URL}/products/${p.slug}`,
-        lastModified: new Date(),
         changeFrequency: "weekly" as const,
         priority: 0.9,
         images,
@@ -154,7 +155,6 @@ export function buildSitemap(photos?: PhotoSources, posts: PostMeta[] = []): Met
     const images = onePerPhoto([abs(heroUrl), ...sitemapImages(galleryUrls(gallery))]);
     return {
       url: `${BASE_URL}/applications/${a.slug}`,
-      lastModified: new Date(),
       changeFrequency: "weekly" as const,
       priority: 0.9,
       images,
@@ -172,7 +172,7 @@ export function buildSitemap(photos?: PhotoSources, posts: PostMeta[] = []): Met
     const hero = postHeroSrc(p);
     return {
       url: `${BASE_URL}/blog/${p.slug}`,
-      lastModified: new Date(p.date),
+      lastModified: new Date(p.updated),
       changeFrequency: "monthly" as const,
       priority: 0.7,
       images: hero ? [abs(hero)] : undefined,

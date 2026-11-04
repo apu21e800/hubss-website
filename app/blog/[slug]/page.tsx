@@ -185,7 +185,7 @@ export default async function BlogPostPage({ params }: Props) {
     headline: post.title,
     description: post.excerpt,
     datePublished: post.date,
-    dateModified: post.date,
+    dateModified: post.updated,
     articleSection: section.plural,
     wordCount: post.wordCount,
     inLanguage: "en-CA",
@@ -225,7 +225,7 @@ export default async function BlogPostPage({ params }: Props) {
     url: postUrl,
     image: post.featuredImage
       ? (isSanityImage(post.featuredImage) ? sanitySized(post.featuredImage, 1200, 80, postHeroAlt(post)) : `https://hubss.com${post.featuredImage}`)
-      : "https://hubss.com/images/og-default.jpg",
+      : "https://hubss.com/images/og/default.jpg",
   };
 
   // Breadcrumb passes through the section, so the trail matches the site's

@@ -309,6 +309,31 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
   // screen. Vern, 27 Oct, at 1519x790: "the bottom of the large callout
   // cards gets cut off slightly at the bottom". Elsewhere it is unchanged.
   const hero = Title === "h1";
+  // On a phone the card stacks: host, title, lead, benefits, the phones, and
+  // only then the form, 840px down a 664px screen (the phone walk, 4 Nov
+  // 2026: no button on the first screen the display ads land on). Two
+  // things, below lg, on /lunch-learn only: a "Book your session" button
+  // under the lead that goes to the form, and a #book arrival (every "Book a
+  // Lunch & Learn" button on the site) lands on the form itself, not the
+  // card's top. A laptop has the form beside the words and is unchanged.
+  // One id, on /lunch-learn only (the card renders once there; /ll-preview
+  // renders it three times, as h2s, and gets no id).
+  const formId = "book-form";
+  useEffect(() => {
+    if (!hero || window.location.hash !== "#book") return;
+    if (!window.matchMedia("(max-width: 1023px)").matches) return;
+    const panel = document.getElementById(formId);
+    const book = document.getElementById("book");
+    if (!panel || !book) return;
+    // This runs after hydration, a second or two in. Only if the page still
+    // sits where the browser's own #book jump left it (the card's top edge
+    // under the bar); a visitor already reading is not moved.
+    const top = book.getBoundingClientRect().top;
+    if (top < -40 || top > 200) return;
+    // html's scroll-padding-top keeps it clear of the bar.
+    const id = requestAnimationFrame(() => panel.scrollIntoView({ block: "start", behavior: "auto" }));
+    return () => cancelAnimationFrame(id);
+  }, [hero, formId]);
   return (
     <section
       /* the brand's closing statement, not part of the reading */
@@ -387,6 +412,19 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                   team. Canadian case studies, spec language you can use, and samples you can hold.
                 </p>
 
+                {/* Phones and tablets, /lunch-learn only: the form is a screen
+                    down, so the first screen gets the button (see `hero`). */}
+                {hero && !hideForm && (
+                  <div className="lg:hidden mb-8">
+                    <a href={`#${formId}`} className="btn-accent btn-block">
+                      Book your session
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M12 5v14" /><path d="M6 13l6 6 6-6" />
+                      </svg>
+                    </a>
+                  </div>
+                )}
+
                 <div className="ll-benefits space-y-3.5 mb-9">
                   {BENEFITS.map((b) => (
                     <div key={b} className="flex items-start gap-3">
@@ -422,7 +460,7 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
 
               {/* Form side — inset panel */}
               <div className="ll-formcol lg:col-span-5 p-5 sm:p-7 lg:p-8 lg:pl-2 flex">
-                <div className="ll-panel relative w-full rounded-xl p-6 sm:p-7 self-center" style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}>
+                <div id={hero ? formId : undefined} className="ll-panel relative w-full rounded-xl p-6 sm:p-7 self-center" style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}>
                   {hideForm ? (
                     <div>
                       <FormTitle className="font-bold text-lg mb-1" style={{ color: "var(--text-primary)" }}>Book your session</FormTitle>

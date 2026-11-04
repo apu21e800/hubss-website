@@ -52,7 +52,8 @@
     "test:review": "tsx scripts/test-review.ts",
     "test:pin": "tsx scripts/test-pinned-post.ts",
     "test:studio": "tsx scripts/test-edit-on-the-page.ts && tsx scripts/test-studio-words.ts",
-    "flyers": "tsx scripts/flyers/build-flyers.ts"
+    "flyers": "tsx scripts/flyers/build-flyers.ts",
+    "test:sitemap": "tsx scripts/test-sitemap-xml.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",

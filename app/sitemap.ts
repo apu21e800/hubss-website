@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { buildSitemap } from "@/lib/sitemap";
+import { xmlSafeSitemap } from "@/lib/sitemap-xml";
 import { getMergedProducts } from "@/lib/products.server";
 import { getMergedApplications } from "@/lib/applications.server";
 import { getAllPosts } from "@/lib/blog";
@@ -18,13 +19,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getAllPosts(),
     getSanityPageContent("homepage"),
   ]);
-  return buildSitemap(
-    {
-      products: new Map(products.map((p) => [p.slug, p])),
-      applications: new Map(applications.map((a) => [a.slug, a])),
-      // The photo the homepage hero shows (app/page.tsx reads the same field).
-      homeHero: toPhoto(homepage?.homepageHeroImage, ""),
-    },
-    posts
+  // Every address XML-safe: Next prints them as they are, and the Sanity
+  // photo addresses carry "&" (lib/sitemap-xml.ts, xmlText).
+  return xmlSafeSitemap(
+    buildSitemap(
+      {
+        products: new Map(products.map((p) => [p.slug, p])),
+        applications: new Map(applications.map((a) => [a.slug, a])),
+        // The photo the homepage hero shows (app/page.tsx reads the same field).
+        homeHero: toPhoto(homepage?.homepageHeroImage, ""),
+      },
+      posts
+    )
   );
 }

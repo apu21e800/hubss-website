@@ -508,8 +508,15 @@ export default function CanadaMap({ revealOnMount = false }: { revealOnMount?: b
   // stuttered (phone walk, 4 Nov 2026).
   useEffect(() => {
     if (!revealOnMount) return;
-    const id = requestAnimationFrame(() =>
-      frameRef.current?.scrollIntoView({ behavior: "auto", block: "start" }));
+    // scrollWindowInstantly, not scrollIntoView({ behavior: "auto" }): "auto"
+    // follows html's scroll-behavior: smooth (the review of #128), and the
+    // frame lands under the bar as html's scroll-padding-top says.
+    const id = requestAnimationFrame(() => {
+      const frame = frameRef.current;
+      if (!frame) return;
+      const pad = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+      scrollWindowInstantly(frame.getBoundingClientRect().top + window.scrollY - pad);
+    });
     return () => cancelAnimationFrame(id);
     // Once, on mount.
     // eslint-disable-next-line react-hooks/exhaustive-deps

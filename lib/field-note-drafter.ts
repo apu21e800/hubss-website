@@ -164,8 +164,21 @@ async function toolCall<T>(client: Anthropic, system: string, user: string, tool
   return block.input as T;
 }
 
+/**
+ * Every Claude call here is bounded (4 Nov 2026 audit). The SDK's default is a
+ * ten-minute timeout with two retries, inside functions Vercel stops at 300 s
+ * (app/api/cron/draft-field-note, app/api/cron/social-drafts): one call that
+ * hung had the whole run killed with no catch, no failure email, and the
+ * daily run's later steps skipped for the day. The article takes about a
+ * minute to write; the check and the rewrite much less. A timeout is a
+ * failure the catch can report, and the plan item stays Ready for next time.
+ */
+export const WRITE_TIMEOUT_MS = 150_000;
+export const SHORT_TIMEOUT_MS = 60_000;
+export const draftClient = (timeout: number) => new Anthropic({ timeout, maxRetries: 1 });
+
 export async function writeDraft(brief: DraftBrief, facts: string, relatedPosts: string[]): Promise<Draft> {
-  const client = new Anthropic();
+  const client = draftClient(WRITE_TIMEOUT_MS);
   const user = [
     `Write an Insights article.`,
     ``,
@@ -188,7 +201,7 @@ export async function writeDraft(brief: DraftBrief, facts: string, relatedPosts:
 }
 
 export async function checkDraft(draft: Draft, facts: string): Promise<FactCheck> {
-  const client = new Anthropic();
+  const client = draftClient(SHORT_TIMEOUT_MS);
   const system = `You fact-check Insights articles for HUB Surface Systems before a human editor publishes them. You are strict and literal. You compare the DRAFT with the FACTS and list every statement in the draft about HUB, its systems, specifications, numbers, standards, places, projects or clients that the FACTS do not support, including numbers that differ, capabilities the FACTS don't claim, and any named city, agency, project or client not in the FACTS. General context that isn't about HUB and has no numbers (what Vision Zero is, why contrast helps) is fine; don't list it. A figure from the FACTS' outside evidence is supported only when it is quoted as written, the same paragraph gives that study's limits, and it is applied only to what the study measured (a crosswalk-visibility finding used for a decorative design, or a study of one coating used for another, is unsupported): list any that fall short. Links are fine. If everything is supported, the verdict is "clean" and the list is empty.`;
   const user = `FACTS:\n${facts}\n\nDRAFT:\n# ${draft.title}\n\n${draft.excerpt}\n\n${draft.body}\n\nReport with the report tool.`;
   const result = await toolCall<unknown>(client, system, user, REPORT, 3000);
@@ -325,7 +338,7 @@ export async function styleRewrite(pieces: CopyPiece[], opts: { model: string; s
     const list = items.map(({ piece, f }, i) => `${i + 1}. [${piece.label}] ${f.text}\n   Problem: ${problems(f.issues).join(" ")}`);
     const user = `Rewrite these ${items.length} sentence(s), then save them with save_rewrites.\n\n${list.join("\n\n")}`;
     const res = await toolCall<{ rewrites?: { n: number; rewrite: string }[] }>(
-      new Anthropic(), `${opts.system}\n\n${EDITOR}`, user, REWRITE, 4000, opts.model
+      draftClient(SHORT_TIMEOUT_MS), `${opts.system}\n\n${EDITOR}`, user, REWRITE, 4000, opts.model
     );
     const growth = opts.maxGrowth ?? 1.3;
     for (const r of res.rewrites ?? []) {

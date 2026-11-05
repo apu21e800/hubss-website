@@ -49,6 +49,10 @@ Copy .env.local.example → .env.local and fill in:
 - CONTACT_EMAIL — receiving address (defaults to info@hubss.com)
 - FORM_SCREENED_EMAIL — where the forms send what they hold back from
   info@hubss.com (defaults to cleve.stordy@hubss.com). Nothing is dropped.
+- LEAD_COPY_EMAILS — who is cc'd on every delivered form message (contact,
+  Lunch & Learn, printed Product Book), comma-separated; defaults to
+  vernon@hubss.com,cleve.stordy@hubss.com (Vern, 5 Nov 2026). "none" turns
+  copies off. Held messages are never copied: they already go to Vern.
 - ANTHROPIC_API_KEY — the Insights drafter and the forms' spam screen
 - GA4_API_SECRET: the GA4 Measurement Protocol secret for the forms' leads
   (Production only; see "Leads in GA4" under Forms and spam)

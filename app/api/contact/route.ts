@@ -17,6 +17,16 @@ const CATALOGUE_TO_EMAIL = process.env.CATALOGUE_EMAIL ?? TO_EMAIL;
 // filled honeypot): Vern's inbox, marked [Screened], so a wrong call is one
 // forward away. Nothing a visitor sends is ever thrown away.
 const SCREENED_TO_EMAIL = process.env.FORM_SCREENED_EMAIL || "cleve.stordy@hubss.com";
+// Copies of every delivered lead (Vern, 5 Nov 2026: "When Doug gets email
+// form inquiries for things like lunch and learns, etc, make sure that
+// vernon@hubss.com and cleve.stordy@hubss.com also get them"). Cc'd on what
+// goes to the office, never on a held message (that already goes to Vern).
+// LEAD_COPY_EMAILS (comma-separated) replaces the list; set it to "none" for
+// no copies.
+const LEAD_COPY_EMAILS = (process.env.LEAD_COPY_EMAILS ?? "vernon@hubss.com,cleve.stordy@hubss.com")
+  .split(",")
+  .map((s) => s.trim())
+  .filter((s) => s && s.toLowerCase() !== "none");
 
 const FORM_TYPES = ["contact", "lunch-learn", "newsletter", "catalogue-print"] as const;
 type FormType = (typeof FORM_TYPES)[number];
@@ -352,9 +362,14 @@ export async function POST(req: NextRequest) {
     // A reply-to the mail server would refuse ("jane@gmail") would cost the
     // whole message; the address is in the body either way.
     const replyTo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email ?? "") ? body.email : undefined;
+    const officeTo = hold ? SCREENED_TO_EMAIL : body.formType === "catalogue-print" ? CATALOGUE_TO_EMAIL : TO_EMAIL;
+    const copies = hold
+      ? []
+      : LEAD_COPY_EMAILS.filter((a) => a.toLowerCase() !== officeTo.toLowerCase());
     const { error } = await resend.emails.send({
       from: "HUB Surface Systems <noreply@hubss.com>",
-      to: [hold ? SCREENED_TO_EMAIL : body.formType === "catalogue-print" ? CATALOGUE_TO_EMAIL : TO_EMAIL],
+      to: [officeTo],
+      ...(copies.length ? { cc: copies } : {}),
       ...(replyTo ? { replyTo } : {}),
       subject: `${hold ? "[Screened] " : ""}${buildSubjectLine(body)}`,
       html: buildEmailHtml(body, hold, source),

@@ -47,7 +47,7 @@ import { draftProjectArticles, publishDueDrafts } from "@/lib/project-posts";
 import { sanityWriteClient } from "@/lib/sanity.write";
 import { emailEditors } from "@/lib/editor-mail";
 import { logLeadSummary } from "@/lib/lead-counts";
-import { sendReviewLinkOnce } from "@/lib/review-link";
+import { keepDougsLinkInStudio, sendReviewLinkOnce } from "@/lib/review-link";
 import { scheduleCalendarPosts } from "@/lib/social-calendar";
 
 export const maxDuration = 300;
@@ -95,6 +95,14 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   } catch (err) {
     out.reviewLink = { error: errorText(err) };
     console.error(`[review] link email failed: ${errorText(err)}`);
+  }
+  // Doug's link, for the Studio's "Start here" button (lib/review-link.ts).
+  // Never stops the run.
+  try {
+    out.studioLink = await keepDougsLinkInStudio(client.withConfig({ timeout: 10_000, maxRetries: 0 }), now);
+  } catch (err) {
+    out.studioLink = { error: errorText(err) };
+    console.error(`[review] Studio link failed: ${errorText(err)}`);
   }
 
   // 1. The blog: scheduled drafts whose time has come.

@@ -4,6 +4,7 @@
  * Plain words for a non-technical editor (15 Oct 2026; Vern: "what does not
  * live mean? What's the difference between insights and insights plan? maybe
  * better to just call it blog"):
+ *   📖 Start here     (Doug's guide, with his review page's button)
  *   📄 Website Pages  → singletons per page (no confusing "create new" list)
  *   📦 Products, Applications
  *   ✍️  Blog posts      (the articles; the site calls the blog "Insights")
@@ -34,7 +35,12 @@ import {
   BulbOutlineIcon,
   ImagesIcon,
   ShareIcon,
+  BookIcon,
 } from "@sanity/icons";
+import GuidePane from "./components/GuidePane";
+
+/** The first item's title: Doug's guide (lib/office-guide.ts). */
+export const GUIDE_ITEM_TITLE = "Start here: how to update the site";
 
 // Page document IDs — set by the May 2026 migration
 const PAGE_IDS = {
@@ -48,6 +54,18 @@ export const structure: StructureResolver = (S) =>
   S.list()
     .title("HUB Surface Systems")
     .items([
+      // ── Start here (4 Nov 2026, as Square One's Studio since 23 Oct) ─────────
+      // Doug's one-page guide (lib/office-guide.ts) with his review page's
+      // button above it, first; the same guide to bookmark is
+      // hubss.com/studio/guide.
+      S.listItem()
+        .id("guide")
+        .title(GUIDE_ITEM_TITLE)
+        .icon(BookIcon)
+        .child(S.component(GuidePane).id("guide-page").title("How to update the site")),
+
+      S.divider(),
+
       // ── Website Pages (singletons per page) ─────────────────────────────────
       S.listItem()
         .title("Website Pages")
@@ -129,14 +147,16 @@ export const structure: StructureResolver = (S) =>
       // Publishing one has the next daily run write posts from it for Buffer;
       // with the story filled in it becomes a Projects article as well
       // (lib/project-posts.ts, 19 Oct 2026). ("From the field" until 15 Oct
-      // 2026; the stream keeps that name in the logs.)
+      // 2026; the stream keeps that name in the logs.) The title promised
+      // "it goes to social the next morning" until 4 Nov 2026: with Doug
+      // reviewing first (lib/review-first.ts) nothing goes out until his OK.
       S.listItem()
         .id("fromTheField")
         .title("Job photos for social")
         .icon(ImagesIcon)
         .child(
           S.documentTypeList("fieldPost")
-            .title("Job photos · publish one and it goes to social the next morning; add the story and 21e8 writes it up as a Projects article")
+            .title("Job photos · publish one and 21e8 writes its social posts the next morning, for your OK; add the story and it writes a Projects article too")
             .defaultOrdering([{ field: "date", direction: "desc" }])
         ),
 
@@ -151,7 +171,7 @@ export const structure: StructureResolver = (S) =>
         .icon(ShareIcon)
         .child(
           S.documentTypeList("socialLog")
-            .title("Sent to Buffer · read only · approve the posts themselves in Buffer")
+            .title("Sent to Buffer · read only · what was written for social and how its style check went; the posts wait for Doug's OK")
             .defaultOrdering([{ field: "createdAt", direction: "desc" }])
             .initialValueTemplates([])
         ),

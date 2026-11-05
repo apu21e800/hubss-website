@@ -1,7 +1,10 @@
 # How to publish on hubss.com
 
 For Doug. One page. Everything below happens in Studio, at **hubss.com/studio**
-(sign in with Google; Vern sends the invitation the first time).
+(sign in with Google; Vern sends the invitation the first time). The short
+version is the Studio's first item, **Start here: how to update the site**,
+with the button that opens your review page; it is also at
+hubss.com/studio/guide, to bookmark on a phone.
 
 ## 0. Edit on the page (the quickest way)
 
@@ -32,18 +35,18 @@ that browser. Press **Exit preview**; nobody else ever sees it.
 
 ## 1. Fix something on a live article
 
-Open **Insights**, click the article, change the words, press **Publish**
+Open **Blog posts**, click the article, change the words, press **Publish**
 (top right). The site updates within a few seconds. Saving without pressing
 Publish changes nothing on the site, so you can leave a half-finished edit
 overnight.
 
 ## 2. Publish a new article
 
-**Insights → the + button**, then fill in, top to bottom:
+**Blog posts → the + button**, then fill in, top to bottom:
 
 - **Title:** under 70 characters if you can.
 - **Type:** Case Study, Project Profile, Guide, White Paper or Article. It
-  sets the badge and which Insights hub the piece appears in.
+  sets the badge and which section of Projects lists the piece.
 - **Publish date:** the date printed on the article. The first Publish sets
   it to that moment, so you can leave it; change it after publishing if the
   article needs another date. A future date does not hold it back.
@@ -157,7 +160,7 @@ means:
 - **"Learn more", "Explore" or "Discover" on a button**: say what happens,
   like "Book a Lunch & Learn".
 - **"Catalogue"**, **"Idea Book"**, **"Product Book"**: the printed book is the Product Portfolio Book (Doug's name, 17 Oct 2026).
-- **"Field Notes"**: the blog is called Insights.
+- **"Field Notes"**, **"Insights"**: the blog is called Projects (since 17 Oct 2026).
 - **Title Case** (Every Word With A Capital): headings, buttons and labels
   take a capital on the first word and on names only: "Where the colour goes".
   The older articles' titles are yours to decide; the warning only points

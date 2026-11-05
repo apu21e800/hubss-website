@@ -18,6 +18,10 @@ export const metadata = buildMetadata({
   title: "Lunch & Learn for engineers, landscape architects and planners",
   description: "A free Lunch & Learn for engineering, landscape architecture and planning teams: Canadian case studies, spec language and samples. Your office or online.",
   slug: "lunch-learn",
+  // The page's own share card (app/lunch-learn/opengraph-image.tsx). Named
+  // here because an explicit openGraph.images in metadata is kept over the
+  // file convention's (checked on the local build, 4 Nov 2026).
+  image: "/lunch-learn/opengraph-image",
 });
 
 // Service schema: Lunch & Learn is a free technical session, eligible for
@@ -43,6 +47,17 @@ const serviceSchema = {
     availability: "https://schema.org/InStock",
     url: "https://hubss.com/lunch-learn",
   },
+};
+
+// The trail, as the product and application pages carry one (4 Nov 2026):
+// Home, then this page.
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://hubss.com" },
+    { "@type": "ListItem", position: 2, name: "Lunch & Learn", item: "https://hubss.com/lunch-learn" },
+  ],
 };
 
 export default async function LunchLearnPage() {
@@ -104,6 +119,7 @@ export default async function LunchLearnPage() {
     <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <JsonLd data={faqSchema} />
       <JsonLd data={serviceSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <Nav />
 
       {/* The page leads with the same card every other page uses.

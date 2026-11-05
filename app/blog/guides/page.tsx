@@ -11,8 +11,10 @@ const SECTION = SECTION_BY_KEY.guides;
 
 export const metadata: Metadata = buildMetadata({
   title: "Specification Guides · Choosing & Defending a Surface System",
+  // Under 155 characters (4 Nov 2026): the 203-character line lost its end
+  // in Google's snippet.
   description:
-    "Decision support for engineers, landscape architects and procurement: comparisons, cost over the service life, spec language, freeze-thaw failure modes and where decorative pavement is heading in Canada.",
+    "Guides for engineers, landscape architects and procurement: comparing systems, cost over the service life, spec language and freeze-thaw failure modes.",
   slug: "blog/guides",
 });
 

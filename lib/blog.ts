@@ -48,13 +48,21 @@ export type PostCategory = FieldNoteType;
 // A new cache key, so a cached list from before can't hand the pages posts
 // without them.
 // Bumped again on 3 Nov 2026 for the pin (pinned, pinnedAt).
-const QUERY_VERSION = `${CACHE_VERSION}:pin-1103`;
+// And on 4 Nov 2026 for _updatedAt (updated).
+const QUERY_VERSION = `${CACHE_VERSION}:updated-1104`;
 
 export interface PostMeta {
   slug: string;
   title: string;
   /** YYYY-MM-DD, the publish date as a Canadian reader's calendar shows it. */
   date: string;
+  /**
+   * When the document was last published (Sanity's _updatedAt on the live
+   * document, ISO), for the Article schema's dateModified and the sitemap:
+   * until 4 Nov 2026 both said the publish date, so an edited post never
+   * read as updated. Never earlier than the publish date.
+   */
+  updated: string;
   excerpt: string;
   readTime: string;
   /** Sanity CDN URL. Render it with components/ui/PhotoImage, never plain next/image. */
@@ -124,6 +132,7 @@ export const META_FIELDS = `
   title,
   "slug": slug.current,
   publishedAt,
+  _updatedAt,
   excerpt,
   readTime,
   category,
@@ -158,6 +167,7 @@ export interface RawPost {
   title?: string | null;
   slug?: string | null;
   publishedAt?: string | null;
+  _updatedAt?: string | null;
   excerpt?: string | null;
   readTime?: string | null;
   category?: string | null;
@@ -200,6 +210,14 @@ export function postDate(iso: string): string {
   return TORONTO_DAY.format(new Date(iso));
 }
 
+/** The later of the publish date and the document's last change, ISO. */
+export function postUpdated(r: Pick<RawPost, "publishedAt" | "_updatedAt">): string {
+  const published = r.publishedAt ? new Date(r.publishedAt) : new Date(0);
+  const changed = r._updatedAt ? new Date(r._updatedAt) : published;
+  const later = Number.isFinite(changed.getTime()) && changed > published ? changed : published;
+  return later.toISOString();
+}
+
 function tableWords(r: RawPost): string {
   return strings(r.tableText).join(" ").replace(/\*\*/g, "");
 }
@@ -231,6 +249,7 @@ export function toMeta(r: RawPost): PostMeta | null {
     slug,
     title,
     date: postDate(r.publishedAt),
+    updated: postUpdated(r),
     excerpt,
     readTime: r.readTime?.trim() || readTimeFor(words),
     featuredImage: r.featured?.url?.trim() || undefined,

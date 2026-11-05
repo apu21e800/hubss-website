@@ -213,6 +213,13 @@ const nextConfig: NextConfig = {
       { source: "/durashield", destination: "/products/durashield", permanent: true },
       { source: "/premark", destination: "/products/premark", permanent: true },
       { source: "/airmark", destination: "/products/airmark", permanent: true },
+      // The paths the Google Ads show (claude/HUBSS-google-ads-plan-2026-10.md:
+      // "shown as hubss.com/thermoplastic/premark"), typed in by hand. The
+      // others (/stamped-asphalt/streetprint, /crosswalks, /streetbond,
+      // /decomark) already land; these three were 404s (4 Nov 2026).
+      { source: "/thermoplastic/premark", destination: "/products/premark", permanent: true },
+      { source: "/bike-lanes", destination: "/applications/bike-lanes", permanent: true },
+      { source: "/bus-lanes", destination: "/applications/bus-lanes", permanent: true },
       // Applications
       { source: "/crosswalks", destination: "/applications/crosswalks", permanent: true },
       { source: "/bike-bus-lanes", destination: "/applications/bike-lanes", permanent: true },

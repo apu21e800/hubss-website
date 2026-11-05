@@ -127,7 +127,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     // its very bottom, and glided up for most of a second; a touch on the way
     // stopped it there (Vern and Doug, 23 Oct 2026: "some clicks start users
     // at the bottom of the page"). In-page anchors (#map) still glide.
-    <html lang="en" data-theme="mixed" data-scroll-behavior="smooth" suppressHydrationWarning>
+    <html lang="en-CA" data-theme="mixed" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         {/* Theme bootstrap — runs before first paint so a saved "light" never
             flashes dark. Order: ?theme= in the URL (persisted, so a review link

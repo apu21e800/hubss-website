@@ -35,6 +35,7 @@ import { getSiteSettings } from "@/lib/sanity.queries";
 import { telHref } from "@/lib/site-settings";
 import { lunchLearnHref } from "@/lib/lunch-learn";
 import PricingStrip from "@/components/sections/PricingStrip";
+import PhoneActionBar from "@/components/sections/PhoneActionBar";
 
 export const revalidate = 3600;
 
@@ -358,6 +359,7 @@ export default async function ProductPage({ params }: Props) {
               heading="Price a project"
               offices={offices}
               contactHref={`/contact?project=${encodeURIComponent(product.name)}&from=product`}
+              lunchLearnHref={lunchLearnHref(product.name, "product")}
             />
             {/* Lead with the catalogue's positioning spread where we have one.
                 The heading used to read "About <product>" — a filing label, in
@@ -675,6 +677,10 @@ export default async function ProductPage({ params }: Props) {
       </div>
       <LunchLearn compact topic={product.name} from="product" />
       <Footer />
+      {/* Phones and tablets: Call and Send the project at the foot of the
+          screen once the first-screen card is gone (components/sections/PhoneActionBar.tsx).
+          Outside the paper surface, so it wears the dark tokens. */}
+      <PhoneActionBar offices={offices} contactHref={`/contact?project=${encodeURIComponent(product.name)}&from=product`} />
     </main>
   );
 }

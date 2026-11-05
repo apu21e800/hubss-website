@@ -108,7 +108,10 @@ function framing(source: SocialSource): string[] {
 }
 
 export async function writeSocialCopy(source: SocialSource, links: Record<keyof SocialCopy, string>): Promise<SocialCopy> {
-  const client = new Anthropic();
+  // Bounded, as lib/field-note-drafter.ts explains: a hung call must fail
+  // inside the daily run's budget, not kill the run.
+  // One attempt: a retried timeout would hold the daily run's later steps (lib/field-note-drafter.ts, draftClient).
+  const client = new Anthropic({ timeout: 90_000, maxRetries: 0 });
   const head = source.kind && source.kind !== "article" ? `${source.type.toUpperCase()}: ${source.title}` : `ARTICLE (${source.type}): ${source.title}`;
   const user = [
     ...framing(source),

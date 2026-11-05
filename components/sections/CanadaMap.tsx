@@ -79,6 +79,12 @@ const PHONE_BOUNDS: [[number, number], [number, number]] = (() => {
   return [[w - 1.2, s - 0.8], [e + 1.2, n + 0.8]];
 })();
 const PANEL_W = 368;
+/**
+ * The longest the shield over a loading map stays (the "cm-shield" effect):
+ * "See the work" caps its own wait at 2.5 s; a map still drawing at 4 s is
+ * handed back to the finger whatever it has.
+ */
+const SHIELD_MAX_MS = 4000;
 /** One tour stop: the flight, then time to look. */
 const TOUR_FLIGHT_MS = 2600;
 const TOUR_STOP_MS = 8200;
@@ -394,6 +400,12 @@ export default function CanadaMap({ revealOnMount = false }: { revealOnMount?: b
   const reducedMotion = useMedia("(prefers-reduced-motion: reduce)");
 
   const [loaded, setLoaded] = useState(false);
+  // The first frame with every tile in view drawn (the effect below, the same
+  // moment "hubss:map-ready" fires), or SHIELD_MAX_MS, whichever is first.
+  const [ready, setReady] = useState(false);
+  // The strip's photos mount at an idle moment after the style is in, not
+  // in the same task as the map's first draw (below, "cm-shield").
+  const [stripPhotos, setStripPhotos] = useState(false);
   const [styleFailed, setStyleFailed] = useState(false);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -490,15 +502,53 @@ export default function CanadaMap({ revealOnMount = false }: { revealOnMount?: b
   // itself, under the bar, with the strip of projects below it; the heading
   // and the filters are a scroll up (phone QA, 24 Oct 2026: the frame began
   // 745px down an 844px screen, so the tap opened a heading and three rows
-  // of filters and no map).
+  // of filters and no map). The jump is instant, as "See the work" jumps
+  // under its dark (components/sections/SeeTheWork.tsx): a smooth scroll
+  // here ran on the same frames as the map's first seconds of work and
+  // stuttered (phone walk, 4 Nov 2026).
   useEffect(() => {
     if (!revealOnMount) return;
-    const id = requestAnimationFrame(() =>
-      frameRef.current?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" }));
+    // scrollWindowInstantly, not scrollIntoView({ behavior: "auto" }): "auto"
+    // follows html's scroll-behavior: smooth (the review of #128), and the
+    // frame lands under the bar as html's scroll-padding-top says.
+    const id = requestAnimationFrame(() => {
+      const frame = frameRef.current;
+      if (!frame) return;
+      const pad = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+      scrollWindowInstantly(frame.getBoundingClientRect().top + window.scrollY - pad);
+    });
     return () => cancelAnimationFrame(id);
     // Once, on mount.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // While the map builds itself (about 2.3 s of long tasks on a phone, the
+  // first frame of tiles at 1.8 to 3.6 s; phone walk, 4 Nov 2026) a finger
+  // that lands on it waits: maplibre listens to touchmove on its canvas
+  // without `passive`, so the browser cannot scroll the page until the busy
+  // main thread has run that listener. A 300px drag that normally takes
+  // 450ms took 1.3 to 2.8 s. Until the map is ready a plain, transparent
+  // layer sits over the canvas (`cm-shield`, in the render below): a finger
+  // or a wheel lands on it, no listener is in the way, and the page scrolls
+  // at once. It lifts with "hubss:map-ready", with a failed style (so the
+  // pins still work, see cm-note), or after SHIELD_MAX_MS at most.
+  useEffect(() => {
+    if (ready) return;
+    const id = window.setTimeout(() => setReady(true), SHIELD_MAX_MS);
+    return () => window.clearTimeout(id);
+  }, [ready]);
+
+  // The strip's photos (phone and tablet) once the browser has a moment to
+  // spare after the style is in: eight to eighty <img>s mounting in the same
+  // task as the first draw were part of the stall above.
+  useEffect(() => {
+    if (!loaded || stripPhotos) return;
+    const go = () => setStripPhotos(true);
+    // Safari has no requestIdleCallback.
+    const idle = typeof window.requestIdleCallback === "function";
+    const id = idle ? window.requestIdleCallback(go, { timeout: 1500 }) : window.setTimeout(go, 300);
+    return () => { if (idle) window.cancelIdleCallback(id); else window.clearTimeout(id); };
+  }, [loaded, stripPhotos]);
 
   // ── Moving the camera to a project
   const flyTo = useCallback((p: MapProject, how: "tour" | "select" | "follow") => {
@@ -679,6 +729,7 @@ export default function CanadaMap({ revealOnMount = false }: { revealOnMount?: b
       window.__hubssMapReady = true;
       m.off("render", ready);
       m.off("idle", ready);
+      setReady(true);
       window.dispatchEvent(new Event("hubss:map-ready"));
     };
     window.__hubssMapReady = false;
@@ -1005,6 +1056,12 @@ export default function CanadaMap({ revealOnMount = false }: { revealOnMount?: b
               )}
             </Map>
 
+            {/* Over the canvas until the first tiles are drawn, so a finger
+                that lands on a loading map scrolls the page at once (the
+                SHIELD_MAX_MS effect above). Nothing to see: the map draws
+                in under it. */}
+            {!ready && !styleFailed && <div className="cm-shield" aria-hidden="true" data-testid="cm-shield" />}
+
             {styleFailed && <p className="cm-note">The base map did not load. Pins and projects still work.</p>}
 
             {moved && (
@@ -1114,14 +1171,15 @@ export default function CanadaMap({ revealOnMount = false }: { revealOnMount?: b
                       onClick={() => { stopTour(); setSelectedId(p.id); setSheetId(p.id); }}
                     >
                       <span className="cm-scard-photo">
-                        {/* After the style is in (`loaded`): on a phone the
-                            strip mounts with the map and its eight photos,
-                            500 KB at the old 100vw sizing, shared the line
-                            with maplibre and the style and held the map up
-                            by seconds on a cellular link (performance
-                            review, 24 Oct 2026). A card is min(78vw, 320px)
-                            wide, so a 390px phone gets the 640 cut, not 828. */}
-                        {loaded && p.images[0] ? (
+                        {/* After the style is in, at an idle moment
+                            (`stripPhotos`): on a phone the strip mounts with
+                            the map and its eight photos, 500 KB at the old
+                            100vw sizing, shared the line with maplibre and
+                            the style and held the map up by seconds on a
+                            cellular link (performance review, 24 Oct 2026).
+                            A card is min(78vw, 320px) wide, so a 390px phone
+                            gets the 640 cut, not 828. */}
+                        {stripPhotos && p.images[0] ? (
                           <Image loader={mapLoader} src={mapPhotoSrc(p, p.images[0])} alt="" fill sizes="(max-width: 640px) 78vw, 320px" style={{ objectFit: "cover" }} />
                         ) : null}
                         <span className="cm-scard-system">{p.product}</span>
@@ -1183,6 +1241,10 @@ const CSS = `
 
 .cm-frame { position: relative; height: clamp(560px, 76vh, 860px); border-radius: 22px; overflow: hidden; border: 1px solid rgba(249,115,22,0.16); box-shadow: 0 30px 90px rgba(0,0,0,0.55); background: #0e0e0e; }
 @media (max-width: 1023px) { .cm-frame { height: clamp(360px, 56vh, 560px); border-radius: 18px; } }
+/* Over the canvas (z 4) and under the panel (6) and the note (5) while the map
+   loads: a transparent layer with no listeners, so the browser never waits on
+   maplibre to scroll the page. touch-action auto on purpose. */
+.cm-shield { position: absolute; z-index: 4; inset: 0; background: transparent; touch-action: auto; }
 
 .cm-panel { position: absolute; z-index: 6; top: 14px; left: 14px; bottom: 14px; width: ${PANEL_W}px; display: flex; flex-direction: column; border-radius: 18px; overflow: hidden; background: rgba(13,14,16,0.9); -webkit-backdrop-filter: blur(16px) saturate(1.2); backdrop-filter: blur(16px) saturate(1.2); border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 18px 60px rgba(0,0,0,0.55); }
 .cm-panel-list, .cm-panel-detail { display: flex; flex-direction: column; min-height: 0; flex: 1; }

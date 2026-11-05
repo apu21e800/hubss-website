@@ -330,6 +330,19 @@ export async function POST(req: NextRequest) {
     const logReason = hold?.reason ?? "";
 
     if (!process.env.RESEND_API_KEY) {
+      // Production by the runtime's VERCEL_ENV, else the build's (next.config.ts
+      // inlines NEXT_PUBLIC_VERCEL_ENV), as lib/lead-counts.ts reads it: a
+      // project that stops exposing system variables to functions must not
+      // fall back to the dev path and say "sent" to a visitor.
+      if ((process.env.VERCEL_ENV || process.env.NEXT_PUBLIC_VERCEL_ENV) === "production") {
+        // In production a missing key is an outage, never a quiet "sent" (4 Nov
+        // 2026 audit): the visitor sees the same error as a refused message
+        // and may call, and the daily counts show it as failed.
+        console.error("[contact API] RESEND_API_KEY is not set: the message was not sent");
+        logOutcome(body.formType, "failed", gate, "mail service", "no RESEND_API_KEY", srcLabel);
+        countOutcome(body.formType, "failed");
+        return NextResponse.json({ error: "Failed to send message. Please try again." }, { status: 500 });
+      }
       // Dev fallback: no key, no mail. The log line still shows the decision.
       logOutcome(body.formType, hold ? "held-not-sent" : "delivered-not-sent", gate, logBy, logReason, srcLabel);
       return NextResponse.json({ success: true });

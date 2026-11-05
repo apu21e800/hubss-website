@@ -211,9 +211,15 @@ async function main() {
     assert.match(route, /countOutcome\(body\.formType, "failed"\)/);
     assert.match(route, /if \(!countingOn\(\)\) return;/);
     assert.match(route, /after\(\(\) => addToLeadCount\(/);
-    // Never for blocked or rejected requests: no count before the mail is sent.
+    // Never for blocked or rejected requests: no count before the route has
+    // reached the mail service (the first count is a production deployment
+    // with no RESEND_API_KEY, logged and counted "failed" since 4 Nov 2026;
+    // the gates, the honeypot and the spam check all come before that line).
     const firstCount = route.indexOf("countOutcome(body.formType");
-    assert.ok(firstCount > route.indexOf("resend.emails.send("), "counts come after the send");
+    assert.ok(firstCount > route.indexOf("process.env.RESEND_API_KEY"), "counts come after the mail service is reached");
+    const spamDecision = route.indexOf("let hold: Hold | undefined;");
+    assert.ok(spamDecision > 0, "the spam decision is where the test expects it");
+    assert.ok(firstCount > spamDecision, "counts come after the spam decision");
   });
 
   await check("the daily run logs the summary first, and a failure there doesn't fail the run", () => {

@@ -18,6 +18,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { draftNextFieldNote } from "@/lib/field-note-pipeline";
+import { emailEditors } from "@/lib/editor-mail";
 
 // Three Claude calls: writing (about a minute), a short style rewrite, and
 // checking; then, when the plan is low and there's time, the planner's
@@ -44,9 +45,22 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     const result = await draftNextFieldNote({ ideaId: req.nextUrl.searchParams.get("idea") ?? undefined });
     return NextResponse.json(result);
   } catch (err) {
-    // The plan item stays "Ready", so the next run tries again.
+    // The plan item stays "Ready", so the next run tries again. The editors
+    // hear of it (4 Nov 2026 audit: until then a failed Tuesday or Thursday
+    // was one log line, and a run of them looked like "no draft").
     const message = err instanceof Error ? err.message : String(err);
     console.error(`[field-notes] draft failed: ${message}`);
+    await emailEditors(
+      "No new draft this morning",
+      [
+        "The Tuesday/Thursday article draft didn't get written.",
+        "",
+        `What stopped it: ${message}`,
+        "",
+        "The idea at the top of Blog ideas stays Ready, so the next run tries it again. If this happens twice in a row, open the idea in Studio: a brief the writer can't work from (no facts, a claim it can't support) is the usual cause.",
+      ].join("\n"),
+      "field-notes",
+    );
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

@@ -15,8 +15,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-const LUNCH_LEARN_HREF =
-  "/lunch-learn?utm_source=catalogue&utm_medium=flipbook&utm_campaign=web";
+// No UTM tags on an internal link: they overwrite the visitor's real source
+// in GA4 (components/AnalyticsEvents.tsx reports the click as cta_click
+// instead). This component is not mounted anywhere today (the reader is
+// app/product-book/CatalogueViewer.tsx); the tags are gone so they can't
+// come back with it.
+const LUNCH_LEARN_HREF = "/lunch-learn?from=product-book";
 
 type Props = {
   pages: string[];

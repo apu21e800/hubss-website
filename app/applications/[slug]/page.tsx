@@ -25,6 +25,7 @@ import { getSiteSettings } from "@/lib/sanity.queries";
 import { telHref } from "@/lib/site-settings";
 import { lunchLearnHref } from "@/lib/lunch-learn";
 import PricingStrip from "@/components/sections/PricingStrip";
+import PhoneActionBar from "@/components/sections/PhoneActionBar";
 import type { SanityBlock } from "@/types/sanity";
 
 // Sanity is the CMS for this page's copy, so the page has to be allowed to go
@@ -270,6 +271,7 @@ export default async function ApplicationPage({ params }: Props) {
                 heading="Pricing and installers"
                 offices={offices}
                 contactHref={`/contact?project=${encodeURIComponent(application.name)}&from=application`}
+                lunchLearnHref={lunchLearnHref(ask.topic, "application")}
               />
               {/* The catalogue's spread first, where the printed book has one:
                   headline, pull line, and the SPECIFY list naming which systems
@@ -417,6 +419,10 @@ export default async function ApplicationPage({ params }: Props) {
       </div>
       <LunchLearn compact topic={ask.topic} from="application" />
       <Footer />
+      {/* Phones and tablets: Call and Send the project at the foot of the
+          screen once the first-screen card is gone (components/sections/PhoneActionBar.tsx).
+          Outside the paper surface, so it wears the dark tokens. */}
+      <PhoneActionBar offices={offices} contactHref={`/contact?project=${encodeURIComponent(application.name)}&from=application`} />
     </main>
   );
 }

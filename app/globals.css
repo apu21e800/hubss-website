@@ -1192,6 +1192,79 @@ p {
   border-radius: inherit;
 }
 
+/* ─── The phone's action bar (components/sections/PhoneActionBar.tsx, 4 Nov
+   2026): Call and Send the project at the foot of the screen on a product or
+   application page, once the first-screen card has scrolled off. Under the
+   menu (z 60), search and the lightbox (9999); over the page (the bar is 40,
+   the site's top bar 50). It slides in from below and is out of the tab
+   order while hidden (visibility, after the slide). The two office rows,
+   when Call is open, are 44px each with the town, so a thumb can tell East
+   from West. */
+.cta-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  background: var(--bg-dark);
+  border-top: 1px solid var(--border-color);
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.35);
+  padding: 10px 16px max(10px, env(safe-area-inset-bottom, 0px));
+  transform: translate3d(0, 100%, 0);
+  visibility: hidden;
+  transition: transform var(--dur-2) var(--ease-out), visibility 0s linear var(--dur-2);
+}
+.cta-bar[data-shown="true"] {
+  transform: none;
+  visibility: visible;
+  transition-delay: 0s;
+}
+.cta-bar-row,
+.cta-bar-offices {
+  /* A tablet's bar is not a banner: the row stops at 600px, centred. */
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.cta-bar-row {
+  display: flex;
+  gap: 8px;
+}
+.cta-bar-row .btn-ghost {
+  flex: 0 0 auto;
+}
+.cta-bar-row .btn-accent {
+  flex: 1 1 auto;
+}
+.cta-bar-offices {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+.cta-bar-office {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 2px;
+  color: var(--text-primary);
+  font-size: 15px;
+  text-decoration: none;
+}
+.cta-bar-office-where {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+.cta-bar-office-phone {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cta-bar { transition: none; }
+}
+
 /* ─── yet-another-react-lightbox theming ───────────── */
 .yarl__root {
   --yarl__color_backdrop:              rgba(8, 8, 8, 0.97);

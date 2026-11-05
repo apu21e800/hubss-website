@@ -92,45 +92,27 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
           local build: the form's card ends at 720 on 1536x730 and 1366x768,
           and at 736 on 1440x900 (before: 922). */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-14 pb-16 sm:pb-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
-          {/* Left */}
+        {/* Three cells. A laptop: the words over the offices on the left, the
+            form on the right spanning both rows. The first row is the words'
+            own height and the second takes the rest (auto 1fr), with no row
+            gap, so the offices follow the words and the form card keeps its
+            height and place. A phone (the walk of 4 Nov 2026: the form began
+            887px down, two scrolls for every lead): the words, then the form,
+            then the offices. */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-[auto_1fr] gap-x-12 lg:gap-x-16 gap-y-10 lg:gap-y-0">
+          {/* Left, the words */}
           <div className="lg:pt-2">
             <p className="eyebrow mb-3" style={{ color: "var(--accent-text-lg)" }}>{eyebrow}</p>
             <h1 className="h1-page mb-5" style={{ color: "var(--text-primary)" }}>
               {heading}
             </h1>
-            <p className="text-[16px] leading-relaxed mb-8 max-w-prose" style={{ color: "var(--text-body)" }}>
+            <p className="text-[16px] leading-relaxed lg:mb-8 max-w-prose" style={{ color: "var(--text-body)" }}>
               {subheading}
             </p>
-            <div>
-              {/* The offices from Studio's Site Settings (lib/site-settings.ts),
-                  side by side so both sit above the fold. */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {[
-                  { region: "West office", ...offices.west },
-                  { region: "East office", ...offices.east },
-                ].map((office) => (
-                  <div key={office.region}>
-                    <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--accent-text-lg)" }}>{office.region}</p>
-                    <p className="text-sm font-medium mb-1" style={{ color: "var(--text-primary)" }}>{office.place}</p>
-                    <a href={mailtoHref(office.email)} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 44 }}>{office.email}</a>
-                    <a href={telHref(office.phone)} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 44 }}>{office.phone}</a>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-5 pt-5" style={{ borderTop: "1px solid var(--border-subtle)" }}>
-                <div className="flex items-center gap-4 flex-wrap">
-                  <p className="text-xs font-semibold uppercase tracking-widest flex-shrink-0" style={{ color: "var(--ink-50)" }}>Follow our work</p>
-                  <SocialLinks size="sm" className="gap-4" />
-                </div>
-              </div>
-            </div>
-
           </div>
 
-          {/* Right: form */}
-          <div className="rounded-xl p-6 sm:p-8" style={{ background: "var(--bg-card-surface)", border: "1px solid var(--border-subtle)" }}>
+          {/* Right: form (both rows on a laptop; second on a phone) */}
+          <div className="rounded-xl p-6 sm:p-8 lg:row-span-2 lg:col-start-2" style={{ background: "var(--bg-card-surface)", border: "1px solid var(--border-subtle)" }}>
             {submitted ? (
               <div className="flex flex-col items-center justify-center h-full py-16 text-center">
                 <div className="w-16 h-16 rounded-full flex items-center justify-center mb-5" style={{ background: "rgba(249,115,22,0.15)" }}>
@@ -288,6 +270,35 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
                 </button>
               </form>
             )}
+          </div>
+
+          {/* Left, under the words on a laptop; last on a phone: the offices
+              from Studio's Site Settings (lib/site-settings.ts), side by side
+              so both sit above the fold on a laptop. */}
+          <div className="lg:col-start-1">
+            <div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {[
+                  { region: "West office", ...offices.west },
+                  { region: "East office", ...offices.east },
+                ].map((office) => (
+                  <div key={office.region}>
+                    <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--accent-text-lg)" }}>{office.region}</p>
+                    <p className="text-sm font-medium mb-1" style={{ color: "var(--text-primary)" }}>{office.place}</p>
+                    <a href={mailtoHref(office.email)} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 44 }}>{office.email}</a>
+                    <a href={telHref(office.phone)} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 44 }}>{office.phone}</a>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-5 pt-5" style={{ borderTop: "1px solid var(--border-subtle)" }}>
+                <div className="flex items-center gap-4 flex-wrap">
+                  <p className="text-xs font-semibold uppercase tracking-widest flex-shrink-0" style={{ color: "var(--ink-50)" }}>Follow our work</p>
+                  <SocialLinks size="sm" className="gap-4" />
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>

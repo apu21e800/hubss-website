@@ -15,20 +15,30 @@ import { telHref, type SiteSettings } from "@/lib/site-settings";
  * card is on the first screen and this isn't drawn. Its heading is a plain
  * line, not an h2: on a phone the sidebar's own h2 still follows, further
  * down.
+ *
+ * Since 4 Nov 2026 the link row also carries the Lunch & Learn (the phone
+ * walk found it two to three scrolls down every landing page, and nowhere on
+ * the first screen), and the card is marked `data-pricing-strip` for the
+ * phone's action bar (components/sections/PhoneActionBar.tsx), which shows
+ * once this card has scrolled off.
  */
 export default function PricingStrip({
   heading,
   offices,
   contactHref,
+  lunchLearnHref,
 }: {
   heading: string;
   offices: SiteSettings["offices"];
   contactHref: string;
+  /** The Lunch & Learn, with this page's topic (lib/lunch-learn.ts lunchLearnHref). */
+  lunchLearnHref: string;
 }) {
   return (
     <div
       className="lg:hidden mb-10 rounded-xl p-4 sm:p-5 relative overflow-hidden"
       style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}
+      data-pricing-strip
     >
       <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
       <p className="font-bold text-base mb-2" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
@@ -44,10 +54,19 @@ export default function PricingStrip({
           <span className="block text-[15px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.west.phone}</span>
         </a>
       </div>
-      <Link href={contactHref} className="link-arrow mt-1">
-        Send us the project
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-      </Link>
+      {/* One row from 390px up; on a 360px phone the Lunch & Learn wraps
+          under Send, so the phones and Send keep their place on the first
+          screen. */}
+      <div className="mt-1 flex flex-wrap items-center justify-between gap-x-4">
+        <Link href={contactHref} className="link-arrow">
+          Send us the project
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+        </Link>
+        <Link href={lunchLearnHref} className="link-arrow">
+          Book a Lunch &amp; Learn
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+        </Link>
+      </div>
     </div>
   );
 }

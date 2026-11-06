@@ -320,6 +320,12 @@ about 40% below the WordPress site's.
   cross-section drawing to today's copy (KNOWN). `npm run test:redirects`
   follows each through next.config.ts's own rules (LANDS). They are not in
   lib/legacy-addresses.json, which stays the 16 Oct Search Console list.
+- Vercel Firewall rule "Forms send only from hubss.com" (8 Oct 2026, still
+  on 6 Nov): a POST to /api/contact on any host but hubss.com gets 403
+  (`x-vercel-mitigated: deny`). Old previews carry the pre-6 Oct form with no
+  filter and Resend is in the Preview env; this rule stops them mailing
+  info@. So a preview can't send the form: test form changes locally, or
+  pause the rule in Vercel (Firewall, Rules) for the test.
 - Not done (Vern's dashboard): Vercel Firewall Bot Protection is Off. Turning
   it On would challenge non-browser clients, including the Sanity webhook
   (/api/revalidate): it needs a bypass for /api first; Log mode first.
@@ -868,10 +874,12 @@ own and emailing BLOG_DRAFT_NOTIFY through lib/editor-mail.ts):
   day after it is live. Studio's Publish on a scheduled draft switches it off
   (sanity.config.ts datedPublish), so a later edit can't be
   published by the run.
-- lib/buffer.ts `socialAutoQueue()`: never while Doug reviews first (the
-  default since 27 Oct 2026). With REVIEW_FIRST=off, posts are queued in
-  Buffer (posted at the next slot unless deleted), as from 19 to 27 Oct
-  (Vern: "auto-queue on"), and `SOCIAL_AUTO_QUEUE=off` keeps them drafts.
+- lib/buffer.ts `socialAutoQueue()`: posts are queued in Buffer (posted at
+  the next slot unless edited or deleted) unless `SOCIAL_AUTO_QUEUE=off`.
+  Since 6 Nov 2026 Doug's review holds articles only (Vern: "if he okays the
+  blog post, then it's good to be scheduled in buffer ... okay every social
+  media post, that's overkill"); from 27 Oct to 6 Nov every post waited as a
+  draft while REVIEW_FIRST was on.
   Copy the style pass couldn't fix always waits as a draft, switch or no
   switch (`queued` on the result). Only Vern turns either; the emails say
   which. A clean Projects article likewise waits held while Doug reviews
@@ -895,12 +903,13 @@ own and emailing BLOG_DRAFT_NOTIFY through lib/editor-mail.ts):
 Vern, 27 Oct: "in the beginning Doug want's to review the Blogs and Socials
 before they go out, but once we gain his trust not making mistakes and
 nailing the brand voice, he will leave it in our domain." lib/review-first.ts:
-- `reviewFirst()`, on unless REVIEW_FIRST=off in Vercel: every social post
-  waits in Buffer as a draft (all three streams), and a Projects article
+- `reviewFirst()`, on unless REVIEW_FIRST=off in Vercel: a Projects article
   written from Doug's job photos is saved held even when both checks are
-  clean. The Insights drafter's drafts wait for Publish as before. Nothing
-  goes out until someone releases it: Publish or "Scheduled" in Studio, Add
-  to Queue in Buffer. REVIEW_FIRST=off (then a redeploy) brings back the
+  clean, and the Insights drafter's drafts wait for Publish as before. No
+  article goes out until someone releases it: Publish or "Scheduled" in
+  Studio. Social posts are not held since 6 Nov 2026 (Vern: Doug's OK on
+  the article is enough; lib/buffer.ts socialAutoQueue): an article's posts
+  are written only after it is published, and they queue in Buffer. REVIEW_FIRST=off (then a redeploy) brings back the
   19 Oct behaviour; only Vern turns it, when Doug leaves it to 21e8.
 - The review page, /review/<key> (app/review/[key]/page.tsx,
   components/review/ReviewView.tsx, lib/review-page.ts and its .server.ts),

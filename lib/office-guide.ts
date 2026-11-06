@@ -70,7 +70,7 @@ export const OFFICE_GUIDE: OfficeGuideContent = {
       ],
       next: [
         "The page is on hubss.com in about five minutes. An edit to a live article shows within seconds.",
-        "The next morning 21e8 writes its social posts, and Vern puts them on your review page for your OK.",
+        "The next morning 21e8 writes its social posts and schedules them. Your OK on the article covers them.",
         "A yellow note under a field is a style check: read it, fix what you agree with, carry on. It never stops you.",
       ],
     },
@@ -90,16 +90,16 @@ export const OFFICE_GUIDE: OfficeGuideContent = {
     },
     {
       id: "review",
-      title: "Check what is going out",
-      when: "Vern tells you something is waiting, or any time you like.",
+      title: "Check an article before it goes out",
+      when: "Vern tells you an article is waiting, or any time you like.",
       steps: [
         "In the Studio, press **Open your review page** at the top of this guide. Or use the link Vern sent you.",
-        "Read each article and post: every word and photo is there, nothing else.",
+        "Read each article: every word and photo is there. The social posts already scheduled are listed too.",
         "Reply to Vern with OK, or with what to change.",
       ],
       next: [
-        "Nothing goes on the site or on social until you have said OK.",
-        "After your OK, Vern releases it: the article goes live and the posts go out at their times.",
+        "No article goes on the site until you have said OK.",
+        "After your OK, Vern releases it, and its social posts follow at their times. To change a scheduled post, tell Vern.",
       ],
     },
     {
@@ -114,7 +114,7 @@ export const OFFICE_GUIDE: OfficeGuideContent = {
         "Press **Publish**.",
       ],
       next: [
-        "The next morning 21e8 writes the social posts (and, if you wrote the story, a Projects article), and Vern puts them on your review page for your OK.",
+        "The next morning 21e8 writes the social posts and schedules them. If you wrote the story, it writes a Projects article too, which waits for your OK.",
         "Leave out customers' phone numbers, emails and street addresses, and name a private homeowner by town only.",
       ],
     },

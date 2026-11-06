@@ -147,16 +147,16 @@ export const structure: StructureResolver = (S) =>
       // Publishing one has the next daily run write posts from it for Buffer;
       // with the story filled in it becomes a Projects article as well
       // (lib/project-posts.ts, 19 Oct 2026). ("From the field" until 15 Oct
-      // 2026; the stream keeps that name in the logs.) The title promised
-      // "it goes to social the next morning" until 4 Nov 2026: with Doug
-      // reviewing first (lib/review-first.ts) nothing goes out until his OK.
+      // 2026; the stream keeps that name in the logs.) Since 6 Nov 2026 the
+      // posts are scheduled straight away and only the article waits for
+      // Doug's OK (lib/buffer.ts socialAutoQueue).
       S.listItem()
         .id("fromTheField")
         .title("Job photos for social")
         .icon(ImagesIcon)
         .child(
           S.documentTypeList("fieldPost")
-            .title("Job photos · publish one and 21e8 writes its social posts the next morning, for your OK; add the story and it writes a Projects article too")
+            .title("Job photos · publish one and 21e8 writes and schedules its social posts the next morning; add the story and it writes a Projects article for your OK")
             .defaultOrdering([{ field: "date", direction: "desc" }])
         ),
 
@@ -171,7 +171,7 @@ export const structure: StructureResolver = (S) =>
         .icon(ShareIcon)
         .child(
           S.documentTypeList("socialLog")
-            .title("Sent to Buffer · read only · what was written for social and how its style check went; the posts wait for Doug's OK")
+            .title("Sent to Buffer · read only · what was written for social and when it goes out")
             .defaultOrdering([{ field: "createdAt", direction: "desc" }])
             .initialValueTemplates([])
         ),

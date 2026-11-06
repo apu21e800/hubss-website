@@ -25,7 +25,7 @@ import { copyStyle, galleryImageItem } from "./_shared";
 export default defineType({
   name: "fieldPost",
   title: "Job photos",
-  description: "Photos of a finished job. Publish it and 21e8 writes its social posts the next morning, for your OK. Add the story and it writes the job up as a Projects article for the website as well. The post itself is not shown on the website.",
+  description: "Photos of a finished job. Publish it and 21e8 writes and schedules its social posts the next morning. Add the story and it writes the job up as a Projects article for the website as well, which waits for your OK. The post itself is not shown on the website.",
   type: "document",
   icon: ImagesIcon,
 

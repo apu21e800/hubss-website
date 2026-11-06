@@ -74,12 +74,10 @@ check("on unless REVIEW_FIRST says off", () => {
   withEnv({ REVIEW_FIRST: "on" }, () => assert.equal(reviewFirst(), true));
   for (const v of ["off", "OFF", " no ", "false", "0"]) withEnv({ REVIEW_FIRST: v }, () => assert.equal(reviewFirst(), false, v));
 });
-check("nothing queues in Buffer while it is on, whatever SOCIAL_AUTO_QUEUE says", () => {
-  withEnv({ REVIEW_FIRST: undefined, SOCIAL_AUTO_QUEUE: undefined }, () => assert.equal(socialAutoQueue(), false));
-  withEnv({ REVIEW_FIRST: undefined, SOCIAL_AUTO_QUEUE: "on" }, () => assert.equal(socialAutoQueue(), false));
-});
-check("with it off, posts queue as from 19 Oct, unless SOCIAL_AUTO_QUEUE=off", () => {
+check("social posts queue whether Doug reviews articles or not, unless SOCIAL_AUTO_QUEUE=off (6 Nov 2026)", () => {
+  withEnv({ REVIEW_FIRST: undefined, SOCIAL_AUTO_QUEUE: undefined }, () => assert.equal(socialAutoQueue(), true));
   withEnv({ REVIEW_FIRST: "off", SOCIAL_AUTO_QUEUE: undefined }, () => assert.equal(socialAutoQueue(), true));
+  withEnv({ REVIEW_FIRST: undefined, SOCIAL_AUTO_QUEUE: "off" }, () => assert.equal(socialAutoQueue(), false));
   withEnv({ REVIEW_FIRST: "off", SOCIAL_AUTO_QUEUE: "off" }, () => assert.equal(socialAutoQueue(), false));
 });
 

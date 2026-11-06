@@ -2,15 +2,13 @@
  * The few Buffer API calls the social pipeline needs (developers.buffer.com,
  * GraphQL at https://api.buffer.com, `Authorization: Bearer <BUFFER_API_KEY>`).
  *
- * Drafts while Doug reviews first (the default since 27 Oct 2026,
- * lib/review-first.ts): every post waits for someone to press Add to Queue,
- * and his review page reads them back (bufferPostsForReview). With
- * REVIEW_FIRST=off, as from 19 to 27 Oct (Vern: "auto-queue on"), a post
- * goes into the channel's queue and Buffer posts it at the next free slot
- * (Tue, Wed, Thu 11:00 Toronto, docs/buffer-setup.md) unless someone deletes
- * it there first; SOCIAL_AUTO_QUEUE=off then keeps drafts (how it ran from
- * 9 to 19 Oct). Copy the style pass couldn't fix is drafted either way
- * (lib/social-pipeline.ts). The emails say which.
+ * A post goes into the channel's queue and Buffer posts it at the next free
+ * slot (docs/buffer-setup.md) unless someone edits or deletes it there first;
+ * SOCIAL_AUTO_QUEUE=off keeps drafts instead. Doug's review holds articles,
+ * not posts, since 6 Nov 2026 (socialAutoQueue below); his review page still
+ * reads the waiting and queued posts back (bufferPostsForReview). Copy the
+ * style pass couldn't fix is drafted either way (lib/social-pipeline.ts).
+ * The emails say which.
  *
  * The key, from Buffer's docs (checked 9 Oct 2026): every plan has the API,
  * Free included; only the organization's owner can make a key; a key lasts a
@@ -21,7 +19,6 @@
  * 24-hour windows as well. A day's run uses a handful.
  */
 
-import { reviewFirst } from "@/lib/review-first";
 
 const ENDPOINT = "https://api.buffer.com";
 
@@ -114,14 +111,17 @@ export interface DraftPostInput {
 
 /**
  * True when posts go straight into Buffer's queue rather than waiting as
- * drafts for approval. Not while Doug reviews first (lib/review-first.ts, the
- * default since 27 Oct 2026): every post then waits as a draft until someone
- * presses Add to Queue in Buffer. With REVIEW_FIRST=off they are queued, as
- * Vern decided on 19 Oct 2026, unless SOCIAL_AUTO_QUEUE=off (or no, false,
- * 0). Only Vern turns either.
+ * drafts for approval: yes, unless SOCIAL_AUTO_QUEUE=off (or no, false, 0).
+ * Since 6 Nov 2026 Doug's review (lib/review-first.ts) holds articles only
+ * (Vern: "if he okays the blog post, then it's good to be scheduled in
+ * buffer. I don't think he needs to okay every social media post, that's
+ * overkill"). An article's posts are written only once it is published,
+ * which is after his OK, and a job photos post is Doug's own. From 27 Oct to
+ * 6 Nov every post waited as a draft while REVIEW_FIRST was on. Copy the
+ * style pass couldn't fix, or that shows a customer's details, still waits
+ * (lib/social-pipeline.ts `queued`). Only Vern turns the switch.
  */
 export function socialAutoQueue(): boolean {
-  if (reviewFirst()) return false;
   const v = (process.env.SOCIAL_AUTO_QUEUE ?? "").trim().toLowerCase();
   return !["off", "no", "false", "0"].includes(v);
 }

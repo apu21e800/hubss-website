@@ -102,7 +102,7 @@ export default function ReviewView({ data, now, actionKey, action }: { data: Rev
 
         <p className="mt-16 pt-6 text-[15px]" style={{ borderTop: "1px solid var(--border-color)", color: "var(--text-secondary)" }}>
           {agency
-            ? "Keep this link to yourself: it can put things on Doug's page. After his OK: Publish (or \"Scheduled\" on) in Studio, Add to Queue in Buffer."
+            ? "Keep this link to yourself: it can put things on Doug's page. After his OK: Publish (or \"Scheduled\" on) in Studio. Social posts queue themselves (a held one: Add to Queue in Buffer)."
             : "This page always shows what is waiting, so keep the link. Once something is out, it leaves the page."}
         </p>
       </main>

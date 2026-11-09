@@ -1298,6 +1298,38 @@ in public/resources/flyers, so every link holds: HUBSS-Flyer-<slug>-v01.pdf,
   itself: blank on Android, the first page zoomed in on an iPhone (Vern: "they
   are zoomed in"). The build prints the reminder.
 
+## Stamped asphalt in search (9 Nov 2026)
+Vern, 9 Nov: "we need to be No.1 again", after 21e8 misread a Semrush row:
+the "#21" was /products, a second HUB page for the same search, not
+StreetPrint falling. Semrush lists each URL a domain has for a keyword as
+its own row; read Search Console before reporting a ranking change. Search
+Console, Canada, "stamped asphalt", /products/streetprint: about #2 in
+September, #4 in October, #1 or #2 on most days of the first week of
+November; #3.1 over three months (217 impressions, 7 clicks). "stamped
+blacktop" sits near #24, "stamped asphalt toronto" near #6 (96 impressions,
+no clicks).
+- The StreetPrint gallery says what each photo shows
+  (docs/site-audits/gallery-descriptions-2026-11-09.csv, written from the
+  captions sheet's eye cues → lib/image-facts.ts `description` →
+  lib/image-seo.ts honestLine): 77 different lines, "stamped asphalt" in 9.
+  It said "StreetPrint stamped asphalt, photo 5 of 77" under 70 of them
+  (GalleryGrid's tell-apart suffix), 617 times in the page's code with the
+  file names and the schema. `npm run test:images` holds a described gallery
+  to different lines, no system named, and the keyword in one line in five.
+  Other product galleries keep their folder's line until described; the
+  photo's schema keeps "StreetPrint stamped asphalt" (`keywords`).
+- A product page's h1 holds its family word (the eyebrow is a span inside
+  the heading): "Stamped Asphalt StreetPrint". It looks as it did.
+- The StreetPrint FAQ answers "Is stamped blacktop the same as stamped
+  asphalt?" (the word's meaning and the book's own line).
+- scripts/streetprint-links-2026-11-09.ts (Vern's PC; dry run by default,
+  `--apply` writes): one link to /products/streetprint, on the words, in the
+  seven posts that name StreetPrint stamped asphalt and link to it nowhere.
+- Holding #1 against streetbond.com (the maker's own page, #1 in Semrush's
+  results) is mostly links, not code: the makers' and Square One's sites
+  linking to hubss.com, and the Milton office's Google Business Profile for
+  the Toronto searches.
+
 ## Speed on a phone, for the paid traffic (28 Oct 2026)
 The MediaEdge display ads land on /lunch-learn from 1 Nov and Google Ads on
 ten pages (the six main products, crosswalks, bike lanes, bus lanes,

@@ -22,6 +22,14 @@
  * reviews is the line the site prints: on 26 Oct 2026 the sheet's own
  * composition disagreed with the site on 38 rows. `npm run test:images` fails
  * if they part again.
+ *
+ * Since 9 Nov 2026 a photo in a product folder can also carry a description
+ * of what the picture shows (docs/site-audits/gallery-descriptions-2026-11-09.csv,
+ * written from each photo's "eye cue" in the captions sheet: the pattern, the
+ * colour, the setting, nothing the cue does not say). The StreetPrint gallery
+ * printed "StreetPrint stamped asphalt, photo 5 of 77" under 70 of its 77
+ * photos, the same words over and over that Google's image guidelines call
+ * keyword stuffing (the stamped asphalt ranking review, 9 Nov 2026).
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
@@ -30,11 +38,12 @@ import { parseCsv, parseRows, toCsv } from "./lib/csv";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SHEET = path.join(ROOT, "docs/site-audits/gallery-captions-2026-10-26.csv");
+const DESCRIPTIONS = path.join(ROOT, "docs/site-audits/gallery-descriptions-2026-11-09.csv");
 const OUT = path.join(ROOT, "lib/image-facts.ts");
 
 const text = readFileSync(SHEET, "utf8");
 const rows = parseCsv(text);
-const facts: Record<string, { system?: string; place?: string; source: string }> = {};
+const facts: Record<string, { system?: string; place?: string; label?: string; description?: string; source: string }> = {};
 for (const r of rows) {
   // Doug's word, then the records, then 21e8's eye on the photograph itself
   // (Vern, 26 Oct 2026: "take our best shot at getting the photo captions
@@ -57,6 +66,20 @@ for (const r of rows) {
   const source = parts.join("; ") || "the captions sheet";
   facts[r.file] = { ...(system ? { system } : {}), ...(place ? { place } : {}), ...(label ? { label } : {}), source };
 }
+// What the picture shows, for a product folder's photo (9 Nov 2026). Only a
+// photo the captions sheet already lists, so every description has its eye
+// cue beside it there.
+const inSheet = new Set(rows.map((r) => r.file));
+for (const d of parseCsv(readFileSync(DESCRIPTIONS, "utf8"))) {
+  const description = d.description;
+  if (!description) continue;
+  if (!inSheet.has(d.file)) throw new Error(`${path.relative(ROOT, DESCRIPTIONS)}: ${d.file} is not in the captions sheet`);
+  if (!d.file.startsWith("/images/products/")) throw new Error(`${path.relative(ROOT, DESCRIPTIONS)}: ${d.file}: descriptions are for product folders only`);
+  const fact = facts[d.file];
+  facts[d.file] = fact
+    ? { ...fact, description, source: `${fact.source}; description: by eye, from the captions sheet's eye cue` }
+    : { description, source: "description: by eye, from the captions sheet's eye cue" };
+}
 const lines = [
   "/**",
   " * What the site can honestly say under each gallery photograph beyond its",
@@ -70,6 +93,8 @@ const lines = [
   "  place?: string;",
   "  /** The gallery's word for this photo, refined by eye: a splash pad in the Parks & Paths gallery says so. */",
   "  label?: string;",
+  "  /** What a product folder's photo shows, by eye (docs/site-audits/gallery-descriptions-2026-11-09.csv): its line in place of the folder's. */",
+  "  description?: string;",
   "  source: string;",
   "}",
   "",
@@ -79,7 +104,7 @@ const lines = [
   "",
 ];
 writeFileSync(OUT, lines.join("\n"));
-console.log(`lib/image-facts.ts: ${Object.keys(facts).length} photographs with a system or a place (${rows.length} in the sheet)`);
+console.log(`lib/image-facts.ts: ${Object.keys(facts).length} photographs with a system, a place or a description (${rows.length} in the sheet)`);
 
 // Loaded only now, so it reads the facts written above.
 import("../lib/image-seo").then(({ seoAlt }) => {

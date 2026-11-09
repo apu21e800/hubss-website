@@ -35,6 +35,14 @@ export const PRODUCT_FAQS: Record<string, ProductFaqEntry[]> = {
       q: "What is StreetPrint stamped asphalt?",
       a: "StreetPrint is stamped asphalt, the original decorative asphalt system, installed in Canada since 1992. A pattern is pressed into asphalt using heat, a stamping template, and a plate compactor, then the surface is coloured and sealed with StreetBond coatings. The result gives the look of brick, cobblestone, or stone while keeping the flexibility and flush surface of asphalt.",
     },
+    // Not in the PDF (9 Nov 2026): the words people search for the same thing
+    // (Search Console: "stamped blacktop" at about #24 while "stamped
+    // asphalt" is top five). The answer is the word's meaning and the book's
+    // own line, "The original. Since 1992. A Canadian invention".
+    {
+      q: "Is stamped blacktop the same as stamped asphalt?",
+      a: "Yes. Blacktop is another word for asphalt, so stamped blacktop, asphalt stamping and stamped asphalt all mean a pattern pressed into an asphalt surface. StreetPrint is the original stamped asphalt system, a Canadian invention installed since 1992.",
+    },
     {
       q: "Can you stamp existing asphalt, or only new asphalt?",
       a: "Both. New asphalt can be stamped while it is still hot behind the paver, and existing asphalt in good condition can be reheated in place with infrared asphalt-reheating technology and then stamped. Reheating is what makes retrofits possible: a sound existing driveway or intersection does not need to be repaved to be patterned.",

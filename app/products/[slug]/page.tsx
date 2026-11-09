@@ -307,12 +307,6 @@ export default async function ProductPage({ params }: Props) {
         )}
         <div className="absolute inset-0 flex items-end">
           <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-14">
-            {/* The label was orange on the photo and measured 2 to 3:1 on red,
-                orange and grey heroes (QA pa#13). Cream on the scrim reads on
-                all of them; the orange stays in the dash under the name. */}
-            <p className="eyebrow eyebrow-photo mb-3" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.6)" }}>
-              {product.eyebrow ?? getProductFamily(product.slug)}
-            </p>
             <h1
               className="h1-hero mb-3"
               style={{
@@ -321,6 +315,17 @@ export default async function ProductPage({ params }: Props) {
                 letterSpacing: "-0.025em",
               }}
             >
+              {/* The label was orange on the photo and measured 2 to 3:1 on red,
+                  orange and grey heroes (QA pa#13). Cream on the scrim reads on
+                  all of them; the orange stays in the dash under the name.
+                  Inside the heading since 9 Nov 2026, so the page's one h1
+                  names the thing as people search it ("Stamped asphalt
+                  StreetPrint", not "StreetPrint" alone); .eyebrow sets every
+                  type property itself, so it looks as it did (the stamped
+                  asphalt ranking review). */}
+              <span className="eyebrow eyebrow-photo block mb-3" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.6)" }}>
+                {product.eyebrow ?? getProductFamily(product.slug)}
+              </span>
               {product.name}
             </h1>
             {/* The orange signature dash from the catalogue's product spread —

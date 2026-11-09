@@ -118,8 +118,12 @@ test("every gallery line the facts make is a clean caption", () => {
 
 test("a documented photo's line carries its system and place; a person's Studio line stays", () => {
   assert.equal(seoAlt("/images/applications/crosswalks/crosswalks-110.jpg", ""), "TrafficPatternsXD decorative crosswalk, Oakville, Ontario");
-  // A product folder's photo keeps its product, whatever else the records say.
-  assert.match(seoAlt("/images/products/streetprint/streetprint-25.jpg", ""), /^StreetPrint stamped asphalt/);
+  // A product folder's photo keeps its product, whatever else the records say:
+  // its folder's line, or (9 Nov 2026) what the picture shows, never another
+  // system (a record names StreetBond for streetprint-74).
+  assert.equal(seoAlt("/images/products/traffic-patterns-xd/traffic-patterns-xd-05.jpg", ""), "TrafficPatternsXD preformed thermoplastic");
+  assert.equal(seoAlt("/images/products/streetprint/streetprint-74.jpg", ""), "Terracotta herringbone covering a roundabout apron");
+  assert.equal(seoAlt("/images/products/streetprint/streetprint-63.png", ""), "Pale grey ashlar and brick street crossing across from City Hall, Woodstock, Ontario");
   const typed = honestPhoto({ src: "https://cdn.sanity.io/x.jpg", alt: "Doug's own words", origin: "/images/applications/crosswalks/crosswalks-110.jpg" });
   assert.equal(typed.alt, "Doug's own words");
   const bare = honestPhoto({ src: "https://cdn.sanity.io/x.jpg", alt: "Decorative crosswalk", origin: "/images/applications/crosswalks/crosswalks-110.jpg" });
@@ -143,6 +147,28 @@ test("a graphic or a marking is never the surface it sits on", () => {
   assert.equal(seoAlt("/images/applications/sport-courts/sport-courts-16.jpg", ""), "DecoMark graphics on a sport court, Anjou, Montréal, Quebec");
   // A surfacing system is still the surface: its line is unchanged.
   assert.equal(seoAlt("/images/applications/parks-paths/parks-paths-51.jpg", ""), "StreetPrint park path surface");
+});
+
+// The stamped asphalt ranking review, 9 Nov 2026: the StreetPrint gallery said
+// "StreetPrint stamped asphalt" under 70 of its 77 photos, told apart only by
+// "photo 5 of 77", the repetition Google's image guidelines call keyword
+// stuffing. A described gallery's lines are all different, and its keyword
+// is in no more than one line in five.
+test("a described gallery says something different under every photo", () => {
+  const described = Object.entries(IMAGE_FACTS).filter(([, f]) => f.description);
+  assert.ok(described.length >= 77, `${described.length} described photos`);
+  const byFolder = new Map<string, string[]>();
+  for (const [file] of described) {
+    const folder = file.slice(0, file.lastIndexOf("/"));
+    byFolder.set(folder, [...(byFolder.get(folder) ?? []), seoAlt(file, "")]);
+  }
+  for (const [folder, lines] of byFolder) {
+    assert.equal(new Set(lines).size, lines.length, `${folder}: two photos share a line`);
+    const keyword = /stamped asphalt/i;
+    const withKeyword = lines.filter((l) => keyword.test(l)).length;
+    assert.ok(withKeyword * 5 <= lines.length, `${folder}: "stamped asphalt" in ${withKeyword} of ${lines.length} lines`);
+    for (const l of lines) assert.ok(!SYSTEMS.some((n) => new RegExp(`\\b${n}\\b`).test(l)), `${folder}: a description names a system: ${l}`);
+  }
 });
 
 // The captions sheet is what Doug reviews: its "proposed line" must be the

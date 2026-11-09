@@ -29,6 +29,12 @@
  * Doug's own columns win over the evidence. A photo with no fact keeps its
  * folder's line.
  *
+ * Since 9 Nov 2026 a product folder's photo can print what the picture shows
+ * instead of the folder's line (`descriptionFor`, the descriptions sheet):
+ * the StreetPrint gallery's 77 photos say 77 different things, and "stamped
+ * asphalt" is in a few of them, not all of them (the stamped asphalt ranking
+ * review; `npm run test:images` holds it to one in five).
+ *
  * The function signatures are unchanged, so no caller changes. Safe to import
  * anywhere: pure data and string functions, no side effects.
  */
@@ -265,14 +271,31 @@ function subjectWithSystem(src: string, subject: ImageSubject): string {
 }
 
 /**
+ * What a product folder's photo shows, where the descriptions sheet says
+ * (lib/image-facts.ts `description`, 9 Nov 2026): "Terracotta herringbone
+ * across a roundabout truck apron". Undefined for any other photo.
+ */
+function descriptionFor(src: string): string | undefined {
+  const clean = src.split("?")[0];
+  return folderOf(clean).startsWith("images/products/") ? IMAGE_FACTS[clean]?.description : undefined;
+}
+
+/**
  * "StreetPrint stamped asphalt", "TrafficPatternsXD decorative crosswalk,
  * Oakville, Ontario": the folder's subject, the documented system in front of
  * an application photo's, and the documented place after.
+ *
+ * A product folder's photo with a description prints the description
+ * instead of the folder's line ("Pale grey ashlar and brick street crossing
+ * across from City Hall, Woodstock, Ontario"). The page already says whose
+ * system it is, and the photo's schema keeps it (`seoKeywords`): until
+ * 9 Nov 2026 the StreetPrint gallery said "StreetPrint stamped asphalt" under
+ * 70 of 77 photos, told apart only by "photo 5 of 77" (components/ui/GalleryGrid.tsx).
  */
 function honestLine(src: string): string | undefined {
   const subject = subjectFor(src);
   if (!subject) return undefined;
-  const line = subjectWithSystem(src, subject);
+  const line = descriptionFor(src) ?? subjectWithSystem(src, subject);
   const place = placeFor(src);
   return place ? `${line}, ${place}` : line;
 }

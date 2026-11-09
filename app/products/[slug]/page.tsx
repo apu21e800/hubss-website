@@ -32,7 +32,6 @@ import { getMergedApplications, type MergedApplication } from "@/lib/application
 import { heroObjectPosition, heroColourClass } from "@/lib/hero-framing";
 import { editAttr, isPreview } from "@/lib/sanity.preview";
 import { getSiteSettings } from "@/lib/sanity.queries";
-import { telHref } from "@/lib/site-settings";
 import { lunchLearnHref } from "@/lib/lunch-learn";
 import PricingStrip from "@/components/sections/PricingStrip";
 import PhoneActionBar from "@/components/sections/PhoneActionBar";
@@ -146,6 +145,13 @@ export default async function ProductPage({ params }: Props) {
   // Until 25 Sep 2026 the cards used the /public photo through next/image,
   // which was the last big source of /_next/image transforms on the site
   // (35 on this page for MMAX).
+  // ChipFill is bought for a repair, not specified (Vern, 9 Nov 2026: "no
+  // specify the ChipFill product ... make the button a contact us button").
+  const isRepairAsk = product.slug === "chipfill";
+  // AirMark's page leaves out "Where AirMark goes" (Vern, 9 Nov 2026: the
+  // cards above the footer are redundant; Regulatory Markings showed a bus
+  // and bike lane photo on an airfield product).
+  const showWhereGoes = product.slug !== "airmark";
   const mergedApps = await getMergedApplications();
   const relatedAppData: MergedApplication[] = product.relatedApplications
     .map((s) => mergedApps.find((a) => a.slug === s) ?? applications.find((a) => a.slug === s))
@@ -416,16 +422,24 @@ export default async function ProductPage({ params }: Props) {
           <div className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl" style={{ background: "linear-gradient(180deg, #F97316, #EAB308)" }} />
           <div className="relative pl-3">
             <p className="font-bold text-lg leading-snug" style={{ color: "var(--text-primary)" }}>
-              Specify {product.name}.
+              {isRepairAsk ? `Talk to us about ${product.name}.` : `Specify ${product.name}.`}
             </p>
             <p className="text-sm mt-1 max-w-md" style={{ color: "var(--text-secondary)" }}>
-              A free Lunch &amp; Learn takes your team through the specification, with samples on the table.
+              {isRepairAsk
+                ? "Tell us about the repairs and your regional office will get back to you."
+                : <>A free Lunch &amp; Learn takes your team through the specification, with samples on the table.</>}
             </p>
           </div>
           <div className="flex flex-wrap gap-3 relative flex-shrink-0">
-            <Link href={lunchLearnHref(product.name, "product")} className="btn-accent">
-              Book a Lunch &amp; Learn
-            </Link>
+            {isRepairAsk ? (
+              <Link href={`/contact?project=${encodeURIComponent(product.name)}&from=product`} className="btn-accent">
+                Contact us
+              </Link>
+            ) : (
+              <Link href={lunchLearnHref(product.name, "product")} className="btn-accent">
+                Book a Lunch &amp; Learn
+              </Link>
+            )}
             {hasDocs && (
               <a href="#spec-sheets" className="btn-ghost">
                 Spec sheets
@@ -475,60 +489,33 @@ export default async function ProductPage({ params }: Props) {
 
           </div>
 
-          {/* Right: the specification rows the spread doesn't already show,
-              and the way to a price. Sticky again from 28 Sep 2026, when the
-              page stopped clipping with overflow hidden (app/globals.css). */}
+          {/* Right: the specification rows the spread doesn't already show.
+              A details card only since 9 Nov 2026 (Vern: "remove the 'Price a
+              project' and contact information from the details card on the
+              right. Just make it a details card"). The way to a price stays in
+              the ask above, under the hero on a phone (PricingStrip) and in the
+              bar at the foot of a phone's screen (PhoneActionBar). */}
           <aside className="min-w-0">
-            <div className="follow-nav rounded-xl p-6 sm:p-7 lg:sticky lg:top-[calc(var(--nav-offset)+32px)] relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}>
-              <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
-              <h2 className="font-bold text-lg mb-1.5" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
-                Price a project
-              </h2>
-              <p className="text-[15px] leading-relaxed mb-4 max-w-prose" style={{ color: "var(--text-secondary)" }}>
-                Your regional office prices it and puts you in touch with a certified {product.name} installer.
-              </p>
-              <div className="grid grid-cols-2 gap-2 mb-3">
-                <a href={telHref(offices.east.phone)} className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
-                  <span className="block text-[12px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>East</span>
-                  <span className="block text-[15px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.east.phone}</span>
-                </a>
-                <a href={telHref(offices.west.phone)} className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
-                  <span className="block text-[12px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>West</span>
-                  <span className="block text-[15px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.west.phone}</span>
-                </a>
+            {sideSpecs.length > 0 && (
+              <div className="follow-nav rounded-xl p-6 sm:p-7 lg:sticky lg:top-[calc(var(--nav-offset)+32px)] relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}>
+                <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
+                <h2 className="font-bold text-lg mb-4" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
+                  Details
+                </h2>
+              <dl className="space-y-3.5">
+                {sideSpecs.map((spec) => (
+                  <div key={spec.label} className="flex justify-between gap-4 text-sm" style={{ borderBottom: "1px solid var(--ink-06)", paddingBottom: "12px" }}>
+                    <dt style={{ color: "var(--text-muted)" }}>{spec.label}</dt>
+                    <dd className="font-semibold text-right max-w-[62%]" style={{ color: "var(--text-primary)" }}>
+                      {/* fixPrint: Studio holds StreetPrint's "Yes: flush surface" row; the
+                          punctuation is corrected at render until the sync runs (QA B23). */}
+                      {plainSpec(fixPrint(spec.value))}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
               </div>
-              {/* Carries the system to the contact form, as the Lunch & Learn
-                  link beside it carries its topic (interaction review, 17 Oct
-                  2026: the two buttons on one card behaved differently). */}
-              <Link href={`/contact?project=${encodeURIComponent(product.name)}&from=product`} className="link-arrow">
-                Send us the project
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-              </Link>
-              {sideSpecs.length > 0 && (
-                <>
-                  {/* Its own section, not an <h3> under Downloads. */}
-                  {/* After the way to a price (17 Oct 2026, Vern: "imagine you are a
-                      city specifier or architect ... make it clean, don't overwhelm
-                      the buyer"): the sidebar leads with the people and the ask, and
-                      the leftover rows follow as "More details". */}
-                  <h2 className="font-bold text-base mt-8 mb-4" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
-                    More details
-                  </h2>
-                  <dl className="space-y-3.5">
-                    {sideSpecs.map((spec) => (
-                      <div key={spec.label} className="flex justify-between gap-4 text-sm" style={{ borderBottom: "1px solid var(--ink-06)", paddingBottom: "12px" }}>
-                        <dt style={{ color: "var(--text-muted)" }}>{spec.label}</dt>
-                        <dd className="font-semibold text-right max-w-[62%]" style={{ color: "var(--text-primary)" }}>
-                          {/* fixPrint: Studio holds StreetPrint's "Yes: flush surface" row; the
-                              punctuation is corrected at render until the sync runs (QA B23). */}
-                          {plainSpec(fixPrint(spec.value))}
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
-                </>
-              )}
-            </div>
+            )}
           </aside>
         </div>
       </div>
@@ -597,7 +584,7 @@ export default async function ProductPage({ params }: Props) {
         )}
 
         {/* Applications this product is used for */}
-        {relatedAppData.length > 0 && (
+        {showWhereGoes && relatedAppData.length > 0 && (
           <section style={{ background: "var(--bg-section-asphalt)", borderTop: "1px solid var(--border-color)" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 section-padding">
             <div className="flex items-end justify-between mb-8">

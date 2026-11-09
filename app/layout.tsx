@@ -7,6 +7,7 @@ import AnalyticsEvents from "@/components/AnalyticsEvents";
 // VercelToolbar — only on staging/preview, never on production
 import { VercelToolbar } from "@vercel/toolbar/next";
 import HumanAnalytics from "@/components/HumanAnalytics";
+import ApolloVisitors from "@/components/ApolloVisitors";
 // One GA4 id for the tag, the cookie lib/post-form.ts reads and the server's leads.
 import { GA_MEASUREMENT_ID } from "@/lib/ga4-lead";
 import { Analytics } from "@vercel/analytics/next";
@@ -195,6 +196,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             {/* Google Analytics for people: not for browsers driven by a
                 program (components/HumanAnalytics.tsx, 15 Oct 2026). */}
             <HumanAnalytics gaId={GA_MEASUREMENT_ID} />
+            {/* Which organizations visit, for Apollo; company level only, on
+                hubss.com only (components/ApolloVisitors.tsx, 9 Nov 2026). */}
+            <ApolloVisitors />
             <AnalyticsEvents officeByHref={officeByHref} />
           </NotInStudio>
         )}

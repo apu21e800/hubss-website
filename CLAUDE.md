@@ -292,6 +292,15 @@ about 40% below the WordPress site's.
   Studio and every page under it, so an editor's session isn't a visit and
   the chat bubble doesn't sit over the Studio. Square One's Studio has done
   the same since 14 Oct.
+- Apollo's visitor tracker (9 Nov 2026; Vern: company names only, not
+  people): components/ApolloVisitors.tsx, beside GA4 inside NotInStudio,
+  for people only and on hubss.com only (never a preview or local build).
+  In Apollo the hubss.com domain has contact-level tracking off, so the
+  tracker never loads its person-matching script (LiveIntent): Apollo
+  answered `{"can_track":false}` on 9 Nov. It watches four pages for intent
+  (/lunch-learn, /contact, /request-product-book high; /product-book
+  medium). The privacy page names it; turning contact-level on means
+  changing that page first. `NEXT_PUBLIC_APOLLO_VISITORS=off` turns it off.
 - The printed Product Book request now counts as a lead (form_type
   product-book-print), like the contact and Lunch & Learn forms. Since 20 Oct
   2026 the route sends that generate_lead, for delivered requests only, and

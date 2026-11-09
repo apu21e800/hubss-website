@@ -44,7 +44,10 @@ const BLOG_SLUGS: string[] = JSON.parse(fs.readFileSync(BLOG_INDEX, "utf8")).map
 const CSP_REPORT_ONLY = [
   "default-src 'self'",
   // Inline + eval needed for Next.js + framer-motion runtime
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://client.crisp.chat https://*.vercel-scripts.com https://*.vercel-insights.com https://va.vercel-scripts.com https://www.googletagmanager.com",
+  // assets.apollo.io: Apollo's visitor tracker (components/ApolloVisitors.tsx, 9 Nov 2026).
+  // Its person-matching script (d-code.liadm.com) is left out on purpose: the
+  // tracker is set to company level, and Apollo does not load it then.
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://client.crisp.chat https://*.vercel-scripts.com https://*.vercel-insights.com https://va.vercel-scripts.com https://www.googletagmanager.com https://assets.apollo.io",
   // Inline styles from framer-motion + Tailwind v4 + Crisp
   "style-src 'self' 'unsafe-inline' https://client.crisp.chat https://fonts.googleapis.com",
   // Images from Unsplash, Vercel optimization, data URIs, blob (for clipboard), Crisp avatars,
@@ -53,8 +56,8 @@ const CSP_REPORT_ONLY = [
   "img-src 'self' data: blob: https://cdn.sanity.io https://images.unsplash.com https://plus.unsplash.com https://*.crisp.chat https://image.crisp.chat https://basemaps.cartocdn.com https://*.basemaps.cartocdn.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com",
   // Google Fonts files
   "font-src 'self' data: https://fonts.gstatic.com https://client.crisp.chat",
-  // Resend API, Crisp WS, Vercel telemetry, MapLibre tiles, GA4 collection
-  "connect-src 'self' https://api.resend.com https://*.crisp.chat wss://*.crisp.chat https://*.vercel-insights.com https://va.vercel-scripts.com https://*.cartocdn.com https://basemaps.cartocdn.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com",
+  // Resend API, Crisp WS, Vercel telemetry, MapLibre tiles, GA4 collection, Apollo's visit events
+  "connect-src 'self' https://api.resend.com https://*.crisp.chat wss://*.crisp.chat https://*.vercel-insights.com https://va.vercel-scripts.com https://*.cartocdn.com https://basemaps.cartocdn.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://aplo-evnt.com",
   // Frame sources — Crisp chat iframe + YouTube embeds (just in case)
   "frame-src 'self' https://client.crisp.chat https://www.youtube.com https://www.youtube-nocookie.com",
   // Disallow plugins

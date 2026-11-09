@@ -128,6 +128,7 @@ const LANDS: Record<string, string> = {
   "/blog/decorative-paving-public-art-joyce": "/applications/public-art",
   "/blog/residential-decorative-paving": "/applications/townhomes",
   "/blog/laneway-revitalization-vancouver": "/products/streetbond",
+  "/blog/laneway-project": "/products/streetbond",
   "/blog/residential-decorative-driveways": "/applications/residential-driveways",
   "/blog/decorative-paving-playgrounds": "/applications/playgrounds",
   "/blog/parking-lot-wayfinding": "/applications/parking-lots",

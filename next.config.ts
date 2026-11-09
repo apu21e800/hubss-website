@@ -437,6 +437,7 @@ const nextConfig: NextConfig = {
         { source: "/blog/decorative-paving-public-art-joyce", destination: "/applications/public-art", permanent: true }, // as /decorative-paving-public-art
         { source: "/blog/residential-decorative-paving", destination: "/applications/townhomes", permanent: true }, // as /residential-decorative-paving
         { source: "/blog/laneway-revitalization-vancouver", destination: "/products/streetbond", permanent: true }, // as /laneway-revitalization
+        { source: "/blog/laneway-project", destination: "/products/streetbond", permanent: true }, // the post itself, taken down 9 Nov 2026 (Doug); a republished post wins
         { source: "/blog/residential-decorative-driveways", destination: "/applications/residential-driveways", permanent: true }, // as /residential-decorative-driveways
         { source: "/blog/decorative-paving-playgrounds", destination: "/applications/playgrounds", permanent: true }, // as /decorative-paving-for-playgrounds
         { source: "/blog/parking-lot-wayfinding", destination: "/applications/parking-lots", permanent: true }, // as /parking-lot-wayfinding

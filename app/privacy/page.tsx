@@ -61,6 +61,11 @@ type Block = string | string[];
 // - Then "may also use" becomes "also use" and the date changes. If Google
 //   signals is turned on, say Google may recognize signed-in visitors on
 //   other devices.
+// 9 Nov 2026: Apollo.io's visitor tracker (components/ApolloVisitors.tsx),
+// company level only: it names the organizations a visit comes from and
+// keeps a random visitor number in local storage (apolloAnonId). If Apollo's
+// contact-level tracking is ever turned on, it identifies people, and this
+// page must say so before it does.
 // The contact lines carry the offices from Studio's Site Settings
 // (lib/site-settings.ts), so they match the footer.
 const buildSections = (offices: SiteSettings["offices"]): { heading: string; blocks: Block[] }[] => [
@@ -113,6 +118,7 @@ const buildSections = (offices: SiteSettings["offices"]): { heading: string; blo
         "Spam screening: Anthropic (reads what you send through our forms, with phone numbers and email addresses taken out and never your mailing address, to keep spam out of our inbox)",
         "Analytics: Google Analytics (pages visited, time on site, browser type, and referring URL)",
         "Advertising: Google Ads (shows our ads, measures which of them lead to inquiries, and may show our ads to people who have visited this site)",
+        "Business visit insights: Apollo.io (tells us which organizations visit the site, from the network address a visit comes from, and which pages they read; it is set not to identify individual visitors)",
         "Content: Sanity (stores the site's text and serves its photographs)",
         "Maps: CARTO (supplies the map on the homepage)",
       ],
@@ -130,6 +136,7 @@ const buildSections = (offices: SiteSettings["offices"]): { heading: string; blo
         "Measure our advertising and, if we use remarketing, show our ads to people who have visited the site",
       ],
       "You can disable cookies in your browser settings. Disabling cookies may affect some site functionality.",
+      "Apollo.io keeps a random visitor number in your browser's storage, so it can tell one visit from the next. It holds no name or contact details, and clearing your browser's site data removes it.",
       "We use Google Ads to show our ads and to measure which of them lead to inquiries. To measure them, our Google Analytics cookies work with Google's own advertising cookies, where your browser allows them, so Google can connect a visit or an inquiry to one of our ads. We may also use remarketing, a Google Analytics and Google Ads feature: Google may then show our ads to people who have visited hubss.com, on other websites and apps, including Google's own, such as Search and YouTube. Remarketing uses the same cookies to recognize a browser that has been here before.",
       "To opt out of remarketing, turn off personalized ads in Google's ad settings (adssettings.google.com), or opt out of interest-based ads from participating companies, Google included, at youradchoices.ca. To stop Google Analytics in your browser, and with it the ad measurement above, install Google's opt-out add-on for Google Analytics (tools.google.com/dlpage/gaoptout). When you send one of our forms, our server still tells Google Analytics that an inquiry arrived, without your name or contact details, so we can count it.",
     ],
@@ -183,7 +190,7 @@ export default async function PrivacyPage() {
           Privacy policy
         </h1>
         <p className="text-sm mb-12" style={{ color: "var(--text-muted)" }}>
-          Last updated: Oct 30, 2026
+          Last updated: Nov 9, 2026
         </p>
 
         <p className="text-base leading-relaxed mb-12" style={{ color: "var(--text-muted)" }}>

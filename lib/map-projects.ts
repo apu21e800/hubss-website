@@ -401,28 +401,6 @@ const curatedProjects: MapProject[] = [
       "Pastel StreetBond rings and bands on the City of Vancouver's plaza at Cambie Street and West 18th Avenue.",
   },
   {
-    // Post: laneway-project (More Awesome Now, "Alley Oops", downtown Vancouver). Its
-    // hero is Toronto's Leslieville lane, and the stand-in that was here could not be
-    // tied to the lane, so the pin shows no photo. Downtown Vancouver, approximate.
-    id: "vancouver-laneways",
-    title: "More Awesome Now laneways",
-    city: "Vancouver",
-    province: "BC",
-    lat: 49.2845,
-    lng: -123.1098,
-    product: "StreetBond",
-    application: "Public Art",
-    approximate: true,
-    images: [],
-    post: "laneway-project",
-    excerpt:
-      "More Awesome Now turned downtown Vancouver laneways into bright, playful public spaces with StreetBond 150 decorative coatings.",
-    problem:
-      "HCMA, the City of Vancouver and the Downtown Vancouver Business Improvement Association set out to turn downtown alleys from service corridors into bright, playful public spaces, while service vehicles kept using them.",
-    solution:
-      "StreetBond 150 decorative coatings in bold colour across the lane surface, shared by people on foot and service vehicles alike.",
-  },
-  {
     // Post: parc-riviera-streetbond-walkway. Product Book p.75: "Richmond, British Columbia"
     // (Townhomes spread). Parc Riviera Mews, 10199 River Dr.
     id: "richmond-parc-riviera",
@@ -1595,7 +1573,8 @@ const curatedProjects: MapProject[] = [
   },
   {
     // The post names the Leslieville laneway but not the lane: pin in Leslieville
-    // (Queen St E and Leslie St). Second photo: the same lane, from laneway-project.
+    // (Queen St E and Leslie St). Second photo: the same lane, the hero of the laneway post
+    // taken down 9 Nov 2026 (the photo is of this job, so it stays).
     id: "toronto-leslieville-laneway",
     title: "Leslieville laneway",
     city: "Toronto",

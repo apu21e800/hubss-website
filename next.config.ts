@@ -325,7 +325,7 @@ const nextConfig: NextConfig = {
       { source: "/stamped-asphalt-parking-lot", destination: "/blog/stamped-asphalt-parking-lot", permanent: true },
       { source: "/terry-fox-decorative-asphalt-plaza-coquitlam", destination: "/blog/terry-fox-plaza-coquitlam", permanent: true },
       { source: "/decorative-crosswalk-and-meridian", destination: "/blog/decorative-crosswalk-meridian", permanent: true },
-      { source: "/the-laneway-project", destination: "/blog/laneway-project", permanent: true },
+      { source: "/the-laneway-project", destination: "/products/streetbond", permanent: true }, // the post was taken down 9 Nov 2026 (Doug): StreetBond on laneways
       { source: "/parc-riviera-mews-streetbond-asphalt-walkway", destination: "/blog/parc-riviera-streetbond-walkway", permanent: true },
       { source: "/decorative-asphalt-for-rutland-centennial-park-kelowna", destination: "/applications/parks-paths", permanent: true }, // StreetBond in the Rutland Centennial Park revitalization
       { source: "/societe-de-transport-du-saguenay", destination: "/applications/crosswalks", permanent: true }, // TrafficPatternsXD station crosswalks, Saguenay
@@ -371,7 +371,7 @@ const nextConfig: NextConfig = {
       { source: "/performance-crosswalks-for-asphalt-and-concrete", destination: "/blog/performance-crosswalks-asphalt-concrete", permanent: true },
       { source: "/imprinted-asphalt-crosswalks-for-york-transit-corridor", destination: "/blog/multimodal-connectivity-york-region", permanent: true }, // the stub it used to land on is archived (QA rest#9)
       { source: "/residential-decorative-paving", destination: "/applications/townhomes", permanent: true }, // decorative paving for townhouse developers
-      { source: "/laneway-revitalization", destination: "/blog/laneway-project", permanent: true }, // More Awesome Now laneways, which this post covers
+      { source: "/laneway-revitalization", destination: "/products/streetbond", permanent: true }, // More Awesome Now laneways; the laneway post was taken down 9 Nov 2026
       { source: "/residential-decorative-driveways", destination: "/applications/residential-driveways", permanent: true }, // StreetPrint driveway, Burnaby; matches /residential-driveways
       // Google still lists this old post address and it answered 404 (30 Sep 2026). No Insights post covers a hospital
       // stamped-asphalt job (lib/blog-index.json: BC Children's Hospital is StreetBond and DecoMark), so the product page.
@@ -436,7 +436,7 @@ const nextConfig: NextConfig = {
         { source: "/blog/decorative-paving-townhomes", destination: "/blog/community-branding-case-study", permanent: true }, // as /decorative-paving-for-townhomes-canada (Windsor Gate, which this post covers)
         { source: "/blog/decorative-paving-public-art-joyce", destination: "/applications/public-art", permanent: true }, // as /decorative-paving-public-art
         { source: "/blog/residential-decorative-paving", destination: "/applications/townhomes", permanent: true }, // as /residential-decorative-paving
-        { source: "/blog/laneway-revitalization-vancouver", destination: "/blog/laneway-project", permanent: true }, // as /laneway-revitalization
+        { source: "/blog/laneway-revitalization-vancouver", destination: "/products/streetbond", permanent: true }, // as /laneway-revitalization
         { source: "/blog/residential-decorative-driveways", destination: "/applications/residential-driveways", permanent: true }, // as /residential-decorative-driveways
         { source: "/blog/decorative-paving-playgrounds", destination: "/applications/playgrounds", permanent: true }, // as /decorative-paving-for-playgrounds
         { source: "/blog/parking-lot-wayfinding", destination: "/applications/parking-lots", permanent: true }, // as /parking-lot-wayfinding

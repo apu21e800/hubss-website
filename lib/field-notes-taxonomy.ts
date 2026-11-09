@@ -318,7 +318,7 @@ export const RETIRED_PROJECT_PAGES: Record<string, string> = {
   "london-east-link-brt": "/blog/london-east-link-brt",
   "kitchener-veterans-memorial": "/blog/veterans-crosswalk-kitchener",
   "ubc-musqueam-crosswalk": "/blog/ubc-musqueam-crosswalk",
-  "vancouver-more-awesome-laneway": "/blog/laneway-project",
+  "vancouver-more-awesome-laneway": "/products/streetbond", // the laneway post was taken down 9 Nov 2026
 };
 
 /** Where a retired /projects/<slug> page now points. */
@@ -534,10 +534,6 @@ export const FIELD_NOTES: Record<string, Entry> = {
   "imprinted-asphalt-york-transit": {
     type: "Project Profile",
     keywords: ["imprinted asphalt", "BRT corridor pavement", "stamped asphalt"],
-  },
-  "laneway-project": {
-    type: "Project Profile",
-    keywords: ["laneway activation", "alley placemaking", "pattern paving"],
   },
   "murrayville-schoolhouse-sidewalk": {
     type: "Project Profile",

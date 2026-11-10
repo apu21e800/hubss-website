@@ -113,11 +113,16 @@ export default function ProjectDetail({
 }) {
   const systems = [project.product, ...(project.systems ?? [])];
   // The card leads to projects, never the Product Book (Vern, 16 Oct 2026:
-  // "map should go to projects, not the booklet"): the job's own write-up,
-  // or, for the 40 jobs with none yet, the Projects section. Until then a job
-  // without a write-up said "See it in the Product Book" and opened its
-  // printed page, and one with both linked the page as well.
+  // "map should go to projects, not the booklet"). The button is the job's
+  // own write-up; "More projects" (/blog/projects) is a quiet link on every
+  // card (Vern, 10 Nov 2026: "some lead to just the blog, that can be a
+  // secondary cta"). A job whose write-up isn't published yet (lib/map-
+  // projects.ts sets `slug` from the build's list) has its system's page as
+  // the button instead: until 10 Nov the button itself said "More projects"
+  // and opened the list. Until 16 Oct a job without a write-up said "See it
+  // in the Product Book" and opened its printed page.
   const readHref = project.slug ? `/blog/${project.slug}` : null;
+  const systemHref = productHref(project.product);
   const hasBrief = Boolean(project.problem || project.solution);
 
   return (
@@ -146,15 +151,15 @@ export default function ProjectDetail({
         <p className="cm-detail-text">{project.excerpt}</p>
 
         <div className="cm-detail-actions">
-          <a className="cm-btn cm-btn-primary" href={readHref ?? "/blog/projects"}>
-            {readHref ? "Read the write-up" : "More projects"}
+          <a className="cm-btn cm-btn-primary" href={readHref ?? systemHref}>
+            {readHref ? "Read the write-up" : `See ${project.product}`}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
           </a>
         </div>
 
         <p className="cm-detail-links">
-          {readHref && <a href="/blog/projects">More projects</a>}
-          <a href={productHref(project.product)}>About {project.product}</a>
+          <a href="/blog/projects">More projects</a>
+          {readHref && <a href={systemHref}>About {project.product}</a>}
           <a href="/contact">Plan a project like this</a>
         </p>
 

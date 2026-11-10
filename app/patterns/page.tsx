@@ -109,7 +109,7 @@ export default function PatternsPage() {
           the text from xl, under it below (components/patterns/StencilHero.tsx,
           10 Nov 2026). data-hero keeps the dark set in every theme: the art
           is drawn for it. */}
-      <section data-hero className="relative overflow-hidden pt-36 pb-12 xl:pb-24 xl:min-h-[560px]" style={{ background: "var(--bg-dark)" }}>
+      <section data-hero className="relative overflow-hidden pt-24 sm:pt-36 pb-12 xl:pb-24 xl:min-h-[560px]" style={{ background: "var(--bg-dark)" }}>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="xl:max-w-[min(42rem,calc(50vw-5rem))]">
             <div className="flex items-center gap-2.5 mb-3">

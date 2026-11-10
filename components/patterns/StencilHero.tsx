@@ -79,10 +79,11 @@ const CSS = `
 @media (pointer: coarse) { .st-cap a { min-height: 44px; } }
 @media (min-width: 640px) { .st-art { height: 300px; } .st-cap { margin-inline: 24px; } }
 @media (min-width: 1024px) { .st-art { height: 360px; } .st-cap { margin-inline: 32px; } }
-/* From xl the art fills the hero's right half, from under the bar to the
-   hero's foot, fading in from the middle so the text column stays clear. */
+/* From xl the art fills the hero's right half, from the bar (sticky, so the
+   hero starts under it) to the hero's foot, fading in from the middle so the
+   text column stays clear. */
 @media (min-width: 1280px) {
-  .st-fig { position: absolute; top: var(--nav-h, 64px); bottom: 0; right: 0; left: calc(50% + 1.5rem); margin: 0; }
+  .st-fig { position: absolute; top: 0; bottom: 0; right: 0; left: calc(50% + 1.5rem); margin: 0; }
   .st-art { position: absolute; inset: 0; height: auto;
     -webkit-mask-image: linear-gradient(90deg, transparent, #000 26%), linear-gradient(180deg, transparent, #000 10%);
     mask-image: linear-gradient(90deg, transparent, #000 26%), linear-gradient(180deg, transparent, #000 10%); }

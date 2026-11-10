@@ -434,6 +434,25 @@ export default async function ProductPage({ params }: Props) {
                 ? "Tell us about the repairs and your regional office will get back to you."
                 : <>A free Lunch &amp; Learn takes your team through the specification, with samples on the table.</>}
             </p>
+            {/* A laptop's way to a price (final QA, 10 Nov 2026). The sidebar
+                became a details card on 9 Nov and took "Price a project" with
+                it, which left a laptop's product page with no route to the
+                office but the bar's Contact, and that one forgets the product.
+                One quiet link, in the ask and not in the card; a phone and a
+                tablet have theirs under the hero (PricingStrip), so it shows
+                from lg only. The repair pages' button is already Contact. */}
+            {!isRepairAsk && (
+              <p className="hidden lg:block mt-1.5 text-sm" style={{ color: "var(--text-secondary)" }}>
+                Pricing a job?{" "}
+                <Link
+                  href={`/contact?project=${encodeURIComponent(product.name)}&from=product`}
+                  className="font-semibold underline underline-offset-4 whitespace-nowrap transition-colors hover:text-[var(--text-primary)]"
+                  style={{ color: "var(--accent-text)" }}
+                >
+                  Send us the project
+                </Link>
+              </p>
+            )}
           </div>
           <div className="flex flex-wrap gap-3 relative flex-shrink-0">
             {isRepairAsk ? (
@@ -497,9 +516,10 @@ export default async function ProductPage({ params }: Props) {
           {/* Right: the specification rows the spread doesn't already show.
               A details card only since 9 Nov 2026 (Vern: "remove the 'Price a
               project' and contact information from the details card on the
-              right. Just make it a details card"). The way to a price stays in
-              the ask above, under the hero on a phone (PricingStrip) and in the
-              bar at the foot of a phone's screen (PhoneActionBar). */}
+              right. Just make it a details card"). The way to a price is in
+              the ask above (its "Pricing a job?" line from lg, since 10 Nov),
+              under the hero on a phone (PricingStrip) and in the bar at the
+              foot of a phone's screen (PhoneActionBar). */}
           <aside className="min-w-0">
             {sideSpecs.length > 0 && (
               <div className="follow-nav rounded-xl p-6 sm:p-7 lg:sticky lg:top-[calc(var(--nav-offset)+32px)] relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}>

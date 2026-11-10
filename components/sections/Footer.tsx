@@ -58,8 +58,11 @@ const companyLinks = [
 // navigates instantly enough; nothing here is a primary path.
 const footerLink =
   "text-sm flex items-center min-h-11 sm:min-h-0 transition-colors hover:text-[var(--accent-text-lg)] underline-offset-4 hover:underline";
+// sm:min-h-6: an office's address and number were 22.8px rows on a laptop, a
+// hair under the 24px a pointer target needs (WCAG 2.5.8; final QA, 10 Nov
+// 2026). 24px keeps the compact list.
 const officeLink =
-  "text-xs flex items-center min-h-11 sm:min-h-0 [overflow-wrap:anywhere] transition-colors hover:text-[var(--text-primary)]";
+  "text-xs flex items-center min-h-11 sm:min-h-6 [overflow-wrap:anywhere] transition-colors hover:text-[var(--text-primary)]";
 const legalLink =
   "text-xs inline-flex items-center min-h-11 sm:min-h-0 transition-colors hover:text-[var(--text-primary)] underline-offset-4 hover:underline";
 

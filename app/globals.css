@@ -1484,6 +1484,13 @@ p {
   border-bottom: none;
 }
 
+/* A heading row's blank corner cell is a td, not a th with no name
+   (components/blog/PostBody.tsx, 10 Nov 2026). It wears the row's look. */
+.blog-prose thead tr:last-child td {
+  background: var(--bg-code);
+  border-bottom: 2px solid #f97316;
+}
+
 .blog-prose hr {
   border: none;
   height: 2px;

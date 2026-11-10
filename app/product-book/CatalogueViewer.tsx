@@ -972,8 +972,12 @@ export default function CatalogueViewer({
             boxShadow: "0 8px 30px rgba(0,0,0,0.45)",
           }}
         >
+          {/* The scrubber's end numbers, the "Go to" label and the two hints
+              under them are white at 55% (6:1 on the bar). At 38 to 45% they
+              were 3.5 to 4.5:1, at or under the 4.5 small text needs (final
+              QA, 10 Nov 2026). */}
           <div className="flex items-center gap-3">
-            <span className="hidden w-8 flex-shrink-0 text-right text-[12px] tabular-nums sm:block" style={{ color: "rgba(255,255,255,0.40)" }}>
+            <span className="hidden w-8 flex-shrink-0 text-right text-[12px] tabular-nums sm:block" style={{ color: "rgba(255,255,255,0.55)" }}>
               1
             </span>
             <input
@@ -985,7 +989,7 @@ export default function CatalogueViewer({
               aria-label={`Jump to a page. Currently ${label}.`}
               className="catalogue-scrub min-w-0 flex-1"
             />
-            <span className="hidden w-8 flex-shrink-0 text-[12px] tabular-nums sm:block" style={{ color: "rgba(255,255,255,0.40)" }}>
+            <span className="hidden w-8 flex-shrink-0 text-[12px] tabular-nums sm:block" style={{ color: "rgba(255,255,255,0.55)" }}>
               {total}
             </span>
             {/* On a phone on its side the controls share one row with the
@@ -1002,7 +1006,7 @@ export default function CatalogueViewer({
               </div>
             )}
             <form onSubmit={submitJump} className={`${short ? "hidden" : "hidden md:flex"} flex-shrink-0 items-center gap-2`}>
-              <label htmlFor="catalogue-jump" className="text-[11px] font-semibold uppercase tracking-[0.14em]" style={{ color: "rgba(255,255,255,0.42)" }}>
+              <label htmlFor="catalogue-jump" className="text-[11px] font-semibold uppercase tracking-[0.14em]" style={{ color: "rgba(255,255,255,0.55)" }}>
                 Go to
               </label>
               <input
@@ -1042,7 +1046,7 @@ export default function CatalogueViewer({
             >
               Book a Lunch &amp; Learn
             </Link>
-            <p className="hidden text-[12px] sm:block" style={{ color: "rgba(255,255,255,0.38)" }}>
+            <p className="hidden text-[12px] sm:block" style={{ color: "rgba(255,255,255,0.55)" }}>
               Drag a page or use <kbd style={kbd}>&larr;</kbd> <kbd style={kbd}>&rarr;</kbd> to turn &nbsp;·&nbsp; scroll or double-tap to zoom
             </p>
           </div>
@@ -1051,7 +1055,7 @@ export default function CatalogueViewer({
               off and the line above is desktop-only, so the reader opened on
               the cover with no sign of how to turn it. */}
           {!short && (
-            <p className="mt-2 text-center text-[12px] sm:hidden" style={{ color: "rgba(255,255,255,0.45)" }}>
+            <p className="mt-2 text-center text-[12px] sm:hidden" style={{ color: "rgba(255,255,255,0.55)" }}>
               Drag a page to turn &nbsp;·&nbsp; double-tap to zoom
             </p>
           )}

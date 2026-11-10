@@ -1553,6 +1553,12 @@ export default function Nav() {
       <AnimatePresence>
         {searchOpen && <SearchOverlay onClose={closeSearch} />}
       </AnimatePresence>
+
+      {/* Where "Skip to content" lands when the page's heading can't be
+          found, or before the page's script has loaded: just after the bar
+          (components/SkipLink.tsx). sr-only takes it out of the page's flow,
+          so it adds no row or gap to a page laid out as a grid or a stack. */}
+      <span id="content" tabIndex={-1} className="sr-only" />
     </MotionConfig>
   );
 }

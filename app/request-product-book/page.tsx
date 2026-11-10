@@ -73,7 +73,7 @@ export default function RequestIdeaBookPage() {
                   <a href={catalogue.download.href} download={ideaBook.fileName} data-tap="44" className="inline-flex items-center min-h-11 sm:min-h-0 font-semibold underline" style={{ color: "var(--accent-text)" }}>
                     Download the PDF
                   </a>{" "}
-                  <span style={{ color: "var(--text-hint)" }}>({catalogue.download.label})</span>
+                  <span style={{ color: "var(--text-muted)" }}>({catalogue.download.label})</span>
                 </p>
               )}
             </div>

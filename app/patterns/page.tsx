@@ -5,6 +5,7 @@ import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import { buildMetadata } from "@/lib/seo";
 import { fieldTemplates, borderTemplates, patternSrc, type PatternTemplate } from "@/lib/pattern-templates";
+import StencilHero from "@/components/patterns/StencilHero";
 
 export const metadata: Metadata = buildMetadata({
   title: "StreetPrint patterns · Stamping templates",
@@ -104,42 +105,49 @@ export default function PatternsPage() {
       <Nav />
 
       {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="pt-36 pb-12" style={{ background: "var(--bg-dark)" }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-2.5 mb-3">
-            <span
-              className="inline-block rounded-full flex-shrink-0"
-              style={{ width: 6, height: 6, background: "#F97316" }}
+      {/* The Standard Herringbone template and its finished surface beside
+          the text from xl, under it below (components/patterns/StencilHero.tsx,
+          10 Nov 2026). data-hero keeps the dark set in every theme: the art
+          is drawn for it. */}
+      <section data-hero className="relative overflow-hidden pt-36 pb-12 xl:pb-24 xl:min-h-[560px]" style={{ background: "var(--bg-dark)" }}>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="xl:max-w-[min(42rem,calc(50vw-5rem))]">
+            <div className="flex items-center gap-2.5 mb-3">
+              <span
+                className="inline-block rounded-full flex-shrink-0"
+                style={{ width: 6, height: 6, background: "#F97316" }}
+                aria-hidden="true"
+              />
+              <p
+                className="text-[0.72rem] font-semibold uppercase"
+                style={{ letterSpacing: "0.22em", color: "var(--text-secondary)" }}
+              >
+                StreetPrint templates
+              </p>
+            </div>
+            <h1 className="h1-page" style={{ color: "var(--text-primary)" }}>
+              The pattern library.
+            </h1>
+            <div
+              className="mt-6 mb-6"
+              style={{ height: 1, background: "var(--ink-16)" }}
               aria-hidden="true"
             />
-            <p
-              className="text-[0.72rem] font-semibold uppercase"
-              style={{ letterSpacing: "0.22em", color: "var(--text-secondary)" }}
-            >
-              StreetPrint templates
+            <p className="text-base sm:text-lg max-w-2xl leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+              Sixteen stamping templates, shown as installed, dimensioned to the inch. Flexible
+              templates press the pattern into warm asphalt; StreetBond colour locks it in. Every
+              field pattern combines with every border course, plus fully custom designs.{" "}
+              {/* 23 Oct 2026 (Vern: "templates apply to TPXD too"): its Design
+                  Manual stamps herringbone, offset brick, slate, cobble and tile
+                  with its own wire-rope grids. */}
+              <Link href="/products/traffic-patterns-xd" className="underline underline-offset-2" style={{ color: "var(--text-primary)" }}>
+                TrafficPatternsXD
+              </Link>{" "}
+              is stamped in many of the same patterns, with its own wire-rope grids.
             </p>
           </div>
-          <h1 className="h1-page" style={{ color: "var(--text-primary)" }}>
-            The pattern library.
-          </h1>
-          <div
-            className="mt-6 mb-6"
-            style={{ height: 1, background: "var(--ink-16)" }}
-            aria-hidden="true"
-          />
-          <p className="text-base sm:text-lg max-w-2xl leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-            Sixteen stamping templates, shown as installed, dimensioned to the inch. Flexible
-            templates press the pattern into warm asphalt; StreetBond colour locks it in. Every
-            field pattern combines with every border course, plus fully custom designs.{" "}
-            {/* 23 Oct 2026 (Vern: "templates apply to TPXD too"): its Design
-                Manual stamps herringbone, offset brick, slate, cobble and tile
-                with its own wire-rope grids. */}
-            <Link href="/products/traffic-patterns-xd" className="underline underline-offset-2" style={{ color: "var(--text-primary)" }}>
-              TrafficPatternsXD
-            </Link>{" "}
-            is stamped in many of the same patterns, with its own wire-rope grids.
-          </p>
         </div>
+        <StencilHero />
       </section>
 
       {/* Under the dark hero the library sits on paper, as the product and

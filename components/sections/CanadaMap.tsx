@@ -26,6 +26,24 @@
  * does not collapse under your cursor when the camera moves for you, a way
  * back to the whole country, and 44px controls.
  *
+ * Scrolling the page past the map on a laptop (10 Nov 2026; Vern: "the map
+ * freezes on page scroll and takes time to reload on desktop"). Two things
+ * did it, both measured on hubss.com at 1440x900:
+ *   - MapLibre's cooperative-gesture screen ("Use Ctrl + scroll to zoom the
+ *     map") came up on every wheel tick over the map, drawn here at 72% black
+ *     with a 4px blur over the whole frame. It held for a second after the
+ *     last tick and took another to fade, so the map went dark while the page
+ *     moved and came back two seconds later. With a mouse or trackpad that
+ *     screen is off (CSS below); a blocked wheel shows a small pill instead
+ *     (`cm-nudge`), and the map stays as it is. A phone keeps the screen: it
+ *     is the one way a finger learns the two-finger move.
+ *   - The panel's list caught the wheel: with the pointer resting where the
+ *     panel arrived, twelve wheel ticks moved the list 1,200px and the page
+ *     not at all (overscroll-behavior: contain kept it there). With a mouse
+ *     or trackpad the list scrolls once the pointer has moved over it, a key
+ *     or a press is in it (`panelScroll`); until then the wheel scrolls the
+ *     page.
+ *
  * Every photo goes through lib/map-photo.ts: Sanity's CDN or a /public file,
  * never /_next/image.
  */
@@ -419,6 +437,10 @@ export default function CanadaMap({ revealOnMount = false }: { revealOnMount?: b
   const [touched, setTouched] = useState(false);
   const [tour, setTour] = useState<{ ids: string[]; index: number; playing: boolean } | null>(null);
   const [announce, setAnnounce] = useState("");
+  /** The small "Ctrl + scroll to zoom" pill a blocked wheel shows on a laptop. Toggled by data-on, never by state. */
+  const nudgeRef = useRef<HTMLParagraphElement>(null);
+  // The key a hint names: a Mac zooms with ⌘ (or Ctrl, or a pinch), everything else with Ctrl.
+  const zoomKey = useMemo(() => (/Mac/.test(navigator.userAgent) ? "⌘" : "Ctrl"), []);
 
   /** While true, camera moves we make do not re-filter the list. A move the visitor makes releases it. */
   const freezeList = useRef(false);
@@ -741,6 +763,58 @@ export default function CanadaMap({ revealOnMount = false }: { revealOnMount?: b
       window.__hubssMapReady = false;
     };
   }, [loaded, isDesktop, padding, syncInView, homeBounds]);
+
+  // A wheel over the map without Ctrl (or ⌘) scrolls the page, and with a
+  // mouse or trackpad MapLibre's dark screen no longer says so (the header,
+  // and the CSS below): the pill under the map does, for a moment, without
+  // covering it. Straight to the element, never through state, so a page
+  // scrolled past the map renders nothing. The first one also retires the
+  // opening hint, which says the same thing in the same place.
+  useEffect(() => {
+    if (!loaded || !isDesktop) return;
+    const m = mapRef.current?.getMap();
+    if (!m) return;
+    const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const onBlocked = (e: { gestureType?: string }) => {
+      if (e.gestureType !== "wheel_zoom" || !fine.matches) return;
+      const el = nudgeRef.current;
+      if (!el) return;
+      setTouched(true);
+      el.setAttribute("data-on", "");
+      clearTimeout(timer);
+      timer = setTimeout(() => el.removeAttribute("data-on"), 1400);
+    };
+    m.on("cooperativegestureprevented", onBlocked);
+    return () => {
+      m.off("cooperativegestureprevented", onBlocked);
+      clearTimeout(timer);
+    };
+  }, [loaded, isDesktop]);
+
+  // The panel's list, on a laptop: it scrolls once the visitor is in it (the
+  // header). A page scrolled under a resting pointer moves nothing, so the
+  // pointer's place is kept as it enters and only a real move from there, a
+  // press or a key engages the list; leaving it lets the wheel have the page
+  // again. data-engaged is read by the CSS (fine pointers only), never state.
+  const panelScroll = useMemo(() => {
+    let at: { x: number; y: number } | null = null;
+    const engage = (el: HTMLElement) => el.setAttribute("data-engaged", "");
+    return {
+      onPointerEnter: (e: React.PointerEvent<HTMLDivElement>) => { at = { x: e.clientX, y: e.clientY }; },
+      onPointerMove: (e: React.PointerEvent<HTMLDivElement>) => {
+        if (e.pointerType === "touch" || e.currentTarget.hasAttribute("data-engaged")) return;
+        if (at && Math.abs(e.clientX - at.x) + Math.abs(e.clientY - at.y) < 3) return;
+        engage(e.currentTarget);
+      },
+      onPointerDown: (e: React.PointerEvent<HTMLDivElement>) => engage(e.currentTarget),
+      onFocus: (e: React.FocusEvent<HTMLDivElement>) => engage(e.currentTarget),
+      onPointerLeave: (e: React.PointerEvent<HTMLDivElement>) => {
+        at = null;
+        e.currentTarget.removeAttribute("data-engaged");
+      },
+    };
+  }, []);
 
   // A search frames what it found, once typing pauses.
   useEffect(() => {
@@ -1075,7 +1149,10 @@ export default function CanadaMap({ revealOnMount = false }: { revealOnMount?: b
             )}
 
             {isDesktop && !touched && loaded && !selected && !tour && (
-              <p className="cm-hint" aria-hidden="true">Drag to explore · Ctrl + scroll to zoom · Click a pin</p>
+              <p className="cm-hint" aria-hidden="true">Drag to explore · {zoomKey} + scroll to zoom · Click a pin</p>
+            )}
+            {isDesktop && loaded && (
+              <p ref={nudgeRef} className="cm-nudge" aria-hidden="true">{zoomKey} + scroll to zoom</p>
             )}
 
             {/* ── The panel (desktop) */}
@@ -1101,7 +1178,7 @@ export default function CanadaMap({ revealOnMount = false }: { revealOnMount?: b
                       )}
                     </div>
                     {tourBar}
-                    <div className="cm-panel-scroll">
+                    <div className="cm-panel-scroll" {...panelScroll}>
                       {/* 600px for a 342px box: the panel photo is the one a visitor judges
                   the job by, and at 1x it picked a 384px file that looked soft
                   (17 Oct 2026). 600 makes next/image ask for 640 at 1x, 828 at
@@ -1120,7 +1197,7 @@ export default function CanadaMap({ revealOnMount = false }: { revealOnMount?: b
                       <span>{listTitle}</span>
                       {anyFilter && <button type="button" className="cm-link-btn" onClick={startOver}>Start over</button>}
                     </div>
-                    <div ref={listRef} className="cm-panel-scroll" tabIndex={-1} role="region" aria-label="Projects in view">
+                    <div ref={listRef} className="cm-panel-scroll" tabIndex={-1} role="region" aria-label="Projects in view" {...panelScroll}>
                       {listProjects.length === 0 ? emptyList : (
                         <ul className="cm-list">
                           {listProjects.map((p) => (
@@ -1250,7 +1327,11 @@ const CSS = `
 .cm-panel-list, .cm-panel-detail { display: flex; flex-direction: column; min-height: 0; flex: 1; }
 .cm-panel-controls { padding: 14px 14px 10px; display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.06); }
 .cm-panel-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px 6px 10px; }
-.cm-panel-scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; outline: none; }
+.cm-panel-scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; outline: none; scrollbar-gutter: stable; }
+/* A mouse or trackpad: the list takes the wheel once the visitor is in it
+   (panelScroll sets data-engaged); until then the page does. The gutter stays
+   reserved, so nothing shifts when the scrollbar comes back. */
+@media (hover: hover) and (pointer: fine) { .cm-panel-scroll:not([data-engaged]) { overflow-y: hidden; } }
 .cm-panel-scroll::-webkit-scrollbar { width: 5px; }
 .cm-panel-scroll::-webkit-scrollbar-thumb { background: rgba(249,115,22,0.3); border-radius: 5px; }
 .cm-list-head, .cm-strip-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-text-lg); }
@@ -1334,6 +1415,12 @@ const CSS = `
 .cm-back { position: absolute; z-index: 7; top: 14px; right: 14px; display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 0 16px; border-radius: 11px; border: 1px solid rgba(255,255,255,0.14); background: rgba(13,14,16,0.88); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); color: var(--text-primary); font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,0.45); }
 .cm-back:hover { border-color: rgba(249,115,22,0.6); }
 .cm-hint { position: absolute; z-index: 5; left: calc(${PANEL_W}px + 28px + (100% - ${PANEL_W}px - 28px) / 2); bottom: 18px; transform: translateX(-50%); margin: 0; padding: 7px 16px; border-radius: 999px; background: rgba(13,14,16,0.82); border: 1px solid rgba(255,255,255,0.08); color: #B7BDC8; font-size: 12px; white-space: nowrap; pointer-events: none; animation: cm-hint 6s ease 1.2s both; }
+/* In the hint's place, for a moment after a wheel the map let the page have. */
+.cm-nudge { position: absolute; z-index: 5; left: calc(${PANEL_W}px + 28px + (100% - ${PANEL_W}px - 28px) / 2); bottom: 18px; transform: translate(-50%, 6px); margin: 0; padding: 7px 16px; border-radius: 999px; background: rgba(13,14,16,0.88); border: 1px solid rgba(249,115,22,0.35); color: var(--text-primary); font-size: 12px; font-weight: 600; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity var(--dur-2) var(--ease-out), transform var(--dur-2) var(--ease-out); }
+.cm-nudge[data-on] { opacity: 1; transform: translate(-50%, 0); }
+/* A mouse or trackpad never gets MapLibre's dark screen (the header): the page
+   scrolls past the map with the map as it is. A finger still gets it. */
+@media (hover: hover) and (pointer: fine) { .maplibregl-cooperative-gesture-screen { display: none !important; } }
 @keyframes cm-hint { 0% { opacity: 0; transform: translate(-50%, 8px); } 10% { opacity: 1; transform: translate(-50%, 0); } 85% { opacity: 1; } 100% { opacity: 0; } }
 .cm-note { position: absolute; z-index: 5; top: 14px; left: 50%; transform: translateX(-50%); margin: 0; padding: 8px 14px; border-radius: 10px; background: rgba(8,13,22,0.9); color: #B7BDC8; font-size: 12px; }
 
@@ -1388,6 +1475,7 @@ const CSS = `
 
 @media (prefers-reduced-motion: reduce) {
   .cm-bubble, .cm-sheet, .cm-sheet-backdrop, .cm-hint { animation: none; }
+  .cm-nudge { transition: none; }
   .cm-bubble-photo::after { animation: none; display: none; }
   .cm-tour-fill { animation: none; width: 100%; }
 }

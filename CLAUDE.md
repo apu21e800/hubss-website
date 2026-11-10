@@ -152,6 +152,32 @@ has no popups: a pin opens in the floating panel (desktop) or a sheet
 through the highlights (TOUR_IDS). Studio has a "Projects (Map Pins)" list
 from the May 2026 migration, but the map does not read it.
 
+Scrolling the page past the map on a laptop (10 Nov 2026; Vern: "the map
+freezes on page scroll and takes time to reload on desktop"). Measured on
+hubss.com at 1440x900, two causes, both fixed for a mouse or trackpad only
+(`(hover: hover) and (pointer: fine)`); a phone is unchanged:
+- MapLibre's cooperative-gesture screen ("Use Ctrl + scroll to zoom") came up
+  on every wheel tick over the map, 72% black with a 4px blur over the whole
+  frame, held a second after the last tick and faded over another. It is off;
+  a blocked wheel shows a small pill under the map instead (`cm-nudge`, set
+  through a ref, never state), and the opening hint names the Mac's key (⌘).
+  Plain wheel still scrolls the page; Ctrl or ⌘ + wheel, or a pinch, zooms.
+  A phone keeps the screen: it is how a finger learns the two-finger move.
+- The panel's list caught the wheel: with the pointer resting where the panel
+  arrived, twelve ticks moved the list 1,200px and the page none. The list
+  now takes the wheel only once the pointer has moved over it, or a press or
+  a key is in it (`panelScroll`, data-engaged); leaving it hands the wheel
+  back to the page. QA it with real pointer moves (Playwright's mouse.move),
+  never by scrolling the list from script.
+
+The card's button is the job's write-up ("Read the write-up"); every card has
+"More projects" (/blog/projects) as a quiet link under it (Vern, 10 Nov:
+"some lead to just the blog, that can be a secondary cta"). A job whose
+write-up is not published yet has its system's page as the button ("See
+StreetBond") until it is. Vern, 10 Nov: "we should have a blog dedicated to
+every map item. for sure": the 39 unpublished write-ups are the drafts in
+content/drafts/ named by each pin's `post:`.
+
 The project count the page prints comes from `lib/map-count.json`, regenerated
 every build. Do not type a project count anywhere: the phone card used to say
 "84 projects" while the map's own header, forty pixels below it, said 59.
@@ -257,9 +283,10 @@ Then, on Vern's answers:
   types or something to that effect"; Vern: "endless applications I think";
   scripts/studio-cleanup-2026-10-17.ts, same pattern, dry run by default).
 - The homepage map's project cards lead to projects, never the Product Book
-  (Vern: "map should go to projects, not the booklet"): the write-up, or
-  "More projects" (/blog/projects) for the 40 jobs without one
-  (components/sections/map/ProjectDetail.tsx). A phone frames the pins
+  (Vern: "map should go to projects, not the booklet"): the write-up, with
+  "More projects" (/blog/projects) as a quiet link on every card since 10
+  Nov 2026 (components/sections/map/ProjectDetail.tsx; "Putting a project on
+  the homepage map" above). A phone frames the pins
   themselves (PHONE_BOUNDS in CanadaMap.tsx); desktop keeps ALL_BOUNDS.
 - Page descriptions over 160 characters were shortened in code (gallery,
   resources, contact, Lunch & Learn, privacy, the Product Book's three
@@ -1262,6 +1289,29 @@ build` bakes them, a bare `next build` does not (`npm run gen:search-images --
 search field at 320px (`min-w-0`: its default twenty-character width slid the
 panel sideways), `.h2-section` at 320px (30px under 360) and the photo
 archive's hover caption (two lines at most).
+
+## The pattern library's hero (10 Nov 2026)
+Vern: "do something creative with the pattern gallery hero space can you make
+a stencil to match one of the drawings, could look really cool if done
+right." /patterns' hero now carries components/patterns/StencilHero.tsx: the
+Standard Herringbone template drawn from its own sheet
+(lib/stencil-herringbone.ts: brick 9.374 x 4.499, strip .376, so the long side
+is two short sides and a strip and the 117.376 x 58.876 sheet is 24 x 12
+steps; the cells were checked to tile with no gap or overlap). Toward the text, the template as
+steel on asphalt with three of the sheet's dimensions in the accent; toward
+the corner, the same bricks in StreetBond Terra Cotta (EMA 2026 card,
+lib/colours.ts), each pressed in, the edge between them following the bricks.
+On load the template draws itself in and the colour comes in as it lifts, once,
+under two seconds, CSS only; reduced motion shows the finished picture.
+- A server component: an inline SVG (about 44 KB of HTML before compression),
+  no script, no request. The art is aria-hidden; its caption says what it is
+  and links to the drawing (#herringbone).
+- From xl it fills the hero's right half from under the bar, fading in from
+  the middle (the text column is capped at 50vw - 5rem there); under xl it is
+  a band under the text, the dimensions off (6px figures on a phone). The
+  SVG covers its box, centred: measure a change at 1280, 1440, 1920 (the
+  dimensions must stay clear of the fades) and at 390, 768, 1024.
+- data-hero on the section keeps the hero dark in every theme.
 
 ## The gate photo (28 Oct 2026)
 public/images/products/streetprint/streetprint-86.jpg (the estate driveway

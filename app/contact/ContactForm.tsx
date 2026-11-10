@@ -8,6 +8,7 @@ import { useSiteSettings } from "@/components/SiteSettingsProvider";
 import { mailtoHref, telHref } from "@/lib/site-settings";
 import { track } from "@vercel/analytics";
 import { postForm } from "@/lib/post-form";
+import { NextSteps, PROJECTS_STEP, SentPanel, bookStep } from "@/components/ui/SentPanel";
 
 // Note: metadata must be in a server component — defined in layout or a parallel route.
 // Page-level metadata for client components requires moving meta to a parent layout.
@@ -22,6 +23,12 @@ const projectTypes = [
   "Parking lot",
   "Other",
 ];
+
+// The field labels. --text-muted, not the --text-secondary the other two
+// forms' labels use: this form's card is the lighter --bg-card-surface, and
+// on it --text-secondary came to 4.26:1 at 12px, under the 4.5 a small label
+// needs. --text-muted is 5.66:1 there (final QA, 10 Nov 2026).
+const LABEL_COLOUR = "var(--text-muted)";
 
 interface ContactFormProps {
   footer: React.ReactNode;
@@ -114,15 +121,20 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
           {/* Right: form (both rows on a laptop; second on a phone) */}
           <div className="rounded-xl p-6 sm:p-8 lg:row-span-2 lg:col-start-2" style={{ background: "var(--bg-card-surface)", border: "1px solid var(--border-subtle)" }}>
             {submitted ? (
-              <div className="flex flex-col items-center justify-center h-full py-16 text-center">
+              /* SentPanel: the confirmation comes into view and takes the
+                 focus. On a phone it sat 90px above the screen, the offices
+                 in view, and nothing said the message had gone (final QA,
+                 10 Nov 2026). Then two quiet ways on. */
+              <SentPanel className="flex flex-col items-center justify-center h-full py-12 sm:py-16 text-center">
                 <div className="w-16 h-16 rounded-full flex items-center justify-center mb-5" style={{ background: "rgba(249,115,22,0.15)" }}>
-                  <svg className="w-7 h-7" style={{ color: "var(--accent-text-lg)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-7 h-7" style={{ color: "var(--accent-text-lg)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold mb-2" style={{ color: "var(--text-primary)" }}>Message sent</h3>
+                <h3 data-sent-heading className="text-xl font-bold mb-2" style={{ color: "var(--text-primary)" }}>Message sent</h3>
                 <p className="text-sm" style={{ color: "var(--text-body)" }}>We&apos;ll be in touch within one business day.</p>
-              </div>
+                <NextSteps steps={[...bookStep(), PROJECTS_STEP]} />
+              </SentPanel>
             ) : (
               <form
                 onSubmit={async (e) => {
@@ -168,7 +180,7 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
                       {/* The label the Lunch & Learn and Product Portfolio Book
                           forms use (uniformity pass, 17 Oct 2026: three label
                           styles across three forms). */}
-                      <label htmlFor={`contact-${f.key}`} className="block text-[12px] font-semibold uppercase tracking-[0.16em] mb-1.5" style={{ color: "var(--text-secondary)" }}>
+                      <label htmlFor={`contact-${f.key}`} className="block text-[12px] font-semibold uppercase tracking-[0.16em] mb-1.5" style={{ color: LABEL_COLOUR }}>
                         {f.label}
                         {f.optional && <span style={{ textTransform: "none", letterSpacing: 0 }}> (optional)</span>}
                       </label>
@@ -193,7 +205,7 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
                     { label: "Phone", key: "phone", type: "tel", placeholder: "416-555-0100", optional: true },
                   ].map((f) => (
                     <div key={f.key}>
-                      <label htmlFor={`contact-${f.key}`} className="block text-[12px] font-semibold uppercase tracking-[0.16em] mb-1.5" style={{ color: "var(--text-secondary)" }}>
+                      <label htmlFor={`contact-${f.key}`} className="block text-[12px] font-semibold uppercase tracking-[0.16em] mb-1.5" style={{ color: LABEL_COLOUR }}>
                         {f.label}
                         {f.optional && <span style={{ textTransform: "none", letterSpacing: 0 }}> (optional)</span>}
                       </label>
@@ -213,7 +225,7 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
                   ))}
                 </div>
                 <div>
-                  <label htmlFor="contact-projectType" className="block text-[12px] font-semibold uppercase tracking-[0.16em] mb-1.5" style={{ color: "var(--text-secondary)" }}>Project type</label>
+                  <label htmlFor="contact-projectType" className="block text-[12px] font-semibold uppercase tracking-[0.16em] mb-1.5" style={{ color: LABEL_COLOUR }}>Project type</label>
                   <select
                     id="contact-projectType"
                     name="projectType"
@@ -231,7 +243,7 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
                   </select>
                 </div>
                 <div>
-                  <label htmlFor="contact-message" className="block text-[12px] font-semibold uppercase tracking-[0.16em] mb-1.5" style={{ color: "var(--text-secondary)" }}>Message</label>
+                  <label htmlFor="contact-message" className="block text-[12px] font-semibold uppercase tracking-[0.16em] mb-1.5" style={{ color: LABEL_COLOUR }}>Message</label>
                   <textarea
                     id="contact-message"
                     name="message"
@@ -257,8 +269,18 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
                   onChange={(e) => setForm({ ...form, website: e.target.value })}
                 />
 
+                {/* role="alert": a screen reader is told the send failed. The
+                    numbers follow, as the Lunch & Learn form's error gives
+                    them: on a phone the offices are a scroll below the form,
+                    and a send that fails twice shouldn't cost the job. */}
                 {error && (
-                  <p className="text-sm text-[var(--err-text)]">{error}</p>
+                  <p role="alert" className="text-sm text-[var(--err-text)]">
+                    {error} Or call East{" "}
+                    <a href={telHref(offices.east.phone)} className="font-semibold underline underline-offset-2 whitespace-nowrap">{offices.east.phone}</a>
+                    {" "}or West{" "}
+                    <a href={telHref(offices.west.phone)} className="font-semibold underline underline-offset-2 whitespace-nowrap">{offices.west.phone}</a>
+                    .
+                  </p>
                 )}
 
                 <button

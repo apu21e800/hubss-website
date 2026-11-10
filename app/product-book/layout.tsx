@@ -41,6 +41,11 @@ export function generateMetadata(): Metadata {
 export default function CatalogueLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <div className="min-h-dvh bg-black" data-surface="dark" data-catalogue-route>
+      {/* "Skip to content" names #content, the mark the site's bar leaves
+          after itself. The reader has no bar, so the mark is here: the link
+          has somewhere to land, and its script then goes to the heading
+          (components/SkipLink.tsx). */}
+      <span id="content" tabIndex={-1} className="sr-only" />
       {children}
     </div>
   );

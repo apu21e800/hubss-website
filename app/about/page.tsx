@@ -294,8 +294,11 @@ export default async function AboutPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[
                 // MMAX is Ennis-Flint by PPG (its own sheets), not GAF: moved 17 Oct 2026.
-                { name: "GAF",         sub: "",              logo: "/images/partners/gaf-logo-96.png", products: ["StreetBond", "StreetBondSR", "DuraShield"],                                                 accent: "#E05C1A" },
-                { name: "Ennis-Flint", sub: "A PPG company", logo: "/images/partners/ppg-logo.svg", products: ["TrafficPatterns", "TrafficPatternsXD", "PreMark", "AirMark", "DuraTherm", "DecoMark", "MMAX"], accent: "#0057A8" },
+                // `ink`: the colour of the system names on the chip's tint. GAF's
+                // own orange was 3.29:1 there at 12px; its darker tone is 5.03:1
+                // (final QA, 10 Nov 2026). The rule above the card keeps the accent.
+                { name: "GAF",         sub: "",              logo: "/images/partners/gaf-logo-96.png", products: ["StreetBond", "StreetBondSR", "DuraShield"],                                                 accent: "#E05C1A", ink: "#B83E0B" },
+                { name: "Ennis-Flint", sub: "A PPG company", logo: "/images/partners/ppg-logo.svg", products: ["TrafficPatterns", "TrafficPatternsXD", "PreMark", "AirMark", "DuraTherm", "DecoMark", "MMAX"], accent: "#0057A8", ink: "#0057A8" },
               ].map((partner) => (
                 <div key={partner.name} className="rounded-xl relative overflow-hidden flex flex-col sm:flex-row sm:items-center gap-5 px-5 sm:px-7 py-6" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}>
                   <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: partner.accent }} />
@@ -303,13 +306,17 @@ export default async function AboutPage() {
                     <Image src={partner.logo} width={80} height={40} alt={partner.name} style={{ maxHeight: 32, width: "auto", objectFit: "contain" }} unoptimized />
                   </div>
                   <div className="min-w-0">
+                    {/* The space before the span is written out: without it the
+                        heading read "Ennis-FlintA PPG company" to a screen reader
+                        and a search engine. --text-muted: --ink-30 was 2.7:1 on
+                        the card (final QA, 10 Nov 2026). */}
                     <h3 className="text-xl font-bold" style={{ color: "var(--text-primary)" }}>
                       {partner.name}
-                      {partner.sub && <span className="ml-2 text-xs font-semibold tracking-wide uppercase align-middle" style={{ color: "var(--ink-30)" }}>{partner.sub}</span>}
+                      {partner.sub && <>{" "}<span className="ml-1 text-xs font-semibold tracking-wide uppercase align-middle" style={{ color: "var(--text-muted)" }}>{partner.sub}</span></>}
                     </h3>
                     <div className="flex flex-wrap gap-1.5 mt-2.5">
                       {partner.products.map((p) => (
-                        <span key={p} className="text-[12px] font-semibold px-2 py-0.5 rounded-full" style={{ background: `${partner.accent}18`, color: partner.accent, border: `1px solid ${partner.accent}30` }}>{p}</span>
+                        <span key={p} className="text-[12px] font-semibold px-2 py-0.5 rounded-full" style={{ background: `${partner.accent}18`, color: partner.ink, border: `1px solid ${partner.accent}30` }}>{p}</span>
                       ))}
                     </div>
                   </div>

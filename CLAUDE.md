@@ -192,12 +192,18 @@ readiness): the product and application pages put the sidebar's pricing card
 under the whole page on a phone, so components/sections/PricingStrip.tsx
 repeats its heading, the two offices' phones and "Send us the project" under
 the hero below lg (all of it on a 360x640 first screen). From lg up the
-sidebar card is on the first screen; on the application pages it comes before
-the systems card (the four pages without a spread had their phones under a
-laptop's first screen). Check a change on the ten pages an ad would land on
+application pages' sidebar card is on the first screen, before the systems
+card (the four pages without a spread had their phones under a laptop's
+first screen). The product pages' sidebar is a details card only since 9 Nov
+2026 (Vern: "Just make it a details card"), so from lg their way to the
+office is one quiet line in the "Specify ..." ask, "Pricing a job? Send us
+the project" (10 Nov 2026; it carries the product into the form), with the
+bar's Contact above it. Check a change on the ten pages an ad would land on
 (the six main products, crosswalks, bike lanes, bus lanes, regulatory
 markings) at 360x640, 375x667, 390x844, 768x1024, 1024x768 and 1440x900:
-both phones, and below lg the link too, inside the first screen.
+below lg both phones and the link inside the first screen; from lg the
+application pages' phones on the first screen and the product pages' line
+in the ask.
 
 ## Commands
 npm run dev     # local development
@@ -1290,6 +1296,48 @@ build` bakes them, a bare `next build` does not (`npm run gen:search-images --
 search field at 320px (`min-w-0`: its default twenty-character width slid the
 panel sideways), `.h2-section` at 320px (30px under 360) and the photo
 archive's hover caption (two lines at most).
+
+## The final QA (10 Nov 2026): what later work must keep
+Vern, 10 Nov: "a final QA on the website. copy, ux/ui, sales funnels
+(gentle)". Every sitemap page was read at 1440x900 and 390x844 (254 visits:
+meta, headings, images, links, copy, calls to action, console, sideways
+scroll, tap targets, the accessibility checker), the copy spell-checked and
+its numbers compared across pages, and the three forms walked to their
+"sent" and "failed" screens with /api/contact answered inside the browser
+(Playwright's page.route), so nothing was sent. No broken link or image, no
+page error, no typo. What it changed:
+- After a send, the confirmation is components/ui/SentPanel.tsx: it takes
+  the focus (its heading, `data-sent-heading`) and comes to the middle of the
+  screen when it isn't whole on it. Measured before: the printed-book form's
+  "Request received." sat 450px above a phone's screen and under the bar on
+  a laptop, the contact form's "Message sent" 90px above a phone's, and the
+  focus fell to the page's start on all three. Under it, `NextSteps`: one or
+  two text links (the book while it is on, `bookStep()`; recent projects; a
+  Lunch & Learn after a book request). A new form's "sent" screen is a
+  SentPanel, and an error is `role="alert"`.
+- No form says a confirmation email is coming: the route mails the office
+  only. The printed-book panel gives the two offices' numbers for "need it
+  by a certain date".
+- "Skip to content" (components/SkipLink.tsx) goes to the page's h1. It went
+  to <main>, which holds the bar, so the next Tab was the logo; its address
+  named an element no page had, which the checker flagged on all 127 pages.
+  Its address is `#content`, a mark the bar leaves after itself (Nav.tsx)
+  and the reader's layout carries. A page with neither the bar nor an h1
+  needs the mark.
+- /patterns closes with the Lunch & Learn band like every other page (topic
+  StreetPrint), and its "Start a project" carries the project.
+- Small text under 4.5:1 was raised where it was found: the contact form's
+  labels (--text-muted on its lighter card), the printed-book form's
+  "(optional)" and fine print, the reader's scrubber numbers, "Go to" and
+  hints (white at 55%), About's GAF chips (`ink`) and "A PPG company". A
+  footer office link is 24px tall on a laptop. A post table's blank heading
+  cell is a td (PostBody.tsx; a thead td wears the row's look in
+  app/globals.css).
+- Left as they are, on purpose: five posts' search descriptions over 160
+  characters and one post's h2-to-h4 step (Studio's text), the alt text the
+  checker calls redundant (it serves image search), no structured data on
+  the hub pages, and the book's own lines the style lint flags (Doug's, for
+  the next print run).
 
 ## The pattern library's hero (10 Nov 2026)
 Vern: "do something creative with the pattern gallery hero space can you make

@@ -404,7 +404,16 @@ function renderTable(t: PostTableBlock): ReactNode {
       <table style={{ margin: 0 }}>
         {head && (
           <thead>
-            <tr>{(head.cells ?? []).map((c, i) => <th key={i}>{cell(c, `${t._key}-h${i}`)}</th>)}</tr>
+            {/* A heading row's blank cell (the corner of a comparison, above
+                the row labels) is a plain cell, not a heading with no name:
+                a screen reader announced an empty column header on two posts
+                (final QA, 10 Nov 2026). It looks the same: app/globals.css
+                gives a thead td the heading row's background and rule. */}
+            <tr>
+              {(head.cells ?? []).map((c, i) =>
+                c && c.trim() ? <th key={i} scope="col">{cell(c, `${t._key}-h${i}`)}</th> : <td key={i} />,
+              )}
+            </tr>
           </thead>
         )}
         {body.length > 0 && (

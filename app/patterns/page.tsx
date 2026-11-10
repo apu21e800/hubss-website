@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
+import LunchLearn from "@/components/sections/LunchLearn";
 import { buildMetadata } from "@/lib/seo";
 import { fieldTemplates, borderTemplates, patternSrc, type PatternTemplate } from "@/lib/pattern-templates";
 import StencilHero from "@/components/patterns/StencilHero";
@@ -201,7 +202,9 @@ export default function PatternsPage() {
               <Link href="/products/streetprint" className="btn-ghost">
                 StreetPrint system
               </Link>
-              <Link href="/contact" className="btn-accent">
+              {/* The form opens knowing the job is a StreetPrint one, as it
+                  does from the system's own page (final QA, 10 Nov 2026). */}
+              <Link href="/contact?project=StreetPrint&from=patterns" className="btn-accent">
                 Start a project
               </Link>
             </div>
@@ -210,6 +213,12 @@ export default function PatternsPage() {
       </section>
       </div>
 
+      {/* The band every other page closes with. The pattern library went
+          from its last drawing straight to the footer: the one page a
+          landscape architect picks a pattern on, and the one with no Lunch &
+          Learn on it (final QA, 10 Nov 2026). The session it books is a
+          StreetPrint one. */}
+      <LunchLearn compact topic="StreetPrint" from="patterns" />
       <Footer />
     </main>
   );

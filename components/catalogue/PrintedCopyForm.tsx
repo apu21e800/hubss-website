@@ -16,6 +16,10 @@
 import { useState } from "react";
 import { track } from "@vercel/analytics";
 import { postForm } from "@/lib/post-form";
+import { useSiteSettings } from "@/components/SiteSettingsProvider";
+import { telHref } from "@/lib/site-settings";
+import { lunchLearnHref } from "@/lib/lunch-learn";
+import { NextSteps, SentPanel, bookStep } from "@/components/ui/SentPanel";
 
 const PROVINCES = [
   "AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT",
@@ -24,6 +28,8 @@ const PROVINCES = [
 type Status = "idle" | "sending" | "sent" | "error";
 
 export default function PrintedCopyForm({ compact = false }: { compact?: boolean }) {
+  // The office phones for the "sent" panel, from Studio's Site Settings.
+  const { offices } = useSiteSettings();
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
 
@@ -75,15 +81,33 @@ export default function PrintedCopyForm({ compact = false }: { compact?: boolean
 
   if (status === "sent") {
     return (
-      <div className="rounded-xl p-7 text-center" style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}>
-        <p className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>
+      /* SentPanel: the confirmation comes into view and takes the focus. The
+         form is the longest on the site, so this short panel in its place
+         sat 450px above a phone's screen and under the bar on a laptop, the
+         footer in view (final QA, 10 Nov 2026).
+         Until then the second line said "reply to the confirmation and tell
+         us the date". No confirmation is sent: the route mails the office
+         only (app/api/contact/route.ts). The offices' numbers stand in. */
+      <SentPanel className="rounded-xl p-7 text-center" style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}>
+        <p data-sent-heading className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>
           Request received.
         </p>
-        <p className="mt-2 text-sm" style={{ color: "var(--text-secondary)" }}>
-          We will put a copy in the mail. If you need it for a specific meeting, reply to the confirmation and tell us
-          the date.
+        {/* Balanced lines, and a number never breaks at its hyphen. */}
+        <p className="mt-2 text-sm" style={{ color: "var(--text-secondary)", textWrap: "balance" }}>
+          We will put a copy in the mail. Need it by a certain date? Call your regional office: East{" "}
+          <a href={telHref(offices.east.phone)} className="font-semibold underline underline-offset-2 whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.east.phone}</a>
+          , West{" "}
+          <a href={telHref(offices.west.phone)} className="font-semibold underline underline-offset-2 whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.west.phone}</a>
+          .
         </p>
-      </div>
+        {/* In the reader (compact) the book is already open behind this. */}
+        <NextSteps
+          steps={[
+            ...(compact ? [] : bookStep("Read it online now")),
+            { label: "Book a Lunch & Learn", href: lunchLearnHref(undefined, "product-book") },
+          ]}
+        />
+      </SentPanel>
     );
   }
 
@@ -173,8 +197,11 @@ export default function PrintedCopyForm({ compact = false }: { compact?: boolean
       </div>
 
       <div>
+        {/* "(optional)" as the Phone label above writes it. It was the
+            label's capitals at 60% opacity: 2.67:1 on the paper (final QA,
+            10 Nov 2026). */}
         <label className={label} style={labelStyle} htmlFor="pc-message">
-          Anything we should know? <span style={{ opacity: 0.6 }}>(optional)</span>
+          Anything we should know? <span style={{ textTransform: "none", letterSpacing: 0 }}>(optional)</span>
         </label>
         <textarea
           id="pc-message"
@@ -187,7 +214,7 @@ export default function PrintedCopyForm({ compact = false }: { compact?: boolean
       </div>
 
       {status === "error" && (
-        <p className="text-sm" style={{ color: "var(--err-text)" }}>
+        <p role="alert" className="text-sm" style={{ color: "var(--err-text)" }}>
           {error} You can also email <a href="mailto:info@hubss.com" className="underline">info@hubss.com</a>.
         </p>
       )}
@@ -202,7 +229,8 @@ export default function PrintedCopyForm({ compact = false }: { compact?: boolean
 
       {/* Was "to follow up once - nothing else": a typed dash standing in for
           an em dash (QA, 27 Sep 2026). Same promise, plainly. */}
-      <p className="text-xs" style={{ color: "var(--text-hint)" }}>
+      {/* --text-muted: --text-hint was 4.06:1 on the paper at this size. */}
+      <p className="text-xs" style={{ color: "var(--text-muted)" }}>
         Canadian addresses only. We use this only to mail the Product Portfolio Book and to follow up once.
       </p>
     </form>

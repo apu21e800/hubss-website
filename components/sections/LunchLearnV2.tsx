@@ -29,6 +29,7 @@ import { CHROME_MARKS } from "@/lib/chrome-images.mjs";
 import ChromeImg from "@/components/ui/ChromeImg";
 import { lunchLearnHref, readLunchLearnParams, LL_TOPIC_MAX } from "@/lib/lunch-learn";
 import { postForm } from "@/lib/post-form";
+import { NextSteps, PROJECTS_STEP, SentPanel, bookStep } from "@/components/ui/SentPanel";
 
 export type LunchLearnVariant = "boardroom" | "ticket" | "proof" | "band";
 
@@ -245,21 +246,29 @@ function Honeypot({ value, onChange }: { value: string; onChange: (e: React.Chan
 
 function SuccessPanel({ message }: { message?: string }) {
   return (
-    <m.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-10">
-      <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style={{ background: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.3)" }}>
-        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "var(--ok-text)" }}>
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-        </svg>
-      </div>
-      <h3 className="font-bold text-lg mb-2" style={{ color: "var(--text-primary)" }}>Request received.</h3>
-      <p className="text-sm leading-relaxed max-w-sm mx-auto" style={{ color: "var(--ok-text)" }}>{message}</p>
-    </m.div>
+    // SentPanel: the confirmation takes the focus and, when it isn't whole on
+    // the screen, comes into view (components/ui/SentPanel.tsx; final QA,
+    // 10 Nov 2026). Then two quiet ways on: the booking is made, and the
+    // visitor is still here.
+    <SentPanel>
+      <m.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-8">
+        <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style={{ background: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.3)" }}>
+          <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" style={{ color: "var(--ok-text)" }}>
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h3 data-sent-heading className="font-bold text-lg mb-2" style={{ color: "var(--text-primary)" }}>Request received.</h3>
+        <p className="text-sm leading-relaxed max-w-sm mx-auto" style={{ color: "var(--ok-text)", textWrap: "balance" }}>{message}</p>
+        <NextSteps steps={[...bookStep(), PROJECTS_STEP]} />
+      </m.div>
+    </SentPanel>
   );
 }
 
 function ErrorNote({ message }: { message?: string }) {
   return (
-    <m.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="p-4 rounded-xl text-sm" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.25)", color: "var(--err-text)" }}>
+    // role="alert": a screen reader is told the send failed.
+    <m.div role="alert" initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="p-4 rounded-xl text-sm" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.25)", color: "var(--err-text)" }}>
       {message}
     </m.div>
   );

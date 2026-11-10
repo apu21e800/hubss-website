@@ -431,6 +431,7 @@ function renderImage(img: PostImageBlock, title?: string): ReactNode {
   if (isSanityImage(src)) {
     // Never offer a width larger than the photo itself.
     const natural = img.width ?? IMAGE_WIDTHS[IMAGE_WIDTHS.length - 1];
+    const ratio = img.width && img.height ? Math.round((img.width / img.height) * 10000) / 10000 : null;
     const widths = IMAGE_WIDTHS.filter((w) => w < natural).concat(Math.min(natural, 1600));
     // The photo's filename (lib/sanity-image.ts): its alt, else its caption,
     // else the post's title.
@@ -451,7 +452,18 @@ function renderImage(img: PostImageBlock, title?: string): ReactNode {
         decoding="async"
         // A photo narrower than the column sits in its middle, not against
         // the left edge; a tall one stops short of filling the screen.
-        style={{ marginLeft: "auto", marginRight: "auto", maxHeight: "80vh" }}
+        // With its size known, the box is drawn at the photo's own shape
+        // before the photo arrives (9 Nov 2026): `width: auto` left it 0x0
+        // until it loaded, so the article moved under the reader, and a
+        // contents link landed short in Safari, which has no scroll anchoring.
+        style={ratio ? {
+          marginLeft: "auto",
+          marginRight: "auto",
+          width: "100%",
+          maxWidth: `min(${natural}px, calc(80vh * ${ratio}))`,
+          height: "auto",
+          aspectRatio: `${img.width} / ${img.height}`,
+        } : { marginLeft: "auto", marginRight: "auto", maxHeight: "80vh" }}
       />
     );
   } else {

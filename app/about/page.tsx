@@ -272,8 +272,8 @@ export default async function AboutPage() {
                     <span key={prov} className="text-xs font-bold px-2 py-0.5 rounded" style={{ background: "rgba(249,115,22,0.10)", color: "var(--accent-text-lg)", border: "1px solid rgba(249,115,22,0.20)" }}>{prov}</span>
                   ))}
                 </div>
-                <a href={mailtoHref(office.email)} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 40 }}>{office.email}</a>
-                <a href={telHref(office.phone)} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 40 }}>{office.phone}</a>
+                <a href={mailtoHref(office.email)} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 44 }}>{office.email}</a>
+                <a href={telHref(office.phone)} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 44 }}>{office.phone}</a>
               </div>
             ))}
           </div>

@@ -137,7 +137,7 @@ export default async function TypeHub({ section }: { section: InsightsSection })
                   key={t.key}
                   href={t.href}
                   aria-current={active ? "page" : undefined}
-                  className="relative inline-flex min-h-[48px] flex-shrink-0 items-center gap-1.5 whitespace-nowrap px-3 text-[15px] transition-colors hover:text-[var(--text-primary)]"
+                  className="relative inline-flex min-h-[48px] min-w-[48px] flex-shrink-0 items-center justify-center gap-1.5 whitespace-nowrap px-3 text-[15px] transition-colors hover:text-[var(--text-primary)]"
                   style={{ color: active ? "var(--text-primary)" : "var(--text-muted)", fontWeight: active ? 700 : 600 }}
                 >
                   {t.label}

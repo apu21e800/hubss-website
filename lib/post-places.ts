@@ -14,7 +14,6 @@ const MANY_PLACES = new Set([
   // (the independent review of the Projects page): add a post here when it
   // is written about more than one place.
   "decorative-paving-solutions", // Victoria and Kelowna
-  "laneway-project", // Vancouver and Toronto
   "safety-durability-transit-stations", // Waterloo and York Region
   "extending-transit-lane-lifespan", // Toronto, London, York Region, Richmond
   "multimodal-connectivity-york-region", // York Region, London, Waterloo and others

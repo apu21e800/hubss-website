@@ -1013,7 +1013,7 @@ export default function CatalogueViewer({
                 value={jump}
                 onChange={(e) => setJump(e.target.value)}
                 placeholder={String(shown[0])}
-                className="w-14 rounded-lg px-2 py-1.5 text-center text-[14.5px] tabular-nums outline-none"
+                className="w-14 rounded-lg px-2 py-1.5 text-center text-[14.5px] tabular-nums outline-none pointer-coarse:min-h-[44px]"
                 style={{ background: "rgba(255,255,255,0.08)", color: "#fff", border: "1px solid rgba(255,255,255,0.14)" }}
               />
             </form>

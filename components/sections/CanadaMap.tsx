@@ -1329,9 +1329,11 @@ const CSS = `
 .cm-panel-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px 6px 10px; }
 .cm-panel-scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; outline: none; scrollbar-gutter: stable; }
 /* A mouse or trackpad: the list takes the wheel once the visitor is in it
-   (panelScroll sets data-engaged); until then the page does. The gutter stays
-   reserved, so nothing shifts when the scrollbar comes back. */
-@media (hover: hover) and (pointer: fine) { .cm-panel-scroll:not([data-engaged]) { overflow-y: hidden; } }
+   (panelScroll sets data-engaged); until then the page does. contain goes
+   with it: on a box that cannot scroll it still swallows the wheel (Chrome,
+   measured 10 Nov 2026: the page did not move). The gutter stays reserved,
+   so nothing shifts when the scrollbar comes back. */
+@media (hover: hover) and (pointer: fine) { .cm-panel-scroll:not([data-engaged]) { overflow-y: hidden; overscroll-behavior: auto; } }
 .cm-panel-scroll::-webkit-scrollbar { width: 5px; }
 .cm-panel-scroll::-webkit-scrollbar-thumb { background: rgba(249,115,22,0.3); border-radius: 5px; }
 .cm-list-head, .cm-strip-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-text-lg); }

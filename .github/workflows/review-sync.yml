@@ -6,7 +6,8 @@
 # are kept by Vercel against that branch, not inside a build, so moving the
 # branch forward keeps every note and shows Doug the live site. Vercel
 # deploys the branch on every push, so after each push to main this job
-# fast-forwards review/main to it, and that push starts the new review build.
+# fast-forwards review/main to main's head, and that push starts the new
+# review build. A manual run from any branch also syncs to main, nothing else.
 #
 # Never a force push: if review/main ever holds a commit main doesn't, the
 # job fails and says so, and nothing on the branch is overwritten.
@@ -31,14 +32,18 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Move review/main to this commit
+      - name: Move review/main to main
         run: |
           set -euo pipefail
+          # Always main's head, whichever branch a manual run starts from, so
+          # an unmerged branch can never land on Doug's copy (Vercel review).
+          git fetch -q origin refs/heads/main:refs/remotes/origin/main
+          TARGET="$(git rev-parse origin/main)"
           if git fetch -q origin refs/heads/review/main:refs/remotes/origin/review/main; then
-            if ! git merge-base --is-ancestor origin/review/main "$GITHUB_SHA"; then
+            if ! git merge-base --is-ancestor origin/review/main "$TARGET"; then
               echo "::error::review/main has commits that main does not. Nothing was overwritten: bring them into main, then run this job again."
               exit 1
             fi
           fi
-          git push origin "$GITHUB_SHA:refs/heads/review/main"
-          echo "review/main is now $GITHUB_SHA"
+          git push origin "$TARGET:refs/heads/review/main"
+          echo "review/main is now $TARGET"

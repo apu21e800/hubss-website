@@ -1,0 +1,44 @@
+# Keeps Doug's review copy of the site on the same commit as production.
+#
+# 10 Nov 2026. Vern: "make sure the preview link stays in synch with
+# production". Doug leaves notes with the Vercel toolbar on the review/main
+# branch (hubss-website-git-review-main-based-agency.vercel.app). The notes
+# are kept by Vercel against that branch, not inside a build, so moving the
+# branch forward keeps every note and shows Doug the live site. Vercel
+# deploys the branch on every push, so after each push to main this job
+# fast-forwards review/main to it, and that push starts the new review build.
+#
+# Never a force push: if review/main ever holds a commit main doesn't, the
+# job fails and says so, and nothing on the branch is overwritten.
+name: review-sync
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: review-sync
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  fast-forward:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Move review/main to this commit
+        run: |
+          set -euo pipefail
+          if git fetch -q origin refs/heads/review/main:refs/remotes/origin/review/main; then
+            if ! git merge-base --is-ancestor origin/review/main "$GITHUB_SHA"; then
+              echo "::error::review/main has commits that main does not. Nothing was overwritten: bring them into main, then run this job again."
+              exit 1
+            fi
+          fi
+          git push origin "$GITHUB_SHA:refs/heads/review/main"
+          echo "review/main is now $GITHUB_SHA"

@@ -180,6 +180,7 @@ npm run start   # run production locally
 
 ## Deploy
 Vercel — connected to GitHub, auto-deploys on push to main
+Doug's review copy is the review/main branch (hubss-website-git-review-main-based-agency.vercel.app), where he leaves Vercel toolbar notes. .github/workflows/review-sync.yml fast-forwards it to main on every push (10 Nov 2026; Vern: "make sure the preview link stays in synch with production"), and Vercel builds it. The notes stay with the branch. Never force-push review/main or commit to it directly.
 
 ## Names (Doug's rounds, 25 Sep, 14 Oct and 17 Oct 2026)
 - The printed book is the **Product Portfolio Book** on the site ("Product

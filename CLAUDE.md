@@ -1034,11 +1034,14 @@ use from a client side experience too."
   (app/review/[key]/actions.ts), and the
   daily run (notifyMissedReviews in app/api/cron/social-drafts), which
   emails any sent article that has no email yet (a failed send, a Studio on
-  a preview; several go as one email that lists them, dougDigestEmail, as
-  the articles already on Doug's page did the first morning after the
-  merge) and switches the review off on live articles (staleReviewFlags,
+  a preview; several go as one email that lists them, dougDigestEmail: the
+  first morning after the merge, that is every article already on Doug's
+  page) and switches the review off on live articles (staleReviewFlags,
   25 a run). Only production sends (sendsHere): a preview's key would open
-  nothing on hubss.com.
+  nothing on hubss.com. A preview's Studio isn't registered with Sanity
+  (checked 12 Nov 2026: "Connect this studio to your project"), so the
+  panels are first seen on hubss.com/studio; their look was checked from
+  ReviewPanelView and JobPhotosCardView, which draw without a Studio.
 - The route acts only for a signed-in editor (Vercel's security review of
   PR #141: the first version answered anyone who sent this site's Origin,
   and said whether a guessed draft existed and was with Doug). The panel

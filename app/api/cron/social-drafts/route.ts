@@ -10,7 +10,9 @@
  * messages by form, which the Monday report reads. A failure there is a log
  * line only (no email, the run's status untouched): the counts themselves
  * are safe in Sanity and tomorrow's line has them. Then the review page's
- * two links, emailed to the editors once per key (lib/review-link.ts).
+ * two links, emailed to the editors once per key (lib/review-link.ts), and
+ * Doug's email for any article sent to him that wasn't emailed when it was
+ * sent (lib/review-notify.ts, notifyMissedReviews).
  *
  * Then the steps below, each on its own (a failure in one is emailed and the
  * next still runs; the response carries them all):
@@ -48,6 +50,7 @@ import { sanityWriteClient } from "@/lib/sanity.write";
 import { emailEditors } from "@/lib/editor-mail";
 import { logLeadSummary } from "@/lib/lead-counts";
 import { keepDougsLinkInStudio, sendReviewLinkOnce } from "@/lib/review-link";
+import { notifyMissedReviews } from "@/lib/review-notify";
 import { scheduleCalendarPosts } from "@/lib/social-calendar";
 
 export const maxDuration = 300;
@@ -103,6 +106,14 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   } catch (err) {
     out.studioLink = { error: errorText(err) };
     console.error(`[review] Studio link failed: ${errorText(err)}`);
+  }
+  // Doug's emails for articles sent to him that the Studio couldn't email
+  // (lib/review-notify.ts). Never stops the run.
+  try {
+    out.dougsEmails = await notifyMissedReviews(client.withConfig({ timeout: 10_000, maxRetries: 0 }), now);
+  } catch (err) {
+    out.dougsEmails = { error: errorText(err) };
+    console.error(`[review] Doug's emails failed: ${errorText(err)}`);
   }
 
   // 1. The blog: scheduled drafts whose time has come.

@@ -18,7 +18,7 @@
  *     publishes it, and it still gets its social drafts the day it goes live.
  *     Up to MAX_POSTS_PER_RUN a day, oldest first.
  *  2. From the field (since 14 Oct 2026): a published field post (Studio →
- *     Job photos for social: photos of a finished job, the place, the system,
+ *     Job photos: photos of a finished job, the place, the system,
  *     a line of facts) gets posts linked to the system's page. One a day.
  *     Since 19 Oct 2026 a field post with its story filled in is left to
  *     lib/project-posts.ts: it becomes a Projects article, and the article's

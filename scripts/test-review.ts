@@ -37,6 +37,27 @@ import { DUE_GRACE_MS as PUBLISH_GRACE_MS, RUN_HOUR_UTC as PUBLISH_HOUR } from "
 import { reviewLinkEmails } from "../lib/review-link";
 import ReviewView from "../components/review/ReviewView";
 import { lintCopy } from "../lib/style-lint";
+import { readFileSync } from "node:fs";
+import {
+  clearDougNotice,
+  DOUG_EMAIL_FROM,
+  DOUGS_ADDRESS,
+  dougArticleEmail,
+  dougDigestEmail,
+  dougsAddresses,
+  MAILED_TYPE,
+  mailedRecordId,
+  notifyDoug,
+  notifyMissedReviews,
+  replyToAddress,
+  sendsHere,
+  shortExcerpt,
+  staleReviewFlags,
+} from "../lib/review-notify";
+import type { Mail } from "../lib/editor-mail";
+import type { SanityClient } from "@sanity/client";
+import { anchorFor as anchorForStudio } from "../lib/review-anchor";
+import { jobPhotosLine } from "../sanity/job-photos-line";
 
 let failures = 0;
 function check(name: string, fn: () => void) {
@@ -346,8 +367,328 @@ check("when the keys changed, both say the old links are dead", () => {
   assert.match(again.agency.text, /the old ones now show a 404/);
 });
 
-if (failures) {
-  console.log(`\n${failures} failed`);
-  process.exit(1);
+console.log("Doug's email when an article is sent to him (lib/review-notify.ts, 12 Nov 2026)");
+const link = `https://hubss.com/review/DOUGSKEY#${anchorFor("article", "drafts.blogpost-milton-crosswalk")}`;
+const first = dougArticleEmail({ title: "A school crosswalk in Milton", excerpt: "The town wanted the crossing seen from the corner.", link });
+check("says what it is in the subject, with the article's title", () => {
+  assert.equal(first.subject, "Ready for your OK: A school crosswalk in Milton");
+});
+check("has the title, the opening line and the link to his page, at the article's card", () => {
+  for (const out of [first.text, first.html]) {
+    assert.ok(out.includes("A school crosswalk in Milton"));
+    assert.ok(out.includes("The town wanted the crossing seen from the corner."));
+    assert.ok(out.includes(link));
+  }
+  assert.ok(link.endsWith("#article-drafts-blogpost-milton-crosswalk"), "the card's own anchor");
+  assert.match(first.html, /Read the article<\/a>/);
+  assert.match(first.text, /^Hi Doug,$/m);
+  assert.match(first.text, /Reply to this email with OK/);
+});
+check("names no machinery and keeps the house style", () => {
+  const banned = /\b(AI|A\.I\.|Claude|Anthropic|automat\w*|Buffer|Studio|Sanity|cron|queue\w*|drafter|by itself|bot|generated|21e8|style check|fact check|REVIEW_\w+|Vercel)\b/i;
+  for (const out of [first.subject, first.text, words(first.html)]) assert.equal(out.match(banned), null, `says "${out.match(banned)?.[0]}"`);
+  assert.deepEqual(lintCopy(first.text.replace(link, "")).map((i) => i.message), []);
+  assert.ok(!/[\u2014\u2013]/.test(first.text + first.html), "no dashes");
+});
+check("a second round says he has seen it before", () => {
+  const again = dougArticleEmail({ title: "A school crosswalk in Milton", link }, 2);
+  assert.equal(again.subject, "Ready again for your OK: A school crosswalk in Milton");
+  assert.match(again.text, /you have seen before/);
+  assert.ok(!again.text.includes("undefined") && !again.html.includes("undefined"), "no excerpt, no gap");
+});
+check("several at once: one email that lists them, each title to its card", () => {
+  const page = "https://hubss.com/review/DOUGSKEY";
+  const three = dougDigestEmail(
+    ["Plow season", "Traffic calming", "Cold patch"].map((t, i) => ({ title: t, link: `${page}#article-drafts-p${i}` })),
+    page
+  );
+  assert.equal(three.subject, "Three articles ready for your OK");
+  assert.match(three.text, /^Three articles for hubss\.com are ready for you to read:$/m);
+  assert.match(three.text, /^- Plow season$/m);
+  assert.match(three.text, new RegExp(`Read them here: ${page}$`, "m"));
+  assert.ok(three.html.includes(`href="${page}#article-drafts-p2"`));
+  assert.match(three.html, /Read the articles<\/a>/);
+  const banned = /\b(AI|Claude|automat\w*|Buffer|Studio|Sanity|cron|queue\w*|drafter|by itself|bot|generated|21e8|style check|fact check)\b/i;
+  assert.equal(three.text.match(banned), null);
+  assert.deepEqual(lintCopy(three.text.replace(new RegExp(page, "g"), "")).map((i) => i.message), []);
+  assert.equal(dougDigestEmail([{ title: "a", link: page }, { title: "b", link: page }], page).subject, "Two articles ready for your OK");
+});
+check("a title or excerpt with markup is printed as text", () => {
+  const odd = dougArticleEmail({ title: "Paths & <b>parks</b>", excerpt: "\"Quoted\" & fine", link });
+  assert.ok(odd.html.includes("Paths &amp; &lt;b&gt;parks&lt;/b&gt;"));
+  assert.ok(!odd.html.includes("<b>parks"));
+  assert.ok(odd.html.includes("&quot;Quoted&quot; &amp; fine"));
+});
+check("a long excerpt is cut at a word", () => {
+  const long = "Stamped asphalt crossings ".repeat(20).trim();
+  const cut = shortExcerpt(long);
+  assert.ok(cut.length <= 243 && cut.endsWith("..."), cut);
+  assert.ok(!/\s\.\.\.$/.test(cut));
+  assert.equal(shortExcerpt("Short and sweet."), "Short and sweet.");
+});
+check("comes from Vern at hubss.com, goes to Doug, and his reply goes to Vern", () => {
+  assert.match(DOUG_EMAIL_FROM, /^Vern via hubss\.com <noreply@hubss\.com>$/);
+  assert.equal(DOUGS_ADDRESS, "doug.bain@hubss.com");
+  assert.deepEqual(dougsAddresses({}), ["doug.bain@hubss.com"]);
+  assert.deepEqual(dougsAddresses({ REVIEW_EMAIL_TO: "off" }), []);
+  assert.deepEqual(dougsAddresses({ REVIEW_EMAIL_TO: "a@hubss.com, not an address, b@hubss.com" }), ["a@hubss.com", "b@hubss.com"]);
+  assert.equal(replyToAddress({ BLOG_DRAFT_NOTIFY: "vern@example.com, other@example.com" }), "vern@example.com");
+  assert.equal(replyToAddress({ REVIEW_REPLY_TO: "reply@example.com", BLOG_DRAFT_NOTIFY: "vern@example.com" }), "reply@example.com");
+  assert.equal(replyToAddress({}), undefined);
+});
+check("only the production site sends (a preview's key would open nothing)", () => {
+  assert.equal(sendsHere({ VERCEL_ENV: "production" }), true);
+  assert.equal(sendsHere({ VERCEL_ENV: "preview" }), false);
+  assert.equal(sendsHere({ NEXT_PUBLIC_VERCEL_ENV: "production" }), true);
+  assert.equal(sendsHere({}), false);
+});
+check("one private record per article, the same from its draft or its published id", () => {
+  const id = mailedRecordId("blogpost-milton-crosswalk");
+  assert.equal(mailedRecordId("drafts.blogpost-milton-crosswalk"), id);
+  assert.match(id, /^review\.mailed-[0-9a-f]{16}$/, "dotted: the public API never returns it");
+  assert.notEqual(mailedRecordId("blogpost-another"), id);
+  assert.ok(!id.includes("milton"));
+});
+check("the Studio reads the same record type and lands on the same card", () => {
+  const input = readFileSync(new URL("../sanity/components/ForReviewInput.tsx", import.meta.url), "utf8");
+  assert.ok(input.includes(`const MAILED_TYPE = "${MAILED_TYPE}";`), "ForReviewInput's MAILED_TYPE");
+  assert.equal(anchorForStudio("article", "drafts.x-y"), anchorFor("article", "drafts.x-y"));
+});
+check("old switches on live articles are found, and only those", () => {
+  assert.deepEqual(staleReviewFlags(["drafts.a", "b", "drafts.c", "d"], ["a", "b"]), ["drafts.a", "b"]);
+  assert.deepEqual(staleReviewFlags([], ["a"]), []);
+});
+
+console.log("The job photos card (sanity/job-photos-line.ts)");
+check("says which way a job goes, before and after Publish", () => {
+  assert.match(jobPhotosLine({ published: false, story: false, article: null, hasArticle: false }), /^Publish it and its photos go out in HUB's social posts/);
+  assert.match(jobPhotosLine({ published: true, story: false, article: null, hasArticle: false }), /^Its photos go out in HUB's social posts/);
+  assert.match(jobPhotosLine({ published: false, story: true, article: null, hasArticle: false }), /once you publish it\. It goes to Doug to read before it goes live/);
+  assert.match(jobPhotosLine({ published: true, story: true, article: null, hasArticle: false }), /in the next few days/);
+});
+check("and how far its article has got", () => {
+  const a = (o: Partial<{ live: boolean; draft: boolean; withDoug: boolean }>) => ({ title: "Milton crosswalk", live: false, draft: false, withDoug: false, ...o });
+  assert.match(jobPhotosLine({ published: true, story: true, article: a({ draft: true }), hasArticle: true }), /"Milton crosswalk"\. 21e8 is reading it/);
+  assert.match(jobPhotosLine({ published: true, story: true, article: a({ draft: true, withDoug: true }), hasArticle: true }), /on Doug's review page, waiting for his OK/);
+  assert.match(jobPhotosLine({ published: true, story: true, article: a({ live: true }), hasArticle: true }), /which is on the site\.$/);
+  assert.match(jobPhotosLine({ published: true, story: true, article: a({}), hasArticle: true }), /no longer in Blog posts/);
+});
+check("in the house style", () => {
+  const lines = [false, true].flatMap((published) => [false, true].map((story) => jobPhotosLine({ published, story, article: null, hasArticle: false })));
+  for (const t of lines) assert.deepEqual(lintCopy(t).map((i) => i.message), [], t);
+});
+
+// ── notifyDoug against a stand-in Sanity: one email per round, whatever happens ──
+
+type Doc = Record<string, unknown> & { _id: string; _type: string; _rev?: string };
+
+/** Just enough of a Sanity client for lib/review-notify.ts: its two queries, create and patch. */
+function fakeSanity(docs: Doc[]) {
+  const store = new Map<string, Doc>(docs.map((d) => [d._id, { ...d, _rev: "r0" }]));
+  let rev = 0;
+  const pick = (d: Doc | undefined, keys: string[]) => (d ? Object.fromEntries(keys.filter((k) => k in d).map((k) => [k, d[k]])) : null);
+  const all = () => [...store.values()];
+  const client = {
+    store,
+    async fetch(query: string, params: Record<string, string> = {}) {
+      if (query.includes('"article": *[_id == $draft]')) {
+        return {
+          article: pick(store.get(params.draft), ["_id", "_type", "title", "excerpt", "forReview"]),
+          live: store.has(params.published),
+          record: pick(store.get(params.record), ["_id", "_rev", "round", "state", "cleared", "at"]),
+        };
+      }
+      if (query.includes('"ticked":')) {
+        const posts = all().filter((d) => d._type === "blogPost");
+        return {
+          ticked: posts.filter((d) => d._id.startsWith("drafts.") && d.forReview === true).map((d) => ({ _id: d._id, title: d.title })),
+          open: all()
+            .filter((d) => d._type === params.type && d.state === "sent" && d.cleared !== true)
+            .map((d) => ({ _id: d._id, ticked: store.get(`drafts.${d.articleId}`)?.forReview === true, live: store.has(String(d.articleId)) })),
+          flagged: posts.filter((d) => d.forReview === true).map((d) => d._id),
+          live: posts.filter((d) => !d._id.startsWith("drafts.")).map((d) => d._id),
+        };
+      }
+      throw new Error(`the stand-in doesn't know this query: ${query.slice(0, 60)}`);
+    },
+    async create(doc: Doc) {
+      if (store.has(doc._id)) throw new Error("Document already exists");
+      store.set(doc._id, { ...doc, _rev: `r${++rev}` });
+      return store.get(doc._id);
+    },
+    patch(id: string) {
+      let ifRev: string | undefined;
+      const sets: Record<string, unknown>[] = [];
+      const unsets: string[] = [];
+      const builder = {
+        ifRevisionId(r: string) { ifRev = r; return builder; },
+        set(o: Record<string, unknown>) { sets.push(o); return builder; },
+        unset(keys: string[]) { unsets.push(...keys); return builder; },
+        async commit() {
+          const doc = store.get(id);
+          if (!doc) throw new Error(`no document ${id}`);
+          if (ifRev && doc._rev !== ifRev) throw new Error("revision mismatch");
+          const next: Doc = { ...doc, ...Object.assign({}, ...sets), _rev: `r${++rev}` };
+          for (const k of unsets) delete next[k];
+          store.set(id, next);
+          return next;
+        },
+      };
+      return builder;
+    },
+  };
+  return client;
 }
-console.log("\nall passed");
+
+const sanity = (c: ReturnType<typeof fakeSanity>) => c as unknown as SanityClient;
+const PRODUCTION = { VERCEL_ENV: "production", REVIEW_SECRET: "a-test-secret", REVIEW_FIRST: undefined, REVIEW_EMAIL_TO: undefined, REVIEW_REPLY_TO: undefined, BLOG_DRAFT_NOTIFY: "vern@example.com", NEXT_PUBLIC_VERCEL_ENV: undefined };
+
+/** Runs an async fn with these environment variables set, then puts them back. */
+async function withEnvAsync(vars: Record<string, string | undefined>, fn: () => Promise<void>) {
+  const saved: Record<string, string | undefined> = {};
+  for (const k of Object.keys(vars)) saved[k] = process.env[k];
+  try {
+    for (const [k, v] of Object.entries(vars)) {
+      if (v === undefined) delete process.env[k];
+      else process.env[k] = v;
+    }
+    await fn();
+  } finally {
+    for (const [k, v] of Object.entries(saved)) {
+      if (v === undefined) delete process.env[k];
+      else process.env[k] = v;
+    }
+  }
+}
+
+async function checkAsync(name: string, fn: () => Promise<void>) {
+  try {
+    await withEnvAsync(PRODUCTION, fn);
+    console.log(`  ok    ${name}`);
+  } catch (err) {
+    failures++;
+    console.log(`  FAIL  ${name}\n        ${err instanceof Error ? err.message : err}`);
+  }
+}
+
+const article = (id: string, o: Record<string, unknown> = {}): Doc => ({ _id: id, _type: "blogPost", title: "A school crosswalk in Milton", excerpt: "The town wanted it seen.", forReview: true, ...o });
+function mailbox(ok = true) {
+  const sent: Mail[] = [];
+  return { sent, send: async (m: Mail) => { sent.push(m); return ok ? m.to : []; } };
+}
+
+async function storeTests() {
+  console.log("notifyDoug against a stand-in Sanity (one email per round)");
+  await checkAsync("sends once, to Doug, with Vern on the reply and the copy, and records it", async () => {
+    const db = fakeSanity([article("drafts.blogpost-a")]);
+    const box = mailbox();
+    assert.equal(await notifyDoug(sanity(db), "blogpost-a", { send: box.send }), "sent");
+    assert.equal(box.sent.length, 1);
+    const [m] = box.sent;
+    assert.deepEqual(m.to, ["doug.bain@hubss.com"]);
+    assert.equal(m.replyTo, "vern@example.com");
+    assert.deepEqual(m.bcc, ["vern@example.com"]);
+    assert.equal(m.from, DOUG_EMAIL_FROM);
+    assert.equal(m.subject, "Ready for your OK: A school crosswalk in Milton");
+    assert.ok(m.text.includes(`${reviewLink()}#article-drafts-blogpost-a`), "his page, at the card");
+    const record = db.store.get(mailedRecordId("blogpost-a"));
+    assert.equal(record?.state, "sent");
+    assert.equal(record?.articleId, "blogpost-a");
+    assert.equal(record?._type, MAILED_TYPE);
+  });
+  await checkAsync("a second press, or the morning run, sends nothing more", async () => {
+    const db = fakeSanity([article("drafts.blogpost-a")]);
+    const box = mailbox();
+    await notifyDoug(sanity(db), "blogpost-a", { send: box.send });
+    assert.equal(await notifyDoug(sanity(db), "drafts.blogpost-a", { send: box.send }), "already sent");
+    const run = await notifyMissedReviews(sanity(db), new Date(), box.send);
+    assert.deepEqual(run.sent, []);
+    assert.equal(box.sent.length, 1);
+  });
+  await checkAsync("two presses at once send one email", async () => {
+    const db = fakeSanity([article("drafts.blogpost-a")]);
+    const box = mailbox();
+    const outcomes = await Promise.all([notifyDoug(sanity(db), "blogpost-a", { send: box.send }), notifyDoug(sanity(db), "blogpost-a", { send: box.send })]);
+    assert.deepEqual([...outcomes].sort(), ["busy", "sent"]);
+    assert.equal(box.sent.length, 1);
+  });
+  await checkAsync("nothing for an article that isn't sent, is live, or isn't there", async () => {
+    const box = mailbox();
+    assert.equal(await notifyDoug(sanity(fakeSanity([article("drafts.b", { forReview: false })])), "b", { send: box.send }), "not ticked");
+    assert.equal(await notifyDoug(sanity(fakeSanity([article("drafts.c"), article("c")])), "c", { send: box.send }), "already on the site");
+    assert.equal(await notifyDoug(sanity(fakeSanity([])), "d", { send: box.send }), "not found");
+    assert.equal(box.sent.length, 0);
+  });
+  await checkAsync("nothing from a preview, with the email off, or once Doug no longer reviews", async () => {
+    const box = mailbox();
+    const db = fakeSanity([article("drafts.e")]);
+    await withEnvAsync({ VERCEL_ENV: "preview" }, async () => assert.equal(await notifyDoug(sanity(db), "e", { send: box.send }), "elsewhere"));
+    await withEnvAsync({ REVIEW_EMAIL_TO: "off" }, async () => assert.equal(await notifyDoug(sanity(db), "e", { send: box.send }), "off"));
+    await withEnvAsync({ REVIEW_FIRST: "off" }, async () => assert.equal(await notifyDoug(sanity(db), "e", { send: box.send }), "off"));
+    assert.equal(box.sent.length, 0);
+    assert.equal(db.store.has(mailedRecordId("e")), false, "no record, so production sends it later");
+  });
+  await checkAsync("an email the mail service refused is sent on the next try, as the first", async () => {
+    const db = fakeSanity([article("drafts.f")]);
+    assert.equal(await notifyDoug(sanity(db), "f", { send: mailbox(false).send }), "not sent");
+    assert.equal(db.store.get(mailedRecordId("f"))?.state, "failed");
+    const box = mailbox();
+    const run = await notifyMissedReviews(sanity(db), new Date(), box.send);
+    assert.deepEqual(run.sent, ["A school crosswalk in Milton"]);
+    assert.match(box.sent[0].subject, /^Ready for your OK:/);
+  });
+  await checkAsync("taken back and sent again: a second round, said so", async () => {
+    const db = fakeSanity([article("drafts.g")]);
+    const box = mailbox();
+    await notifyDoug(sanity(db), "g", { send: box.send });
+    db.store.set("drafts.g", { ...db.store.get("drafts.g")!, forReview: false });
+    assert.equal(await clearDougNotice(sanity(db), "g"), "cleared");
+    db.store.set("drafts.g", { ...db.store.get("drafts.g")!, forReview: true });
+    assert.equal(await notifyDoug(sanity(db), "g", { send: box.send }), "sent");
+    assert.equal(box.sent.length, 2);
+    assert.match(box.sent[1].subject, /^Ready again for your OK:/);
+  });
+  await checkAsync("a send that died half way is taken again after ten minutes, not before", async () => {
+    const now = new Date("2026-11-12T20:00:00Z");
+    const claim = (minutesAgo: number): Doc => ({ _id: mailedRecordId("h"), _type: MAILED_TYPE, articleId: "h", round: 1, state: "sending", at: new Date(now.getTime() - minutesAgo * 60_000).toISOString() });
+    const box = mailbox();
+    assert.equal(await notifyDoug(sanity(fakeSanity([article("drafts.h"), claim(2)])), "h", { now, send: box.send }), "busy");
+    assert.equal(await notifyDoug(sanity(fakeSanity([article("drafts.h"), claim(11)])), "h", { now, send: box.send }), "sent");
+    assert.equal(box.sent.length, 1);
+  });
+  await checkAsync("the morning run with several waiting sends one email that lists them", async () => {
+    const db = fakeSanity([article("drafts.m", { title: "Plow season" }), article("drafts.n", { title: "Traffic calming" }), article("drafts.o", { title: "Cold patch" })]);
+    const box = mailbox();
+    const run = await notifyMissedReviews(sanity(db), new Date(), box.send);
+    assert.equal(box.sent.length, 1);
+    assert.equal(box.sent[0].subject, "Three articles ready for your OK");
+    assert.deepEqual([...run.sent].sort(), ["Cold patch", "Plow season", "Traffic calming"]);
+    for (const id of ["m", "n", "o"]) assert.equal(db.store.get(mailedRecordId(id))?.state, "sent");
+    assert.equal(await notifyDoug(sanity(db), "m", { send: box.send }), "already sent", "and none of them again");
+  });
+  await checkAsync("the morning run: emails what was missed, clears what went live, switches off old ones", async () => {
+    const db = fakeSanity([
+      article("drafts.i"),
+      article("j", { forReview: true }),
+      article("k"),
+      { _id: mailedRecordId("k"), _type: MAILED_TYPE, articleId: "k", round: 1, state: "sent" },
+    ]);
+    const box = mailbox();
+    const run = await notifyMissedReviews(sanity(db), new Date(), box.send);
+    assert.deepEqual(run.sent, ["A school crosswalk in Milton"]);
+    assert.equal(box.sent.length, 1, "only the new one");
+    assert.equal(run.cleared, 1, "the live article's record");
+    assert.equal(db.store.get(mailedRecordId("k"))?.cleared, true);
+    assert.equal(run.tidied, 2, "the switch on the two live articles");
+    assert.equal("forReview" in db.store.get("j")!, false);
+    assert.equal(db.store.get("drafts.i")?.forReview, true, "a new article keeps it");
+  });
+}
+
+void storeTests().then(() => {
+  if (failures) {
+    console.log(`\n${failures} failed`);
+    process.exit(1);
+  }
+  console.log("\nall passed");
+});

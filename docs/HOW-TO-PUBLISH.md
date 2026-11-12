@@ -116,8 +116,9 @@ Eastern).
 
 Two more kinds arrive the same way:
 
-- **Job photos for social** (was "From the field"). When a job is finished,
-  take 3 to 5 photos on your phone. In Studio, **Job photos for social** →
+- **Job photos** (was "Job photos for social", and "From the field" before
+  that). When a job is finished,
+  take 3 to 5 photos on your phone. In Studio, **Job photos** →
   **+**: add the photos (best one
   first, alt text on each), where it is ("Brantford, Ontario"), the system, and
   one or two sentences of facts. Publish. The next morning its posts are

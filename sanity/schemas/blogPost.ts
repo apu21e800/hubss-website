@@ -3,6 +3,7 @@ import { EditIcon, InsertAboveIcon, ThListIcon } from "@sanity/icons";
 import { FIELD_NOTE_TYPES } from "../../lib/field-notes-taxonomy";
 import { bodyStyle, copyStyle, headingStyle } from "./_shared";
 import PinToTopInput from "../components/PinToTopInput";
+import ForReviewInput from "../components/ForReviewInput";
 
 /**
  * A Field Notes post. Since Sep 2026 this is the only copy of the blog: the
@@ -28,7 +29,59 @@ export default defineType({
     { name: "meta",    title: "Meta & SEO" },
   ],
 
+  fieldsets: [
+    { name: "release", title: "Review and going live", options: { collapsible: false } },
+  ],
+
   fields: [
+    // ── Review and going live (12 Nov 2026) ─────────────────────────────────
+    // At the top of the form, where an editor looks first: Doug's review, then
+    // the schedule. Doug reads first (27 Oct 2026, lib/review-first.ts): once
+    // 21e8 has read a new draft it sends it to Doug, and it shows, words and
+    // photo, on his review page (app/review) until it is published. Since 12
+    // Nov 2026 the switch is a button (sanity/components/ForReviewInput.tsx)
+    // and sending it emails Doug a link (lib/review-notify.ts). Sending it
+    // publishes nothing; publishing switches it off (sanity.config.ts).
+    defineField({
+      name: "forReview",
+      title: "Doug's review",
+      type: "boolean",
+      group: "content",
+      fieldset: "release",
+      initialValue: false,
+      description: "For a new article, once 21e8 has read it and checked it.",
+      components: { input: ForReviewInput },
+    }),
+    // Scheduling (19 Oct 2026, lib/project-posts.ts): an article the daily
+    // run wrote from a job photos post is saved as a draft that goes live by
+    // itself at `scheduledFor` unless someone turns `scheduled` off first.
+    // Any draft can be scheduled the same way. A boolean, not a status list:
+    // the 77 posts from before show it plainly off.
+    defineField({
+      name: "scheduled",
+      title: "Scheduled",
+      type: "boolean",
+      group: "content",
+      fieldset: "release",
+      initialValue: false,
+      description: "On: it goes live at the time below. Off: it goes live when you press Publish, as always.",
+    }),
+    defineField({
+      name: "scheduledFor",
+      title: "Goes live at",
+      type: "datetime",
+      group: "content",
+      fieldset: "release",
+      options: { timeStep: 60 },
+      description: "It goes live at the first morning run on or after this time (10:00 Toronto time; 9:00 after the clocks go back). Change it to any later day to move it.",
+      hidden: ({ parent }) => !parent?.scheduled,
+      validation: (r) =>
+        r.custom((value, ctx) => {
+          const scheduled = (ctx.parent as { scheduled?: boolean } | undefined)?.scheduled;
+          if (scheduled && !value) return "Say when it should go live, or turn \"Scheduled\" off";
+          return true;
+        }),
+    }),
     // ── Content ─────────────────────────────────────────────────────────────
     defineField({
       name: "title",
@@ -78,34 +131,6 @@ export default defineType({
       options: { timeStep: 60 },
       validation: (r) => r.required().error("Publish date is required"),
     }),
-    // Scheduling (19 Oct 2026, lib/project-posts.ts): an article the daily
-    // run wrote from a job photos post is saved as a draft that goes live by
-    // itself at `scheduledFor` unless someone turns `scheduled` off first.
-    // Any draft can be scheduled the same way. A boolean, not a status list:
-    // the 77 posts from before show it plainly off.
-    defineField({
-      name: "scheduled",
-      title: "Scheduled",
-      type: "boolean",
-      group: "content",
-      initialValue: false,
-      description: "On: it goes live at the time below. Off: it goes live when you press Publish, as always.",
-    }),
-    defineField({
-      name: "scheduledFor",
-      title: "Goes live at",
-      type: "datetime",
-      group: "content",
-      options: { timeStep: 60 },
-      description: "It goes live at the first morning run on or after this time (10:00 Toronto time; 9:00 after the clocks go back). Change it to any later day to move it.",
-      hidden: ({ parent }) => !parent?.scheduled,
-      validation: (r) =>
-        r.custom((value, ctx) => {
-          const scheduled = (ctx.parent as { scheduled?: boolean } | undefined)?.scheduled;
-          if (scheduled && !value) return "Say when it should go live, or turn \"Scheduled\" off";
-          return true;
-        }),
-    }),
     // Pin to top (3 Nov 2026): the pinned post leads the homepage's blog
     // section and /blog (lib/blog.ts, pinnedPost). One at a time: the switch
     // stamps `pinnedAt` (sanity/components/PinToTopInput.tsx) and the site
@@ -143,18 +168,6 @@ export default defineType({
       readOnly: true,
       hidden: ({ parent }) => !parent?.pinned,
       description: "Set when Pin to top is switched on. If two posts are pinned, the site shows the one pinned last.",
-    }),
-    // Doug reads first (27 Oct 2026, lib/review-first.ts): 21e8 ticks this
-    // once it has read the draft, and the draft then shows, words and photo,
-    // on Doug's review page (app/review) until it is published. Ticking it
-    // publishes nothing.
-    defineField({
-      name: "forReview",
-      title: "Ready for Doug's review",
-      type: "boolean",
-      group: "content",
-      initialValue: false,
-      description: "21e8 ticks this once the draft has been read and checked. It then shows on Doug's review page until it is published. It publishes nothing.",
     }),
     defineField({
       name: "fieldPost",
@@ -414,10 +427,11 @@ export default defineType({
   ],
 
   preview: {
-    select: { title: "title", publishedAt: "publishedAt", category: "category", media: "featuredImage", scheduled: "scheduled", scheduledFor: "scheduledFor", pinned: "pinned" },
-    prepare: ({ title, publishedAt, category, media, scheduled, scheduledFor, pinned }) => ({
+    select: { title: "title", publishedAt: "publishedAt", category: "category", media: "featuredImage", scheduled: "scheduled", scheduledFor: "scheduledFor", pinned: "pinned", forReview: "forReview" },
+    prepare: ({ title, publishedAt, category, media, scheduled, scheduledFor, pinned, forReview }) => ({
       title,
       subtitle: [
+        forReview ? "With Doug" : undefined,
         pinned ? "Pinned" : undefined,
         category,
         scheduled && scheduledFor

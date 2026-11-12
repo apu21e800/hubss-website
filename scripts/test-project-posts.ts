@@ -264,6 +264,10 @@ check("keeps the words, the photos and the link to the post", () => {
   assert.deepEqual(live.fieldPost, doc.fieldPost);
 });
 check("says in the notes that it went on schedule", () => assert.match(live.editorNotes, /^Published on schedule, Wednesday 21 October at 10:00 Toronto time \(21e8\)\./));
+check("leaves Doug's review behind: a live article is off his page", () => {
+  const sent = toPublished({ ...doc, _rev: "r3", forReview: true }, now);
+  assert.equal("forReview" in sent, false);
+});
 check("a scheduled edit to a live post keeps the post's date", () => {
   const edit = toPublished({ ...doc, _rev: "r2" }, now, "2024-06-03T13:00:00.000Z");
   assert.equal(edit.publishedAt, "2024-06-03T13:00:00.000Z");

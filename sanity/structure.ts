@@ -3,15 +3,22 @@
  *
  * Plain words for a non-technical editor (15 Oct 2026; Vern: "what does not
  * live mean? What's the difference between insights and insights plan? maybe
- * better to just call it blog"):
+ * better to just call it blog"), in three groups since 12 Nov 2026 (Vern:
+ * "eliminate pain points from the sanity experience ... so everything is made
+ * clear"): what Doug and Vern open every week first, the website's own pages
+ * next, and the lists the daily work keeps for itself last:
  *   📖 Start here     (Doug's guide, with his review page's button)
+ *   ── Blog
+ *   ✍️  Blog posts      (the articles; the site calls the blog "Projects")
+ *   📷  Job photos      (a finished job: an article with the story, a social
+ *                        post without; "Job photos for social" until 12 Nov)
+ *   ── Website
  *   📄 Website Pages  → singletons per page (no confusing "create new" list)
  *   📦 Products, Applications
- *   ✍️  Blog posts      (the articles; the site calls the blog "Insights")
- *   💡 Blog ideas      (what the AI writer drafts next)
- *   📷  Job photos for social (become social posts; not on the website)
- *   📣  Sent to Buffer  (read only: what went to Buffer, and its style check)
  *   ⚙️  Site Settings (singleton)
+ *   ── Behind the scenes
+ *   💡 Blog ideas      (what 21e8 writes up next; it keeps the list topped up)
+ *   📣  Sent to Buffer  (read only: what went to Buffer, and its style check)
  *
  * The May 2026 "Projects (Map Pins)" list is off the sidebar: the homepage
  * map is built from lib/map-projects.ts, so editing a pin there changed
@@ -19,7 +26,8 @@
  * sanity.config.ts keeps it out of the Create menu.
  *
  * Each list keeps the id its old title gave it, so a saved Studio link still
- * opens the same list.
+ * opens the same list. The groups are titled dividers, not folders, for the
+ * same reason.
  */
 
 import type { StructureResolver } from "sanity/structure";
@@ -64,7 +72,46 @@ export const structure: StructureResolver = (S) =>
         .icon(BookIcon)
         .child(S.component(GuidePane).id("guide-page").title("How to update the site")),
 
-      S.divider(),
+      // ── Blog: what Doug and Vern open every week ─────────────────────────────
+      S.divider().title("Blog"),
+
+      // ── Blog posts ───────────────────────────────────────────────────────────
+      // The site's only copy of the blog (lib/blog.ts), shown on hubss.com as
+      // "Projects" (BLOG_NAME). Newest first. New drafts land here unpublished;
+      // the list's line says "With Doug" while one waits on his review page.
+      S.listItem()
+        .id("insights")
+        .title("Blog posts")
+        .icon(EditIcon)
+        .child(
+          S.documentTypeList("blogPost")
+            .title("Blog posts · on the site as Projects · a new article goes to Doug for his OK before it goes live")
+            .defaultOrdering([{ field: "publishedAt", direction: "desc" }])
+        ),
+
+      // ── Job photos ───────────────────────────────────────────────────────────
+      // Photos of a finished job with a line of facts (sanity/schemas/fieldPost.ts).
+      // Publishing one has the next daily run write posts from it for Buffer;
+      // with the story filled in it becomes a Projects article instead, whose
+      // own posts follow once it is live (lib/project-posts.ts, 19 Oct 2026). ("From the field" until 15 Oct
+      // 2026; the stream keeps that name in the logs.) Since 6 Nov 2026 the
+      // posts are scheduled straight away and only the article waits for
+      // Doug's OK (lib/buffer.ts socialAutoQueue). "Job photos" since 12 Nov
+      // 2026 ("Job photos for social" until then): with the story a post
+      // becomes an article, not a social post, and the old name said otherwise.
+      // Its form says which, and how far it has got (JobPhotosInput.tsx).
+      S.listItem()
+        .id("fromTheField")
+        .title("Job photos")
+        .icon(ImagesIcon)
+        .child(
+          S.documentTypeList("fieldPost")
+            .title("Job photos · a finished job: with the story it becomes an article, without it a social post")
+            .defaultOrdering([{ field: "date", direction: "desc" }])
+        ),
+
+      // ── Website: the pages, products and settings ─────────────────────────────
+      S.divider().title("Website"),
 
       // ── Website Pages (singletons per page) ─────────────────────────────────
       S.listItem()
@@ -97,8 +144,6 @@ export const structure: StructureResolver = (S) =>
             ])
         ),
 
-      S.divider(),
-
       // ── Products ─────────────────────────────────────────────────────────────
       S.documentTypeListItem("product")
         .title("Products")
@@ -109,21 +154,15 @@ export const structure: StructureResolver = (S) =>
         .title("Applications")
         .icon(BlockContentIcon),
 
-      S.divider(),
+      // ── Site Settings (singleton) ─────────────────────────────────────────────
+      S.documentListItem()
+        .schemaType("siteSettings")
+        .id("siteSettings")
+        .title("Site Settings")
+        .icon(CogIcon),
 
-      // ── Blog posts ───────────────────────────────────────────────────────────
-      // The site's only copy of the blog (lib/blog.ts), shown on hubss.com as
-      // "Insights" (Doug's name for it). Newest first. The AI writer's drafts
-      // land here unpublished.
-      S.listItem()
-        .id("insights")
-        .title("Blog posts")
-        .icon(EditIcon)
-        .child(
-          S.documentTypeList("blogPost")
-            .title("Blog posts · on the site as Projects · drafts wait here for Publish, or go live at their scheduled time")
-            .defaultOrdering([{ field: "publishedAt", direction: "desc" }])
-        ),
+      // ── Behind the scenes: the lists the daily work keeps ───────────────────
+      S.divider().title("Behind the scenes"),
 
       // ── Blog ideas ───────────────────────────────────────────────────────────
       // What to write next. The drafter (Tuesdays and Thursdays) takes the top
@@ -136,28 +175,8 @@ export const structure: StructureResolver = (S) =>
         .icon(BulbOutlineIcon)
         .child(
           S.documentTypeList("storyIdea")
-            .title("Blog ideas · 21e8 drafts the top one Tuesday and Thursday")
+            .title("Blog ideas · 21e8 writes the top one up on Tuesdays and Thursdays and keeps the list topped up")
             .defaultOrdering([{ field: "priority", direction: "asc" }, { field: "_createdAt", direction: "asc" }])
-        ),
-
-      S.divider(),
-
-      // ── Job photos for social ────────────────────────────────────────────────
-      // Photos of a finished job with a line of facts (sanity/schemas/fieldPost.ts).
-      // Publishing one has the next daily run write posts from it for Buffer;
-      // with the story filled in it becomes a Projects article as well
-      // (lib/project-posts.ts, 19 Oct 2026). ("From the field" until 15 Oct
-      // 2026; the stream keeps that name in the logs.) Since 6 Nov 2026 the
-      // posts are scheduled straight away and only the article waits for
-      // Doug's OK (lib/buffer.ts socialAutoQueue).
-      S.listItem()
-        .id("fromTheField")
-        .title("Job photos for social")
-        .icon(ImagesIcon)
-        .child(
-          S.documentTypeList("fieldPost")
-            .title("Job photos · publish one and 21e8 writes and schedules its social posts the next morning; add the story and it writes a Projects article for your OK")
-            .defaultOrdering([{ field: "date", direction: "desc" }])
         ),
 
       // ── Sent to Buffer ───────────────────────────────────────────────────────
@@ -175,13 +194,4 @@ export const structure: StructureResolver = (S) =>
             .defaultOrdering([{ field: "createdAt", direction: "desc" }])
             .initialValueTemplates([])
         ),
-
-      S.divider(),
-
-      // ── Site Settings (singleton) ─────────────────────────────────────────────
-      S.documentListItem()
-        .schemaType("siteSettings")
-        .id("siteSettings")
-        .title("Site Settings")
-        .icon(CogIcon),
     ]);

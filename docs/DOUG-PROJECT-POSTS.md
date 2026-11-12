@@ -6,7 +6,7 @@ article on hubss.com under **Projects**, and the social posts for it.
 
 ## What you do (five minutes, on your phone)
 
-1. Studio (**hubss.com/studio**) → **Job photos for social** → **+**.
+1. Studio (**hubss.com/studio**) → **Job photos** → **+**.
 2. Add 3 to 10 photos, best one first (it leads the article and the social
    posts), alt text on each: what is in the picture, in a line.
 3. **Where**: town and province, spelled out. Add the site if the client is
@@ -26,10 +26,12 @@ article on hubss.com under **Projects**, and the social posts for it.
 ## What happens next
 
 - 21e8 writes the job up as a Projects article from your words and the
-  system's approved copy, nothing else, and checks it. Then it is on your
-  review page (the link Vern sent you), every word and photo: tell Vern OK,
-  or what to change. It goes on hubss.com after your OK. Its social posts
-  follow, and they wait for your OK on the same page.
+  system's approved copy, nothing else, and checks it. Then you get an email,
+  "Ready for your OK", with a button to it on your review page, every word
+  and photo: reply OK, or with what to change (your reply goes to Vern). It
+  goes on hubss.com after your OK, and its social posts follow.
+- The card at the top of the job post says which way it is going (an article,
+  or the photos to social) and how far it has got.
 - The first photo leads the article; the others close it under "The job in
   photographs", with your captions.
 - Once the article exists, the job post shows **The article written from

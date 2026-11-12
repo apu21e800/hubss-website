@@ -39,7 +39,7 @@ export default function ReviewView({ data, now, actionKey, action }: { data: Rev
             <p className="eyebrow">For 21e8 only</p>
             <h1 className="h1-page mt-3">What&apos;s waiting</h1>
             <p className="text-lg mt-5 max-w-2xl" style={{ color: "var(--text-secondary)" }}>
-              Everything waiting to go out, with the checks&apos; notes. Doug&apos;s link shows only what you put on his page. Read each one, fix what needs it (Studio for an article, Buffer for a post), then press <strong>Put on Doug&apos;s page</strong>. Nothing here publishes or posts.
+              Everything waiting to go out, with the checks&apos; notes. Doug&apos;s link shows only what you put on his page. Read each one, fix what needs it (Studio for an article, Buffer for a post), then press <strong>Put on Doug&apos;s page</strong> (or <strong>Send to Doug</strong> at the top of the draft in Studio). Doug gets an email with a link to an article you put on his page; his reply comes to you. Nothing here publishes or posts.
             </p>
             {data.dougsLink && (
               <p className="mt-4 text-[15px]" style={{ color: "var(--text-secondary)", overflowWrap: "anywhere" }}>

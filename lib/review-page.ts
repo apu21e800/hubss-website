@@ -312,7 +312,5 @@ export function reviewWhen(iso: string): string {
   return `${get("weekday")} ${get("day")} ${get("month")}, ${get("hour")}:${get("minute")} ${period}`.trim();
 }
 
-/** The id a card carries on the page, so Vern's button brings him back to it. */
-export function anchorFor(kind: "article" | "social", id: string): string {
-  return `${kind}-${id.replace(/[^A-Za-z0-9_-]+/g, "-")}`.slice(0, 120);
-}
+/** The id a card carries on the page (lib/review-anchor.ts, which the Studio reads too). */
+export { anchorFor } from "@/lib/review-anchor";

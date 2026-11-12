@@ -5,8 +5,8 @@
  * button that puts an item on Doug's page or takes it off. Only with Vern's
  * key (sent in the form; Doug's page has no buttons, and his key is refused
  * here). It publishes nothing and posts nothing:
- *  - an article: `forReview` on its unpublished draft, the same field as the
- *    "Ready for Doug's review" tick in Studio;
+ *  - an article: `forReview` on its unpublished draft, the same field as
+ *    "Send to Doug" in Studio, and Doug's email with it (lib/review-notify.ts);
  *  - a group of social posts: a private record (reviewTickId), never the
  *    Sent to Buffer record itself, which stays the pipeline's.
  * Every other id is refused before Sanity is asked. Next checks that the
@@ -18,6 +18,7 @@ import { redirect } from "next/navigation";
 import { sanityWriteClient } from "@/lib/sanity.write";
 import { reviewAudience, reviewTickId } from "@/lib/review-first";
 import { anchorFor } from "@/lib/review-page";
+import { clearDougNotice, notifyDoug } from "@/lib/review-notify";
 
 /** An unpublished draft's id, as Sanity makes them for a blog post. */
 const ARTICLE_ID = /^drafts\.[A-Za-z0-9][A-Za-z0-9._-]{0,150}$/;
@@ -39,6 +40,14 @@ export async function setOnDougsPage(formData: FormData): Promise<void> {
     if (doc?._type === "blogPost") {
       await client.patch(id).set({ forReview: on }).commit();
       console.log(`[review] ${id} ${on ? "put on" : "taken off"} Doug's page`);
+      // Doug's email, as "Send to Doug" in the Studio sends it (lib/review-notify.ts).
+      // A failure here is the morning run's to retry; the button's work is done.
+      try {
+        if (on) await notifyDoug(client, id);
+        else await clearDougNotice(client, id);
+      } catch (err) {
+        console.error(`[review] Doug's email for ${id}: ${err instanceof Error ? err.message : err}`);
+      }
     }
   } else if (kind === "social" && GROUP_KEY.test(id)) {
     const tickId = reviewTickId(id);

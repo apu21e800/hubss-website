@@ -269,18 +269,29 @@ async function claimRound(client: SanityClient, id: string, now: Date, waitMs: n
  * new round whichever happened first (the review of PR #141).
  */
 async function finishRound(client: SanityClient, claim: Claim, sent: boolean, now: Date): Promise<void> {
-  try {
-    const takenBack = sent ? (await readState(client, claim.draftId, true, 0)).article?.forReview !== true : false;
-    await client
-      .patch(claim.recordId)
-      .set(
-        sent
-          ? { state: "sent", mailedAt: now.toISOString(), title: claim.title, ...(takenBack ? { cleared: true, clearedAt: now.toISOString() } : {}) }
-          : { state: "failed", failedAt: now.toISOString() }
-      )
-      .commit();
-  } catch (err) {
-    console.error(`[review] the email record for ${claim.draftId} wasn't saved: ${err instanceof Error ? err.message : err}`);
+  // Whether it was taken back meanwhile. If Sanity can't say, the round is
+  // still marked sent (never left "sending", which a later run would take for
+  // a send that died, and email again); the morning run clears it if the
+  // article was taken back.
+  let takenBack = false;
+  if (sent) {
+    try {
+      takenBack = (await readState(client, claim.draftId, true, 0)).article?.forReview !== true;
+    } catch (err) {
+      console.error(`[review] couldn't read ${claim.draftId} after its email: ${err instanceof Error ? err.message : err}`);
+    }
+  }
+  const fields = sent
+    ? { state: "sent", mailedAt: now.toISOString(), title: claim.title, ...(takenBack ? { cleared: true, clearedAt: now.toISOString() } : {}) }
+    : { state: "failed", failedAt: now.toISOString() };
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      await client.patch(claim.recordId).set(fields).commit();
+      break;
+    } catch (err) {
+      if (attempt === 3) console.error(`[review] the email record for ${claim.draftId} wasn't saved: ${err instanceof Error ? err.message : err}`);
+      else await sleep(400 * attempt);
+    }
   }
   if (sent) console.log(`[review] Doug was emailed about ${claim.draftId} (round ${claim.round})`);
 }

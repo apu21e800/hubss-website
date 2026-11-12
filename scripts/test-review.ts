@@ -493,8 +493,11 @@ function fakeSanity(docs: Doc[]) {
   const all = () => [...store.values()];
   const client = {
     store,
+    /** Stand in for Sanity failing to answer the article's reads. */
+    failReads: false,
     async fetch(query: string, params: Record<string, string> = {}) {
       if (query.includes('"article": *[_id == $draft]')) {
+        if (client.failReads) throw new Error("Sanity didn't answer");
         return {
           article: pick(store.get(params.draft), ["_id", "_type", "title", "excerpt", "forReview"]),
           live: store.has(params.published),
@@ -681,6 +684,16 @@ async function storeTests() {
       assert.equal(await notifyDoug(sanity(db), "p", { send }), "sent");
       assert.match(sent[1].subject, /^Ready again for your OK:/);
     }
+  });
+  await checkAsync("if Sanity can't be read after the email went, the round is still marked sent", async () => {
+    const db = fakeSanity([article("drafts.q")]);
+    const send = async (m: Mail) => { db.failReads = true; return m.to; };
+    assert.equal(await notifyDoug(sanity(db), "q", { send }), "sent");
+    db.failReads = false;
+    assert.equal(db.store.get(mailedRecordId("q"))?.state, "sent");
+    const box = mailbox();
+    assert.equal(await notifyDoug(sanity(db), "q", { send: box.send }), "already sent");
+    assert.equal(box.sent.length, 0, "never a second email for the same round");
   });
   await checkAsync("the site acts only on an editor's ask, once, while it is fresh", async () => {
     const now = new Date("2026-11-12T20:00:00Z");

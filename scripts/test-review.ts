@@ -49,12 +49,15 @@ import {
   mailedRecordId,
   notifyDoug,
   notifyMissedReviews,
+  ASK_MAX_AGE_MS,
   replyToAddress,
+  takeAsk,
   sendsHere,
   shortExcerpt,
   staleReviewFlags,
 } from "../lib/review-notify";
 import type { Mail } from "../lib/editor-mail";
+import { ASK_KEY, ASK_PREFIX, ASK_TYPE, newAskKey } from "../lib/review-ask";
 import type { SanityClient } from "@sanity/client";
 import { anchorFor as anchorForStudio } from "../lib/review-anchor";
 import { jobPhotosLine } from "../sanity/job-photos-line";
@@ -498,6 +501,9 @@ function fakeSanity(docs: Doc[]) {
           record: pick(store.get(params.record), ["_id", "_rev", "round", "state", "cleared", "at"]),
         };
       }
+      if (query.includes("articleId, on, at, used")) {
+        return pick(store.get(params.id), ["_id", "_type", "_rev", "articleId", "on", "at", "used"]);
+      }
       if (query.includes('"ticked":')) {
         const posts = all().filter((d) => d._type === "blogPost");
         return {
@@ -655,6 +661,46 @@ async function storeTests() {
     assert.equal(await notifyDoug(sanity(fakeSanity([article("drafts.h"), claim(2)])), "h", { now, send: box.send }), "busy");
     assert.equal(await notifyDoug(sanity(fakeSanity([article("drafts.h"), claim(11)])), "h", { now, send: box.send }), "sent");
     assert.equal(box.sent.length, 1);
+  });
+  await checkAsync("taken back while its email was on its way: sending it again is a new round", async () => {
+    for (const viaClear of [true, false]) {
+      const db = fakeSanity([article("drafts.p")]);
+      const sent: Mail[] = [];
+      const send = async (m: Mail) => {
+        sent.push(m);
+        if (sent.length === 1) {
+          // The editor presses Take it back while the first email is going out.
+          db.store.set("drafts.p", { ...db.store.get("drafts.p")!, forReview: false });
+          if (viaClear) assert.equal(await clearDougNotice(sanity(db), "p"), "cleared");
+        }
+        return m.to;
+      };
+      assert.equal(await notifyDoug(sanity(db), "p", { send }), "sent");
+      assert.equal(db.store.get(mailedRecordId("p"))?.cleared, true, viaClear ? "cleared while sending" : "cleared when it finished");
+      db.store.set("drafts.p", { ...db.store.get("drafts.p")!, forReview: true });
+      assert.equal(await notifyDoug(sanity(db), "p", { send }), "sent");
+      assert.match(sent[1].subject, /^Ready again for your OK:/);
+    }
+  });
+  await checkAsync("the site acts only on an editor's ask, once, while it is fresh", async () => {
+    const now = new Date("2026-11-12T20:00:00Z");
+    const key = newAskKey();
+    assert.match(key, ASK_KEY);
+    assert.notEqual(newAskKey(), key);
+    const askDoc = (k: string, o: Record<string, unknown> = {}): Doc => ({ _id: `${ASK_PREFIX}${k}`, _type: ASK_TYPE, articleId: "blogpost-a", on: true, at: new Date(now.getTime() - 5_000).toISOString(), ...o });
+    const db = fakeSanity([askDoc(key)]);
+    assert.deepEqual(await takeAsk(sanity(db), key, now), { id: `${ASK_PREFIX}${key}`, articleId: "blogpost-a", on: true });
+    assert.equal(await takeAsk(sanity(db), key, now), null, "used once");
+    assert.equal(await takeAsk(sanity(db), "f".repeat(40), now), null, "a key nobody made");
+    assert.equal(await takeAsk(sanity(db), "not-a-key", now), null, "a key of another shape");
+    assert.equal(await takeAsk(sanity(db), undefined, now), null);
+    const old = "a".repeat(40);
+    const stale = fakeSanity([askDoc(old, { at: new Date(now.getTime() - ASK_MAX_AGE_MS - 1000).toISOString() })]);
+    assert.equal(await takeAsk(sanity(stale), old, now), null, "older than five minutes");
+    const odd = "b".repeat(40);
+    for (const o of [{ articleId: "../etc" }, { on: "yes" }, { _type: "blogPost" }, { at: "soon" }]) {
+      assert.equal(await takeAsk(sanity(fakeSanity([askDoc(odd, o)])), odd, now), null, JSON.stringify(o));
+    }
   });
   await checkAsync("the morning run with several waiting sends one email that lists them", async () => {
     const db = fakeSanity([article("drafts.m", { title: "Plow season" }), article("drafts.n", { title: "Traffic calming" }), article("drafts.o", { title: "Cold patch" })]);

@@ -41,6 +41,7 @@ import type { SanityClient } from "@sanity/client";
 import { editorAddresses, sendMail, type Mail } from "@/lib/editor-mail";
 import { reviewFirst, reviewLink } from "@/lib/review-first";
 import { anchorFor } from "@/lib/review-page";
+import { ASK_KEY, ASK_PREFIX, ASK_TYPE } from "@/lib/review-ask";
 
 /** The record's type. sanity/components/ForReviewInput.tsx reads it by this name. */
 export const MAILED_TYPE = "reviewMailed";
@@ -261,12 +262,22 @@ async function claimRound(client: SanityClient, id: string, now: Date, waitMs: n
   return { draftId: draftIdOf(id), recordId, round, title, excerpt: article.excerpt };
 }
 
-/** Marks the round sent, or failed so the next press or run sends it. */
+/**
+ * Marks the round sent, or failed so the next press or run sends it. An
+ * article taken back while its email was on its way is cleared here (and
+ * clearDougNotice clears a round still sending), so sending it again is a
+ * new round whichever happened first (the review of PR #141).
+ */
 async function finishRound(client: SanityClient, claim: Claim, sent: boolean, now: Date): Promise<void> {
   try {
+    const takenBack = sent ? (await readState(client, claim.draftId, true, 0)).article?.forReview !== true : false;
     await client
       .patch(claim.recordId)
-      .set(sent ? { state: "sent", mailedAt: now.toISOString(), title: claim.title } : { state: "failed", failedAt: now.toISOString() })
+      .set(
+        sent
+          ? { state: "sent", mailedAt: now.toISOString(), title: claim.title, ...(takenBack ? { cleared: true, clearedAt: now.toISOString() } : {}) }
+          : { state: "failed", failedAt: now.toISOString() }
+      )
       .commit();
   } catch (err) {
     console.error(`[review] the email record for ${claim.draftId} wasn't saved: ${err instanceof Error ? err.message : err}`);
@@ -329,13 +340,67 @@ export function dougDigestEmail(articles: { title: string; link: string }[], pag
   return { subject, text, html };
 }
 
+// ── The Studio's ask (the review of PR #141) ─────────────────────────────────
+//
+// POST /api/review/notify must act only for a signed-in editor and say
+// nothing about drafts to anyone else (draft ids follow their slugs, so they
+// can be guessed). The Studio panel first creates a private record with its
+// own session, `review.ask-<32 to 64 random hex>` (type reviewAsk: the
+// article's published id, on or off, when), which only an editor can make,
+// then posts the random part. The route takes the record once (takeAsk) and
+// acts on what it says; a key nobody made, an old one or a used one is
+// refused before any article is read. The outcome is written back to the
+// record, which the panel can read.
+
+/** An ask older than this is refused. */
+export const ASK_MAX_AGE_MS = 5 * 60_000;
+/** A blog post's id, published or draft, as Sanity makes them. */
+const ARTICLE_ID = /^(?:drafts\.)?[A-Za-z0-9][A-Za-z0-9._-]{0,150}$/;
+
+export interface Ask {
+  id: string;
+  articleId: string;
+  on: boolean;
+}
+
+/** Takes an editor's ask once: what to do, or null for a key nobody made, an old or used one, or anything odd. */
+export async function takeAsk(client: SanityClient, key: unknown, now = new Date()): Promise<Ask | null> {
+  if (typeof key !== "string" || !ASK_KEY.test(key)) return null;
+  const id = `${ASK_PREFIX}${key}`;
+  const ask = await client.fetch<{ _id: string; _type?: string; _rev?: string; articleId?: unknown; on?: unknown; at?: unknown; used?: unknown } | null>(
+    `*[_id == $id][0]{ _id, _type, _rev, articleId, on, at, used }`,
+    { id }
+  );
+  if (!ask || ask._type !== ASK_TYPE || ask.used === true || !ask._rev) return null;
+  if (typeof ask.articleId !== "string" || !ARTICLE_ID.test(ask.articleId) || typeof ask.on !== "boolean") return null;
+  const at = typeof ask.at === "string" ? Date.parse(ask.at) : NaN;
+  if (Number.isNaN(at) || now.getTime() - at > ASK_MAX_AGE_MS || at - now.getTime() > 60_000) return null;
+  try {
+    await client.patch(id).ifRevisionId(ask._rev).set({ used: true, usedAt: now.toISOString() }).commit();
+  } catch {
+    return null;
+  }
+  return { id, articleId: ask.articleId, on: ask.on };
+}
+
+/** Writes what came of an ask into it, for the panel. Never throws. */
+export async function answerAsk(client: SanityClient, ask: Ask, outcome: string): Promise<void> {
+  try {
+    await client.patch(ask.id).set({ outcome }).commit();
+  } catch (err) {
+    console.error(`[review] the ask's answer wasn't saved: ${err instanceof Error ? err.message : err}`);
+  }
+}
+
 export type ClearOutcome = "cleared" | "nothing to clear" | "still ticked";
 
 /** The article was taken back: the next send is a new round. Waits up to `waitMs` for the change to be saved. */
 export async function clearDougNotice(client: SanityClient, id: string, opts: { now?: Date; waitMs?: number } = {}): Promise<ClearOutcome> {
   const { article, record } = await readState(client, id, false, opts.waitMs ?? 0);
   if (article?.forReview === true) return "still ticked";
-  if (!record || record.cleared || record.state !== "sent") return "nothing to clear";
+  // A round still sending is cleared too: its email may yet go, but sending
+  // the article again must be a new round (finishRound keeps it cleared).
+  if (!record || record.cleared || (record.state !== "sent" && record.state !== "sending")) return "nothing to clear";
   await client.patch(record._id).set({ cleared: true, clearedAt: (opts.now ?? new Date()).toISOString() }).commit();
   return "cleared";
 }

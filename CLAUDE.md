@@ -1030,9 +1030,8 @@ use from a client side experience too."
   after, cleared when the article is taken back or goes live. Sent again
   after that: "Ready again for your OK".
 - Three ways in, one function: the panel (POST /api/review/notify,
-  app/api/review/notify/route.ts: same-origin, the id checked, waits up to
-  12 s for the Studio to save the switch, acts only on what Sanity holds, so
-  it needs no key), Vern's button (app/review/[key]/actions.ts), and the
+  app/api/review/notify/route.ts), Vern's button
+  (app/review/[key]/actions.ts), and the
   daily run (notifyMissedReviews in app/api/cron/social-drafts), which
   emails any sent article that has no email yet (a failed send, a Studio on
   a preview; several go as one email that lists them, dougDigestEmail, as
@@ -1040,6 +1039,21 @@ use from a client side experience too."
   merge) and switches the review off on live articles (staleReviewFlags,
   25 a run). Only production sends (sendsHere): a preview's key would open
   nothing on hubss.com.
+- The route acts only for a signed-in editor (Vercel's security review of
+  PR #141: the first version answered anyone who sent this site's Origin,
+  and said whether a guessed draft existed and was with Doug). The panel
+  first creates a private one-use record with the editor's own session,
+  `review.ask-<40 random hex>` (type reviewAsk: the article, on or off,
+  when; lib/review-ask.ts), and posts only the random part. The route takes
+  it once (takeAsk: unknown, used, over five minutes old or odd is refused
+  before any article is read), waits up to 12 s for the Studio to save the
+  switch, acts, and writes the outcome into the ask. If the ask can't be
+  made, the switch is still saved and the morning run sends the email. The
+  asks stay in the dataset (a few a week; nothing deletes them).
+- Taken back while its email is on its way: clearDougNotice clears a round
+  still sending, and finishRound clears it if the switch is off when the
+  email has gone, so sending it again is always a new round (Vercel Agent's
+  review of PR #141).
 - Publishing switches it off: Studio's Publish (datedPublish) and the daily
   run's scheduled publish (toPublished), so a live post never reads "With
   Doug" and its next edit isn't sent by mistake.

@@ -8,7 +8,8 @@
  * stands in it:
  *  - a new article not sent yet: "Send to Doug". It saves the field, then
  *    asks the site to email Doug a link to it (POST /api/review/notify,
- *    lib/review-notify.ts). The morning run sends any it missed;
+ *    lib/review-notify.ts), through a private one-use record only an editor
+ *    can make (lib/review-ask.ts). The morning run sends any it missed;
  *  - sent: "With Doug", when he was emailed, a link to his page, and
  *    "Take it back";
  *  - already on the site: a line saying the review is for new articles.
@@ -29,6 +30,7 @@ import { CheckmarkCircleIcon, ClockIcon, EnvelopeIcon, LaunchIcon, UndoIcon } fr
 import { getPublishedId, set, useClient, useEditState, useFormValue, type BooleanInputProps } from "sanity";
 import { DOUGS_LINK_ID } from "../../lib/review-link-record";
 import { anchorFor } from "../../lib/review-anchor";
+import { ASK_PREFIX, ASK_TYPE, newAskKey } from "../../lib/review-ask";
 import QuietBoundary from "./QuietBoundary";
 
 /** lib/review-notify.ts MAILED_TYPE (`npm run test:review` keeps them equal). */
@@ -42,6 +44,7 @@ const ANSWERS: Record<string, string> = {
   error: "The site couldn't be reached to email Doug. Press Email Doug now to try again; if it still won't, it goes tomorrow morning.",
   "not ticked": "Still saving. Press Email Doug now in a moment.",
   elsewhere: "Saved. Doug gets the email tomorrow morning.",
+  refused: "Saved. Doug gets the email tomorrow morning.",
   off: "Saved. No email goes to Doug while his review is switched off.",
   "already on the site": "This article is already on the site.",
   "not found": "Give the article a title, then send it again.",
@@ -184,13 +187,22 @@ function ReviewPanel(props: BooleanInputProps) {
     return () => { alive = false; };
   }, [client]);
 
+  // The ask (lib/review-ask.ts): a private record only a signed-in editor
+  // can make, so the site acts for an editor and nobody else. If it can't be
+  // made, the switch is still saved and the morning run sends the email.
   const ask = useCallback(
     async (send: boolean): Promise<string> => {
+      const key = newAskKey();
+      try {
+        await client.create({ _id: `${ASK_PREFIX}${key}`, _type: ASK_TYPE, articleId: publishedId, on: send, at: new Date().toISOString() });
+      } catch {
+        return "refused";
+      }
       try {
         const res = await fetch("/api/review/notify", {
           method: "POST",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify({ id: publishedId, on: send }),
+          body: JSON.stringify({ ask: key }),
         });
         const body = (await res.json()) as { outcome?: string };
         return body.outcome ?? "error";
@@ -198,7 +210,7 @@ function ReviewPanel(props: BooleanInputProps) {
         return "error";
       }
     },
-    [publishedId]
+    [client, publishedId]
   );
 
   const send = useCallback(

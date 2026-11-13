@@ -9,14 +9,19 @@
  * (sanity/structure.ts). No imports, so the tests read it without the Studio.
  *
  * The button says what it does, not who it goes to: Doug sees the Studio
- * too, and "Send to Doug" read oddly on his own screen. REVIEWERS names who
- * the email goes to, lib/review-notify.ts REVIEW_ADDRESSES (`npm run
- * test:review` keeps the two together); Vern gets a copy of each email and
- * their replies.
+ * too, and "Send to Doug" read oddly on his own screen. The review is HUB's
+ * own step, not one person's (Vern, the same evening: "let make it more about
+ * hubss ops and less about Doug, moving forward. just need to satisfy dougs
+ * needs"), so the Studio says "the HUB team"; the email itself greets its
+ * people by name (lib/review-notify.ts greetingFor). `npm run test:review`
+ * keeps every address the email goes to at hubss.com, so the words stay true.
  */
 
-/** Who reads a new article before it goes live. */
-export const REVIEWERS = "Doug and Cleve";
+/** Who reads a new article before it goes live (lower case: it sits mid-sentence; upFirst starts one). */
+export const REVIEWERS = "the HUB team";
+
+/** The same words at the start of a sentence: "The HUB team". */
+export const upFirst = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 
 /** The button that sends a new article for their OK. */
 export const SEND_FOR_REVIEW = "Send for review";

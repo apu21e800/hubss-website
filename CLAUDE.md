@@ -1021,11 +1021,15 @@ use from a client side experience too."
   button in blog post, say 'set review' or something better,
   doug.bain@hubss.com, cleve.stordy, and vernon, all get notified"): the
   button says what it does, not who it goes to (Doug sees the Studio too,
-  and "Send to Doug" read oddly there). The Studio's words are one file,
-  sanity/review-words.ts (REVIEWERS "Doug and Cleve", SEND_FOR_REVIEW,
-  IN_REVIEW); `npm run test:review` keeps REVIEWERS naming the addresses the
-  email goes to and fails on the old labels. Code names keep Doug's
-  (notifyDoug, dougsAddresses, forReview, Vern's "Put on Doug's page").
+  and "Send to Doug" read oddly there). The review is HUB's own step, not
+  one person's (Vern, later the same evening: "let make it more about hubss
+  ops and less about Doug, moving forward. just need to satisfy dougs
+  needs"): the Studio speaks of the HUB team, and the email greets its
+  people by name. The Studio's words are one file, sanity/review-words.ts
+  (REVIEWERS "the HUB team", upFirst, SEND_FOR_REVIEW, IN_REVIEW);
+  `npm run test:review` keeps every address the email goes to at hubss.com
+  and fails on the old labels. Code names keep Doug's (notifyDoug,
+  dougsAddresses, forReview, Vern's "Put on Doug's page").
 - Sending emails Doug and Cleve (lib/review-notify.ts, notifyDoug), one email
   to both: "Hi Doug and Cleve," (greetingFor, from the addresses' first
   names; "Hello," for a mailbox that isn't a person), "Ready for your OK:
@@ -1077,8 +1081,8 @@ use from a client side experience too."
 - Job photos (sanity/components/JobPhotosInput.tsx, words in
   sanity/job-photos-line.ts): a card above the form says what Publish does
   (no story: its photos go out in HUB's social posts; a story: 21e8 writes
-  it up as an article, which goes to Doug and Cleve) and how far the article
-  has got (with 21e8, with Doug and Cleve, live), with **Open the article**. The list's line
+  it up as an article, which goes to the HUB team) and how far the article
+  has got (with 21e8, with the HUB team, live), with **Open the article**. The list's line
   says "Photos for social", "Story in: to be written up" or "Written up as an
   article". These words assume Doug reviews first: change them if
   REVIEW_FIRST goes off.

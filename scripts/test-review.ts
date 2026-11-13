@@ -64,7 +64,7 @@ import { ASK_KEY, ASK_PREFIX, ASK_TYPE, newAskKey } from "../lib/review-ask";
 import type { SanityClient } from "@sanity/client";
 import { anchorFor as anchorForStudio } from "../lib/review-anchor";
 import { jobPhotosLine } from "../sanity/job-photos-line";
-import { IN_REVIEW, REVIEWERS, SEND_FOR_REVIEW } from "../sanity/review-words";
+import { IN_REVIEW, REVIEWERS, SEND_FOR_REVIEW, upFirst } from "../sanity/review-words";
 
 let failures = 0;
 function check(name: string, fn: () => void) {
@@ -457,11 +457,10 @@ check("greets the people it goes to by first name, and a mailbox that isn't a pe
   assert.match(dougArticleEmail({ title: "T", link: "https://hubss.com/review/K" }, 1, "Hi Doug,").text, /^Hi Doug,$/m);
   assert.match(dougDigestEmail([{ title: "a", link: "l" }, { title: "b", link: "l" }], "p").text, /^Hi Doug and Cleve,$/m);
 });
-check("the Studio names the same people the email goes to, and says what the button does", () => {
-  for (const address of REVIEW_ADDRESSES) {
-    const first = address.split(/[.@]/)[0];
-    assert.ok(REVIEWERS.includes(first[0].toUpperCase() + first.slice(1)), `REVIEWERS ("${REVIEWERS}") names ${first}`);
-  }
+check("the Studio speaks of the HUB team, and everyone the email goes to is on it", () => {
+  assert.equal(REVIEWERS, "the HUB team");
+  assert.equal(upFirst(REVIEWERS), "The HUB team");
+  for (const address of [...REVIEW_ADDRESSES, VERNS_ADDRESS]) assert.match(address, /@hubss\.com$/, `${address} is at hubss.com`);
   assert.equal(SEND_FOR_REVIEW, "Send for review");
   assert.equal(IN_REVIEW, "In review");
   const studio = ["sanity/components/ForReviewInput.tsx", "sanity.config.ts", "sanity/schemas/blogPost.ts", "sanity/job-photos-line.ts", "sanity/schemas/fieldPost.ts", "sanity/structure.ts"]
@@ -498,13 +497,13 @@ console.log("The job photos card (sanity/job-photos-line.ts)");
 check("says which way a job goes, before and after Publish", () => {
   assert.match(jobPhotosLine({ published: false, story: false, article: null, hasArticle: false }), /^Publish it and its photos go out in HUB's social posts/);
   assert.match(jobPhotosLine({ published: true, story: false, article: null, hasArticle: false }), /^Its photos go out in HUB's social posts/);
-  assert.match(jobPhotosLine({ published: false, story: true, article: null, hasArticle: false }), /once you publish it\. It goes to Doug and Cleve to read before it goes live/);
+  assert.match(jobPhotosLine({ published: false, story: true, article: null, hasArticle: false }), /once you publish it\. It goes to the HUB team to read before it goes live/);
   assert.match(jobPhotosLine({ published: true, story: true, article: null, hasArticle: false }), /in the next few days/);
 });
 check("and how far its article has got", () => {
   const a = (o: Partial<{ live: boolean; draft: boolean; withDoug: boolean }>) => ({ title: "Milton crosswalk", live: false, draft: false, withDoug: false, ...o });
   assert.match(jobPhotosLine({ published: true, story: true, article: a({ draft: true }), hasArticle: true }), /"Milton crosswalk"\. 21e8 is reading it/);
-  assert.match(jobPhotosLine({ published: true, story: true, article: a({ draft: true, withDoug: true }), hasArticle: true }), /which is with Doug and Cleve, waiting for their OK\.$/);
+  assert.match(jobPhotosLine({ published: true, story: true, article: a({ draft: true, withDoug: true }), hasArticle: true }), /which is with the HUB team, waiting for their OK\.$/);
   assert.match(jobPhotosLine({ published: true, story: true, article: a({ live: true }), hasArticle: true }), /which is on the site\.$/);
   assert.match(jobPhotosLine({ published: true, story: true, article: a({}), hasArticle: true }), /no longer in Blog posts/);
 });

@@ -2,8 +2,9 @@
  * The review on a blog post (12 Nov 2026; Vern: "it's not clear to me how
  * this process works with Doug ... it might be ideal if he gets an email
  * when there is a blog ready for him to review"). Since the evening of 12 Nov
- * the button says what it does, and the email goes to Doug and Cleve with
- * Vern copied (the words: sanity/review-words.ts).
+ * the button says what it does and the panel speaks of the HUB team; the
+ * email goes to Doug and Cleve with Vern copied (the words:
+ * sanity/review-words.ts).
  *
  * The field is still `forReview` (the review page reads it,
  * lib/review-page.ts), but the switch is a panel now, with where the article
@@ -35,7 +36,7 @@ import { DOUGS_LINK_ID } from "../../lib/review-link-record";
 import { anchorFor } from "../../lib/review-anchor";
 import { ASK_PREFIX, ASK_TYPE, newAskKey } from "../../lib/review-ask";
 import QuietBoundary from "./QuietBoundary";
-import { IN_REVIEW, REVIEWERS, SEND_FOR_REVIEW } from "../review-words";
+import { IN_REVIEW, REVIEWERS, SEND_FOR_REVIEW, upFirst } from "../review-words";
 
 /** lib/review-notify.ts MAILED_TYPE (`npm run test:review` keeps them equal). */
 const MAILED_TYPE = "reviewMailed";
@@ -50,8 +51,8 @@ const ANSWERS: Record<string, string> = {
   "not sent": `The email didn't go. Press ${EMAIL_NOW} to try again; if it still won't, it goes tomorrow morning.`,
   error: `The site couldn't be reached to send the email. Press ${EMAIL_NOW} to try again; if it still won't, it goes tomorrow morning.`,
   "not ticked": `Still saving. Press ${EMAIL_NOW} in a moment.`,
-  elsewhere: `Saved. ${REVIEWERS} get the email tomorrow morning.`,
-  refused: `Saved. ${REVIEWERS} get the email tomorrow morning.`,
+  elsewhere: `Saved. ${upFirst(REVIEWERS)} gets the email tomorrow morning.`,
+  refused: `Saved. ${upFirst(REVIEWERS)} gets the email tomorrow morning.`,
   off: "Saved. No review email goes while the review is switched off.",
   "already on the site": "This article is already on the site.",
   "not found": "Give the article a title, then send it again.",
@@ -105,7 +106,7 @@ export function ReviewPanelView(props: ReviewPanelState & { onSend: () => void; 
           <Flex wrap="wrap" gap={3} align="center">
             <Button icon={EnvelopeIcon} text={sending ? "Sending..." : SEND_FOR_REVIEW} tone="primary" disabled={readOnly || busy || !hasTitle} onClick={props.onSend} />
             <Text size={1} muted>
-              {hasTitle ? `${REVIEWERS} get an email with a link to read it, and Vern a copy. Nothing goes on the site without their OK.` : "Give the article a title first."}
+              {hasTitle ? `${upFirst(REVIEWERS)} gets an email with a link to read it. Nothing goes on the site without their OK.` : "Give the article a title first."}
             </Text>
           </Flex>
           {answer ? <Text size={1}>{answer}</Text> : null}

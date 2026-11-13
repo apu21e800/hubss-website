@@ -41,7 +41,7 @@ export default defineType({
     // 21e8 has read a new draft it sends it for review, and it shows, words
     // and photo, on the review page (app/review) until it is published. Since
     // 12 Nov 2026 the switch is a button (sanity/components/ForReviewInput.tsx)
-    // and sending it emails Doug and Cleve a link, Vern copied
+    // and sending it emails the HUB team a link (Doug and Cleve, Vern copied)
     // (lib/review-notify.ts; the button read Send to Doug until that evening). Sending it
     // publishes nothing; publishing switches it off (sanity.config.ts).
     defineField({

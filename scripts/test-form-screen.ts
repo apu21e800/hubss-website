@@ -114,6 +114,99 @@ check("a very long message is cut for the model", () => {
   const text = describeSubmission(contact("x".repeat(9000)));
   assert.ok(text.length < 4600, `length ${text.length}`);
 });
+check("every shape of address in an ordinary message is replaced", () => {
+  const out = redact(
+    "Reach me at Jane.Doe+tenders@eng.city.ca. Or <pm@westbrookmall.com>, mailto:info@example.org; (a_b-c@sub.example.co.uk) 'x@y.io', and cc DOUG@EXAMPLE.CA"
+  );
+  assert.ok(!/@/.test(out), out);
+  assert.equal(out.match(/\[email\]/g)?.length, 6, out);
+  assert.ok(out.endsWith("cc [email]") && out.includes("Reach me at [email]."), out);
+});
+check("signs that are not an address are left alone", () => {
+  assert.equal(redact("2 crosswalks @ $4,000 each, @hubss on Instagram"), "2 crosswalks @ $4,000 each, @hubss on Instagram");
+});
+check("addresses joined by a character an address can hold are both replaced", () => {
+  for (const joined of ["jane@city.ca/bob@city.ca", "jane@city.ca&bob@town.on.ca", "to=jane@city.ca|cc=bob@city.ca", "jane@city.ca-bob@city.ca"]) {
+    const out = redact(joined);
+    assert.ok(!/jane|bob|city|town/.test(out), `${joined} became ${out}`);
+  }
+});
+
+check("a long run glued to an address still loses the address", () => {
+  for (const glued of [`${"x".repeat(100)}jane@city.ca`, `https://example.com/${"p".repeat(80)}?to=jane@city.ca`, `jane@city.ca/${"p".repeat(300)}.pdf`]) {
+    const out = redact(glued);
+    assert.ok(!/jane|city/.test(out), `${glued.slice(0, 30)}... became ${out.slice(-50)}`);
+  }
+});
+
+/**
+ * The form takes a message of 20,000 characters and redact() reads all of
+ * it while the visitor waits, so no message that long may hold it. Until 13
+ * Nov 2026 the email pattern let an "@" into both halves of an address, and
+ * 4,000 "@" signs took eleven to thirteen seconds: eight times longer for
+ * each doubling, so minutes at the form's full length.
+ *
+ * First the two floods at a tenth of that length, so a pattern that has gone
+ * wrong again fails in a second or two instead of running for minutes. Then
+ * the worst cases found for each pattern at the full length: they take 0.1
+ * to 7 ms, and the limit leaves room for a slow machine.
+ */
+function fastest(text: string): number {
+  let ms = Infinity;
+  for (let run = 0; run < 3; run++) {
+    const start = performance.now();
+    redact(text);
+    ms = Math.min(ms, performance.now() - start);
+  }
+  return ms;
+}
+const fill = (unit: string, length: number) => unit.repeat(Math.ceil(length / unit.length)).slice(0, length);
+
+console.log("redact(): an @ flood at 2,000 characters");
+let floodsHeld = true;
+for (const [name, unit] of [["only @ signs", "@"], ["a@ repeated", "a@"]] as const) {
+  const text = fill(unit, 2000);
+  const start = performance.now();
+  redact(text);
+  const ms = performance.now() - start;
+  check(`${name}: ${ms.toFixed(1)} ms`, () => {
+    if (ms >= 100) floodsHeld = false;
+    assert.ok(ms < 100, `${ms.toFixed(0)} ms for 2,000 characters: the pattern is trying every split again`);
+  });
+}
+
+console.log("redact() at the form's full length (20,000 characters)");
+const FULL = 20000;
+const LIMIT_MS = 250;
+const LONG: [string, string][] = [
+  ["email: only @ signs", fill("@", FULL)],
+  ["email: a@ repeated", fill("a@", FULL)],
+  ["email: a@a. repeated", fill("a@a.", FULL)],
+  ["email: one run of letters, no space", fill("a", FULL)],
+  ["email: a run of letters, an @, a run of letters", `${"a".repeat(FULL / 2 - 1)}@${"b".repeat(FULL / 2)}`],
+  ["email: an @ then dots and letters", `a@${fill(".a", FULL).slice(2)}`],
+  ["email: 64 letters and an @, repeated", fill(`${"a".repeat(64)}@`, FULL)],
+  ["email: 63 letters, an @, 255 letters, repeated", fill(`${"a".repeat(63)}@${"b".repeat(255)}`, FULL)],
+  ["email: 64 letters, an @, dots and letters, repeated", fill(`${"a".repeat(64)}@${".b".repeat(120)} `, FULL)],
+  ["email: joined addresses repeated", fill("x@y.zz/", FULL)],
+  ["phone: only digits", fill("5", FULL)],
+  ["phone: 555- repeated", fill("555-", FULL)],
+  ["phone: (555) repeated", fill("(555) ", FULL)],
+  ["phone: +1. repeated", fill("+1.", FULL)],
+  ["phone: a number and ext repeated", fill("555.555.5555 ext ", FULL)],
+  ["an ordinary message repeated", fill("Six crosswalks near two schools. Call (416) 555-0100 x23 or write jane.doe@city.ca. Tender 2026-104-1234. ", FULL)],
+];
+if (!floodsHeld) {
+  console.log("  skipped: the flood above would run for minutes at this length");
+} else {
+  for (const [name, text] of LONG) {
+    const ms = fastest(text);
+    check(`${name}: ${ms.toFixed(1)} ms`, () => {
+      assert.equal(text.length, FULL);
+      assert.ok(ms < LIMIT_MS, `${ms.toFixed(0)} ms, over the ${LIMIT_MS} ms limit`);
+    });
+  }
+}
 
 if (failures) {
   console.log(`\n${failures} failed`);

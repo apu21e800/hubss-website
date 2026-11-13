@@ -20,7 +20,13 @@
  *   cover: { ref, alt, hotspot, crop }, a photo already in Studio, or
  *   cover: <a path in the repo> with coverAlt (and coverHotspot, coverCrop),
  *   uploaded on the real run; forDoug (28 Oct 2026), a line or a list of
- *   lines the note in Studio adds as "To confirm before Publish: ...".
+ *   lines the note in Studio adds as "To confirm before Publish: ...";
+ *   photos (13 Nov 2026, for the Midland crosswalk), a list of
+ *   { file: <a path in the repo>, alt, caption }, uploaded on the real run
+ *   and set after the body under "The job in photographs", as an article
+ *   made from job photos has them (lib/project-posts.ts); sources, one line
+ *   for the note in Studio on where the facts are from, when that is not
+ *   the Product Portfolio Book and the site's own pages.
  * The body goes through the same converter as the drafter's drafts
  * (lib/markdown-to-portable-text.ts) and the same style check
  * (lib/style-lint.ts), with the photo's alt text and no "vs" in a title or a
@@ -72,6 +78,9 @@ if (keywords.length > 6) problems.push(`${keywords.length} keywords; six at most
 // the note he reads in Studio. Plain words: he reads them as they are.
 const forDoug = (Array.isArray(data.forDoug) ? data.forDoug : data.forDoug ? [data.forDoug] : []).map((q: unknown) => String(q).trim()).filter(Boolean);
 
+// One line for the note in Studio on where the facts are from, when it isn't the book and the site's own pages.
+const sourcesLine = typeof data.sources === "string" ? data.sources.trim() : "";
+
 // The photo: one already in Studio (an object with its ref), or a file in the repo.
 const coverRef = data.cover && typeof data.cover === "object" ? (data.cover as { ref?: unknown; alt?: unknown; hotspot?: Hotspot | null; crop?: Crop | null }) : null;
 const coverPath = typeof data.cover === "string" ? data.cover : null;
@@ -84,6 +93,22 @@ if ((coverRef || coverPath) && !alt) problems.push(coverRef ? "cover.alt is miss
 if (!validHotspot(hotspot)) problems.push("a hotspot needs x, y, width and height between 0 and 1");
 if (!validCrop(crop)) problems.push("a crop needs top, bottom, left and right between 0 and 1");
 
+// More photographs of the job, after the body under their own heading.
+type ExtraPhoto = { file: string; alt: string; caption: string };
+const extraPhotos: ExtraPhoto[] = (Array.isArray(data.photos) ? data.photos : []).map((p: unknown) => {
+  const o = (p && typeof p === "object" ? p : {}) as Record<string, unknown>;
+  return { file: String(o.file ?? "").trim(), alt: String(o.alt ?? "").trim(), caption: String(o.caption ?? "").trim() };
+});
+if (data.photos != null && !Array.isArray(data.photos)) problems.push("photos is a list of { file, alt, caption }");
+extraPhotos.forEach((p, i) => {
+  const n = `photo ${i + 1}`;
+  if (!p.file) problems.push(`${n} has no file`);
+  else if (!existsSync(path.resolve(ROOT, p.file))) problems.push(`${n} not found: ${p.file}`);
+  if (!p.alt) problems.push(`${n} has no alt`);
+});
+if (new Set(extraPhotos.map((p) => p.file)).size !== extraPhotos.length) problems.push("the same photo is listed twice");
+if (extraPhotos.length > 10) problems.push(`${extraPhotos.length} photos; ten at most`);
+
 // The house style, as the drafter's pass checks it, plus the alt text and no "vs".
 const title = String(data.title ?? "").trim();
 const excerpt = String(data.excerpt ?? "").trim();
@@ -92,7 +117,9 @@ const flags = [
   ...flagSentences(excerpt),
   ...flagSentences(content, { headings: "markdown" }),
   ...(alt ? flagSentences(alt) : []),
+  ...extraPhotos.flatMap((p) => [...flagSentences(p.alt), ...(p.caption ? flagSentences(p.caption) : [])]),
   ...forDoug.flatMap((q) => flagSentences(q)),
+  ...(sourcesLine ? flagSentences(sourcesLine) : []),
 ];
 for (const f of flags) problems.push(`house style, "${f.text}": ${f.issues.map(describeIssue).join("; ")}`);
 for (const h of [title, ...content.split("\n").filter((l) => /^\s*#{1,6}\s/.test(l))]) {
@@ -130,6 +157,9 @@ function imageField(ref: string) {
   };
 }
 
+/** The heading an article made from job photos puts over its photographs (lib/project-posts.ts). */
+const PHOTOS_HEADING = "The job in photographs";
+
 const words = (md: string) =>
   md.replace(/\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/[#*_>`-]/g, " ").split(/\s+/).filter((w) => /\w/.test(w)).length;
 
@@ -164,7 +194,9 @@ async function main() {
     // What the editor sees in Studio: who wrote it, never how (Vern, 19 Oct 2026).
     editorNotes: [
       `Written by 21e8 on ${new Date().toISOString().slice(0, 10)}: read it, then Publish.`,
-      "Every statement about HUB is from the Product Portfolio Book or the site's own pages, and any outside source is linked where it is used.",
+      // Where the facts are from. `sources:` in the front matter says it for a
+      // piece that rests on something else (a client's own notes and photos).
+      sourcesLine || "Every statement about HUB is from the Product Portfolio Book or the site's own pages, and any outside source is linked where it is used.",
       // `forDoug:` in the front matter (28 Oct 2026): what only Doug can
       // settle before it goes live, in plain words, one line each.
       ...forDoug.map((q) => `To confirm before Publish: ${q}`),
@@ -173,6 +205,10 @@ async function main() {
 
   console.log(`${doc.title}\n/blog/${slug} · ${body.length} blocks · about ${words(content)} words · style check clean`);
   console.log(`photo: ${photo}${alt ? ` · alt "${alt}"` : ""}${hotspot ? ` · hotspot x ${hotspot.x} y ${hotspot.y} w ${hotspot.width} h ${hotspot.height}` : ""}`);
+  if (extraPhotos.length) {
+    console.log(`more photos, uploaded on the real run and set under "${PHOTOS_HEADING}":`);
+    for (const p of extraPhotos) console.log(`  ${p.file} · alt "${p.alt}"${p.caption ? ` · caption "${p.caption}"` : ""}`);
+  }
   console.log(`systems: ${products.map((r) => r.slug).join(", ") || "none"} · applications: ${apps.map((r) => r.slug).join(", ") || "none"}`);
   if (DRY) {
     console.log(JSON.stringify({ ...doc, body: `(${body.length} blocks)` }, null, 2));
@@ -192,7 +228,17 @@ async function main() {
     const asset = await client.assets.upload("image", createReadStream(abs), { filename: path.basename(abs) });
     featuredImage = imageField(asset._id);
   }
-  await client.create({ ...doc, ...(featuredImage ? { featuredImage } : {}) });
+  // The other photographs, in the order listed, as a job photos article sets them.
+  const gallery: Record<string, unknown>[] = [];
+  for (const [i, p] of extraPhotos.entries()) {
+    const abs = path.resolve(ROOT, p.file);
+    const asset = await client.assets.upload("image", createReadStream(abs), { filename: path.basename(abs) });
+    gallery.push({ _type: "image", _key: `photo-${i + 1}`, asset: { _type: "reference", _ref: asset._id }, alt: p.alt, ...(p.caption ? { caption: p.caption } : {}) });
+  }
+  const withPhotos = gallery.length
+    ? [...body, { _type: "block", _key: "photos-h2", style: "h2", markDefs: [], children: [{ _type: "span", _key: "photos-h2-s", text: PHOTOS_HEADING, marks: [] }] }, ...gallery]
+    : body;
+  await client.create({ ...doc, body: withPhotos, ...(featuredImage ? { featuredImage } : {}) });
   console.log(`Draft saved. Studio → Blog posts → "${doc.title}": read it, then Publish.`);
 }
 

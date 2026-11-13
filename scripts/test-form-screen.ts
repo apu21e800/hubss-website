@@ -132,6 +132,13 @@ check("addresses joined by a character an address can hold are both replaced", (
   }
 });
 
+check("a long run glued to an address still loses the address", () => {
+  for (const glued of [`${"x".repeat(100)}jane@city.ca`, `https://example.com/${"p".repeat(80)}?to=jane@city.ca`, `jane@city.ca/${"p".repeat(300)}.pdf`]) {
+    const out = redact(glued);
+    assert.ok(!/jane|city/.test(out), `${glued.slice(0, 30)}... became ${out.slice(-50)}`);
+  }
+});
+
 /**
  * The form takes a message of 20,000 characters and redact() reads all of
  * it while the visitor waits, so no message that long may hold it. Until 13
@@ -141,10 +148,8 @@ check("addresses joined by a character an address can hold are both replaced", (
  *
  * First the two floods at a tenth of that length, so a pattern that has gone
  * wrong again fails in a second or two instead of running for minutes. Then
- * the worst cases for each pattern at the full length. The floods take about
- * a tenth of a millisecond. A run of 20,000 characters with no space and no
- * "@" takes about 0.2 s, as it always has (the pattern reads it once from
- * each of its characters); the limit leaves room for a slow machine.
+ * the worst cases found for each pattern at the full length: they take 0.1
+ * to 7 ms, and the limit leaves room for a slow machine.
  */
 function fastest(text: string): number {
   let ms = Infinity;
@@ -172,7 +177,7 @@ for (const [name, unit] of [["only @ signs", "@"], ["a@ repeated", "a@"]] as con
 
 console.log("redact() at the form's full length (20,000 characters)");
 const FULL = 20000;
-const LIMIT_MS = 1500;
+const LIMIT_MS = 250;
 const LONG: [string, string][] = [
   ["email: only @ signs", fill("@", FULL)],
   ["email: a@ repeated", fill("a@", FULL)],
@@ -180,6 +185,10 @@ const LONG: [string, string][] = [
   ["email: one run of letters, no space", fill("a", FULL)],
   ["email: a run of letters, an @, a run of letters", `${"a".repeat(FULL / 2 - 1)}@${"b".repeat(FULL / 2)}`],
   ["email: an @ then dots and letters", `a@${fill(".a", FULL).slice(2)}`],
+  ["email: 64 letters and an @, repeated", fill(`${"a".repeat(64)}@`, FULL)],
+  ["email: 63 letters, an @, 255 letters, repeated", fill(`${"a".repeat(63)}@${"b".repeat(255)}`, FULL)],
+  ["email: 64 letters, an @, dots and letters, repeated", fill(`${"a".repeat(64)}@${".b".repeat(120)} `, FULL)],
+  ["email: joined addresses repeated", fill("x@y.zz/", FULL)],
   ["phone: only digits", fill("5", FULL)],
   ["phone: 555- repeated", fill("555-", FULL)],
   ["phone: (555) repeated", fill("(555) ", FULL)],

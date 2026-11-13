@@ -41,25 +41,33 @@ const BLOG_SLUGS: string[] = JSON.parse(fs.readFileSync(BLOG_INDEX, "utf8")).map
 // region1.analytics.google.com) that some visitors are routed to. If Google
 // Ads is ever linked, that guide lists more hosts (*.g.doubleclick.net,
 // *.google.<tld>). Add them then, not before.
+//
+// vercel.live, vercel.com, assets.vercel.com and Pusher's socket are the
+// Vercel Toolbar's, as Vercel lists them (vercel.com/docs/vercel-toolbar/
+// managing-toolbar), on 12 Nov 2026: without them the toolbar told Doug,
+// on his review copy, "This website's Content-Security-Policy is missing
+// domains used by the Vercel Toolbar", on top of the page he was leaving a
+// note on. The policy only reports, so nothing was blocked; the message was
+// the harm.
 const CSP_REPORT_ONLY = [
   "default-src 'self'",
   // Inline + eval needed for Next.js + framer-motion runtime
   // assets.apollo.io: Apollo's visitor tracker (components/ApolloVisitors.tsx, 9 Nov 2026).
   // Its person-matching script (d-code.liadm.com) is left out on purpose: the
   // tracker is set to company level, and Apollo does not load it then.
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://client.crisp.chat https://*.vercel-scripts.com https://*.vercel-insights.com https://va.vercel-scripts.com https://www.googletagmanager.com https://assets.apollo.io",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://client.crisp.chat https://*.vercel-scripts.com https://*.vercel-insights.com https://va.vercel-scripts.com https://www.googletagmanager.com https://assets.apollo.io https://vercel.live",
   // Inline styles from framer-motion + Tailwind v4 + Crisp
-  "style-src 'self' 'unsafe-inline' https://client.crisp.chat https://fonts.googleapis.com",
+  "style-src 'self' 'unsafe-inline' https://client.crisp.chat https://fonts.googleapis.com https://vercel.live",
   // Images from Unsplash, Vercel optimization, data URIs, blob (for clipboard), Crisp avatars,
   // GA4's pixel fallback when fetch/sendBeacon is unavailable, and Sanity's image CDN, which
   // serves the product, application and page photos curated in Studio (lib/photos.ts)
-  "img-src 'self' data: blob: https://cdn.sanity.io https://images.unsplash.com https://plus.unsplash.com https://*.crisp.chat https://image.crisp.chat https://basemaps.cartocdn.com https://*.basemaps.cartocdn.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com",
+  "img-src 'self' data: blob: https://cdn.sanity.io https://images.unsplash.com https://plus.unsplash.com https://*.crisp.chat https://image.crisp.chat https://basemaps.cartocdn.com https://*.basemaps.cartocdn.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://vercel.live https://vercel.com",
   // Google Fonts files
-  "font-src 'self' data: https://fonts.gstatic.com https://client.crisp.chat",
+  "font-src 'self' data: https://fonts.gstatic.com https://client.crisp.chat https://vercel.live https://assets.vercel.com",
   // Resend API, Crisp WS, Vercel telemetry, MapLibre tiles, GA4 collection, Apollo's visit events
-  "connect-src 'self' https://api.resend.com https://*.crisp.chat wss://*.crisp.chat https://*.vercel-insights.com https://va.vercel-scripts.com https://*.cartocdn.com https://basemaps.cartocdn.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://aplo-evnt.com",
+  "connect-src 'self' https://api.resend.com https://*.crisp.chat wss://*.crisp.chat https://*.vercel-insights.com https://va.vercel-scripts.com https://*.cartocdn.com https://basemaps.cartocdn.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://aplo-evnt.com https://vercel.live wss://ws-us3.pusher.com",
   // Frame sources — Crisp chat iframe + YouTube embeds (just in case)
-  "frame-src 'self' https://client.crisp.chat https://www.youtube.com https://www.youtube-nocookie.com",
+  "frame-src 'self' https://client.crisp.chat https://www.youtube.com https://www.youtube-nocookie.com https://vercel.live",
   // Disallow plugins
   "object-src 'none'",
   // Block forms from being submitted to off-domain endpoints

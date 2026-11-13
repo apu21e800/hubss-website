@@ -4,6 +4,71 @@ The record for the `feat/hubss-2` branch: what it is, what was decided, what is
 done, what is next. A new chat reads this first, then CLAUDE.md. Started 13 Nov
 2026.
 
+## Where it stands (13 Nov 2026, evening): a gentle upgrade, in two looks
+
+Vernon, 13 Nov, 2:32 pm, on the first slice: "I still like the white text on
+orange button and the gradient on the text, the megamenu background color
+could be darker. let's be able to toggle between a blue and grey theme. The
+blue theme should still have dominant grey elements ... This feels more like
+a gentle upgrade to what we already have, not a 2.0 overhaul, maybe we don't
+need one."
+
+So this branch is no longer a 2.0. It is hubss.com with the slice's quiet
+gains (the type scale, the phone fixes, the label rule, the still line of
+names, the lighter home page) in two looks behind one switch, and the things
+Vernon missed are back. Read this section first; the sections under it were
+corrected where it changed them.
+
+- **The button is hubss.com's own again**, everywhere: white words on the
+  orange that runs to amber, its glow on hover. `--on-accent` is white. (The
+  slice's Charcoal words measured 5.8:1; white on the orange is 2.8:1. That
+  is Vernon's call, made knowing the number.)
+- **The orange-to-yellow gradient is HUB's signature**, with three jobs: the
+  accent line of a headline on a dark ground (the hero's, "the system.", the
+  404's), the thin rule on top of an offer card, and the line under the card
+  you point at. One token, `--gradient-brand`. It is not a fill for buttons
+  beyond the live one, and never a label.
+- **Two looks**, `data-tone` on `<html>` (app/globals.css, "The two looks"):
+  - Blue (the default): the bar and the menus in the navy black hubss.com has
+    today, the blue grade over photo heroes, the blue night band.
+  - Grey: the bar in HUB Charcoal, a deeper charcoal well for the menus
+    (`#121211`), a charcoal grade and band.
+  - Grey in both: paper, cards, the footer, every text grey. Blue has grey as
+    its ground; it adds blue only where a photograph or the bar is.
+- **The menus are darker** than the slice's: they sit on `--bg-menu`, the
+  bar on `--bg-nav`.
+- **The switch** (components/ui/ToneSwitch.tsx): bottom left, "Look: Blue /
+  Grey", on this branch's keyed preview and on local builds only.
+  `?tone=blue` or `?tone=grey` in any address sets it and sticks; the
+  bootstrap in app/layout.tsx applies it before first paint. When a look is
+  chosen: make it the default on `<html>` and in the bootstrap, delete the
+  other look's two blocks and the switch.
+- **The three hands-off blocks are hubss.com's, element by element, in both
+  looks**: the map, the Lunch & Learn card (main's file again, on the classic
+  dark, its page title at main's size) and the book's reader.
+  `scripts/hubss-2/map-same.mjs <live> <local> [blue|grey]` and
+  `block-same.mjs <live> <local> <path> <selector> [blue|grey]` measure it.
+- **Checking the second look**: `scripts/hubss-2/as-grey.mjs 4311 4312`
+  serves a local build with Grey as the default, so every check script runs
+  on it unchanged.
+
+Checked on a production build of e5ef19a (13 Nov): tsc; 17 test scripts;
+verify 16/16; first screen 72 of 72; no sideways scroll on 16 pages at 9
+widths; the label rule and the accessibility checker with tap targets in
+both looks, as on hubss.com; what search reads the same as hubss.com on 21
+pages; the map 672 elements at 1440 and 9 at 390, Lunch & Learn 74 and 76,
+the home page's card 76 and 75, the reader 44 and 28, none differ, in both
+looks. Weight on a phone, on load, against main: home 1,607 to 1,579 KB; the
+other six pages 1 KB over main with the review switch mounted (four more
+nodes; it never ships). Not yet measured without the switch.
+
+**Who has seen it.** Vernon only, on the keyed preview. On 13 Nov HUB asked
+for fewer places to keep track of and for directed work, so nothing from
+this branch goes to HUB as a link. If Vernon wants HUB to choose, it is
+shown to them by him (his keyed link on a shared screen), or as pictures on
+HUB's own review page. Before any of it merges to main: one independent
+review, the key block out of middleware.ts, one look made the default.
+
 ## What it is
 
 hubss.com raised to 21e8.studio grade, on a branch that is not live. 2.0 is the
@@ -37,9 +102,8 @@ everything below:
 - The map: its look and how it works stay exactly as they are. The section is
   pinned to the pre-2.0 colours and type (`data-surface="classic"`, below).
 - The Product Portfolio Book reader and Lunch & Learn work as they do today.
-  Both are pinned to the classic dark, so their colours and labels are today's.
-  Both take 2.0's button (Charcoal words on the flat orange), and the Lunch &
-  Learn card's orange lost its yellow. Nothing else.
+  Both are pinned to the classic dark and are the same as on hubss.com,
+  element by element (the Lunch & Learn file is main's since 13 Nov, evening).
 - Doug's settled rounds: the names, the page-turn reader, the hero's book
   callout, "Ten systems, endless applications.", 60 minutes.
 - HUB's words: product facts (the book wins), Studio text, published articles.
@@ -55,24 +119,23 @@ everything below:
 
 ## Decisions
 
-### Colour: three colours, three jobs (`app/globals.css`, top)
+### Colour: every colour has a job (`app/globals.css`, top)
 
 | Colour | Job | Where |
 |---|---|---|
-| Grey | The structure | HUB Charcoal `#20201F` is the ground of the bar, the menus, the footer and the dark bands. Its lighter steps are the cards and hairlines on it. On paper the family goes warm: stone and paper. |
-| Blue | The cinema | The grade over a photo hero (`--grade`), the night band (`data-surface="night"`: the home page's applications), the map. Never a button or a label. |
-| Orange | The action | Buttons, links, the current item, focus. One flat orange, `#F97316`. |
+| Grey | The structure, in both looks | HUB Charcoal `#20201F` and its steps: the footer, the dark bands, the cards and hairlines on them. On paper the family goes warm: stone and paper. In the Grey look it is the bar, the menus and the grade over photos too. |
+| Blue | The cinema, in the Blue look | The bar and menus (the navy black hubss.com has), the grade over a photo hero (`--grade`, `--grade-deep`), the night band (`data-surface="night"`: the home page's applications). Never a button or a label. |
+| Orange | The action | Buttons, links, the current item, focus. The button is hubss.com's own: white words on the orange that runs to amber. |
+| Orange to yellow | HUB's signature | The accent line of a headline on a dark ground, the thin rule on an offer card, the line under the card you point at (`--gradient-brand`). |
 
 What changed from main:
 
 - The dark ladder moved up one step, so Charcoal is the ground itself. It was
-  `#151515` with Charcoal as the card colour; the bar and menus were a navy
-  black, `rgb(7,11,18)`.
-- The words on an orange fill are Charcoal: 5.8:1. White on it was 2.8:1, under
-  the 4.5:1 that AA asks of text this size. This is the one change a visitor
-  sees on every screen. It is one token, `--on-accent`.
-- The yellow is out. The orange ran to amber in buttons and to yellow in three
-  headings and a dozen rules. Yellow is Thermo-Design's.
+  `#151515` with Charcoal as the card colour. The bar and menus are a navy
+  black, `rgb(7,11,18)`, in the Blue look, as on main; Charcoal in Grey.
+- (Reversed on 13 Nov, evening: the slice had Charcoal words on a flat orange
+  and no yellow. The button and the gradient are main's again; see "Where it
+  stands".)
 - The small orange capitals over headings are grey and smaller (`.eyebrow`:
   12px, 0.16em), and the four on the home page that said the heading again are
   not printed (docs/STYLE.md, Structure).
@@ -91,7 +154,7 @@ Contrast, measured (13 Nov 2026):
 
 | Pair | Ratio |
 |---|---|
-| Charcoal on orange (button label) | 5.82 |
+| White on orange (the button label, as on hubss.com) | 2.8 |
 | Cream `#F5F0EB` on Charcoal | 14.4 |
 | `--text-secondary` `#B4B3AE` on Charcoal / on `#333331` | 7.8 / 6.0 |
 | `--text-muted` `#A8A7A2` on `#333331` | about 5.3 |
@@ -142,26 +205,23 @@ applications band is the night band. Target for the rollout: under 8,000.
 
 ### The bar and the menus
 
-Charcoal, like the footer. The panels keep the structure Vernon signed off on
-24 to 26 Oct 2026; their six orange ticks are grey hairlines, so the only
-orange in a panel is what can be pressed. The phone menu sits on the same
-ground as the panels.
+Navy black in the Blue look, Charcoal in Grey; the panels and the phone menu
+sit on a darker ground than the slice had (`--bg-menu`). The panels keep the
+structure Vernon signed off on 24 to 26 Oct 2026; their six orange ticks are
+grey hairlines, so the only orange in a panel is what can be pressed.
 
 ### The map, Lunch & Learn and the reader stay classic
 
 `data-surface="classic"` (and `[data-catalogue-route]`) carries the pre-2.0
-dark values and the old label and heading sizes. On the map it carries the old
-button too (white words, the fill that ran to amber), so the map block is the
-same to the pixel: check with `scripts/hubss-2/map-same.mjs` after any token
-change. The Lunch & Learn card (`data-buttons="new"`) and the reader take
-2.0's button.
+dark values and the old label and heading sizes (the section heading's and,
+since 13 Nov, the page title's: the Lunch & Learn page's h1 is the card's).
+All three blocks are the same as on hubss.com, element by element, in both
+looks: check with `map-same.mjs` and `block-same.mjs` after any token change.
 
-What this leaves on the home page: three darks. The night band (applications),
-today's near-black (the map and Lunch & Learn, which sit together as they do
-on hubss.com), and Charcoal (the bar, the menus, the footer). And one button
-in the old style, the map's "Take the tour". Both are Vernon's to change,
-since they touch the map: let the map's band take the night blue, and let its
-button take Charcoal words.
+What this leaves on the home page: the night band (applications), today's
+near-black (the map and Lunch & Learn, which sit together as they do on
+hubss.com) and Charcoal (the footer). Letting the map's band take the look's
+dark is Vernon's to ask for, since it touches the map.
 
 ### One rule for the small capitals
 
@@ -227,8 +287,11 @@ much a phone downloads, so it gets measured first.
   this repository is public, so the address can be worked out from the branch's
   name. The key is not in the repository; the keyed link is on the 21e8
   Motherboard. It goes to Vernon only.
-- **Before 2.0 merges to main:** take the key block out of `middleware.ts`, and
-  the catch-all line at the end of its matcher.
+- The Blue / Grey switch shows on this preview and on local builds only
+  (`TONE_SWITCH` in app/layout.tsx).
+- **Before any of it merges to main:** take the key block out of
+  `middleware.ts`, and the catch-all line at the end of its matcher; make the
+  chosen look the default and take the switch out.
 - No pull request is open for this branch on purpose: Vercel would post the
   preview's address on it in public.
 
@@ -242,7 +305,9 @@ much a phone downloads, so it gets measured first.
 | `overflow.mjs` | Nothing past the screen's edge, 320 to 1440 (a row made to swipe may start a gutter off the left edge; the page itself may not scroll sideways). |
 | `first-screen.mjs` | The ten ad pages' and /lunch-learn's first-screen rules, at CLAUDE.md's sizes (72 cells). |
 | `weigh.mjs` | No page heavier on a phone (390 at DPR 3) than on main. |
-| `map-same.mjs` | The map block is the same as on hubss.com, element by element, read once the map says it is ready and its photos are in. |
+| `map-same.mjs` | The map block is the same as on hubss.com, element by element, read once the map says it is ready and its photos are in. A third word reads the local site in a look. |
+| `block-same.mjs` | The same for any block by its selector: the Lunch & Learn card, the home page's card, the book's reader. |
+| `as-grey.mjs` | Serves a local build with Grey as the default, so every script here checks the second look unchanged. |
 | `labels.mjs` | No orange small-capitals label outside a kicker or a classic block. |
 | `seo-same.mjs` | What search reads is the same as on hubss.com: title, description, canonical, robots, share tags, h1, structured data, images with their alt text, link addresses. |
 | `a11y.mjs` | The accessibility checker at every impact, and the tap targets, beside hubss.com. |
@@ -346,6 +411,10 @@ Left for the template passes:
 
 ## Next
 
+0. (13 Nov, evening) Vernon's call on Blue or Grey, and whether HUB chooses.
+   Then, before main: an independent review, the weight measured with the
+   switch off, the key block and the other look out. The list below was the
+   2.0 plan; under "a gentle upgrade" it is a menu, not a schedule.
 1. Vernon's notes on the slice.
 2. The slice's own templates, by hand: the product page (details card, the
    spec list's tags), the application page, the Projects front (the room above

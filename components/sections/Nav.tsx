@@ -108,7 +108,7 @@ const currentPage = (pathname: string, href: string) => (pathname === href ? ("p
 // The mark itself: the label at --text-primary (set by the caller) with a
 // 2px rule under it in the brand orange, or in the button's own text colour
 // on the orange Lunch & Learn button, where orange on orange would vanish.
-function NavLabel({ children, active, rule = "#F97316" }: { children: React.ReactNode; active: boolean; rule?: string }) {
+function NavLabel({ children, active, rule = "var(--accent)" }: { children: React.ReactNode; active: boolean; rule?: string }) {
   return (
     <span className="relative inline-block">
       {children}
@@ -195,7 +195,7 @@ function RuledTile({ line, compact = false }: { line?: string; compact?: boolean
       style={{ background: `${HATCH}, var(--bg-card)`, border: "1px solid var(--ink-10)" }}
     >
       <div className={`absolute ${compact ? "left-2.5 bottom-2.5" : "left-4 right-4 bottom-4"}`}>
-        <span className="block rounded-full" style={{ width: compact ? 18 : 28, height: 3, background: "#F97316" }} />
+        <span className="block rounded-full" style={{ width: compact ? 18 : 28, height: 3, background: "var(--accent)" }} />
         {!compact && line && (
           <div className="font-display mt-2.5 text-[15px] font-bold leading-snug text-balance" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
             {line}
@@ -790,10 +790,10 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
           <div
             className="drawer-head flex-shrink-0"
             style={{
-              background: "rgba(7,11,18,0.96)",
+              background: "var(--bg-nav)",
               backdropFilter: "blur(12px)",
               WebkitBackdropFilter: "blur(12px)",
-              borderBottom: scrolled ? "1px solid rgba(249,115,22,0.18)" : "1px solid var(--border-color)",
+              borderBottom: scrolled ? "1px solid var(--ink-14)" : "1px solid var(--border-color)",
             }}
           >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4">
@@ -855,7 +855,7 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
           {/* ── The sheet: the sections and the pinned Lunch & Learn ───── */}
           <m.div
             className="drawer-sheet flex min-h-0 flex-1 flex-col"
-            style={{ background: "var(--bg-deepest)" }}
+            style={{ background: "var(--bg-primary)" }}
             variants={reduce ? SHEET_FADE : SHEET_WIPE}
           >
             <div ref={bodyRef} className="drawer-body flex-1 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: "touch" } as React.CSSProperties}>
@@ -966,7 +966,7 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
                 {/* ── The two offices ─────────────────────── */}
                 {/* The phones from Studio's Site Settings (lib/site-settings.ts). */}
                 <RiseIn index={ROOT_SECTIONS.length + plainLinks.length} on={rise} className="mt-9">
-                  <div className="pb-2 text-[12px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--accent-text-lg)" }}>
+                  <div className="eyebrow pb-2">
                     Call an office
                   </div>
                   {([["West", offices.west], ["East", offices.east]] as const).map(([name, office]) => (
@@ -1000,7 +1000,7 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
               className="drawer-foot flex-shrink-0 px-4 sm:px-6 pt-3"
               style={{
                 borderTop: "1px solid var(--ink-08)",
-                background: "var(--bg-deepest)",
+                background: "var(--bg-primary)",
                 paddingBottom: "max(12px, env(safe-area-inset-bottom))",
               }}
             >
@@ -1262,11 +1262,11 @@ export default function Nav() {
         className="nav-bar sticky top-0 z-50"
         data-tucked={tucked ? "true" : undefined}
         style={{
-          background: "rgba(7,11,18,0.96)",
+          background: "var(--bg-nav)",
           backdropFilter: "blur(12px)",
           borderBottom: scrolled
-            ? "1px solid rgba(249,115,22,0.18)"
-            : "1px solid var(--border-color)",
+            ? "1px solid var(--ink-14)"
+            : "1px solid var(--ink-08)",
           // No shadow while tucked: it would hang below the screen's top edge.
           boxShadow: scrolled && !tucked
             ? "0 4px 32px rgba(0,0,0,0.55), 0 1px 0 rgba(249,115,22,0.08)"
@@ -1423,7 +1423,7 @@ export default function Nav() {
               style={{ width: 36, height: 36, color: "var(--text-secondary)" }}
             >
               <svg
-                className="transition-colors duration-200 hover:stroke-[#F97316]"
+                className="transition-colors duration-200 hover:stroke-[var(--accent)]"
                 width="17" height="17" fill="none" stroke="currentColor" viewBox="0 0 24 24"
               >
                 <circle cx="11" cy="11" r="8" strokeWidth={2} /><path d="M21 21l-4.35-4.35" strokeWidth={2} strokeLinecap="round" />
@@ -1497,7 +1497,7 @@ export default function Nav() {
               className="absolute inset-x-0 top-full hidden lg:block"
               style={{
                 // Opaque: at 98.5% the hero headline under it showed through.
-                background: "rgb(7,11,18)",
+                background: "var(--bg-primary)",
                 borderTop: "1px solid var(--ink-08)",
                 borderBottom: "1px solid var(--ink-10)",
                 boxShadow: "0 28px 60px rgba(0,0,0,0.55)",

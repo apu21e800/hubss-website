@@ -215,7 +215,7 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
         <h2
           id="library-heading"
           className="mb-1 text-[12.5px] uppercase"
-          style={{ color: "var(--accent-text)", fontFamily: "inherit", fontWeight: 700, letterSpacing: "0.2em", lineHeight: 1.5 }}
+          style={{ color: "var(--text-muted)", fontFamily: "inherit", fontWeight: 700, letterSpacing: "0.16em", lineHeight: 1.5 }}
         >
           Browse projects and guides
         </h2>
@@ -386,7 +386,7 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
           <button
             onClick={clearFilters}
             className="text-sm font-semibold px-5 rounded-lg inline-flex items-center"
-            style={{ background: "#f97316", color: "var(--on-accent)", minHeight: "44px" }}
+            style={{ background: "var(--accent)", color: "var(--on-accent)", minHeight: "44px" }}
           >
             Clear all filters
           </button>

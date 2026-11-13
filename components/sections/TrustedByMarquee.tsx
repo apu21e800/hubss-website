@@ -22,79 +22,31 @@ export const TRUSTED_BY = [
   "City of Richmond Hill",
 ];
 
-// Duplicate the list so the marquee can scroll seamlessly via -50% translate.
-const TICKER = [...TRUSTED_BY, ...TRUSTED_BY];
-
+/**
+ * Who uses HUB, as a still line of names (13 Nov 2026). It was a ticker that
+ * ran by itself from the moment the page opened; nothing on the site moves
+ * now until the visitor does something. The names are a list for a screen
+ * reader and one flowing line for the eye, a dot between them (.proof-names
+ * in app/globals.css draws the dots and drops one that would start a line).
+ * The file keeps its name: the Lunch & Learn page imports the list from it.
+ */
 export default function TrustedByMarquee() {
   return (
     <section
-      /* client wordmarks; they read better on paper, as on Powershifter */
       data-surface="paper"
-      className="relative overflow-hidden"
-      style={{
-        background: "var(--bg-deepest)",
-        borderTop: "1px solid var(--border-color)",
-        borderBottom: "1px solid var(--border-color)",
-        paddingTop: "3.25rem",
-        paddingBottom: "3.25rem",
-      }}
+      className="proof-band"
       aria-label="Trusted by Canadian municipalities and institutions"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-        <p
-          className="text-[11px] font-bold tracking-[0.22em] uppercase text-center"
-          style={{ color: "var(--ink-50)" }}
-        >
-          Trusted by
-        </p>
-      </div>
-
-      <div
-        className="overflow-hidden"
-        style={{
-          maskImage:
-            "linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%)",
-          WebkitMaskImage:
-            "linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%)",
-        }}
-      >
-        <div
-          className="flex whitespace-nowrap"
-          style={{ animation: "hubss-trusted-marquee 42s linear infinite" }}
-        >
-          {TICKER.map((name, i) => (
-            <span
-              key={`${name}-${i}`}
-              style={{ display: "inline-flex", alignItems: "center", flexShrink: 0 }}
-            >
-              <span
-                className="text-sm font-medium px-6"
-                style={{ color: "var(--ink-50)", lineHeight: 1 }}
-              >
-                {name}
-              </span>
-              <span
-                aria-hidden="true"
-                style={{
-                  display: "block",
-                  width: 4,
-                  height: 4,
-                  borderRadius: "50%",
-                  background: "rgba(249,115,22,0.55)",
-                  flexShrink: 0,
-                }}
-              />
-            </span>
-          ))}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="proof-row">
+          <p className="eyebrow eyebrow-muted">Trusted by</p>
+          <ul className="proof-names">
+            {TRUSTED_BY.map((name) => (
+              <li key={name}>{name}</li>
+            ))}
+          </ul>
         </div>
       </div>
-
-      <style>{`
-        @keyframes hubss-trusted-marquee {
-          0%   { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-      `}</style>
     </section>
   );
 }

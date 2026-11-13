@@ -19,79 +19,121 @@
   --font-geist: '';
   --font-inter: '';
 
-  /* ─── Brand — never change between themes ───────── */
-  --color-bg-primary: #151515;
-  --color-orange:   #F97316;
-  --color-charcoal: #20201F;   /* HUBSS official grey — "Charcoal" */
-  --color-amber:    #EAB308;
-  --gradient-brand: linear-gradient(90deg, #F97316, #EAB308);
-  --gradient-brand-vertical: linear-gradient(180deg, #F97316, #EAB308);
-  --gradient-brand-subtle: linear-gradient(90deg, rgba(249,115,22,0.12) 0%, rgba(234,179,8,0.12) 100%);
-  --gradient-glow:  0 0 20px rgba(249,115,22,0.25);
+  /* ─── HUBSS 2.0: every colour has a job (13 Nov 2026) ────────────────────
+     Vernon, 12 Nov 2026: keep the blue (it works with the orange and gives
+     the site its cinematic feel), add more of HUB's signature grey, choose
+     tastefully. Three colours, three jobs:
 
-  /* Legacy blue tokens — retained as brand references, painted nowhere. */
-  --bg-slate:       #111C2D;
-  --bg-slate-light: #182436;
-  --color-blue-deep:  #111C2D;
-  --color-blue-mid:   #0C1520;
+       Grey is the structure.  HUB Charcoal (#20201F, the official grey) is
+                               the ground of the bar, the menus, the footer
+                               and the dark bands; its lighter steps are the
+                               cards and hairlines on it. On paper the same
+                               family goes warm: stone and paper.
+       Blue is the cinema.     The grade over a photograph, the night band,
+                               the map. Never a button, never a label.
+       Orange is the action.   Buttons, links, the current item, focus. The
+                               words on an orange fill are Charcoal (5.8:1;
+                               white on it was 2.8:1).
+
+     The raw values are here and only here. The blocks below hand them out
+     by role (--bg-*, --text-*, --border-*), and a component reads the
+     roles. docs/HUBSS-2.md has the table and the contrast figures. */
+  --charcoal:        #20201F;  /* HUB Charcoal, the official grey */
+  --charcoal-deep:   #1B1B1A;  /* a step under it: the footer's base, a well */
+  --charcoal-deeper: #171716;
+  --charcoal-raised: #2A2A28;  /* a card on Charcoal */
+  --charcoal-lifted: #333331;  /* a card's inner surface, a hover */
+  --charcoal-line:   #4D4D4C;  /* the hairline on Charcoal (Vernon, Aug 2026) */
+  --stone:           #EFEDE7;  /* a quiet band on paper */
+  --stone-line:      #DAD7CF;  /* the hairline on paper */
+  --paper:           #FAF9F6;  /* the reading ground */
+  --night:           #0C1420;  /* the night band's ground */
+  --night-raised:    #152032;
+  --night-line:      #2B3A52;
+  --grade:           13 17 23; /* the dark blue over a photo hero, an rgb triple: rgb(var(--grade) / 0.8) */
+  --orange:          #F97316;  /* the one orange fill */
+  --orange-bright:   #FB923C;  /* a fill's hover; orange words on a dark ground */
+  --orange-deep:     #B83E0B;  /* orange words on paper (5.3:1) */
+
+  /* Names older files still use. The yellow is out of the brand gradient
+     (HQ, 13 Nov 2026: the orange-to-yellow headline looked older than the
+     rest, and yellow is Thermo-Design's): the "gradient" is one orange. */
+  --color-bg-primary: var(--charcoal);
+  --color-orange:   var(--orange);
+  --color-charcoal: var(--charcoal);
+  --color-amber:    #EAB308;
+  --gradient-brand: linear-gradient(90deg, var(--orange), var(--orange));
+  --gradient-brand-vertical: linear-gradient(180deg, var(--orange), var(--orange));
+  --gradient-brand-subtle: linear-gradient(90deg, rgba(249,115,22,0.12) 0%, rgba(249,115,22,0.12) 100%);
+  --gradient-glow:  0 0 20px rgba(249,115,22,0.25);
+  --bg-slate:       var(--night);
+  --bg-slate-light: var(--night-raised);
+  --color-blue-deep:  var(--night);
+  --color-blue-mid:   var(--night);
   --color-blue-text:  #93C5FD;
   --color-off-white:  #F5F4F0;
+}
 
-  /* ─── Theme tokens — DARK is the default ─────────────────────────────
-     History, kept because it explains the values: Vernon, Aug 2026 —
-     "improve the grey contrast between the cards and the background, use
-     the example colours I just gave you #20201F #151515, (card border
-     #4D4D4C)". A true neutral ground, HUBSS charcoal cards, and a visible
-     hairline doing the separating instead of the fill. Every muted grey
-     clears 4.5:1 against the lightest surface it is painted on (#2A2A28).
+/* ─── The roles, dark ────────────────────────────────────────────────────
+   One list, written once, for every place the site is dark: the shell (the
+   default), a section pinned dark (data-surface="dark"), a photo hero
+   (data-hero), the shell seen again from inside a paper section
+   (data-surface="shell"), and the two special grounds below, which start
+   from this list and change only what differs. Until 13 Nov 2026 this list
+   was written out five times and had to be kept in step by hand.
 
-     Sep 2026 — the site became themeable. Every colour a component paints
-     is one of these tokens; nothing in app/ or components/ carries a raw
-     dark hex any more. Four blocks below share one list (dark, light, the
-     dark pin, the paper surface) and MUST stay in step — regenerate them
-     from the token table rather than editing one by hand:
-
-       --bg-*        surfaces, deepest → hover, in elevation order
-       --text-*      copy, primary → hint
-       --on-accent   text on an orange fill (never flips)
-       --on-dark     text on an element that is dark in every theme
-       --accent*     the orange: fills stay #F97316 in both themes; TEXT
-                     drops to #C2410C on light ground so 9–12px labels
-                     still clear AA
-       --ink-NN      white at NN% alpha in dark, near-black at NN% in light.
-                     One ladder for text, borders and fills — the property
-                     carries the role, the token carries the theme. */
-  --bg-deepest: #0D0D0D;
-  --bg-dark: #101010;
-  --bg-primary: #151515;
-  --bg-neutral: #151515;
-  --bg-section-asphalt: #1A1A19;
-  --bg-card-neutral: #1B1B1A;
-  --bg-card: #20201F;
-  --bg-card-surface: #2A2A28;
-  --bg-card-hover: #2A2A28;
-  --bg-code: #242424;
-  --bg-input: #1E1E1E;
-  --bg-nav: rgba(7,11,18,0.96);
-  --bg-overlay: rgba(8,8,8,0.97);
+     --bg-*        surfaces, deepest to hover, in elevation order. The ground
+                   (--bg-primary) is HUB Charcoal; it was #151515, with
+                   Charcoal as the card colour (Vernon, Aug 2026: "#20201F
+                   #151515, card border #4D4D4C"). The ladder moved up one
+                   step so the grey is the ground itself.
+     --text-*      copy, primary to hint. The greys are warm, like the ground
+                   (they were Tailwind's blue-greys), and each clears 4.5:1
+                   on the lightest surface it is painted on (#333331).
+     --on-accent   words on an orange fill: Charcoal (never flips)
+     --on-dark     words on an element that is dark in every theme
+     --accent*     the orange: the fill is #F97316 in every theme; orange
+                   WORDS are brighter on dark and deeper on paper so small
+                   labels still clear AA
+     --ink-NN      white at NN% in dark, near-black at NN% in light: one
+                   ladder for text, borders and fills */
+:root,
+[data-surface="dark"],
+[data-surface="night"],
+[data-surface="classic"],
+[data-hero],
+[data-theme="mixed"] [data-surface="shell"] {
+  --bg-deepest: var(--charcoal-deeper);
+  --bg-dark: var(--charcoal-deep);
+  --bg-primary: var(--charcoal);
+  --bg-neutral: var(--charcoal);
+  --bg-section-asphalt: #242423;
+  --bg-card-neutral: #262625;
+  --bg-card: var(--charcoal-raised);
+  --bg-card-surface: var(--charcoal-lifted);
+  --bg-card-hover: var(--charcoal-lifted);
+  --bg-code: #2D2D2B;
+  --bg-input: #232322;
+  --bg-nav: rgba(32,32,31,0.97);
+  --bg-overlay: rgba(23,23,22,0.97);
   --text-primary: #F5F0EB;
-  --text-body: #E0E0E0;
-  --text-secondary: #868C98;
-  --text-muted: #9CA3AF;
-  --text-faint: #8B8B8B;
-  --text-hint: #6F757D;
-  --on-accent: #FFFFFF;
+  --text-body: #E2E0DB;
+  --text-secondary: #B4B3AE;
+  --text-muted: #A8A7A2;
+  --text-faint: #A3A29D;
+  --text-hint: #A3A29D;
+  --on-accent: var(--charcoal-deep);
   --on-dark: #F5F0EB;
-  --accent: #F97316;
-  --accent-bright: #FB923C;
-  --accent-text: #FB923C;
-  --accent-text-lg: #F97316;
+  --accent: var(--orange);
+  --accent-bright: var(--orange-bright);
+  --accent-text: var(--orange-bright);
+  --accent-text-lg: var(--orange);
   --accent-soft-text: #FDBA74;
   --ok-text: #4ADE80;
   --err-text: #F87171;
   --sheet-invert: 0;
-  --border-color: #4D4D4C;
-  --border-strong: #333333;
+  --border-color: var(--charcoal-line);
+  --border-strong: #3A3A38;
   --border-subtle: rgba(255,255,255,0.05);
   --border-faint: rgba(255,255,255,0.03);
   --fill-subtle: rgba(255,255,255,0.07);
@@ -134,18 +176,106 @@
   color-scheme: dark;
 }
 
-/* ─── LIGHT ──────────────────────────────────────────────────────────────
+/* The night band: the one dark ground that is blue. Photographs glow on it,
+   so it is where the site shows work in the dark (the home page's
+   applications). It carries no bar, menu or form: those are Charcoal's. */
+[data-surface="night"] {
+  --bg-deepest: #080D16;
+  --bg-dark: #0A101A;
+  --bg-primary: var(--night);
+  --bg-neutral: var(--night);
+  --bg-section-asphalt: #101A28;
+  --bg-card-neutral: #121C2B;
+  --bg-card: var(--night-raised);
+  --bg-card-surface: #1B283C;
+  --bg-card-hover: #1B283C;
+  --bg-code: var(--night-raised);
+  --bg-input: #0F1826;
+  --bg-overlay: rgba(8,13,22,0.97);
+  --text-secondary: #B3BAC6;
+  --text-muted: #A9B1BD;
+  --text-faint: #A9B1BD;
+  --text-hint: #A9B1BD;
+  --border-color: var(--night-line);
+  --border-strong: #22304A;
+  background-color: var(--bg-primary);
+}
+
+/* The classic dark, exactly as it was before 13 Nov 2026, for the two things
+   that must not change with 2.0: the homepage map (Vernon: "don't mess with
+   the map") and the Product Portfolio Book's reader. A section inside one of
+   them that pins itself dark gets these values too. */
+[data-surface="classic"],
+[data-surface="classic"] [data-surface="dark"],
+[data-catalogue-route],
+[data-catalogue-route] [data-surface="dark"] {
+  --bg-deepest: #0D0D0D;
+  --bg-dark: #101010;
+  --bg-primary: #151515;
+  --bg-neutral: #151515;
+  --bg-section-asphalt: #1A1A19;
+  --bg-card-neutral: #1B1B1A;
+  --bg-card: #20201F;
+  --bg-card-surface: #2A2A28;
+  --bg-card-hover: #2A2A28;
+  --bg-code: #242424;
+  --bg-input: #1E1E1E;
+  --bg-nav: rgba(7,11,18,0.96);
+  --bg-overlay: rgba(8,8,8,0.97);
+  --text-body: #E0E0E0;
+  --text-secondary: #868C98;
+  --text-muted: #9CA3AF;
+  --text-faint: #8B8B8B;
+  --text-hint: #6F757D;
+  --on-accent: #FFFFFF;
+  --border-color: #4D4D4C;
+  --border-strong: #333333;
+}
+
+/* The same promise for what the classic dark paints with shared classes:
+   the map's own label and heading, and the orange button on it, keep the
+   values they had, so the block is the same to the pixel. */
+[data-surface="classic"],
+[data-catalogue-route] {
+  --accent-gradient: linear-gradient(135deg, #F97316 0%, #EA8C16 100%);
+}
+[data-surface="classic"] .eyebrow {
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  color: var(--accent-text);
+}
+[data-surface="classic"] .h2-section {
+  font-size: clamp(2.25rem, 4vw, 3.5rem);
+}
+@media (max-width: 359px) {
+  [data-surface="classic"] .h2-section { font-size: 1.875rem; }
+}
+[data-surface="classic"] .btn-accent:hover,
+[data-catalogue-route] .btn-accent:hover {
+  background: var(--accent-gradient);
+  filter: brightness(1.08);
+  box-shadow: var(--btn-shadow, 0 0 #0000), 0 10px 30px rgba(249, 115, 22, 0.36);
+}
+
+/* ─── The roles, light ───────────────────────────────────────────────────
    Warm, not clinical: the ground is a paper white leaning toward the brand
-   cream (#F5F0EB), cards are pure white, and the charcoal that was the card
-   colour in dark becomes the text colour. Orange fills are unchanged; orange
-   text deepens. Photo heroes, the footer and CTA bands pin themselves dark
-   (data-surface="dark") so the light theme reads as "light with dark bands",
-   which is the version of a light site that still looks like HUB. */
-[data-theme="light"] {
+   cream, cards are pure white, and Charcoal becomes the text colour. Orange
+   fills are unchanged; orange words deepen. Photo heroes, the footer and the
+   closing bands pin themselves dark, so a light page reads as "light with
+   dark bands".
+
+   Two places use this list: the whole site in the light theme, and the
+   reading sections (data-surface="paper": the book's spread, the spec, the
+   questions, the documents, an article) in the default, mixed theme, where
+   the shell around them stays dark (Doug: "add some white sections"). In
+   the dark theme a paper section simply stays dark. The toggle sets
+   data-theme on <html>; ?theme=light|mixed|dark in the address does too. */
+[data-theme="light"],
+[data-theme="mixed"] [data-surface="paper"] {
   --bg-deepest: #E9E6DF;
-  --bg-dark: #EFEDE7;
-  --bg-primary: #FAF9F6;
-  --bg-neutral: #FAF9F6;
+  --bg-dark: var(--stone);
+  --bg-primary: var(--paper);
+  --bg-neutral: var(--paper);
   --bg-section-asphalt: #F3F1EB;
   --bg-card-neutral: #F6F4EF;
   --bg-card: #FFFFFF;
@@ -161,17 +291,17 @@
   --text-muted: #6B6862;
   --text-faint: #6A6762;
   --text-hint: #7D7A75;
-  --on-accent: #FFFFFF;
+  --on-accent: var(--charcoal-deep);
   --on-dark: #F5F0EB;
-  --accent: #F97316;
-  --accent-bright: #FB923C;
-  --accent-text: #B83E0B;
-  --accent-text-lg: #B83E0B;
+  --accent: var(--orange);
+  --accent-bright: var(--orange-bright);
+  --accent-text: var(--orange-deep);
+  --accent-text-lg: var(--orange-deep);
   --accent-soft-text: #9A3412;
   --ok-text: #15803D;
   --err-text: #B91C1C;
   --sheet-invert: 1;
-  --border-color: #DAD7CF;
+  --border-color: var(--stone-line);
   --border-strong: #CFCCC4;
   --border-subtle: rgba(0,0,0,0.06);
   --border-faint: rgba(0,0,0,0.04);
@@ -213,100 +343,6 @@
   --ink-85: rgba(27,26,24,0.92);
   --ink-90: rgba(27,26,24,0.96);
   color-scheme: light;
-}
-
-/* ─── SURFACES ───────────────────────────────────────────────────────────
-   Custom properties inherit, so re-declaring the set on a section re-scopes
-   every token beneath it. Two attributes:
-
-     data-surface="dark"   always dark — photo heroes with overlays, the
-                           footer, the Lunch & Learn band. Wins in every theme.
-     data-surface="paper"  the reading sections — catalogue spread, spec,
-                           FAQ, documents, the About story. In MIXED they go
-                           light on the dark shell (Doug: "add some white
-                           sections"); in DARK they stay dark; in LIGHT they
-                           follow the theme.
-
-   Three modes, then: dark (today's site), mixed (dark shell, paper reading
-   sections), light (paper site, dark bands). The toggle in the nav switches
-   data-theme on <html>; ?theme=light|mixed|dark in the URL does the same. */
-/* data-hero — a full-bleed photograph with type laid over it. The overlay is
-   dark in every theme, so the tokens beneath it must be too: the light theme
-   was rendering the About headline in charcoal on a charcoal photo. Pinned
-   here rather than per page, because a hero is a hero on every route. */
-[data-surface="dark"],
-[data-hero] {
-  --bg-deepest: #0D0D0D;
-  --bg-dark: #101010;
-  --bg-primary: #151515;
-  --bg-neutral: #151515;
-  --bg-section-asphalt: #1A1A19;
-  --bg-card-neutral: #1B1B1A;
-  --bg-card: #20201F;
-  --bg-card-surface: #2A2A28;
-  --bg-card-hover: #2A2A28;
-  --bg-code: #242424;
-  --bg-input: #1E1E1E;
-  --bg-nav: rgba(7,11,18,0.96);
-  --bg-overlay: rgba(8,8,8,0.97);
-  --text-primary: #F5F0EB;
-  --text-body: #E0E0E0;
-  --text-secondary: #868C98;
-  --text-muted: #9CA3AF;
-  --text-faint: #8B8B8B;
-  --text-hint: #6F757D;
-  --on-accent: #FFFFFF;
-  --on-dark: #F5F0EB;
-  --accent: #F97316;
-  --accent-bright: #FB923C;
-  --accent-text: #FB923C;
-  --accent-text-lg: #F97316;
-  --accent-soft-text: #FDBA74;
-  --ok-text: #4ADE80;
-  --err-text: #F87171;
-  --sheet-invert: 0;
-  --border-color: #4D4D4C;
-  --border-strong: #333333;
-  --border-subtle: rgba(255,255,255,0.05);
-  --border-faint: rgba(255,255,255,0.03);
-  --fill-subtle: rgba(255,255,255,0.07);
-  --ink-02: rgba(255,255,255,0.02);
-  --ink-025: rgba(255,255,255,0.025);
-  --ink-03: rgba(255,255,255,0.03);
-  --ink-04: rgba(255,255,255,0.04);
-  --ink-05: rgba(255,255,255,0.05);
-  --ink-06: rgba(255,255,255,0.06);
-  --ink-07: rgba(255,255,255,0.07);
-  --ink-08: rgba(255,255,255,0.08);
-  --ink-09: rgba(255,255,255,0.09);
-  --ink-10: rgba(255,255,255,0.1);
-  --ink-12: rgba(255,255,255,0.12);
-  --ink-14: rgba(255,255,255,0.14);
-  --ink-15: rgba(255,255,255,0.15);
-  --ink-16: rgba(255,255,255,0.16);
-  --ink-18: rgba(255,255,255,0.18);
-  --ink-20: rgba(255,255,255,0.2);
-  --ink-22: rgba(255,255,255,0.22);
-  --ink-25: rgba(255,255,255,0.25);
-  --ink-30: rgba(255,255,255,0.3);
-  --ink-35: rgba(255,255,255,0.35);
-  --ink-40: rgba(255,255,255,0.4);
-  --ink-45: rgba(255,255,255,0.45);
-  --ink-50: rgba(255,255,255,0.5);
-  --ink-55: rgba(255,255,255,0.55);
-  --ink-58: rgba(255,255,255,0.58);
-  --ink-60: rgba(255,255,255,0.6);
-  --ink-62: rgba(255,255,255,0.62);
-  --ink-65: rgba(255,255,255,0.65);
-  --ink-68: rgba(255,255,255,0.68);
-  --ink-70: rgba(255,255,255,0.7);
-  --ink-72: rgba(255,255,255,0.72);
-  --ink-75: rgba(255,255,255,0.75);
-  --ink-78: rgba(255,255,255,0.78);
-  --ink-80: rgba(255,255,255,0.8);
-  --ink-85: rgba(255,255,255,0.85);
-  --ink-90: rgba(255,255,255,0.9);
-  color-scheme: dark;
 }
 [data-surface="paper"] { background-color: var(--bg-primary); }
 
@@ -330,157 +366,6 @@
    whichever surface the sheet sits on, so a sheet inside a dark band on a
    light page stays white. */
 .pattern-sheet { filter: invert(var(--sheet-invert)); }
-[data-theme="mixed"] [data-surface="paper"] {
-  --bg-deepest: #E9E6DF;
-  --bg-dark: #EFEDE7;
-  --bg-primary: #FAF9F6;
-  --bg-neutral: #FAF9F6;
-  --bg-section-asphalt: #F3F1EB;
-  --bg-card-neutral: #F6F4EF;
-  --bg-card: #FFFFFF;
-  --bg-card-surface: #F0EEE8;
-  --bg-card-hover: #F0EEE8;
-  --bg-code: #F1EFE9;
-  --bg-input: #FFFFFF;
-  --bg-nav: rgba(250,249,246,0.94);
-  --bg-overlay: rgba(250,249,246,0.97);
-  --text-primary: #1B1A18;
-  --text-body: #2E2C29;
-  --text-secondary: #5C5A55;
-  --text-muted: #6B6862;
-  --text-faint: #6A6762;
-  --text-hint: #7D7A75;
-  --on-accent: #FFFFFF;
-  --on-dark: #F5F0EB;
-  --accent: #F97316;
-  --accent-bright: #FB923C;
-  --accent-text: #B83E0B;
-  --accent-text-lg: #B83E0B;
-  --accent-soft-text: #9A3412;
-  --ok-text: #15803D;
-  --err-text: #B91C1C;
-  --sheet-invert: 1;
-  --border-color: #DAD7CF;
-  --border-strong: #CFCCC4;
-  --border-subtle: rgba(0,0,0,0.06);
-  --border-faint: rgba(0,0,0,0.04);
-  --fill-subtle: rgba(0,0,0,0.045);
-  --ink-02: rgba(27,26,24,0.02);
-  --ink-025: rgba(27,26,24,0.03);
-  --ink-03: rgba(27,26,24,0.04);
-  --ink-04: rgba(27,26,24,0.05);
-  --ink-05: rgba(27,26,24,0.06);
-  --ink-06: rgba(27,26,24,0.08);
-  --ink-07: rgba(27,26,24,0.09);
-  --ink-08: rgba(27,26,24,0.1);
-  --ink-09: rgba(27,26,24,0.12);
-  --ink-10: rgba(27,26,24,0.14);
-  --ink-12: rgba(27,26,24,0.17);
-  --ink-14: rgba(27,26,24,0.2);
-  --ink-15: rgba(27,26,24,0.21);
-  --ink-16: rgba(27,26,24,0.23);
-  --ink-18: rgba(27,26,24,0.26);
-  --ink-20: rgba(27,26,24,0.29);
-  --ink-22: rgba(27,26,24,0.32);
-  --ink-25: rgba(27,26,24,0.36);
-  --ink-30: rgba(27,26,24,0.43);
-  --ink-35: rgba(27,26,24,0.49);
-  --ink-40: rgba(27,26,24,0.55);
-  --ink-45: rgba(27,26,24,0.6);
-  --ink-50: rgba(27,26,24,0.65);
-  --ink-55: rgba(27,26,24,0.69);
-  --ink-58: rgba(27,26,24,0.72);
-  --ink-60: rgba(27,26,24,0.74);
-  --ink-62: rgba(27,26,24,0.75);
-  --ink-65: rgba(27,26,24,0.78);
-  --ink-68: rgba(27,26,24,0.8);
-  --ink-70: rgba(27,26,24,0.81);
-  --ink-72: rgba(27,26,24,0.83);
-  --ink-75: rgba(27,26,24,0.85);
-  --ink-78: rgba(27,26,24,0.87);
-  --ink-80: rgba(27,26,24,0.89);
-  --ink-85: rgba(27,26,24,0.92);
-  --ink-90: rgba(27,26,24,0.96);
-  color-scheme: light;
-}
-
-/* data-surface="shell" — return to the page's own shell from inside a paper
-   section. The Lunch & Learn band uses it: on a paper page in MIXED it goes
-   back to dark, because it is the brand's closing statement, not part of
-   the reading. In LIGHT and DARK the shell is the theme, so no rule needed. */
-[data-theme="mixed"] [data-surface="shell"] {
-  --bg-deepest: #0D0D0D;
-  --bg-dark: #101010;
-  --bg-primary: #151515;
-  --bg-neutral: #151515;
-  --bg-section-asphalt: #1A1A19;
-  --bg-card-neutral: #1B1B1A;
-  --bg-card: #20201F;
-  --bg-card-surface: #2A2A28;
-  --bg-card-hover: #2A2A28;
-  --bg-code: #242424;
-  --bg-input: #1E1E1E;
-  --bg-nav: rgba(7,11,18,0.96);
-  --bg-overlay: rgba(8,8,8,0.97);
-  --text-primary: #F5F0EB;
-  --text-body: #E0E0E0;
-  --text-secondary: #868C98;
-  --text-muted: #9CA3AF;
-  --text-faint: #8B8B8B;
-  --text-hint: #6F757D;
-  --on-accent: #FFFFFF;
-  --on-dark: #F5F0EB;
-  --accent: #F97316;
-  --accent-bright: #FB923C;
-  --accent-text: #FB923C;
-  --accent-text-lg: #F97316;
-  --accent-soft-text: #FDBA74;
-  --ok-text: #4ADE80;
-  --err-text: #F87171;
-  --sheet-invert: 0;
-  --border-color: #4D4D4C;
-  --border-strong: #333333;
-  --border-subtle: rgba(255,255,255,0.05);
-  --border-faint: rgba(255,255,255,0.03);
-  --fill-subtle: rgba(255,255,255,0.07);
-  --ink-02: rgba(255,255,255,0.02);
-  --ink-025: rgba(255,255,255,0.025);
-  --ink-03: rgba(255,255,255,0.03);
-  --ink-04: rgba(255,255,255,0.04);
-  --ink-05: rgba(255,255,255,0.05);
-  --ink-06: rgba(255,255,255,0.06);
-  --ink-07: rgba(255,255,255,0.07);
-  --ink-08: rgba(255,255,255,0.08);
-  --ink-09: rgba(255,255,255,0.09);
-  --ink-10: rgba(255,255,255,0.1);
-  --ink-12: rgba(255,255,255,0.12);
-  --ink-14: rgba(255,255,255,0.14);
-  --ink-15: rgba(255,255,255,0.15);
-  --ink-16: rgba(255,255,255,0.16);
-  --ink-18: rgba(255,255,255,0.18);
-  --ink-20: rgba(255,255,255,0.2);
-  --ink-22: rgba(255,255,255,0.22);
-  --ink-25: rgba(255,255,255,0.25);
-  --ink-30: rgba(255,255,255,0.3);
-  --ink-35: rgba(255,255,255,0.35);
-  --ink-40: rgba(255,255,255,0.4);
-  --ink-45: rgba(255,255,255,0.45);
-  --ink-50: rgba(255,255,255,0.5);
-  --ink-55: rgba(255,255,255,0.55);
-  --ink-58: rgba(255,255,255,0.58);
-  --ink-60: rgba(255,255,255,0.6);
-  --ink-62: rgba(255,255,255,0.62);
-  --ink-65: rgba(255,255,255,0.65);
-  --ink-68: rgba(255,255,255,0.68);
-  --ink-70: rgba(255,255,255,0.7);
-  --ink-72: rgba(255,255,255,0.72);
-  --ink-75: rgba(255,255,255,0.75);
-  --ink-78: rgba(255,255,255,0.78);
-  --ink-80: rgba(255,255,255,0.8);
-  --ink-85: rgba(255,255,255,0.85);
-  --ink-90: rgba(255,255,255,0.9);
-  color-scheme: dark;
-}
 
 @theme inline {
   --font-sans:    var(--font-inter);   /* body → Inter */
@@ -580,8 +465,11 @@ html {
   --dur-1: 160ms;
   --dur-2: 260ms;
   --dur-3: 420ms;
-  /* The one orange fill, for every button that is orange. */
-  --accent-gradient: linear-gradient(135deg, #F97316 0%, #EA8C16 100%);
+  /* The one orange fill, for every button that is orange. Flat since 13 Nov
+     2026: it ran to amber, and with a flat fill the label's contrast can be
+     measured (Charcoal on it, 5.8:1). The name is kept for the files that
+     use it. */
+  --accent-gradient: var(--orange);
 }
 
 /* Tailwind 4's preflight no longer gives <button> the hand cursor, and
@@ -659,44 +547,74 @@ h1, h2, h3, h4, h5, h6 {
    .eyebrow   the small uppercase label above a heading, flat accent;
               .eyebrow-photo on a photograph (cream), .eyebrow-muted for a date
    .link-arrow  a text link with an arrow: the arrow slides on hover */
+/* ─── The type scale (13 Nov 2026): one scale, in one place ───────────────
+   Each step is one fluid size, measured on the real headings from 320 to
+   1920 (scripts/hubss-2/type-census.mjs prints every heading's size and line
+   count at eight widths). What the measuring changed:
+   - On the two smallest phones (320 and 360 wide) a product's name ran off
+     the screen on its own page: "TrafficPatternsXD" at 38px is 358px wide.
+     A page's name now starts at 30px and reaches its old size by 430.
+   - A section's heading was 36px on a phone and took three lines ("Ten
+     systems, endless applications."); it is 28 to 30 there, two lines.
+   - From a tablet up nothing moved: each step meets its old formula there.
+   A page sets a heading's size with one of the classes below, never with a
+   text-* utility or a px value. */
+:root {
+  --fs-display: clamp(2.5rem, min(7vw, 11vh), 5.75rem);                  /* the home page's headline: 40 to 92 */
+  --fs-h1-hero: clamp(1.875rem, min(9.4vw, max(2.375rem, 5.5vw)), 4.25rem); /* a name on a photograph: 30 to 68 */
+  --fs-h1-page: clamp(1.875rem, min(9.4vw, max(2.5rem, 4vw)), 4rem);     /* a hub's, a form's, a legal page's: 30 to 64 */
+  --fs-h2: clamp(1.75rem, min(7.7vw, max(2.25rem, 4vw)), 3.5rem);        /* a section's heading: 28 to 56 */
+  --fs-h3: clamp(1.5rem, 2.2vw, 1.875rem);                               /* a sub-section's: 24 to 30 */
+  --fs-title: clamp(1.25rem, 1.05rem + 0.6vw, 1.5rem);                   /* a card's or a panel's title: 20 to 24 */
+  --fs-lead: clamp(1.125rem, 1.02rem + 0.42vw, 1.375rem);                /* an opening paragraph: 18 to 22 */
+  --fs-body: 1.0625rem;                                                  /* running copy: 17 */
+  --fs-ui: 0.9375rem;                                                    /* buttons, card lines, menus: 15 */
+  --fs-small: 0.8125rem;                                                 /* captions and fine print: 13 */
+  --fs-label: 0.75rem;                                                   /* the small capitals: 12 */
+}
 .h1-page {
-  font-size: clamp(2.5rem, 4vw, 4rem);
+  font-size: var(--fs-h1-page);
   line-height: 1.02;
   letter-spacing: -0.03em;
   font-weight: 900;
 }
 .h1-hero {
-  font-size: clamp(2.375rem, 5.5vw, 4.25rem);
+  font-size: var(--fs-h1-hero);
   line-height: 1.02;
   letter-spacing: -0.03em;
   font-weight: 900;
 }
+/* An article's title on its photograph: a sentence, not a name, so on a
+   phone it is a step smaller than a product's name (28 to 33px; at 38 a
+   sixty-character title took five lines on a 320px screen). From 500px up
+   it is .h1-hero's size. */
+.h1-long {
+  font-size: clamp(1.75rem, min(7.7vw, max(2.375rem, 5.5vw)), 4.25rem);
+}
 .h2-section {
-  font-size: clamp(2.25rem, 4vw, 3.5rem);
+  font-size: var(--fs-h2);
   line-height: 1.05;
   letter-spacing: -0.03em;
   font-weight: 900;
 }
-/* The smallest phones (320px): "Where TrafficPatternsXD goes" ran 15px past
-   the screen at 36px, the system's name being one word (screen-size sweep,
-   28 Oct 2026). */
-@media (max-width: 359px) {
-  .h2-section { font-size: 1.875rem; }
-}
 .h2-sub {
-  font-size: clamp(1.5rem, 2.2vw, 1.875rem);
+  font-size: var(--fs-h3);
   line-height: 1.12;
   letter-spacing: -0.02em;
   font-weight: 800;
 }
+/* The small label. Grey since 13 Nov 2026 (it was orange, 13px, 0.2em, and
+   sat over most headings on the site): orange is kept for what can be
+   pressed, and a label that only names its section has no reason to be the
+   loudest thing above the heading. */
 .eyebrow {
   font-family: var(--font-inter), "Inter", system-ui, sans-serif;
-  font-size: 13px;
+  font-size: var(--fs-label);
   font-weight: 700;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   line-height: 1.4;
-  color: var(--accent-text);
+  color: var(--text-muted);
 }
 .eyebrow-photo {
   color: rgba(255, 250, 245, 0.92);
@@ -732,6 +650,54 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: -1.5px;
   border-radius: 9999px;
   background: var(--ink-30);
+}
+/* The names under the home page's hero (components/sections/TrustedByMarquee.tsx):
+   a label and one flowing line of names, a dot between them. Same trick as
+   .kicker-parts: each name after the first draws its dot in the gap before
+   it, and the list sits one gap left of its column and clips that gap, so a
+   name that starts a line has no dot hanging in front of it. */
+.proof-band {
+  background: var(--bg-dark);
+  border-bottom: 1px solid var(--border-color);
+  padding: 28px 0;
+}
+.proof-row {
+  display: grid;
+  gap: 12px;
+}
+.proof-names {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 8px;
+  margin-left: -24px;
+  clip-path: inset(-4px -4px -4px 24px);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-secondary);
+}
+.proof-names > li {
+  position: relative;
+  margin-left: 24px;
+}
+.proof-names > li + li::before {
+  content: "";
+  position: absolute;
+  left: -13.5px;
+  top: 50%;
+  width: 3px;
+  height: 3px;
+  margin-top: -1.5px;
+  border-radius: 9999px;
+  background: var(--ink-30);
+}
+@media (min-width: 1024px) {
+  .proof-band { padding: 34px 0; }
+  .proof-row {
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: 32px;
+    align-items: baseline;
+  }
 }
 /* "Skip to content" (components/SkipLink.tsx): off screen until it has
    keyboard focus, then a pill under the bar's left edge. */
@@ -990,15 +956,17 @@ p {
 
 /* ─── Section padding utility ───────────────────── */
 .section-padding {
-  /* 112px at 1440, 128 on a wide screen: the room the homepage had before 17 Oct. */
-  padding-top: clamp(6rem, 7.8vw, 8rem);
-  padding-bottom: clamp(6rem, 7.8vw, 8rem);
+  /* 96px at 1440, 112 on a wide screen (112 and 128 until 13 Nov 2026: the
+     home page ran 8,900px, and the room between its sections was the
+     easiest fat to cut). */
+  padding-top: clamp(4.5rem, 6.7vw, 7rem);
+  padding-bottom: clamp(4.5rem, 6.7vw, 7rem);
 }
 
 @media (max-width: 768px) {
   .section-padding {
-    padding-top: 72px;
-    padding-bottom: 72px;
+    padding-top: 64px;
+    padding-bottom: 64px;
   }
 }
 
@@ -1167,10 +1135,12 @@ p {
     padding: 0;
   }
 }
+/* Hover: the fill a step brighter and a soft dark shadow. No orange glow
+   since 13 Nov 2026: a button is orange enough. */
 .btn-accent:hover {
-  filter: brightness(1.08);
+  background: var(--orange-bright);
   transform: translateY(-1px);
-  box-shadow: var(--btn-shadow, 0 0 #0000), 0 10px 30px rgba(249, 115, 22, 0.36);
+  box-shadow: var(--btn-shadow, 0 0 #0000), 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 .btn-accent:active,
 .btn-ghost:active {
@@ -2132,13 +2102,16 @@ html {
 .mm-col-head {
   padding-bottom: 12px;
 }
+/* A hairline across the column, in Charcoal's own line colour (13 Nov 2026).
+   It was a 22px orange tick over every heading: six ticks in a panel, none
+   of them something to press. Grey draws the structure; orange is left for
+   the links. */
 .mm-rule {
   display: block;
-  width: 22px;
-  height: 2px;
-  margin-bottom: 9px;
-  border-radius: 1px;
-  background: #f97316;
+  width: 100%;
+  height: 1px;
+  margin-bottom: 12px;
+  background: var(--border-color);
 }
 /* The family's or group's name: the only bold display type in its column
    (the names under it are Inter), so it reads as the heading of its list. */
@@ -2267,7 +2240,7 @@ html {
   margin-top: 22px;
   padding: 14px 0 22px;
   border-top: 1px solid var(--ink-08);
-  background: rgb(7, 11, 18);
+  background: var(--bg-primary);
 }
 .mm-foot-row {
   display: flex;

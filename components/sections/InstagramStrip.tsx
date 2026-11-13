@@ -215,9 +215,9 @@ export default async function InstagramStrip({ copy = HOMEPAGE_COPY.onTheGround 
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-14 md:mb-16">
-          <p className="eyebrow mb-3">
-            {copy.eyebrow}
-          </p>
+          {/* No small label over the heading (13 Nov 2026): each one said the
+              heading again in fewer words (docs/STYLE.md, Structure). Studio
+              still holds the eyebrow; the page does not print it. */}
           <h2 id="follow-heading" className="h2-section mb-3" style={{ color: "var(--text-primary)" }}>
             {copy.heading}
             {copy.headingAccent && <> {copy.headingAccent}</>}

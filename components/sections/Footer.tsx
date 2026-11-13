@@ -117,9 +117,9 @@ function OfficeRows({ label, office }: { label: string; office: Office }) {
       <span
         aria-hidden="true"
         className="absolute left-0 top-0 bottom-0 w-0.5"
-        style={{ background: "linear-gradient(180deg, #F97316 0%, #EAB308 100%)" }}
+        style={{ background: "var(--border-color)" }}
       />
-      <p className="text-xs font-semibold tracking-widest uppercase" style={{ color: "var(--accent-text-lg)" }}>
+      <p className="text-xs font-semibold tracking-widest uppercase" style={{ color: "var(--text-muted)" }}>
         {label}
       </p>
       <p className="mt-1 text-[15px]" style={{ color: "var(--text-primary)" }}>{office.place}</p>
@@ -175,13 +175,9 @@ export default async function Footer() {
       /* always dark */
       data-surface="dark" className="asphalt-noise" style={{ background: "var(--bg-dark)", position: "relative" }}>
 
-      {/* Full-width gradient divider */}
-      <div
-        style={{
-          height: "2px",
-          background: "linear-gradient(90deg, transparent 0%, #F97316 25%, #EAB308 75%, transparent 100%)",
-        }}
-      />
+      {/* The footer's top edge: a hairline in Charcoal's line colour (it was
+          a 2px orange-to-yellow line until 13 Nov 2026). */}
+      <div style={{ height: "1px", background: "var(--border-color)" }} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-8 lg:pt-14 lg:pb-10">
         {/* Below lg, the page's last word (28 Oct 2026; Vern: "footer on
@@ -347,9 +343,9 @@ export default async function Footer() {
                 <div className="relative pl-4">
                   <span
                     className="absolute left-0 top-0 bottom-0 w-0.5"
-                    style={{ background: "linear-gradient(180deg, #F97316 0%, #EAB308 100%)" }}
+                    style={{ background: "var(--border-color)" }}
                   />
-                  <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--accent-text-lg)" }}>
+                  <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--text-muted)" }}>
                     West office
                   </p>
                   <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>{offices.west.place}</p>
@@ -365,9 +361,9 @@ export default async function Footer() {
                 <div className="relative pl-4">
                   <span
                     className="absolute left-0 top-0 bottom-0 w-0.5"
-                    style={{ background: "linear-gradient(180deg, #F97316 0%, #EAB308 100%)" }}
+                    style={{ background: "var(--border-color)" }}
                   />
-                  <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--accent-text-lg)" }}>
+                  <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--text-muted)" }}>
                     East office
                   </p>
                   <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>{offices.east.place}</p>

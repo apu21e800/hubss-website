@@ -80,16 +80,17 @@ export default function ApplicationsGrid({ applications: source, copy = HOMEPAGE
 
   return (
     <section
-      /* photo-led grid; the big contrast block in the middle of the page */
-      data-surface="dark" className="section-padding" style={{ background: "var(--bg-dark)" }}>
+      /* Photo-led grid: the night band, the one dark ground that is blue
+         (app/globals.css, data-surface="night"). Photographs glow on it. */
+      data-surface="night" className="section-padding">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* The same header as the systems section above it: eyebrow, heading,
             one line, and the index button top right (uniformity pass, 17 Oct
             2026: the three "All x" buttons sat in three places). */}
         <div className="mb-14 md:mb-16">
-          <p className="eyebrow mb-3">
-            {copy.eyebrow}
-          </p>
+          {/* No small label over the heading (13 Nov 2026): each one said the
+              heading again in fewer words (docs/STYLE.md, Structure). Studio
+              still holds the eyebrow; the page does not print it. */}
           <div className="flex items-end justify-between gap-6 flex-wrap">
             <div>
               <h2 className="h2-section mb-3" style={{ color: "var(--text-primary)" }}>
@@ -97,12 +98,10 @@ export default function ApplicationsGrid({ applications: source, copy = HOMEPAGE
                 {copy.headingAccent && (
                   <>
                     {" "}
-                    <span style={{
-                      background: "linear-gradient(90deg, #F97316 0%, #EAB308 100%)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                      backgroundClip: "text",
-                    }}>{copy.headingAccent}</span>
+                    {/* One colour, like the systems heading above it (13 Nov
+                        2026). It ran orange to yellow; orange is kept for
+                        what can be pressed. */}
+                    <span className="inline-block">{copy.headingAccent}</span>
                   </>
                 )}
               </h2>
@@ -180,14 +179,14 @@ export default function ApplicationsGrid({ applications: source, copy = HOMEPAGE
                 <div
                   className="absolute inset-x-0 bottom-0 h-[58%] sm:h-[44%]"
                   style={{
-                    background: "linear-gradient(to top, rgba(7,11,18,0.92) 0%, rgba(7,11,18,0.65) 55%, rgba(7,11,18,0) 100%)",
+                    background: "linear-gradient(to top, rgb(var(--grade) / 0.92) 0%, rgb(var(--grade) / 0.65) 55%, rgb(var(--grade) / 0) 100%)",
                   }}
                 />
 
-                {/* Hover: 2px gradient bottom border only — image foregrounded, no full overlay */}
+                {/* Hover: a 2px orange line along the foot only — image foregrounded, no full overlay */}
                 <span
                   className="absolute inset-x-0 bottom-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                  style={{ background: "linear-gradient(90deg, #F97316 0%, #EAB308 100%)" }}
+                  style={{ background: "var(--accent)" }}
                 />
 
                 <div className="absolute bottom-0 left-0 right-0 p-5 transition-transform duration-300 group-hover:-translate-y-0.5">

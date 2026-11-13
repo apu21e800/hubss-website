@@ -53,11 +53,9 @@ export default async function FeaturedBlogPost({ copy = HOMEPAGE_COPY.insights }
         {/* ── Section header ────────────────────────────────── */}
         <div className="flex items-end justify-between gap-6 flex-wrap mb-14 md:mb-16">
           <div>
-            <p className="eyebrow mb-3">
-              {/* "Insights" in Studio prints as the blog's name
-                  (lib/copy-superseded.ts, through mergeHomepageCopy). */}
-              {copy.eyebrow}
-            </p>
+            {/* No small label over the heading (13 Nov 2026): each one said the
+                heading again in fewer words (docs/STYLE.md, Structure). Studio
+                still holds the eyebrow; the page does not print it. */}
             <h2 className="h2-section mb-3" style={{ color: "var(--text-primary)" }}>
               {/* The heading and its accent phrase (when Studio sets one)
                   are inline-blocks, so a phone breaks the line between the

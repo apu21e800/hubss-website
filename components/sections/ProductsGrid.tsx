@@ -80,9 +80,9 @@ export default function ProductsGrid({ products: source, copy = HOMEPAGE_COPY.sy
 
         {/* Section header */}
         <div className="mb-14 md:mb-16">
-          <p className="eyebrow mb-3">
-            {copy.eyebrow}
-          </p>
+          {/* No small label over the heading (13 Nov 2026): each one said the
+              heading again in fewer words (docs/STYLE.md, Structure). Studio
+              still holds the eyebrow; the page does not print it. */}
           <div className="flex items-end justify-between gap-6 flex-wrap">
             <div>
               <h2 className="h2-section mb-3" style={{ color: "var(--text-primary)" }}>

@@ -95,7 +95,7 @@ function HeroTitle({ post, section }: { post: Post; section: InsightsSection }) 
         </span>
       </Link>
       <h1
-        className="h1-hero"
+        className="h1-hero h1-long"
         style={{
           color: "var(--text-primary)",
           marginBottom: "1.25rem",
@@ -284,8 +284,8 @@ export default async function BlogPostPage({ params }: Props) {
               style={{ filter: "blur(36px) saturate(1.15)", transform: "scale(1.3)" }}
             />
           </div>
-          <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(8,13,22,0.96) 0%, rgba(8,13,22,0.74) 40%, rgba(8,13,22,0.48) 100%)" }} />
-          <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(8,13,22,0.55) 0%, transparent 70%)" }} />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgb(var(--grade) / 0.96) 0%, rgb(var(--grade) / 0.74) 40%, rgb(var(--grade) / 0.48) 100%)" }} />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgb(var(--grade) / 0.55) 0%, transparent 70%)" }} />
 
           {/* Photo first on a phone, then the title; side by side from lg,
               the title held to the foot of the hero as on a full-bleed one. */}
@@ -342,10 +342,10 @@ export default async function BlogPostPage({ params }: Props) {
               and 30% at the middle, which greyed the photograph (Doug, 28 Sep
               2026: colour, but not overkill). */}
           <div className="absolute inset-0" style={{
-            background: "linear-gradient(to top, rgba(8,13,22,0.94) 0%, rgba(8,13,22,0.62) 28%, rgba(8,13,22,0.16) 58%, rgba(8,13,22,0.06) 100%)"
+            background: "linear-gradient(to top, rgb(var(--grade) / 0.94) 0%, rgb(var(--grade) / 0.62) 28%, rgb(var(--grade) / 0.16) 58%, rgb(var(--grade) / 0.06) 100%)"
           }} />
           <div className="absolute inset-0" style={{
-            background: "linear-gradient(90deg, rgba(8,13,22,0.5) 0%, transparent 58%)"
+            background: "linear-gradient(90deg, rgb(var(--grade) / 0.5) 0%, transparent 58%)"
           }} />
 
           {/* Label, title and meta, anchored to the bottom */}
@@ -358,7 +358,7 @@ export default async function BlogPostPage({ params }: Props) {
       )}
 
       {/* ── Orange accent divider ────────────────────── */}
-      <div style={{ height: 2, background: "linear-gradient(90deg, #F97316 0%, #EAB308 50%, transparent 100%)" }} />
+      <div style={{ height: 1, background: "var(--border-color)" }} />
 
       {/* ── Article + sidebar ───────────────────── */}
       {/* The sidebar column takes some of the room the shorter measure gives

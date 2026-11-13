@@ -24,7 +24,7 @@ export default function RuleLabel({
       // utilities, so an h2 set with classes alone came out squeezed
       // ("BROWSEINSIGHTS").
       style={{
-        color: "var(--accent-text)",
+        color: "var(--text-secondary)",
         borderBottom: "1px solid var(--ink-10)",
         fontFamily: "inherit",
         fontWeight: 700,

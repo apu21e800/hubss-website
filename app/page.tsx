@@ -246,7 +246,7 @@ export default async function Home() {
           the bar; both together landed "See the work" with a 93px stripe of
           the section above under the bar (17 Oct 2026). */}
       {SITE_FLAGS.showMap && (
-        <div id="map">
+        <div id="map" data-surface="classic">
           <CanadaMapWrapper />
         </div>
       )}

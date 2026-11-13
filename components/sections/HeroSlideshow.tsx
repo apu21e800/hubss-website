@@ -162,7 +162,7 @@ export default function HeroSlideshow({
         className="absolute inset-0 hidden sm:block"
         style={{
           background:
-            "linear-gradient(180deg, rgba(13,17,23,0.20) 0%, rgba(13,17,23,0) 20%, rgba(13,17,23,0) 80%, rgba(13,17,23,0.38) 100%)",
+            "linear-gradient(180deg, rgb(var(--grade) / 0.20) 0%, rgb(var(--grade) / 0) 20%, rgb(var(--grade) / 0) 80%, rgb(var(--grade) / 0.38) 100%)",
           zIndex: 2,
         }}
       />
@@ -170,7 +170,7 @@ export default function HeroSlideshow({
         className="absolute inset-0 sm:hidden"
         style={{
           background:
-            "linear-gradient(180deg, rgba(13,17,23,0.10) 0%, rgba(13,17,23,0) 25%, rgba(13,17,23,0) 72%, rgba(16,16,16,0.92) 100%)",
+            "linear-gradient(180deg, rgb(var(--grade) / 0.10) 0%, rgb(var(--grade) / 0) 25%, rgb(var(--grade) / 0) 72%, rgb(32 32 31 / 0.94) 100%)",
           zIndex: 2,
         }}
       />
@@ -180,16 +180,7 @@ export default function HeroSlideshow({
           background:
             // Tall enough to sit behind the eyebrow as well as the headline
             // (the eyebrow was orange on bare pavement at 1366 and 1440).
-            "radial-gradient(ellipse 72% 100% at 0% 100%, rgba(13,17,23,0.80) 0%, rgba(13,17,23,0.58) 40%, rgba(13,17,23,0.22) 74%, rgba(13,17,23,0) 100%)",
-          zIndex: 2,
-        }}
-      />
-      {/* Orange atmospheric bloom */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at 0% 0%, rgba(249,115,22,0.14) 0%, transparent 55%)",
+            "radial-gradient(ellipse 72% 100% at 0% 100%, rgb(var(--grade) / 0.80) 0%, rgb(var(--grade) / 0.58) 40%, rgb(var(--grade) / 0.22) 74%, rgb(var(--grade) / 0) 100%)",
           zIndex: 2,
         }}
       />
@@ -217,13 +208,13 @@ export default function HeroSlideshow({
         <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
 
-            {/* Eyebrow — #FDBA74 (orange-300) reads clearly over the hero photo; shadow adds contrast */}
+            {/* The line over the headline: cream, like every label on a photograph
+                (13 Nov 2026; it was orange, and orange is for what can be pressed). */}
             {/* One line on a phone too: at 0.22em tracking the eyebrow wrapped
                 and pushed the headline up into the sign. */}
             <p
-              className="text-[12px] tracking-[0.16em] sm:text-sm sm:tracking-[0.22em] font-bold uppercase mb-3"
+              className="eyebrow eyebrow-photo mb-3"
               style={{
-                color: "var(--accent-soft-text)",
                 // A tight shadow for the letter edges and two soft ones for
                 // the ground: it reads over sunlit pavement as well as shadow.
                 // The third since 16 Oct 2026 (QA sweep: about 2:1 where the
@@ -238,7 +229,7 @@ export default function HeroSlideshow({
             <h1
               className="font-black mb-4"
               style={{
-                fontSize: "clamp(2.5rem, min(7vw, 11vh), 5.75rem)",
+                fontSize: "var(--fs-display)",
                 lineHeight: 0.95,
                 letterSpacing: "-0.04em",
                 color: "white",
@@ -249,13 +240,11 @@ export default function HeroSlideshow({
               <br />
               <span
                 style={{
-                  background: "linear-gradient(92deg, #F97316 0%, #FACC15 55%, #FDE047 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                  // A dark shadow under the glow: "Canvas." is yellow over the
-                  // crosswalk's gold and green, and lost its edges there.
-                  filter: "drop-shadow(0 2px 10px rgba(0,0,0,0.45)) drop-shadow(0 0 24px rgba(249,115,22,0.18))",
+                  // One orange, HUB's (13 Nov 2026). It ran from orange to
+                  // yellow until then, and "Canvas." lost its edges over the
+                  // crosswalk's gold; the shadow keeps them.
+                  color: "var(--orange)",
+                  textShadow: "0 2px 14px rgba(0,0,0,0.5)",
                 }}
               >
                 {subheading}
@@ -291,7 +280,7 @@ export default function HeroSlideshow({
               <SeeTheWork
                 href={cta1Href}
                 className="btn-accent btn-lg"
-                style={{ ["--btn-shadow" as string]: "0 6px 28px rgba(249,115,22,0.42)" }}
+                style={{ ["--btn-shadow" as string]: "0 6px 22px rgba(0,0,0,0.35)" }}
               >
                 {cta1Label}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">

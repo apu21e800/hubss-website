@@ -26,8 +26,9 @@ export default function PersonaEntryPoints({ cards = HOMEPAGE_COPY.audiences }: 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-[var(--ink-06)]">
           {/* IntentLink: these three sit just under the first screen, and a
-              plain Link there fetched /products and its first three card
-              photos (370 KB on a phone) before the visitor had moved. */}
+              plain Link there fetched its page and the page's first photos
+              (about 400 KB on a phone) with the first flick of the page,
+              tap or no tap. */}
           {PERSONAS.map((p) => (
             <IntentLink
               key={p.label}

@@ -1572,14 +1572,15 @@ table is in the PR. What later work must keep:
 - A link near a first screen that leads to a page with photographs at its
   top is a components/ui/IntentLink.tsx, never a plain Link (13 Nov 2026). A
   plain Link fetches its page once it is within 200px of the screen, and the
-  page's first photographs come with it: the home page's /products entry card
-  brought a phone 13 KB of page and 355 KB of three card photos (it sat 4px
-  outside that distance on an 844px-tall phone, inside it on anything
-  taller). An IntentLink fetches on a pointer, a finger or the keyboard's
+  page's first photographs come with it. The home page's three entry cards did
+  that. Measured on hubss.com: a phone's first flick of the page brought
+  414 KB for pages the visitor had not opened (356 KB of it /products' three
+  card photos); a tablet (228 KB) and a laptop (149 KB) fetched theirs as the
+  page opened. An IntentLink fetches on a pointer, a finger or the keyboard's
   focus, and a click or a tap opens the page as before. The three entry cards
-  are the only ones so far: measured on hubss.com that day, the home page read
-  to its foot on a phone spent 598 of 3,015 KB on other pages, and the links
-  lower down still fetch as they come near.
+  are the only ones so far; the links lower down still fetch as they come
+  near. Measure this in windows the size a real browser gives: a 390x844
+  phone shows 664 to 745px of page, and a first look at 844px read it wrong.
 - Measuring: Sanity's CDN serves a new image address as WebP until it has made
   the AVIF, so a quality or size change looks worse on its first runs. Warm
   the addresses (load each page once) before the runs that count.

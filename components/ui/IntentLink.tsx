@@ -8,13 +8,13 @@ import { useState, type ComponentProps } from "react";
  * pointer over it, a finger on it, or the keyboard's focus. Until then it
  * fetches nothing.
  *
- * Why (13 Nov 2026, measured on hubss.com with a 390x844 phone at 3x): a
- * plain Link fetches its page as soon as it is within 200px of the screen,
- * and the page's first photographs come with it. The home page's three entry
- * cards sit just under the first screen. The /products card brought 13 KB of
- * page and 355 KB of its three card photographs: on an 844px-tall phone it
- * sat 4px outside that distance, so they came with the first scroll; on any
- * taller phone it sat inside, so they came before the visitor had moved.
+ * Why (13 Nov 2026, measured on hubss.com): a plain Link fetches its page as
+ * soon as it is within 200px of the screen, and the page's first photographs
+ * come with it. The home page's three entry cards sit just under the first
+ * screen. On a phone the first flick of the page brought 414 KB for pages the
+ * visitor had not opened, 356 KB of it the three card photographs of
+ * /products. A tablet (228 KB) and a laptop (149 KB) fetched theirs as the
+ * page opened.
  *
  * Use it for links that sit near a first screen and lead to a page with
  * photographs at its top. Next's own guide calls this hover-triggered

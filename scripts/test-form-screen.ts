@@ -114,6 +114,57 @@ check("a very long message is cut for the model", () => {
   const text = describeSubmission(contact("x".repeat(9000)));
   assert.ok(text.length < 4600, `length ${text.length}`);
 });
+check("every shape of address in an ordinary message is replaced", () => {
+  const out = redact(
+    "Reach me at Jane.Doe+tenders@eng.city.ca. Or <pm@westbrookmall.com>, mailto:info@example.org; (a_b-c@sub.example.co.uk) 'x@y.io', and cc DOUG@EXAMPLE.CA"
+  );
+  assert.ok(!/@/.test(out), out);
+  assert.equal(out.match(/\[email\]/g)?.length, 6, out);
+  assert.ok(out.endsWith("cc [email]") && out.includes("Reach me at [email]."), out);
+});
+check("signs that are not an address are left alone", () => {
+  assert.equal(redact("2 crosswalks @ $4,000 each, @hubss on Instagram"), "2 crosswalks @ $4,000 each, @hubss on Instagram");
+});
+
+/**
+ * The form takes a message of 20,000 characters and redact() reads all of
+ * it while the visitor waits, so no message that long may hold it. Until 13
+ * Nov 2026 the email pattern let an "@" into both halves of an address, and
+ * 4,000 "@" signs took eleven to thirteen seconds (eight times longer for
+ * each doubling). Each line below is the worst case for one of the two
+ * patterns, at the form's full length. They finish in a millisecond or two;
+ * the limit is loose so a slow machine never fails a healthy pattern.
+ */
+console.log("redact() at the form's full length (20,000 characters)");
+const FULL = 20000;
+const LIMIT_MS = 250;
+const fill = (unit: string) => unit.repeat(Math.ceil(FULL / unit.length)).slice(0, FULL);
+const LONG: [string, string][] = [
+  ["email: only @ signs", fill("@")],
+  ["email: a@ repeated", fill("a@")],
+  ["email: a@a. repeated", fill("a@a.")],
+  ["email: one run of letters, no space", fill("a")],
+  ["email: a run of letters, an @, a run of letters", `${"a".repeat(FULL / 2 - 1)}@${"b".repeat(FULL / 2)}`],
+  ["email: an @ then dots and letters", `a@${fill(".a").slice(2)}`],
+  ["phone: only digits", fill("5")],
+  ["phone: 555- repeated", fill("555-")],
+  ["phone: (555) repeated", fill("(555) ")],
+  ["phone: +1. repeated", fill("+1.")],
+  ["phone: a number and ext repeated", fill("555.555.5555 ext ")],
+  ["an ordinary message repeated", fill("Six crosswalks near two schools. Call (416) 555-0100 x23 or write jane.doe@city.ca. Tender 2026-104-1234. ")],
+];
+for (const [name, text] of LONG) {
+  let ms = Infinity;
+  for (let run = 0; run < 3; run++) {
+    const start = performance.now();
+    redact(text);
+    ms = Math.min(ms, performance.now() - start);
+  }
+  check(`${name}: ${ms.toFixed(1)} ms`, () => {
+    assert.equal(text.length, FULL);
+    assert.ok(ms < LIMIT_MS, `${ms.toFixed(0)} ms, over the ${LIMIT_MS} ms limit`);
+  });
+}
 
 if (failures) {
   console.log(`\n${failures} failed`);

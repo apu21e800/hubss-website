@@ -41,7 +41,7 @@ from three sources, in this order, and every draft waits for approval:
 | Stream | What it drafts from | How often | Links to | `utm_campaign` |
 |---|---|---|---|---|
 | Articles | a newly published Insights article | up to 2 a day, the day after Publish | the article | `insights` |
-| From the field | a published Studio **Job photos** post (Studio → Job photos for social; `sanity/schemas/fieldPost.ts`): photos of a finished job, where, the system, a line of facts | 1 a day | the system's page | `field` |
+| From the field | a published Studio **Job photos** post (Studio → Job photos; `sanity/schemas/fieldPost.ts`): photos of a finished job, where, the system, a line of facts | 1 a day | the system's page | `field` |
 | From the library | one thing HUB has already published and checked (`lib/social-library.ts`): a documented job from the homepage map (the tour's jobs first), or a system or application spread from the Product Portfolio Book, taking turns | 1 a week, Mondays (the very first one at once); a new field post takes the week's turn | the job's article, its Product Portfolio Book page, or the system or application page | `library` |
 
 - The posts say only what their source says (lib/social-drafter.ts

@@ -276,7 +276,7 @@ export function buildProjectDocument(doc: ProjectSource, draft: Draft, check: Fa
   const masked = (t: string) => maskContact(place && maskedPlace !== place ? t.split(place).join(maskedPlace) : t, { typed: true });
   const details = (style?.left.some((l) => l.contact) ?? false) || onTheDay.length > 0;
   const notes = [
-    `Written up by 21e8 on ${today.toISOString().slice(0, 10)} from ${details ? `the ${system} job photos post` : `the job photos post "${masked(name)}"`} (Studio → Job photos for social): its story, the crew's note, and the ${system} page's approved facts. Nothing else.`,
+    `Written up by 21e8 on ${today.toISOString().slice(0, 10)} from ${details ? `the ${system} job photos post` : `the job photos post "${masked(name)}"`} (Studio → Job photos): its story, the crew's note, and the ${system} page's approved facts. Nothing else.`,
     "",
     ready
       ? `SCHEDULED for ${torontoWhen(slot)}. To move it, change "Goes live at". The day after it is live, its social posts go out.`
@@ -366,8 +366,9 @@ export interface LiveDocument {
  * send it round social again.
  */
 export function toPublished(draft: ScheduledDraft, now: Date, liveDate?: string | null): LiveDocument {
-  const { _rev: _r, _createdAt: _c, _updatedAt: _u, scheduledFor: _s, scheduled: _st, publishedAt: _p, editorNotes, ...rest } = draft;
-  void _r; void _c; void _u; void _s; void _st; void _p;
+  // `forReview` stays with the draft: a live article is off Doug's page (12 Nov 2026, lib/review-notify.ts).
+  const { _rev: _r, _createdAt: _c, _updatedAt: _u, scheduledFor: _s, scheduled: _st, publishedAt: _p, forReview: _fr, editorNotes, ...rest } = draft;
+  void _r; void _c; void _u; void _s; void _st; void _p; void _fr;
   const when = torontoWhen(now.toISOString());
   const notes = [`${liveDate ? "Edit published" : "Published"} on schedule, ${when} (21e8).`, editorNotes?.trim() ?? ""].filter(Boolean).join("\n\n");
   return { ...rest, _id: draft._id.replace(/^drafts\./, ""), scheduled: false, publishedAt: liveDate || now.toISOString(), editorNotes: notes };
@@ -718,7 +719,7 @@ async function writeArticle(client: SanityClient, doc: ProjectSource, now: Date)
       `Read it: ${studioLink(liveId)}`,
       ...(forReview
         ? [
-            `- Read it on your review page${page ? ` (${page})` : ""} and, when it reads right, press "Put on Doug's page" (or tick "Ready for Doug's review" in the draft).`,
+            `- Read it in Studio or on your review page${page ? ` (${page})` : ""} and, when it reads right, press "Send to Doug" at the top of the draft (or "Put on Doug's page" on your review page). Doug gets an email with a link to it; his reply comes to you.`,
             `- After his OK, switch "Scheduled" on (it goes live ${when}, or at the next morning's run if that has passed) or press Publish.`,
           ]
         : []),

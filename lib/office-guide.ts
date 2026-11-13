@@ -13,7 +13,8 @@
  * bookmark, hubss.com/studio/guide (noindex, like the Studio).
  *
  * Pure data: safe in the Studio and on the site. `**bold**` marks a label,
- * written exactly as the Studio prints it. Plain words, as everything Doug
+ * written exactly as the Studio (or Doug's email, lib/review-notify.ts)
+ * prints it. Updated 12 Nov 2026: Doug's email, and "Job photos". Plain words, as everything Doug
  * reads in the Studio: who does the work is "21e8" or "Vern", never how
  * (scripts/test-office-guide.ts checks every line, with the house style).
  */
@@ -91,11 +92,11 @@ export const OFFICE_GUIDE: OfficeGuideContent = {
     {
       id: "review",
       title: "Check an article before it goes out",
-      when: "Vern tells you an article is waiting, or any time you like.",
+      when: "An email tells you an article is ready for your OK. Or any time you like.",
       steps: [
-        "In the Studio, press **Open your review page** at the top of this guide. Or use the link Vern sent you.",
+        "Press **Read the article** in the email. Or, in the Studio, press **Open your review page** at the top of this guide.",
         "Read each article: every word and photo is there. The social posts already scheduled are listed too.",
-        "Reply to Vern with OK, or with what to change.",
+        "Reply to the email with OK, or with what to change. Your reply goes to Vern.",
       ],
       next: [
         "No article goes on the site until you have said OK.",
@@ -107,14 +108,16 @@ export const OFFICE_GUIDE: OfficeGuideContent = {
       title: "Send in a finished job",
       when: "A job is done and you have photos of it.",
       steps: [
-        "**Job photos for social**, then **+**.",
+        "**Job photos**, then **+**.",
         "Add 1 to 10 **Photos**, best first, each with a line saying what is in it. Only HUB's own photos of this job, and no faces of children.",
         "**Where** (town and province), the **HUB system**, and **What was done**: one or two sentences of facts in your own words.",
         "For a full article, write a few lines of **The story**: why the job mattered, what the client wanted, what you noticed.",
         "Press **Publish**.",
       ],
       next: [
-        "The next morning 21e8 writes the social posts and schedules them. If you wrote the story, it writes a Projects article too, which waits for your OK.",
+        "Without the story, the photos go out in HUB's social posts over the next few days.",
+        "With the story, 21e8 writes the job up as a Projects article, and you get an email to read it before it goes live. Its social posts follow once it is live.",
+        "The card at the top of the post says which it will be, and how far it has got.",
         "Leave out customers' phone numbers, emails and street addresses, and name a private homeowner by town only.",
       ],
     },

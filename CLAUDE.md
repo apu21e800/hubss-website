@@ -246,8 +246,12 @@ Doug's review copy is the review/main branch (hubss-website-git-review-main-base
 - Studio says it in plain words (15 Oct 2026; Vern: "what does not live mean?
   ... maybe better to just call it blog"): **Blog posts** (blogPost; the site
   calls the blog Projects), **Blog ideas** (storyIdea, was "Insights
-  plan"), **Job photos for social** (fieldPost, was "From the field"; the
-  stream keeps that name in logs), **Sent to Buffer** (socialLog, read only).
+  plan"), **Job photos** (fieldPost; "Job photos for social" until 12 Nov
+  2026, "From the field" before that; the stream keeps that name in logs),
+  **Sent to Buffer** (socialLog, read only). Since 12 Nov 2026 the sidebar is
+  three titled dividers (sanity/structure.ts): Blog (Blog posts, Job photos),
+  Website (pages, products, applications, Site Settings), Behind the scenes
+  (Blog ideas, Sent to Buffer). Dividers, not folders, so saved links hold.
   The old "Projects (Map Pins)" list is off the sidebar and the Create menu
   (the map reads lib/map-projects.ts; its documents are kept). The global
   Create menu offers only hand-made types (NOT_CREATED_BY_HAND in
@@ -831,7 +835,7 @@ fly") they are queued and posted by themselves unless edited or deleted in
 Buffer first, as from 19 to 27 Oct (docs/buffer-setup.md):
 - Articles: each newly published Insights post (lib/social-pipeline.ts).
 - From the field: a published Studio field post (sanity/schemas/fieldPost.ts,
-  Studio → Job photos for social): job photos, place, system, one line of facts.
+  Studio → Job photos): job photos, place, system, one line of facts.
   Linked to the system's page. One a day.
 - From the library: once a week (Mondays), a documented map job (TOUR_IDS
   first, in lib/map-projects.ts) or a Product Book system or application spread
@@ -957,8 +961,9 @@ nailing the brand voice, he will leave it in our domain." lib/review-first.ts:
 - The review page, /review/<key> (app/review/[key]/page.tsx,
   components/review/ReviewView.tsx, lib/review-page.ts and its .server.ts),
   has two links. **Doug's** shows only what 21e8 has read and put on his
-  page: drafts with `forReview` ("Ready for Doug's review"; Studio's tick and
-  Vern's button write the same field; it publishes nothing) and social
+  page: drafts with `forReview` ("Send to Doug" in Studio, "Doug's review"
+  at the top of a blog post since 12 Nov 2026, and Vern's button write the
+  same field; it publishes nothing, and it emails Doug, below) and social
   groups with a private `review.ok-<hash>` record (reviewTickId; never a
   change to the Sent to Buffer record), plus what is already set to go (a
   scheduled article, a queued post), with the run that will really publish
@@ -991,10 +996,78 @@ nailing the brand voice, he will leave it in our domain." lib/review-first.ts:
   is made, safe to pass on whole), and Vern's, marked not to forward. New
   keys get "the old one no longer opens". The drafter's, the social and the
   held-article emails repeat Vern's link with the step to take.
-- Vern's loop: open his link, read, fix (Studio or Buffer), press Put on
-  Doug's page; tell Doug; after his OK, Publish (or Scheduled on) and Add to
-  Queue in Buffer. The guide: claude/HUBSS-content-review-2026-10.md in the
-  Claude project.
+- Vern's loop: read the draft (Studio or his link), fix it, press Send to
+  Doug (or Put on Doug's page); Doug is emailed, and replies to Vern; after
+  his OK, Publish (or Scheduled on). The guide:
+  claude/HUBSS-content-review-2026-10.md in the Claude project.
+
+## Doug's email and the review in Studio (12 Nov 2026)
+Vern, 12 Nov: "it's not clear to me how this process works with Doug, I don't
+see 'doug's review page'. it might be ideal if he gets an email when there is a
+blog ready for him to review ... this needs to be failsafe, and a pleasure to
+use from a client side experience too."
+- "Doug's review" is the first thing in a blog post's form, with Scheduled
+  and Goes live at, under "Review and going live" (the `release` fieldset in
+  sanity/schemas/blogPost.ts). The switch is a panel
+  (sanity/components/ForReviewInput.tsx): a new article shows **Send to
+  Doug**; sent, it shows "With Doug. Emailed <when>.", **View Doug's page**
+  (his link, from the private record, at the article's card), **Email Doug
+  now** when no email went, and **Take it back**; a live article says the
+  review is for new articles. If the panel ever fails, Sanity's own switch
+  takes its place (QuietBoundary.tsx). The document shows a **With Doug**
+  badge (sanity.config.ts) and the list's line starts "With Doug".
+- Sending emails Doug (lib/review-notify.ts, notifyDoug): "Ready for your OK:
+  <title>", the title and opening line, a **Read the article** button to his
+  page at the article's card (lib/review-anchor.ts), "Reply to this email
+  with OK", signed Vern, From "Vern via hubss.com <noreply@hubss.com>", Reply-To
+  Vern (REVIEW_REPLY_TO, else the first BLOG_DRAFT_NOTIFY), Vern in Bcc. To
+  REVIEW_EMAIL_TO, doug.bain@hubss.com when unset; "off" stops it, and so does
+  REVIEW_FIRST=off. No machinery words (`npm run test:review`). The wording
+  is Vern's to approve (it goes to the client): change it only with his OK.
+- Once per round: a private `review.mailed-<hash>` record per article
+  (type reviewMailed, `articleId` the published id) is created before the
+  email (a second press gets "busy" or "already sent"), marked sent or failed
+  after, cleared when the article is taken back or goes live. Sent again
+  after that: "Ready again for your OK".
+- Three ways in, one function: the panel (POST /api/review/notify,
+  app/api/review/notify/route.ts), Vern's button
+  (app/review/[key]/actions.ts), and the
+  daily run (notifyMissedReviews in app/api/cron/social-drafts), which
+  emails any sent article that has no email yet (a failed send, a Studio on
+  a preview; several go as one email that lists them, dougDigestEmail: the
+  first morning after the merge, that is every article already on Doug's
+  page) and switches the review off on live articles (staleReviewFlags,
+  25 a run). Only production sends (sendsHere): a preview's key would open
+  nothing on hubss.com. A preview's Studio isn't registered with Sanity
+  (checked 12 Nov 2026: "Connect this studio to your project"), so the
+  panels are first seen on hubss.com/studio; their look was checked from
+  ReviewPanelView and JobPhotosCardView, which draw without a Studio.
+- The route acts only for a signed-in editor (Vercel's security review of
+  PR #141: the first version answered anyone who sent this site's Origin,
+  and said whether a guessed draft existed and was with Doug). The panel
+  first creates a private one-use record with the editor's own session,
+  `review.ask-<40 random hex>` (type reviewAsk: the article, on or off,
+  when; lib/review-ask.ts), and posts only the random part. The route takes
+  it once (takeAsk: unknown, used, over five minutes old or odd is refused
+  before any article is read), waits up to 12 s for the Studio to save the
+  switch, acts, and writes the outcome into the ask. If the ask can't be
+  made, the switch is still saved and the morning run sends the email. The
+  asks stay in the dataset (a few a week; nothing deletes them).
+- Taken back while its email is on its way: clearDougNotice clears a round
+  still sending, and finishRound clears it if the switch is off when the
+  email has gone, so sending it again is always a new round (Vercel Agent's
+  review of PR #141).
+- Publishing switches it off: Studio's Publish (datedPublish) and the daily
+  run's scheduled publish (toPublished), so a live post never reads "With
+  Doug" and its next edit isn't sent by mistake.
+- Job photos (sanity/components/JobPhotosInput.tsx, words in
+  sanity/job-photos-line.ts): a card above the form says what Publish does
+  (no story: its photos go out in HUB's social posts; a story: 21e8 writes
+  it up as an article, which goes to Doug) and how far the article has got
+  (with 21e8, with Doug, live), with **Open the article**. The list's line
+  says "Photos for social", "Story in: to be written up" or "Written up as an
+  article". These words assume Doug reviews first: change them if
+  REVIEW_FIRST goes off.
 
 ## A customer's details hold the article (24 Oct 2026)
 Ported from Square One (its rule of 20 Oct 2026) before more job posts become

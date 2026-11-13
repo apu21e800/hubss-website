@@ -23,7 +23,7 @@
  *                                   SANITY_API_WRITE_TOKEN (server-side only)
  */
 import { createElement } from "react";
-import { defineConfig, useDocumentOperation, type DocumentActionComponent, type DocumentActionProps } from "sanity";
+import { defineConfig, useDocumentOperation, type DocumentActionComponent, type DocumentActionProps, type DocumentBadgeComponent } from "sanity";
 import { structureTool } from "sanity/structure";
 import { presentationTool, defineDocuments, defineLocations, type DocumentLocation } from "sanity/presentation";
 import { EyeOpenIcon } from "@sanity/icons";
@@ -109,6 +109,10 @@ const mainDocuments = defineDocuments([
  * is no longer set to go by itself as it goes out: otherwise its next edit
  * would sit in a draft still marked to go live by itself, at a time already
  * past, and the daily run would publish the half-made edit.
+ *
+ * And it leaves Doug's review (12 Nov 2026): an article sent to Doug goes
+ * out with the switch off, so the live post doesn't read "With Doug" and its
+ * next edit isn't sent to him by mistake (lib/review-notify.ts).
  */
 function datedPublish(original: DocumentActionComponent): DocumentActionComponent {
   const Action: DocumentActionComponent = (props: DocumentActionProps) => {
@@ -118,13 +122,16 @@ function datedPublish(original: DocumentActionComponent): DocumentActionComponen
     return {
       ...result,
       onHandle: () => {
-        const current = (props.draft ?? props.published) as { publishedAt?: string; scheduled?: boolean } | null;
+        const current = (props.draft ?? props.published) as { publishedAt?: string; scheduled?: boolean; forReview?: boolean } | null;
         const date = current?.publishedAt ? Date.parse(current.publishedAt) : NaN;
         if (!props.published && (Number.isNaN(date) || date <= Date.now())) {
           patch.execute([{ set: { publishedAt: new Date().toISOString() } }]);
         }
         if (current?.scheduled) {
           patch.execute([{ set: { scheduled: false } }, { unset: ["scheduledFor"] }]);
+        }
+        if (current?.forReview) {
+          patch.execute([{ unset: ["forReview"] }]);
         }
         result.onHandle?.();
       },
@@ -133,6 +140,17 @@ function datedPublish(original: DocumentActionComponent): DocumentActionComponen
   Action.action = original.action;
   return Action;
 }
+
+/**
+ * "With Doug" beside a new article's status while it waits on his review
+ * page (12 Nov 2026; sanity/components/ForReviewInput.tsx sends it). Gone
+ * once it is taken back or goes live.
+ */
+const WithDougBadge: DocumentBadgeComponent = (props) => {
+  const draft = props.draft as { forReview?: boolean } | null;
+  if (props.published || draft?.forReview !== true) return null;
+  return { label: "With Doug", title: "On Doug's review page until it goes live", color: "primary" };
+};
 
 /** The HUB wheel in Studio's top bar. */
 const StudioLogo = () =>
@@ -202,6 +220,7 @@ export default defineConfig({
     // by the site.
     newDocumentOptions: (prev, { creationContext }) =>
       creationContext.type === "global" ? prev.filter((t) => !NOT_CREATED_BY_HAND.has(t.templateId)) : prev,
+    badges: (prev, context) => (context.schemaType === "blogPost" ? [...prev, WithDougBadge] : prev),
     // No Delete, Unpublish or Duplicate on the pages, Site Settings or a
     // "Sent to Buffer" record (sanity/document-locks.ts, 23 Oct 2026).
     actions: (prev, context) => {

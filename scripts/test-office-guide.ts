@@ -1,7 +1,8 @@
 /**
  * `npm run test:studio`: Doug's guide (lib/office-guide.ts) reads as the
  * Studio must (scripts/test-studio-words.ts): no machinery named, the house
- * style kept (lib/style-lint.ts), every label it bolds one the Studio prints,
+ * style kept (lib/style-lint.ts), every label it bolds one the Studio (or
+ * Doug's email) prints,
  * and the private record for his review link (lib/review-link-record.ts)
  * has a dotted id, so the public API never returns it. No network.
  */
@@ -71,13 +72,17 @@ check("no em dash, no exclamation mark", () => {
     assert.doesNotMatch(t, /!/, t);
   }
 });
-check("every bold label is one the Studio prints", () => {
+check("every bold label is one the Studio or Doug's email prints", () => {
   const studio = [
     readFileSync(path.join(ROOT, "sanity/structure.ts"), "utf8"),
     readFileSync(path.join(ROOT, "sanity/schemas/blogPost.ts"), "utf8"),
     readFileSync(path.join(ROOT, "sanity/schemas/fieldPost.ts"), "utf8"),
     readFileSync(path.join(ROOT, "sanity/components/EditOnThePage.tsx"), "utf8"),
     readFileSync(path.join(ROOT, "sanity/components/GuidePane.tsx"), "utf8"),
+    readFileSync(path.join(ROOT, "sanity/components/ForReviewInput.tsx"), "utf8"),
+    readFileSync(path.join(ROOT, "sanity/components/JobPhotosInput.tsx"), "utf8"),
+    // Doug's email ("Read the article"), which the review step starts from.
+    readFileSync(path.join(ROOT, "lib/review-notify.ts"), "utf8"),
   ].join("\n");
   // Studio's own buttons, which no file of ours prints.
   const own = new Set(["+", "Publish"]);

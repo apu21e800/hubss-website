@@ -1,11 +1,12 @@
 import { defineField, defineType } from "sanity";
 import { ImagesIcon } from "@sanity/icons";
 import { copyStyle, galleryImageItem } from "./_shared";
+import JobPhotosInput from "../components/JobPhotosInput";
 
 /**
  * A field post: photos of a finished job, straight from a phone, with the
- * place, the system and a line of facts. Studio → Job photos for social
- * ("From the field" until 15 Oct 2026).
+ * place, the system and a line of facts. Studio → Job photos ("Job photos
+ * for social" until 12 Nov 2026, "From the field" until 15 Oct).
  *
  * Publishing one is all it takes: the next daily run (14:00 UTC,
  * lib/social-pipeline.ts) writes a post per channel from it for Buffer,
@@ -21,13 +22,20 @@ import { copyStyle, galleryImageItem } from "./_shared";
  * social post: the job goes out once, as the article.
  *
  * Not shown on the website (yet): the photos live here and in the posts.
+ *
+ * Above the form, a card says which of the two this post will be and where
+ * it has got to (sanity/components/JobPhotosInput.tsx, 12 Nov 2026; Vern: "I
+ * still don't understand how the 'Job photos for social' tab fits into this
+ * process"). Its words, and the story's, assume Doug reviews articles first
+ * (lib/review-first.ts): change them if REVIEW_FIRST goes off.
  */
 export default defineType({
   name: "fieldPost",
   title: "Job photos",
-  description: "Photos of a finished job. Publish it and 21e8 writes and schedules its social posts the next morning. Add the story and it writes the job up as a Projects article for the website as well, which waits for your OK. The post itself is not shown on the website.",
+  description: "Photos of a finished job and a line or two about it. Without the story, its photos go out in HUB's social posts. With the story, 21e8 writes the job up as a Projects article for the website, which goes to Doug for his OK. The post itself is not shown on the website.",
   type: "document",
   icon: ImagesIcon,
+  components: { input: JobPhotosInput },
 
   fields: [
     defineField({
@@ -80,7 +88,7 @@ export default defineType({
       type: "text",
       rows: 8,
       description:
-        "Leave this empty and the photos go to social only. Fill it in and 21e8 writes the job up as a Projects article for the website, checks it and schedules it: it is on hubss.com within a few working days, and its social posts follow. A few sentences or a list, in your own words: who the client was (if they can be named), what they needed, what went in and when, who installed it, anything about the design or the colours, and how it has held up. The article says nothing that isn't here, in the line above or on the system's page, so no guesses and no figures you aren't sure of. Leave out customers' phone numbers, emails and home addresses. A homeowner isn't named in the article, only the town.",
+        "Leave this empty and the photos go to social only. Fill it in and 21e8 writes the job up as a Projects article for the website and checks it; it goes to Doug for his OK, then on hubss.com, and its social posts follow. A few sentences or a list, in your own words: who the client was (if they can be named), what they needed, what went in and when, who installed it, anything about the design or the colours, and how it has held up. The article says nothing that isn't here, in the line above or on the system's page, so no guesses and no figures you aren't sure of. Leave out customers' phone numbers, emails and home addresses. A homeowner isn't named in the article, only the town.",
       validation: (r) => [r.max(4000).warning("That is a lot: a few sentences or a short list is enough"), copyStyle(r)],
     }),
     defineField({
@@ -97,10 +105,13 @@ export default defineType({
   orderings: [{ title: "Newest first", name: "dateDesc", by: [{ field: "date", direction: "desc" }] }],
 
   preview: {
-    select: { place: "place", system: "system.name", media: "photos.0", date: "date" },
-    prepare: ({ place, system, media, date }) => ({
-      title: [system, place].filter(Boolean).join(" in ") || "New field post",
-      subtitle: date ? new Date(`${date}T12:00:00`).toLocaleDateString("en-CA") : undefined,
+    select: { place: "place", system: "system.name", media: "photos.0", date: "date", writeUp: "writeUp", article: "article._ref" },
+    prepare: ({ place, system, media, date, writeUp, article }) => ({
+      title: [system, place].filter(Boolean).join(" in ") || "New job",
+      subtitle: [
+        date ? new Date(`${date}T12:00:00`).toLocaleDateString("en-CA") : undefined,
+        article ? "Written up as an article" : typeof writeUp === "string" && writeUp.trim() ? "Story in: to be written up" : "Photos for social",
+      ].filter(Boolean).join(" · "),
       media,
     }),
   },

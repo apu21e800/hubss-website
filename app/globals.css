@@ -230,6 +230,9 @@
   --on-accent: #FFFFFF;
   --border-color: #4D4D4C;
   --border-strong: #333333;
+  /* Text that sets no colour of its own inherits the page's, which is 2.0's
+     warmer grey: say the old one here so it is the old one inside. */
+  color: var(--text-body);
 }
 
 /* The same promise for what the classic dark paints with shared classes:
@@ -979,45 +982,6 @@ p {
   scrollbar-width: none;
 }
 
-/* ─── Grain texture animation ───────────────────── */
-@keyframes grain {
-  0%, 100% { transform: translate(0, 0); }
-  10%       { transform: translate(-2%, -3%); }
-  20%       { transform: translate(3%, 1%); }
-  30%       { transform: translate(-1%, 4%); }
-  40%       { transform: translate(2%, -2%); }
-  50%       { transform: translate(-3%, 2%); }
-  60%       { transform: translate(1%, -4%); }
-  70%       { transform: translate(-2%, 3%); }
-  80%       { transform: translate(3%, -1%); }
-  90%       { transform: translate(-1%, 2%); }
-}
-
-.grain-overlay {
-  animation: grain 8s steps(1) infinite;
-}
-
-/* ─── Client ticker ───────────────────────────── */
-@keyframes ticker {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-.ticker-track {
-  animation: ticker 55s linear infinite;
-  display: flex;
-  width: max-content;
-  align-items: center;
-  gap: 0;
-  padding: 0 1.5rem;
-}
-
-/* ─── Generic fade up ─────────────────────────── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
 /* ─── Asphalt texture background ─────────────────── */
 /* Fallback: pure CSS noise pattern if asphalt-texture.jpg is missing */
 .bg-asphalt-subtle {
@@ -1039,22 +1003,14 @@ p {
   background-clip:         text;
 }
 
-/* ─── Gradient bottom border ────────────────────── */
-.gradient-border-bottom {
-  border-bottom: 2px solid transparent;
-  border-image: var(--gradient-brand) 1;
-}
-
-
-/* ─── CTA button gradient ───────────────────────── */
-.btn-primary,
-.cta-btn {
+/* The map's own orange button (CanadaMap.tsx, map/ProjectDetail.tsx). Left
+   exactly as it was: the map does not change with 2.0. */
+.btn-primary {
   background: linear-gradient(90deg, #F97316 0%, #D97706 100%);
   color: var(--text-primary);
   transition: all 0.2s ease;
 }
-.btn-primary:hover,
-.cta-btn:hover {
+.btn-primary:hover {
   background: linear-gradient(90deg, #FB923C 0%, #F59E0B 100%);
   box-shadow: var(--gradient-glow);
 }
@@ -1522,65 +1478,10 @@ p {
 /* Vernon: no repeating grid/graph-paper textures anywhere.   */
 /* Classes preserved as solid-colour backgrounds so existing  */
 /* call sites stay valid; the repeating gradient is removed.  */
-.section-grid-bg { /* transparent — section gets its own bg */ }
-[data-theme="dark"] .section-grid-bg { /* same */ }
-
 .bg-grid      { background-color: #ffffff; }
 .bg-grid-dark { background-color: var(--bg-dark); }
 .bg-dot-grid-dark { background-color: var(--bg-section-asphalt); }
 .bg-dot-grid-blue { background-color: var(--bg-primary); }
-
-/* ─── Hero always-dark override (theme-agnostic) ─────── */
-/* Hero has a full-bleed image + black overlay — text stays white in all themes */
-.hero-section {
-  --text-primary: #F5F0EB;
-  --text-body:    #E5E7EB;
-  --border-subtle: #1f1f1f;
-}
-
-/* ─── Page-load gradient sweep ───────────────────── */
-@keyframes page-sweep {
-  from { transform: translateX(-100%); }
-  to   { transform: translateX(100%); }
-}
-
-.page-sweep {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  z-index: 9999;
-  overflow: hidden;
-  pointer-events: none;
-  animation: page-sweep-fade 0.6s ease-out forwards;
-}
-
-.page-sweep::after {
-  content: "";
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: var(--gradient-brand);
-  animation: page-sweep 0.4s ease-out forwards;
-}
-
-@keyframes page-sweep-fade {
-  0%   { opacity: 1; }
-  80%  { opacity: 1; }
-  100% { opacity: 0; }
-}
-
-/* ─── CTA button pulse (single, on appear) ─────────── */
-@keyframes cta-pulse {
-  0%   { box-shadow: 0 0 0 0 rgba(249,115,22,0.4); }
-  70%  { box-shadow: 0 0 0 10px rgba(249,115,22,0); }
-  100% { box-shadow: 0 0 0 0 rgba(249,115,22,0); }
-}
-
-.cta-pulse {
-  animation: cta-pulse 0.8s ease-out 0.5s 1;
-}
 
 /* ─── Gradient underline hover (scaleX 0→1) ────────── */
 .hover-underline-gradient {

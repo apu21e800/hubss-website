@@ -169,9 +169,28 @@ blocks are the same to the pixel. Check after any token change:
 
 ## Checks before anything is shown
 
-`npx tsc --noEmit`, the test scripts CI runs, `npm run verify`, then
-`scripts/hubss-2/overflow.mjs` (nothing past the edge, 320 to 1440),
-`scripts/hubss-2/weigh.mjs` against main's numbers, and the type census.
+`npx tsc --noEmit`, the test scripts CI runs, `npm run verify`, then, against
+`npx next start -p 4311` on the branch's build:
+
+| Script (`scripts/hubss-2/`) | What it holds |
+|---|---|
+| `overflow.mjs` | Nothing past the screen's edge on the slice pages, 320 to 1440. |
+| `first-screen.mjs` | The ten ad pages' and /lunch-learn's first-screen rules, at CLAUDE.md's sizes (72 cells). |
+| `weigh.mjs` | No page heavier on a phone (390 at DPR 3) than on main. |
+| `map-same.mjs` | The map block is the same as on hubss.com, element by element. |
+| `type-census.mjs` | Every heading's size and line count at eight widths. |
+| `shoot.mjs` | The before-and-after pictures. |
+
+Block 1's numbers (13 Nov 2026): verify 16/16; overflow clean (5 pages, 9
+widths); first screen 72 of 72; weight equal or lower on all seven pages
+measured (home 1,607 to 1,605 KB on load); the map block the same.
+
+A trap that cost half an hour: `next start` renames its process to
+`next-server`, so `pkill -f "[n]ext start"` does not stop it. An old server
+kept answering on the port with the old build's pages while the files under
+it were the new build's, and every page came up unstyled. Stop a server by
+its process id (`ps -eo pid,args | grep next-server`), then start the new one
+and check that a page's stylesheet answers 200.
 ESLint does not run in this repository (its config crashes under ESLint 10, on
 main too); that is a small fix for main, not part of 2.0.
 

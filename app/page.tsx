@@ -217,9 +217,8 @@ export default async function Home() {
 
   return (
     <main>
-      {/* Page-load sweep */}
-      <div className="page-sweep" />
-
+      {/* No line sweeping across the top as the page opens (13 Nov 2026):
+          nothing moves until the visitor does something. */}
       <JsonLd data={organizationSchema(settings)} />
       <Nav />
       <HeroSlideshow {...hero} />

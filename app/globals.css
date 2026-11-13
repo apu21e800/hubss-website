@@ -665,8 +665,12 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.03em;
   font-weight: 900;
 }
+/* On a 320 or 360px phone a product's name ran off the screen on its own
+   page: "TrafficPatternsXD" at 38px is 358px wide, and the "D" was cut off
+   at 320 (13 Nov 2026). A name on a photograph now starts at 30px and is
+   back to 38px by 430px wide; from there up nothing changed. */
 .h1-hero {
-  font-size: clamp(2.375rem, 5.5vw, 4.25rem);
+  font-size: clamp(1.875rem, min(9.4vw, max(2.375rem, 5.5vw)), 4.25rem);
   line-height: 1.02;
   letter-spacing: -0.03em;
   font-weight: 900;

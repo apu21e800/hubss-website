@@ -21,6 +21,7 @@ import {
   aboutLine,
   anchorFor,
   DUE_GRACE_MS,
+  editPath,
   groupSocialPosts,
   groupTitle,
   networkName,
@@ -37,6 +38,7 @@ import { DUE_GRACE_MS as PUBLISH_GRACE_MS, RUN_HOUR_UTC as PUBLISH_HOUR } from "
 import { reviewLinkEmails } from "../lib/review-link";
 import ReviewView from "../components/review/ReviewView";
 import { lintCopy } from "../lib/style-lint";
+import { GUIDE_PATH, GUIDE_TITLE } from "../lib/office-guide";
 import { readFileSync } from "node:fs";
 import {
   clearDougNotice,
@@ -305,13 +307,40 @@ check("Doug's: the articles, the posts and their states", () => {
   assert.match(dougsWords, /Reply to Vern with OK/);
 });
 check("Doug's names no machinery", () => {
-  const banned = /\b(AI|A\.I\.|Claude|Anthropic|automat\w*|Buffer|Studio|Sanity|cron|queue\w*|drafter|by itself|bot|generated|21e8 only|style check|fact check)\b/i;
+  // "Studio" is his own tool and is named since 13 Nov 2026 (the edit link, "Where things are"); how the work is made is still never named.
+  const banned = /\b(AI|A\.I\.|Claude|Anthropic|automat\w*|Buffer|Sanity|Vercel|Figma|cron|queue\w*|drafter|by itself|bot|generated|21e8 only|style check|fact check)\b/i;
   const hit = dougsWords.match(banned);
   assert.equal(hit, null, `Doug's page says "${hit?.[0]}"`);
 });
-check("Doug's has no buttons, no forms and no other link", () => {
+check("Doug's has no buttons and no forms", () => {
   assert.ok(!/<form|<button/.test(dougsHtml));
   assert.ok(!/Put on Doug|Take off Doug|Doug's link/.test(dougsWords));
+});
+check("Doug's: every article has its way into the Studio, at that article", () => {
+  assert.equal(editPath("drafts.blogpost-plow"), "/studio/intent/edit/id=blogpost-plow;type=blogPost");
+  assert.equal(editPath("blogpost-plow"), "/studio/intent/edit/id=blogpost-plow;type=blogPost", "an id with no drafts. prefix is taken as it is");
+  // The same address the editors' emails carry (lib/project-posts.ts studioLink), without the host.
+  const editors = readFileSync(new URL("../lib/project-posts.ts", import.meta.url), "utf8");
+  assert.ok(editors.includes("`https://hubss.com/studio/intent/edit/id=${docId};type=blogPost`"), "studioLink changed: editPath must follow it");
+  for (const a of dougs) assert.ok(dougsHtml.includes(`href="${editPath(a.id)}"`), `no edit link for ${a.id}`);
+  assert.equal((dougsWords.match(/Edit this article/g) ?? []).length, dougs.length + 1, "one per card, and the intro names it once");
+  assert.match(dougsWords, /Opens it in Studio\. Change any word or photo: it saves as you go, and this page shows the change\./);
+});
+check("Doug's: where things are, two places and the email", () => {
+  assert.match(dougsWords, /Where things are/);
+  assert.match(dougsWords, /This page What is waiting for your OK, and what is about to go out\. The link never changes, so keep it\./);
+  assert.match(dougsWords, /Studio Where HUB changes the site/);
+  assert.match(dougsWords, /Email from hubss\.com One note when something new is waiting here\. Reply to it and it reaches Vern\./);
+  assert.match(dougsWords, /Nothing else needs a login from you\./);
+  assert.ok(dougsHtml.includes('href="/studio"') && dougsHtml.includes(`href="${GUIDE_PATH}"`), "the Studio and its guide");
+  assert.ok(dougsWords.includes(GUIDE_TITLE));
+});
+check("Doug's: the page's own links go to the Studio and nowhere else", () => {
+  const hrefs = [...dougsHtml.matchAll(/<a\b[^>]*\bhref="([^"]+)"/g)].map((m) => m[1]);
+  assert.ok(hrefs.length >= dougs.length + 2);
+  // No address with a host among them: the page works wherever it is served.
+  assert.deepEqual(hrefs.filter((h) => !/^\/studio(\/|$)/.test(h)), []);
+  for (const tag of dougsHtml.match(/<a\b[^>]*>/g) ?? []) assert.ok(/target="_blank"/.test(tag) && /rel="noopener"/.test(tag), `${tag}: a link into the Studio opens beside the page`);
 });
 check("Doug's keeps the house style", () => {
   const issues = lintCopy(dougsWords).filter((i) => !/Title Case/i.test(i.message));
@@ -322,6 +351,10 @@ const vernsData: ReviewData = { audience: "agency", articles: verns, social: ver
 const pressed: FormData[] = [];
 const vernsHtml = renderToStaticMarkup(createElement(ReviewView, { data: vernsData, now: new Date("2026-10-28T15:05:00Z"), actionKey: "VERNSKEY", action: async (fd: FormData) => { pressed.push(fd); } }));
 const vernsWords = words(vernsHtml);
+check("Vern's: the same way into the Studio on every draft, and no \"Where things are\"", () => {
+  for (const a of verns) assert.ok(vernsHtml.includes(`href="${editPath(a.id)}"`), `no edit link for ${a.id}`);
+  assert.doesNotMatch(vernsWords, /Where things are|Nothing else needs a login/);
+});
 check("Vern's: Doug's link, what is and isn't on his page, a button on each item waiting", () => {
   assert.match(vernsWords, /Doug's link, to send him once: https:\/\/hubss\.com\/review\/DOUGSKEY/);
   assert.match(vernsWords, /On Doug's page, waiting for his OK: 1 article and 2 social posts\. Not on his page yet: 3 items\./);

@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
 import PostBody from "@/components/blog/PostBody";
 import { sanitySized } from "@/lib/photos";
-import { anchorFor, reviewWhen, type ReviewArticle, type ReviewData, type ReviewSocialGroup, type ReviewSocialPost } from "@/lib/review-page";
+import { GUIDE_PATH, GUIDE_TITLE } from "@/lib/office-guide";
+import { anchorFor, editPath, reviewWhen, type ReviewArticle, type ReviewData, type ReviewSocialGroup, type ReviewSocialPost } from "@/lib/review-page";
 
 /** Vern's button (app/review/[key]/actions.ts), passed in so the page can be rendered without Next (test:review). */
 export type ReviewAction = (formData: FormData) => void | Promise<void>;
@@ -12,9 +13,13 @@ export type ReviewAction = (formData: FormData) => void | Promise<void>;
  * words about articles and social posts, never how they are made or where
  * they wait (lib/review-page.ts has that). Vern's link: the same page with
  * everything waiting, the checks' notes, and a button on each item that puts
- * it on Doug's page or takes it off. No links out of the page except the
- * article bodies' own, and the posts' web addresses print as text, so a look
- * at a post is never counted as a visit from social media.
+ * it on Doug's page or takes it off. The posts' web addresses print as text,
+ * so a look at a post is never counted as a visit from social media. The only
+ * links the page itself draws go to the Studio (13 Nov 2026; Doug, on the
+ * review email: "How do I edit the other posts?"): "Edit this article" on each
+ * card, straight to that article's form (lib/review-page.ts editPath), and,
+ * on Doug's page, "Where things are": the Studio and its one-page guide.
+ * Still no buttons on his page and nothing about how the work is made.
  */
 export default function ReviewView({ data, now, actionKey, action }: { data: ReviewData; now: Date; actionKey?: string; action?: ReviewAction }) {
   const agency = data.audience === "agency";
@@ -58,7 +63,7 @@ export default function ReviewView({ data, now, actionKey, action }: { data: Rev
             <p className="eyebrow">For your review</p>
             <h1 className="h1-page mt-3">Ready to go out</h1>
             <p className="text-lg mt-5 max-w-2xl" style={{ color: "var(--text-secondary)" }}>
-              The next articles for hubss.com and posts for HUB&apos;s social channels. Nothing on this page is public yet. Reply to Vern with OK, or with anything you&apos;d change.
+              The next articles for hubss.com and posts for HUB&apos;s social channels. Nothing on this page is public yet. Reply to Vern with OK, or with anything you&apos;d change. To change an article yourself, press <strong>Edit this article</strong> on its card.
             </p>
             <p className="mt-4 text-[15px]" style={{ color: "var(--text-muted)" }}>
               {failed ? "Part of this page couldn't be loaded just now." : summaryLine(waitingArticles, waitingPosts)} As of {reviewWhen(now.toISOString())}, Toronto time.
@@ -100,13 +105,70 @@ export default function ReviewView({ data, now, actionKey, action }: { data: Rev
           )}
         </section>
 
-        <p className="mt-16 pt-6 text-[15px]" style={{ borderTop: "1px solid var(--border-color)", color: "var(--text-secondary)" }}>
-          {agency
-            ? "Keep this link to yourself: it can put things on Doug's page. After his OK: Publish (or \"Scheduled\" on) in Studio. Social posts queue themselves (a held one: Add to Queue in Buffer)."
-            : "This page always shows what is waiting, so keep the link. Once something is out, it leaves the page."}
-        </p>
+        {agency ? (
+          <p className="mt-16 pt-6 text-[15px]" style={{ borderTop: "1px solid var(--border-color)", color: "var(--text-secondary)" }}>
+            Keep this link to yourself: it can put things on Doug&apos;s page. After his OK: Publish (or &quot;Scheduled&quot; on) in Studio. Social posts queue themselves (a held one: Add to Queue in Buffer).
+          </p>
+        ) : (
+          <WhereThingsAre />
+        )}
       </main>
     </div>
+  );
+}
+
+/**
+ * Doug's page only: the places HUB needs, and nothing else (13 Nov 2026: he
+ * asked for fewer places to keep track of). Two: this page and the Studio.
+ * The email is how he hears there is something here.
+ */
+function WhereThingsAre() {
+  const row = "pt-5 mt-5";
+  const term = "text-[17px] font-bold";
+  const line = "mt-1 text-[15px] max-w-2xl";
+  return (
+    <section aria-labelledby="review-where" className="mt-16 pt-8" style={{ borderTop: "1px solid var(--border-color)" }}>
+      <h2 id="review-where" className="h2-sub">Where things are</h2>
+      <dl>
+        <div className="mt-6">
+          <dt className={term}>This page</dt>
+          <dd className={line} style={{ color: "var(--text-secondary)" }}>
+            What is waiting for your OK, and what is about to go out. The link never changes, so keep it. Once something is out, it leaves the page.
+          </dd>
+        </div>
+        <div className={row} style={{ borderTop: "1px solid var(--border-color)" }}>
+          <dt className={term}>Studio</dt>
+          <dd className={line} style={{ color: "var(--text-secondary)" }}>
+            Where HUB changes the site: its words and photos, its articles and job photos.
+            <span className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
+              <StudioLink href="/studio">Open Studio</StudioLink>
+              <StudioLink href={GUIDE_PATH}>{GUIDE_TITLE}</StudioLink>
+            </span>
+          </dd>
+        </div>
+        <div className={row} style={{ borderTop: "1px solid var(--border-color)" }}>
+          <dt className={term}>Email from hubss.com</dt>
+          <dd className={line} style={{ color: "var(--text-secondary)" }}>
+            One note when something new is waiting here. Reply to it and it reaches Vern.
+          </dd>
+        </div>
+      </dl>
+      <p className="mt-8 text-[15px]" style={{ color: "var(--text-secondary)" }}>
+        Nothing else needs a login from you.
+      </p>
+    </section>
+  );
+}
+
+/** A text link into the Studio, in its own tab so the review page stays open; 44px tall under a finger. */
+function StudioLink({ href, children }: { href: string; children: ReactNode }) {
+  return (
+    <a href={href} target="_blank" rel="noopener" className="link-arrow" data-tap="44">
+      {children}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M5 12h14M12 5l7 7-7 7" />
+      </svg>
+    </a>
   );
 }
 
@@ -207,6 +269,12 @@ function ArticleCard({ article, agency, controls }: { article: ReviewArticle; ag
             </div>
           </details>
         )}
+        <p className="mt-4">
+          <StudioLink href={editPath(article.id)}>Edit this article</StudioLink>
+        </p>
+        <p className="mt-1 text-[14px] max-w-xl" style={{ color: "var(--text-muted)" }}>
+          Opens it in Studio. Change any word or photo: it saves as you go, and this page shows the change.
+        </p>
         {agency && article.notes && (
           <details className="mt-5">
             <summary className="cursor-pointer text-[15px] font-semibold" style={{ color: "var(--text-secondary)" }}>

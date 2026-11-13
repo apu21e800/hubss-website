@@ -11,6 +11,9 @@
 import assert from "node:assert/strict";
 import { mapProjects, TOUR_IDS } from "../lib/map-projects";
 import { idFor, imageFor, libraryDue, libraryPick, libraryQueue, nextLibraryItem, SITE, weekStart } from "../lib/social-library";
+import { readFileSync } from "node:fs";
+import { products } from "../lib/products";
+import { HELD_SYSTEMS, isHeldSystem } from "../lib/content-hold";
 
 let failures = 0;
 function check(name: string, fn: () => void) {
@@ -170,6 +173,18 @@ check("not if it, or its article, has already been posted", () => {
 
 console.log("\nThe first six library posts, in order:");
 for (const i of queue.slice(0, 6)) console.log(`  ${i.key.padEnd(48)} -> ${i.path}`);
+
+console.log("\nOut of the mix for now (lib/content-hold.ts; Doug, 13 Nov 2026)");
+check("no library post is about a held system: not its page, not a job done with it", () => {
+  for (const slug of HELD_SYSTEMS) assert.ok(!queue.some((i) => i.key === `lib:system:${slug}`), `${slug}'s page is in the queue`);
+  const heldNames = products.filter((p) => isHeldSystem(p.slug)).map((p) => p.name);
+  assert.equal(heldNames.length, HELD_SYSTEMS.length);
+  for (const item of queue.filter((i) => i.key.startsWith("lib:project:"))) {
+    for (const name of heldNames) assert.ok(!item.text.includes(`System: ${name}.`), `${item.key} was done with ${name}`);
+  }
+  const source = readFileSync(new URL("../lib/social-library.ts", import.meta.url), "utf8");
+  assert.equal((source.match(/isHeldSystem\(/g) ?? []).length, 2, "the system pages and the jobs both ask");
+});
 
 if (failures) {
   console.log(`\n${failures} failed`);

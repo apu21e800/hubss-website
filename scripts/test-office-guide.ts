@@ -81,8 +81,10 @@ check("every bold label is one the Studio or Doug's email prints", () => {
     readFileSync(path.join(ROOT, "sanity/components/GuidePane.tsx"), "utf8"),
     readFileSync(path.join(ROOT, "sanity/components/ForReviewInput.tsx"), "utf8"),
     readFileSync(path.join(ROOT, "sanity/components/JobPhotosInput.tsx"), "utf8"),
-    // Doug's email ("Read the article"), which the review step starts from.
+    // Doug's email ("Read the article"), which the review step starts from,
+    // and his review page's cards ("Edit this article").
     readFileSync(path.join(ROOT, "lib/review-notify.ts"), "utf8"),
+    readFileSync(path.join(ROOT, "components/review/ReviewView.tsx"), "utf8"),
   ].join("\n");
   // Studio's own buttons, which no file of ours prints.
   const own = new Set(["+", "Publish"]);

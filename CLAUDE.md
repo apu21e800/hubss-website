@@ -102,6 +102,22 @@ hubss-website/
   Since 28 Oct 2026 `forDoug:` in the front matter (a line or a list) adds
   "To confirm before Publish: ..." lines to that note, in plain words, for
   what only Doug can settle (a town, a system, an artist's credit).
+  Since 13 Nov 2026 (the Midland crosswalk): `photos:`, a list of
+  { file, alt, caption } in the repo, uploaded on the real run and set after
+  the body under "The job in photographs" as a job photos article has them,
+  and `sources:`, one line for the Studio note on where the facts are from
+  when that is a client's own notes and photos. A draft's photos live in
+  content/drafts/photos/<slug>/, never in /public before it is published.
+- Midland's Veterans Memorial Crosswalk (13 Nov 2026): Doug asked the Town
+  for photos and forwarded its notes ("good images and story"); Vern: "let's
+  get that live too". content/drafts/midland-veterans-memorial-crosswalk.md
+  with its fact record and four of the Town's photos (two with a house
+  number and a business sign blurred, one cut to leave out a truck; Spot
+  Edit, the pavement untouched). Four `forDoug` questions: TrafficPatterns
+  or TrafficPatternsXD, who installed it, whether the Town's project
+  administrator may be named and quoted, and a fifth photo of the crew. On
+  Vern's PC: the dry run, the real run, then Send for review. Once it is
+  live its social posts follow by themselves, and the job goes on the map.
 - The 40 map jobs without a write-up (Vern, 27 Oct: "every pin needs its own
   landing page") have one each in content/drafts/ (28 Oct 2026), written from
   the map record, the printed page and the published posts, checked by two
@@ -976,9 +992,10 @@ nailing the brand voice, he will leave it in our domain." lib/review-first.ts:
   minutes they were read in and never served stale (the cache key is the
   five-minute bucket); the page prints when they were read. Posts are
   matched to their records by Buffer's ids. Plain words on Doug's page: no
-  Buffer, Studio, queue, AI or automation, no buttons (`npm run test:review`
+  Buffer, queue, AI or automation, no buttons (`npm run test:review`
   renders it and fails on any); a post's web address prints as text, so his
-  look is never a social visit in GA4.
+  look is never a social visit in GA4. The Studio is named since 13 Nov 2026
+  ("Editing from the review page", below).
 - The keys: 32 characters of an HMAC of REVIEW_SECRET, else CRON_SECRET, else
   the Sanity write token, one label per link, so neither can be made from the
   other; compared as bytes in constant time; any other key gets the site's
@@ -1086,6 +1103,57 @@ use from a client side experience too."
   says "Photos for social", "Story in: to be written up" or "Written up as an
   article". These words assume Doug reviews first: change them if
   REVIEW_FIRST goes off.
+
+## Editing from the review page (13 Nov 2026)
+Doug, 13 Nov, replying to the review email at 9:12 his time: "How do I edit
+the other posts?" Nobody answered until the afternoon. The page could be
+read and not changed, and the way in was a search through the Studio's list.
+He also asked for fewer places to keep track of: two is the answer, this
+page and the Studio.
+- Every article card, on both links, has **Edit this article**: the
+  Studio's own address for that article's form (lib/review-page.ts
+  `editPath`, the intent link the editors' emails carry, without the host),
+  in its own tab, with one line saying what it does. The Studio asks for a
+  sign-in when there isn't one, then opens the article; a change saves as it
+  is typed and the review page shows it on the next load.
+- Doug's page ends with **Where things are**: this page, the Studio (with
+  links to it and to the one-page guide, /studio/guide) and the email, then
+  "Nothing else needs a login from you." It replaced the one-line footer.
+- The guide's "Check an article before it goes out" has the step
+  (lib/office-guide.ts; `npm run test:studio` finds the label in
+  ReviewView.tsx).
+- What the page's test holds now: every link the page draws goes to
+  /studio (no host), none of Buffer, Sanity, Vercel, Figma, AI or
+  automation is named, no buttons, no forms. The review email is unchanged
+  (its wording is Vern's to approve).
+- Not built, the next step if Vern wants it: an **OK** on each card that
+  records HUB's yes and tells Vern (today the OK is a reply to the email),
+  and whether an OK should schedule the article by itself.
+
+## Repair materials are out of the mix (13 Nov 2026)
+Doug, 13 Nov, on the review email that listed two repair articles: "Please
+leave the repair materials out of the mix for now." Vern: "so no blog posts
+about repair materials." lib/content-hold.ts is the rule (no imports):
+`HELD_SYSTEMS` (chipfill, aggrefill, fast-patch) and what counts as the
+subject where no system is named (`aboutHeld`: cracks and joints, potholes,
+patching, cold patch; never "repair" alone, which is every system's upkeep).
+- The planner is told (`HELD_RULE` in its instructions; the held systems and
+  their jobs are left out of what it is shown) and `vetIdeas` drops an idea
+  about them. A held plan item is not counted as "left".
+- The drafter's pick, its count of what is left and the next title pass over
+  a held plan item (`WAITING` in lib/field-note-pipeline.ts, `$held`). A
+  person can still ask for one by its id.
+- The weekly library post skips a held system's page and a job done with it.
+- Not touched: the product pages, flyers, menus and specification library
+  (what HUB sells is unchanged), an article a person publishes in the Studio,
+  and a Job photos post (Doug's own).
+- As found on 13 Nov: nothing about the family was published, scheduled or
+  in the social calendar. Two drafts existed, both on Doug's page that
+  morning ("Asphalt crack filler ...", "Asphalt patch: cold patch ..."; their
+  plan items are "drafted"); Vern takes them off his page and they stay
+  unpublished. content/drafts/cold-patch-asphalt.md is kept, on hold.
+- To lift it: empty `HELD_SYSTEMS` and take this section out.
+  `npm run test:planner`, `npm run test:social`.
 
 ## A customer's details hold the article (24 Oct 2026)
 Ported from Square One (its rule of 20 Oct 2026) before more job posts become

@@ -52,6 +52,7 @@ import { PROVINCES } from "@/lib/social-library";
 import { documentedJobs, QUESTIONS_BRIEF } from "@/lib/field-note-facts";
 import { EVIDENCE } from "@/lib/insights-evidence";
 import { longDate, MOMENTS, momentLine, momentPlanned, momentsWithin, nextDate, type Moment } from "@/lib/insights-calendar";
+import { aboutHeld, HELD_RULE, isHeldSystem, touchesHeld } from "@/lib/content-hold";
 
 /** Top up when fewer than this many Ideas and Ready items are left: three weeks at two a week. */
 export const PLAN_MIN = 6;
@@ -284,6 +285,8 @@ export function vetIdeas(
     if (/\d/.test(title) || /\d/.test(searchPhrase)) { drop("a figure in the title or search phrase"); continue; }
     if (VS.test(title)) { drop("a \"vs\" title (a choice is what to specify where)"); continue; }
     if (LOADED.test(title)) { drop("the title makes a claim"); continue; }
+    // Out of the mix for now (lib/content-hold.ts): by its systems, its jobs' systems, or its subject.
+    if (touchesHeld(r.systems ?? []) || aboutHeld(title, searchPhrase, ...(r.questions ?? []))) { drop("about the repair materials, which are out of the mix for now"); continue; }
     const same = repeats({ title, searchPhrase }, seen);
     if (same) { drop(`too close to "${same}"`); continue; }
     const _id = `storyIdea-auto-${cleanSlug(title)}`;
@@ -296,7 +299,7 @@ export function vetIdeas(
     if (r.kind === "roundup") {
       const picked = [...new Set(r.jobIds ?? [])]
         .map((id) => jobs.get(id))
-        .filter((j): j is PlannerJob => !!j && !used.has(j.id))
+        .filter((j): j is PlannerJob => !!j && !used.has(j.id) && !isHeldSystem(j.systemSlug))
         .slice(0, 6);
       if (picked.length < 3) { drop("a roundup needs three documented jobs no other plan item features"); continue; }
       const systemSlugs = [...new Set(picked.map((j) => j.systemSlug))];
@@ -382,6 +385,7 @@ MOMENTS: for each moment listed, propose exactly one article timed for it (set m
 ${GLOSSARY_FOR_TITLES}
 
 Rules:
+- ${HELD_RULE}
 - Nothing that EXISTING already covers: the same question or search intent counts as covered, whatever the words.
 - Search phrases are what a real person types: plain, two to five words, lower case, no brand names unless people search the brand.
 - Working titles in sentence case and Canadian English, no em dash, no figures, no exclamation mark, no hype, no claim (best, only, longest), no "vs".
@@ -398,7 +402,7 @@ export async function proposeIdeas(ctx: {
   onlyMoments?: boolean;
 }): Promise<RawIdea[]> {
   const client = new Anthropic({ timeout: TIMEOUT_MS, maxRetries: 0 });
-  const systems = Object.entries(PRODUCT_CATALOGUE).map(([slug, e]) => {
+  const systems = Object.entries(PRODUCT_CATALOGUE).filter(([slug]) => !isHeldSystem(slug)).map(([slug, e]) => {
     const name = products.find((p) => p.slug === slug)?.name ?? slug;
     return `- ${slug}: ${name}. ${e.subhead} Where it goes: ${e.uses.join(", ")}.`;
   });
@@ -428,7 +432,7 @@ export async function proposeIdeas(ctx: {
     ...apps,
     "",
     "JOBS (documented, with no article or roundup yet; id | job | place | system | application | year):",
-    ...ctx.jobs.map((j) => `- ${j.id} | ${j.title} | ${j.place} | ${j.system} | ${j.application} | ${j.year ?? ""}`),
+    ...ctx.jobs.filter((j) => !isHeldSystem(j.systemSlug)).map((j) => `- ${j.id} | ${j.title} | ${j.place} | ${j.system} | ${j.application} | ${j.year ?? ""}`),
     "",
     "EXISTING (articles and plan items; don't repeat them):",
     ...ctx.existing.map((e) => `- ${e.title}${e.phrases.length ? ` [${e.phrases.slice(0, 3).join("; ")}]` : ""}`),
@@ -461,10 +465,11 @@ export async function topUpPlan(
   posts: readonly { title: string; keywords?: string[] }[],
   now: Date = new Date()
 ): Promise<{ added: string[]; dropped: { title: string; why: string }[] } | null> {
-  const plan = await client.fetch<{ title?: string; status?: string; searchPhrase?: string; brief?: string }[]>(
-    `*[_type == "storyIdea" && !(_id in path("drafts.**"))]{ title, status, searchPhrase, brief }`
+  const plan = await client.fetch<{ title?: string; status?: string; searchPhrase?: string; brief?: string; systems?: (string | null)[] | null }[]>(
+    `*[_type == "storyIdea" && !(_id in path("drafts.**"))]{ title, status, searchPhrase, brief, "systems": systems[]._ref }`
   );
-  const left = plan.filter((p) => p.status === "idea" || p.status === "ready").length;
+  // A held item (lib/content-hold.ts) is not one the drafter will take, so it is not "left".
+  const left = plan.filter((p) => (p.status === "idea" || p.status === "ready") && !touchesHeld(p.systems ?? [])).length;
   // Moments coming up with no article in the plan yet (any status: one written
   // or published for this date counts).
   const moments = momentsWithin(now, MOMENT_FROM, MOMENT_TO).filter((m) => !momentPlanned(m, now, plan.map((p) => p.brief)));

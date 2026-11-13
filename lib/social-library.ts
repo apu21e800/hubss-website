@@ -29,6 +29,7 @@ import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
 import { productImages, applicationImages } from "@/lib/featured-images";
 import { isSanityImage } from "@/lib/photos";
+import { isHeldSystem } from "@/lib/content-hold";
 
 export const SITE = "https://hubss.com";
 
@@ -70,6 +71,8 @@ const productBy = (name: string) => products.find((p) => p.name === name);
 function projectItem(p: MapProject): LibraryItem | null {
   if (!p.images.length) return null;
   const product = productBy(p.product);
+  // Out of the mix for now (lib/content-hold.ts): a job done with a held system is not posted.
+  if (isHeldSystem(product?.slug)) return null;
   const province = PROVINCES[p.province] ?? p.province;
   const about = product ? PRODUCT_CATALOGUE[product.slug]?.description : undefined;
   const text = [
@@ -107,7 +110,7 @@ function projectItem(p: MapProject): LibraryItem | null {
 function systemItems(): LibraryItem[] {
   return products.flatMap((product) => {
     const entry = PRODUCT_CATALOGUE[product.slug];
-    if (!entry) return [];
+    if (!entry || isHeldSystem(product.slug)) return [];
     const hero = productImages[product.slug];
     return [{
       key: `lib:system:${product.slug}`,

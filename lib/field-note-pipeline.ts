@@ -43,6 +43,7 @@ import { FIELD_NOTE_TYPES } from "@/lib/field-notes-taxonomy";
 import { topUpPlan } from "@/lib/insights-planner";
 import type { MapProject } from "@/lib/map-projects";
 import type { SanityClient } from "@sanity/client";
+import { HELD_REFS, NOT_HELD_GROQ } from "@/lib/content-hold";
 
 export interface Linked { _id: string; name: string; slug: string; hero?: { asset?: string | null; alt?: string | null } | null }
 export interface Idea {
@@ -137,6 +138,14 @@ async function galleryFraming(client: SanityClient, ref: string): Promise<PhotoF
   }
 }
 
+/**
+ * The plan items the drafter may take: Ready or Idea, and not about a system
+ * that is out of the mix for now (lib/content-hold.ts; `$held` is HELD_REFS).
+ * A held item stays in the plan as it is, and a person can still ask for it
+ * by its id.
+ */
+export const WAITING = `_type == "storyIdea" && status in ["ready", "idea"] && !(_id in path("drafts.**")) && ${NOT_HELD_GROQ}`;
+
 export async function draftNextFieldNote(opts: { ideaId?: string } = {}): Promise<PipelineResult> {
   const started = Date.now();
   const client = sanityWriteClient();
@@ -147,8 +156,8 @@ export async function draftNextFieldNote(opts: { ideaId?: string } = {}): Promis
     client.fetch<Idea | null>(
       opts.ideaId
         ? `*[_type == "storyIdea" && _id == $id][0]${IDEA}`
-        : `*[_type == "storyIdea" && status in ["ready", "idea"] && !(_id in path("drafts.**"))] | order(select(status == "ready" => 0, 1) asc, coalesce(priority, 2) asc, _createdAt asc)[0]${IDEA}`,
-      { id: opts.ideaId ?? "" }
+        : `*[${WAITING}] | order(select(status == "ready" => 0, 1) asc, coalesce(priority, 2) asc, _createdAt asc)[0]${IDEA}`,
+      { id: opts.ideaId ?? "", held: HELD_REFS }
     );
   const idea = await pick();
   if (!idea && !opts.ideaId) {
@@ -193,9 +202,9 @@ export async function draftNextFieldNote(opts: { ideaId?: string } = {}): Promis
   console.log(`[field-notes] drafted "${doc.title}" as ${doc._id} from ${idea._id}; lead job: ${lead ? `${lead.job.id} (${lead.ref ? `its photo${framing?.hotspot ? ", framed in Studio" : ""}` : "stand-in photo: its own is not on Sanity"})` : "none"}; fact check: ${check.verdict} (${check.unsupported.length}); style: ${style.left.length} of ${style.flagged} left${style.error ? ` (rewrite failed: ${style.error})` : ""}`);
 
   const { ideasLeft, next } = await client.fetch<{ ideasLeft: number; next: string | null }>(`{
-    "ideasLeft": count(*[_type == "storyIdea" && status in ["ready", "idea"] && !(_id in path("drafts.**"))]),
-    "next": *[_type == "storyIdea" && status in ["ready", "idea"] && !(_id in path("drafts.**"))] | order(select(status == "ready" => 0, 1) asc, coalesce(priority, 2) asc, _createdAt asc)[0].title
-  }`);
+    "ideasLeft": count(*[${WAITING}]),
+    "next": *[${WAITING}] | order(select(status == "ready" => 0, 1) asc, coalesce(priority, 2) asc, _createdAt asc)[0].title
+  }`, { held: HELD_REFS });
   const notified = await notify(doc.title, doc.excerpt, `blogpost-${slug}`, check, style, { picked, ideaTitle: idea.title, ideasLeft, next });
   // After the email, so a slow planner can't cost it.
   if (Date.now() - started < TOP_UP_BEFORE_MS) await keepPlanStocked(client);

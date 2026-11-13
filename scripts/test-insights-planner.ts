@@ -17,6 +17,9 @@ import { goodQuestion, LEAD_JOB_QUESTION, repeats, roundupJobs, vetIdeas, words,
 import { factsBlock, QUESTIONS_BRIEF } from "../lib/field-note-facts";
 import { dateIn, MOMENTS, momentKey, momentPlanned, momentsWithin, nextDate } from "../lib/insights-calendar";
 import { EVIDENCE, evidenceFor } from "../lib/insights-evidence";
+import { aboutHeld, HELD_REFS, HELD_RULE, HELD_SYSTEMS, isHeldSystem, NOT_HELD_GROQ, touchesHeld } from "../lib/content-hold";
+import { readFileSync } from "node:fs";
+import { products } from "../lib/products";
 
 let failures = 0;
 function check(name: string, fn: () => void) {
@@ -347,6 +350,61 @@ check("the writer's facts carry the study with its limits and source, only when 
   assert.ok(f.includes("Limits (give these with the finding)"));
   assert.ok(f.includes("https://dot.ca.gov/"));
   assert.ok(!factsBlock({ productSlugs: ["chipfill"], applicationSlugs: ["residential-driveways"] }).includes("## Outside evidence"));
+});
+
+console.log("\nOut of the mix for now (lib/content-hold.ts; Doug, 13 Nov 2026)");
+check("the repair family is held, with or without Sanity's prefix, and nothing else is", () => {
+  for (const s of ["chipfill", "aggrefill", "fast-patch", "product-chipfill", " Product-Fast-Patch "]) assert.equal(isHeldSystem(s), true, s);
+  for (const s of ["streetbond", "traffic-patterns-xd", "product-premark", "", null, undefined]) assert.equal(isHeldSystem(s), false, String(s));
+  assert.equal(touchesHeld(["streetbond", "product-aggrefill"]), true);
+  assert.equal(touchesHeld(["streetbond", null]), false);
+  assert.deepEqual([...HELD_REFS], HELD_SYSTEMS.map((s) => `product-${s}`));
+  // Every held slug is a real product: a typo here would hold nothing.
+  for (const s of HELD_SYSTEMS) assert.ok(products.some((p) => p.slug === s), `${s} is not a product`);
+});
+check("the subject is caught where no system is named, and upkeep is not", () => {
+  for (const t of [
+    "Asphalt crack filler: what to use on a crack, a joint and a small pothole",
+    "Asphalt patch: cold patch, hot mix or a permanent repair product",
+    "pothole repair before winter",
+    "What fills cracks and joints in a parking lot?",
+    "Fast Patch on a bridge deck",
+    "Concrete repair for a plaza",
+    "Patching a utility cut",
+  ]) assert.equal(aboutHeld(t), true, t);
+  for (const t of [
+    "How crosswalk markings survive plow season",
+    "Traffic calming measures that start with the surface",
+    "What should a specification say about upkeep and repair?",
+    "Three ways to resurface an asphalt driveway",
+    "Choosing a stamped asphalt pattern",
+    "Thermoplastic pavement markings for bike lanes, crosswalks and stop bars",
+  ]) assert.equal(aboutHeld(t), false, t);
+});
+check("the planner drops an idea about it: by its systems, its title, its search phrase or a question", () => {
+  const cases: RawIdea[] = [
+    guide({ title: "Filling the gaps a winter leaves in a parking lot", searchPhrase: "parking lot winter damage", systems: ["chipfill", "streetbond"] }),
+    guide({ title: "What to use on a small pothole", searchPhrase: "small hole in a driveway" }),
+    guide({ title: "Looking after a parking lot through the winter", searchPhrase: "asphalt crack filler" }),
+    guide({ title: "Looking after a plaza through the winter", searchPhrase: "plaza winter upkeep", questions: ["What fills cracks and joints before the frost?", "How long does a coating last on a plaza?", "What does a plow do to a plaza?"] }),
+  ];
+  for (const c of cases) {
+    const { docs, dropped } = vet([c]);
+    assert.equal(docs.length, 0, c.title);
+    assert.match(dropped[0].why, /repair materials, which are out of the mix for now/, c.title);
+  }
+  assert.equal(vet([guide()]).docs.length, 1, "an ordinary guide still goes in");
+});
+check("the model is told, and the drafter's pick and its count leave a held item where it is", () => {
+  const planner = readFileSync(new URL("../lib/insights-planner.ts", import.meta.url), "utf8");
+  assert.ok(planner.includes("- ${HELD_RULE}"), "the rule is in the planner's instructions");
+  assert.match(HELD_RULE, /ChipFill, AggreFill, Fast Patch DPR/);
+  const pipeline = readFileSync(new URL("../lib/field-note-pipeline.ts", import.meta.url), "utf8");
+  assert.ok(pipeline.includes("&& ${NOT_HELD_GROQ}`"), "WAITING carries the condition");
+  assert.equal((pipeline.match(/\$\{WAITING\}/g) ?? []).length, 3, "the pick, the count of what is left and the next title");
+  assert.equal((pipeline.match(/held: HELD_REFS/g) ?? []).length, 2, "both queries are given $held");
+  // A plan item with no systems at all is not held (coalesce), and one of several held systems is enough.
+  assert.match(NOT_HELD_GROQ, /^coalesce\(count\(\(systems\[\]\._ref\)\[@ in \$held\]\), 0\) == 0$/);
 });
 
 if (failures) {

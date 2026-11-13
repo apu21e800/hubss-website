@@ -296,7 +296,9 @@ help create your vision." It is his to change in Studio, on main.
   product's name no longer runs off a 320 or 360px phone (the `.h1-hero` step
   alone); #146, the home page's three entry cards fetch on intent.
 - Shown to Vernon: the page "HUBSS 2.0 first slice" (before and after, three
-  calls), linked from the 21e8 Motherboard with the keyed preview.
+  calls), linked from the 21e8 Motherboard with the keyed preview. Published
+  again after the review's fixes (pictures from commit 6e18172), with the two
+  PRs to main and the review's verdict on it.
 - Tokens: the colour jobs, one dark list and one light list, the night band,
   the classic dark.
 - The type scale and the phone fixes above.
@@ -336,5 +338,22 @@ Left for the template passes:
 3. The rollout: every other template; images (one set of ratios, crops from
    the hotspot, captions under the photo, placeholders); the blog; the voice
    (docs/VOICE.md); share cards; the social calendar's next ten posts.
+
+   Two weight findings for the image pass, measured on hubss.com's home page
+   with a 390x844 phone (13 Nov 2026): it opens at 1,562 KB at 3x and 924 KB
+   at 2x.
+   - The applications band's first three tiles (crosswalks, commercial spaces,
+     parks and paths) are fetched when the page opens, 482 KB at 3x, though
+     the band is three screens down. They are `loading="eager"` on purpose
+     (components/sections/ApplicationsGrid.tsx; QA, 28 Sep 2026: lazy left an
+     empty box for a second after each swipe of the row). The fix that keeps
+     both: fetch them as the band comes near, not at open.
+   - Every card photo a 3x phone fetches is the 1200px file, for a card about
+     310px wide (next.config.ts offers 640, 828, 1200). Serving cards at about
+     2x would take the five on the first load from 730 KB to roughly half. The
+     system cards' `sizes` also says 100vw for a card that is 82vw: at 2x that
+     picks 828 where 640 would do.
+   Neither is changed yet. Both want before-and-after pictures on a real 3x
+   screen, and the second touches which variants Vercel makes.
 4. The proof: hubss.com and the preview measured the same way, then the page
    "What 2.0 changes" for Cleve and Doug.

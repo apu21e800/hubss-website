@@ -184,15 +184,17 @@ band).
 ### Fetching ahead only when reached for (`components/ui/IntentLink.tsx`)
 
 A plain Link fetches its page once it is within 200px of the screen, and that
-page's first photographs come with it. Measured on hubss.com, a 390x844 phone
-at 3x, the home page read to its foot: 3,015 KB, of which 598 were for other
-pages (467 KB of photographs, 131 KB of page data). The three entry cards
-under the hero sit just below the first screen. The /products card alone
-brought 13 KB of page and 355 KB of its three card photographs. On an
-844px-tall phone hubss.com's card is 4px outside that distance; on any taller
-phone it is inside. On this branch the page above the cards is shorter, so it
-was inside at 844 too, and the home page measured 370 KB heavier on load until
-this was found.
+page's first photographs come with it. The home page's three entry cards sit
+just under the first screen. Measured on hubss.com on 13 Nov 2026 with
+`scripts/hubss-2/fetch-ahead.mjs`, in windows the size real browsers give,
+"for other pages" being route data plus the photographs those routes ask for:
+
+| Window | When | hubss.com | With IntentLink |
+|---|---|---|---|
+| Phone (390x664, 412x785, 430x833) | after the first 400px flick | 414 KB, 356 of it /products' three card photos | 0 |
+| Tablet, 768x954 | as the page opens | 228 KB | 0 |
+| Laptop, 1440x789 | as the page opens | 149 KB | 37 KB |
+| Phone, 390x844, scripted read to the foot | at the foot | 636 KB | 196 KB |
 
 The three cards now fetch on a pointer, a finger or the keyboard's focus
 (Next's own "hover-triggered prefetch"). Checked in a browser: nothing fetched
@@ -201,10 +203,19 @@ the page. The same change is PR #146 to main, waiting on Vernon's go (the two
 copies of IntentLink.tsx are the same file, so main merges back cleanly; the
 entry cards' file will ask for the branch's side).
 
+How it was found, and the lesson: `weigh.mjs` uses a 390x844 window, and on
+this branch the home page measured 370 KB heavier on load, because the page
+above the cards is shorter and the /products card had come inside the 200px
+(on hubss.com it sat 4px outside at that height). The first write-up then said
+phones fetched it "before the visitor had moved". That was wrong: 844px is the
+phone's whole screen, and its browser shows 664 to 745px of page, so on a real
+phone it comes with the first flick. Measure anything that depends on what is
+near the screen in real window sizes.
+
 Not changed: every other link still fetches as it comes near the screen. For
 the rollout's weight pass, the same treatment lower down the home page would
-take off most of what is left of that 598 KB. It trades how quick a tap feels
-against how much a phone downloads, so it gets measured first.
+take off most of what is left. It trades how quick a tap feels against how
+much a phone downloads, so it gets measured first.
 
 ## The preview
 
@@ -235,6 +246,7 @@ against how much a phone downloads, so it gets measured first.
 | `labels.mjs` | No orange small-capitals label outside a kicker or a classic block. |
 | `seo-same.mjs` | What search reads is the same as on hubss.com: title, description, canonical, robots, share tags, h1, structured data, images with their alt text, link addresses. |
 | `a11y.mjs` | The accessibility checker at every impact, and the tap targets, beside hubss.com. |
+| `fetch-ahead.mjs` | What the home page fetches for pages the visitor has not opened, in real window sizes, at load and after a first flick. |
 | `type-census.mjs` | Every heading's size and line count at eight widths. |
 | `shoot.mjs` | The before-and-after pictures. |
 

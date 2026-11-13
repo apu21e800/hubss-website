@@ -147,12 +147,15 @@ export function screenByRules(input: ScreenInput): ScreenVerdict {
  * While either half could hold one, a message of "@" signs made the pattern
  * try every split of every run: eight times longer for each doubling, eleven
  * to thirteen seconds for 4,000 of them, and the form takes 20,000 characters.
- * The lookbehind starts a match only where a run of address characters starts,
- * which is where the leftmost match begins anyway, so a long run with no "@"
- * is read once instead of once from each of its characters (0.2 s at 20,000
- * without it). `npm run test:forms` times redact() at 20,000 characters.
+ * `npm run test:forms` times redact() at that length.
+ *
+ * Do not add a rule about where a match may start (a lookbehind for the start
+ * of a word was tried and taken out the same day): two addresses joined by a
+ * character an address can hold, "a@city.ca/b@city.ca", are two matches, and
+ * the second starts in the middle of the run. It would have gone to the model
+ * unredacted.
  */
-const EMAIL_IN_TEXT = /(?<![^\s<>()"',;:@])[^\s<>()"',;:@]+@[^\s<>()"',;:@]+\.[a-z]{2,}/gi;
+const EMAIL_IN_TEXT = /[^\s<>()"',;:@]+@[^\s<>()"',;:@]+\.[a-z]{2,}/gi;
 const PHONE_IN_TEXT = /(?<![\d-])(?:\+?1[\s.-]?)?(?:\(\d{3}\)|\d{3})[\s.-]?\d{3}[\s.-]?\d{4}(?!\d)(?:\s*(?:x|ext\.?)\s*\d{1,5})?/gi;
 
 /** Phone numbers and email addresses out of free text before it leaves the site. */

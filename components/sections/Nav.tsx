@@ -502,7 +502,7 @@ function MenuGroup({ label, note, items, pathname, onClose }: { label: string; n
       <div className="flex items-center gap-3.5 pb-2">
         <GroupPicture label={label} compact />
         <div className="min-w-0">
-          <h3 id={id} className="uppercase" style={{ color: ACCENT, fontFamily: "var(--font-inter), Inter, system-ui, sans-serif", fontSize: 12, fontWeight: 700, letterSpacing: "0.16em", lineHeight: 1.3 }}>
+          <h3 id={id} className="uppercase" style={{ color: "var(--text-muted)", fontFamily: "var(--font-inter), Inter, system-ui, sans-serif", fontSize: 12, fontWeight: 700, letterSpacing: "0.16em", lineHeight: 1.3 }}>
             {label}
           </h3>
           {note && <p className="mt-1 text-[13px] leading-snug" style={{ color: "var(--ink-50)" }}>{note}</p>}
@@ -552,7 +552,7 @@ function MenuCover({ pathname, onClose }: { pathname: string; onClose: () => voi
           className="absolute inset-0 h-full w-full object-cover"
         />
       </span>
-      <span className="mt-3 block text-[12px] font-bold uppercase tracking-[0.2em]" style={{ color: ACCENT }}>{kindOf(c.type)}</span>
+      <span className="mt-3 block text-[12px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--text-muted)" }}>{kindOf(c.type)}</span>
       <span className="font-display mt-1.5 block text-[21px] font-bold leading-[1.15] tracking-[-0.02em] text-balance" style={{ color: "var(--text-primary)" }}>
         {c.title}
       </span>

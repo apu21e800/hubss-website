@@ -40,18 +40,20 @@ export default function PricingStrip({
       style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}
       data-pricing-strip
     >
-      <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
+      <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "var(--orange)" }} />
       <p className="font-bold text-base mb-2" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
         {heading}
       </p>
+      {/* On a 320px phone the two numbers touched the edges of their boxes
+          (the reviewer, 13 Nov 2026): a step smaller under 360px. */}
       <div className="grid grid-cols-2 gap-2">
-        <a href={telHref(offices.east.phone)} className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
+        <a href={telHref(offices.east.phone)} className="rounded-lg px-2.5 min-[360px]:px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
           <span className="block text-[12px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>East</span>
-          <span className="block text-[15px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.east.phone}</span>
+          <span className="block text-[14px] min-[360px]:text-[15px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.east.phone}</span>
         </a>
-        <a href={telHref(offices.west.phone)} className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
+        <a href={telHref(offices.west.phone)} className="rounded-lg px-2.5 min-[360px]:px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
           <span className="block text-[12px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>West</span>
-          <span className="block text-[15px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.west.phone}</span>
+          <span className="block text-[14px] min-[360px]:text-[15px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.west.phone}</span>
         </a>
       </div>
       {/* One row from 390px up; on a 360px phone the Lunch & Learn wraps

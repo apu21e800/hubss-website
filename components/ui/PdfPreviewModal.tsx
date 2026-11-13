@@ -161,7 +161,7 @@ export default function PdfPreviewModal({
             {productLabel && (
               <p
                 className="text-[11px] font-bold tracking-[0.2em] uppercase mb-0.5"
-                style={{ color: "var(--accent-text-lg)" }}
+                style={{ color: "var(--text-muted)" }}
               >
                 {productLabel}
               </p>

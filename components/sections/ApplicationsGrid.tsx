@@ -98,10 +98,10 @@ export default function ApplicationsGrid({ applications: source, copy = HOMEPAGE
                 {copy.headingAccent && (
                   <>
                     {" "}
-                    {/* One colour, like the systems heading above it (13 Nov
-                        2026). It ran orange to yellow; orange is kept for
-                        what can be pressed. */}
-                    <span className="inline-block">{copy.headingAccent}</span>
+                    {/* The accent in HUB's one orange (13 Nov 2026; it ran
+                        orange to yellow), as on "Your Canvas." and "Lunch is
+                        on us." */}
+                    <span className="inline-block" style={{ color: "var(--orange)" }}>{copy.headingAccent}</span>
                   </>
                 )}
               </h2>

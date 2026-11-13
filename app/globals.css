@@ -63,9 +63,6 @@
   --color-charcoal: var(--charcoal);
   --color-amber:    #EAB308;
   --gradient-brand: linear-gradient(90deg, var(--orange), var(--orange));
-  --gradient-brand-vertical: linear-gradient(180deg, var(--orange), var(--orange));
-  --gradient-brand-subtle: linear-gradient(90deg, rgba(249,115,22,0.12) 0%, rgba(249,115,22,0.12) 100%);
-  --gradient-glow:  0 0 20px rgba(249,115,22,0.25);
   --bg-slate:       var(--night);
   --bg-slate-light: var(--night-raised);
   --color-blue-deep:  var(--night);
@@ -91,7 +88,6 @@
                    (they were Tailwind's blue-greys), and each clears 4.5:1
                    on the lightest surface it is painted on (#333331).
      --on-accent   words on an orange fill: Charcoal (never flips)
-     --on-dark     words on an element that is dark in every theme
      --accent*     the orange: the fill is #F97316 in every theme; orange
                    WORDS are brighter on dark and deeper on paper so small
                    labels still clear AA
@@ -115,7 +111,6 @@
   --bg-code: #2D2D2B;
   --bg-input: #232322;
   --bg-nav: rgba(32,32,31,0.97);
-  --bg-overlay: rgba(23,23,22,0.97);
   --text-primary: #F5F0EB;
   --text-body: #E2E0DB;
   --text-secondary: #B4B3AE;
@@ -123,9 +118,7 @@
   --text-faint: #A3A29D;
   --text-hint: #A3A29D;
   --on-accent: var(--charcoal-deep);
-  --on-dark: #F5F0EB;
   --accent: var(--orange);
-  --accent-bright: var(--orange-bright);
   --accent-text: var(--orange-bright);
   --accent-text-lg: var(--orange);
   --accent-soft-text: #FDBA74;
@@ -135,7 +128,6 @@
   --border-color: var(--charcoal-line);
   --border-strong: #3A3A38;
   --border-subtle: rgba(255,255,255,0.05);
-  --border-faint: rgba(255,255,255,0.03);
   --fill-subtle: rgba(255,255,255,0.07);
   --ink-02: rgba(255,255,255,0.02);
   --ink-025: rgba(255,255,255,0.025);
@@ -143,9 +135,7 @@
   --ink-04: rgba(255,255,255,0.04);
   --ink-05: rgba(255,255,255,0.05);
   --ink-06: rgba(255,255,255,0.06);
-  --ink-07: rgba(255,255,255,0.07);
   --ink-08: rgba(255,255,255,0.08);
-  --ink-09: rgba(255,255,255,0.09);
   --ink-10: rgba(255,255,255,0.1);
   --ink-12: rgba(255,255,255,0.12);
   --ink-14: rgba(255,255,255,0.14);
@@ -153,7 +143,6 @@
   --ink-16: rgba(255,255,255,0.16);
   --ink-18: rgba(255,255,255,0.18);
   --ink-20: rgba(255,255,255,0.2);
-  --ink-22: rgba(255,255,255,0.22);
   --ink-25: rgba(255,255,255,0.25);
   --ink-30: rgba(255,255,255,0.3);
   --ink-35: rgba(255,255,255,0.35);
@@ -163,13 +152,10 @@
   --ink-55: rgba(255,255,255,0.55);
   --ink-58: rgba(255,255,255,0.58);
   --ink-60: rgba(255,255,255,0.6);
-  --ink-62: rgba(255,255,255,0.62);
   --ink-65: rgba(255,255,255,0.65);
   --ink-68: rgba(255,255,255,0.68);
   --ink-70: rgba(255,255,255,0.7);
-  --ink-72: rgba(255,255,255,0.72);
   --ink-75: rgba(255,255,255,0.75);
-  --ink-78: rgba(255,255,255,0.78);
   --ink-80: rgba(255,255,255,0.8);
   --ink-85: rgba(255,255,255,0.85);
   --ink-90: rgba(255,255,255,0.9);
@@ -191,7 +177,6 @@
   --bg-card-hover: #1B283C;
   --bg-code: var(--night-raised);
   --bg-input: #0F1826;
-  --bg-overlay: rgba(8,13,22,0.97);
   --text-secondary: #B3BAC6;
   --text-muted: #A9B1BD;
   --text-faint: #A9B1BD;
@@ -221,13 +206,11 @@
   --bg-code: #242424;
   --bg-input: #1E1E1E;
   --bg-nav: rgba(7,11,18,0.96);
-  --bg-overlay: rgba(8,8,8,0.97);
   --text-body: #E0E0E0;
   --text-secondary: #868C98;
   --text-muted: #9CA3AF;
   --text-faint: #8B8B8B;
   --text-hint: #6F757D;
-  --on-accent: #FFFFFF;
   --border-color: #4D4D4C;
   --border-strong: #333333;
   /* Text that sets no colour of its own inherits the page's, which is 2.0's
@@ -236,10 +219,15 @@
 }
 
 /* The same promise for what the classic dark paints with shared classes:
-   the map's own label and heading, and the orange button on it, keep the
-   values they had, so the block is the same to the pixel. */
-[data-surface="classic"],
-[data-catalogue-route] {
+   its label and its heading keep the values they had. The orange button
+   keeps its old look too (white words, the fill that ran to amber) on the
+   map, which changes in nothing. The Lunch & Learn card and the reader may
+   take 2.0's button (HQ's brief: "the new type and buttons with a light
+   hand"): the card says so with data-buttons="new", the reader is simply
+   not named in the button rules. */
+[data-surface="classic"]:not([data-buttons="new"]),
+[data-surface="classic"]:not([data-buttons="new"]) [data-surface="dark"] {
+  --on-accent: #FFFFFF;
   --accent-gradient: linear-gradient(135deg, #F97316 0%, #EA8C16 100%);
 }
 [data-surface="classic"] .eyebrow {
@@ -253,8 +241,7 @@
 @media (max-width: 359px) {
   [data-surface="classic"] .h2-section { font-size: 1.875rem; }
 }
-[data-surface="classic"] .btn-accent:hover,
-[data-catalogue-route] .btn-accent:hover {
+[data-surface="classic"]:not([data-buttons="new"]) .btn-accent:hover {
   background: var(--accent-gradient);
   filter: brightness(1.08);
   box-shadow: var(--btn-shadow, 0 0 #0000), 0 10px 30px rgba(249, 115, 22, 0.36);
@@ -287,7 +274,6 @@
   --bg-code: #F1EFE9;
   --bg-input: #FFFFFF;
   --bg-nav: rgba(250,249,246,0.94);
-  --bg-overlay: rgba(250,249,246,0.97);
   --text-primary: #1B1A18;
   --text-body: #2E2C29;
   --text-secondary: #5C5A55;
@@ -295,9 +281,7 @@
   --text-faint: #6A6762;
   --text-hint: #7D7A75;
   --on-accent: var(--charcoal-deep);
-  --on-dark: #F5F0EB;
   --accent: var(--orange);
-  --accent-bright: var(--orange-bright);
   --accent-text: var(--orange-deep);
   --accent-text-lg: var(--orange-deep);
   --accent-soft-text: #9A3412;
@@ -307,7 +291,6 @@
   --border-color: var(--stone-line);
   --border-strong: #CFCCC4;
   --border-subtle: rgba(0,0,0,0.06);
-  --border-faint: rgba(0,0,0,0.04);
   --fill-subtle: rgba(0,0,0,0.045);
   --ink-02: rgba(27,26,24,0.02);
   --ink-025: rgba(27,26,24,0.03);
@@ -315,9 +298,7 @@
   --ink-04: rgba(27,26,24,0.05);
   --ink-05: rgba(27,26,24,0.06);
   --ink-06: rgba(27,26,24,0.08);
-  --ink-07: rgba(27,26,24,0.09);
   --ink-08: rgba(27,26,24,0.1);
-  --ink-09: rgba(27,26,24,0.12);
   --ink-10: rgba(27,26,24,0.14);
   --ink-12: rgba(27,26,24,0.17);
   --ink-14: rgba(27,26,24,0.2);
@@ -325,7 +306,6 @@
   --ink-16: rgba(27,26,24,0.23);
   --ink-18: rgba(27,26,24,0.26);
   --ink-20: rgba(27,26,24,0.29);
-  --ink-22: rgba(27,26,24,0.32);
   --ink-25: rgba(27,26,24,0.36);
   --ink-30: rgba(27,26,24,0.43);
   --ink-35: rgba(27,26,24,0.49);
@@ -335,13 +315,10 @@
   --ink-55: rgba(27,26,24,0.69);
   --ink-58: rgba(27,26,24,0.72);
   --ink-60: rgba(27,26,24,0.74);
-  --ink-62: rgba(27,26,24,0.75);
   --ink-65: rgba(27,26,24,0.78);
   --ink-68: rgba(27,26,24,0.8);
   --ink-70: rgba(27,26,24,0.81);
-  --ink-72: rgba(27,26,24,0.83);
   --ink-75: rgba(27,26,24,0.85);
-  --ink-78: rgba(27,26,24,0.87);
   --ink-80: rgba(27,26,24,0.89);
   --ink-85: rgba(27,26,24,0.92);
   --ink-90: rgba(27,26,24,0.96);
@@ -694,6 +671,24 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 9999px;
   background: var(--ink-30);
 }
+/* On a phone the names are one row to swipe, like the systems and the
+   applications under it (the reviewer, 13 Nov 2026: wrapped, they made six
+   ragged lines). The row fades at its right edge to say there is more. It
+   moves only under a finger. */
+@media (max-width: 639px) {
+  .proof-names {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+    margin-right: -16px;
+    padding: 6px 44px 6px 0;
+    clip-path: none;
+    -webkit-mask-image: linear-gradient(90deg, #000 0, #000 80%, transparent 100%);
+    mask-image: linear-gradient(90deg, #000 0, #000 80%, transparent 100%);
+  }
+  .proof-names::-webkit-scrollbar { display: none; }
+}
 @media (min-width: 1024px) {
   .proof-band { padding: 34px 0; }
   .proof-row {
@@ -935,15 +930,6 @@ select:user-invalid {
   .card:hover .card-photo { transform: none; }
 }
 
-/* Card subheadings */
-.card-eyebrow {
-  font-family: var(--font-geist), "Inter", system-ui, sans-serif;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
-
 /* A paragraph takes its line height from where it sits (the body's 1.5, or
    its parent's or its own utility). This rule set 1.7 here until 24 Oct
    2026, unlayered, and unlayered CSS beats every Tailwind utility: no
@@ -981,40 +967,6 @@ p {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-
-/* ─── Asphalt texture background ─────────────────── */
-/* Fallback: pure CSS noise pattern if asphalt-texture.jpg is missing */
-.bg-asphalt-subtle {
-  background-color: var(--bg-primary);
-  background-image:
-    url('/images/textures/asphalt-texture.jpg'),
-    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.02) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(255,255,255,0.015) 0%, transparent 40%);
-  background-size: 400px 400px, 100% 100%, 100% 100%;
-  background-blend-mode: soft-light, normal, normal;
-}
-
-/* ─── Gradient text utilities ───────────────────── */
-.grad-text,
-.gradient-text {
-  background:              var(--gradient-brand);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip:         text;
-}
-
-/* The map's own orange button (CanadaMap.tsx, map/ProjectDetail.tsx). Left
-   exactly as it was: the map does not change with 2.0. */
-.btn-primary {
-  background: linear-gradient(90deg, #F97316 0%, #D97706 100%);
-  color: var(--text-primary);
-  transition: all 0.2s ease;
-}
-.btn-primary:hover {
-  background: linear-gradient(90deg, #FB923C 0%, #F59E0B 100%);
-  box-shadow: var(--gradient-glow);
-}
-
 
 /* ─── Button states: .btn-accent and .btn-ghost (30 Sep 2026) ─────────────
    QA A3 and C11: the nav's Resources and Lunch & Learn, the hero's two
@@ -1263,7 +1215,7 @@ p {
   display: block;
   width: 32px;
   height: 2px;
-  background: linear-gradient(90deg, #F97316, #EAB308);
+  background: var(--orange);
   margin-bottom: 0.75rem;
   border-radius: 2px;
 }
@@ -1474,37 +1426,6 @@ p {
   z-index: 0;
 }
 
-/* ─── Section / grid utility classes ───────────────── */
-/* Vernon: no repeating grid/graph-paper textures anywhere.   */
-/* Classes preserved as solid-colour backgrounds so existing  */
-/* call sites stay valid; the repeating gradient is removed.  */
-.bg-grid      { background-color: #ffffff; }
-.bg-grid-dark { background-color: var(--bg-dark); }
-.bg-dot-grid-dark { background-color: var(--bg-section-asphalt); }
-.bg-dot-grid-blue { background-color: var(--bg-primary); }
-
-/* ─── Gradient underline hover (scaleX 0→1) ────────── */
-.hover-underline-gradient {
-  position: relative;
-}
-
-.hover-underline-gradient::after {
-  content: "";
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #F97316, #EAB308);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.3s ease;
-}
-
-.hover-underline-gradient:hover::after {
-  transform: scaleX(1);
-}
-
 /* ─── Site-wide finish (investor pass, Wave 1) ─────────────────────────
    The details a visitor's OS would otherwise fill in with defaults:
    grey Windows scrollbars on a dark site, blue text selection, invisible
@@ -1713,7 +1634,7 @@ html {
 .hero-book:hover, .hero-book:focus-visible { border-color: rgba(249, 115, 22, 0.9); background: rgba(8, 10, 14, 0.74); transform: translateY(-1px); }
 .hero-book:focus-visible { outline: 2px solid #F97316; outline-offset: 2px; }
 .hero-book img { width: 44px; height: 44px; flex: none; border-radius: 5px; object-fit: cover; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45); }
-.hero-book-kicker { display: block; font-size: 11.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-soft-text); line-height: 1.3; }
+.hero-book-kicker { display: block; font-size: 11.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255, 250, 245, 0.82); line-height: 1.3; }
 .hero-book-line { display: flex; align-items: center; gap: 6px; margin-top: 3px; font-size: 15px; font-weight: 700; line-height: 1.2; color: #fff; }
 .hero-book:hover .hero-book-line svg { transform: translateX(2px); }
 .hero-book-line svg { transition: transform 0.2s ease; }

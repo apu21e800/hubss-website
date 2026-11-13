@@ -24,7 +24,7 @@ export default function RequestIdeaBookPage() {
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-32 pb-20">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,760px)_340px] lg:justify-between lg:gap-16">
           <div>
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: "var(--accent-text)" }}>
+            <p className="eyebrow mb-3">
               {ideaBook.short} · {ideaBook.volume}
             </p>
             <h1 className="mb-4 font-bold leading-tight" style={{ color: "var(--text-primary)", fontSize: "clamp(2rem, 3.4vw, 3rem)" }}>

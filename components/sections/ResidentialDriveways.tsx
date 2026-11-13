@@ -29,7 +29,7 @@ export default function ResidentialDriveways() {
 
             {/* The "New application" badge went on 28 Sep 2026: the page is
                 not new to anyone reading it (QA pa#2). */}
-            <p className="text-xs font-bold tracking-[0.18em] uppercase mb-4" style={{ color: "var(--accent-text-lg)" }}>
+            <p className="text-xs font-bold tracking-[0.18em] uppercase mb-4" style={{ color: "var(--text-muted)" }}>
               For homeowners
             </p>
             <h2

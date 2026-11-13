@@ -262,7 +262,7 @@ export default function ProductsGrid({ products: source, copy = HOMEPAGE_COPY.sy
               (globals.css), so the desktop line stays compact. On a phone the
               label takes its own row and the four names fit on the next. */}
           <p
-            className="flex flex-wrap items-center justify-center sm:justify-start gap-x-1 text-[14.5px]"
+            className="flex flex-wrap items-center justify-center sm:justify-start gap-x-3 sm:gap-x-1 text-[14.5px]"
             style={{ color: "var(--ink-50)" }}
           >
             <span className="basis-full sm:basis-auto text-center">Also available:</span>
@@ -278,7 +278,9 @@ export default function ProductsGrid({ products: source, copy = HOMEPAGE_COPY.sy
                 >
                   {p.name}
                 </Link>
-                {i < alsoAvailable.length - 1 && <span aria-hidden="true">·</span>}
+                {/* From sm the names share one line and a dot parts them; on a
+                    phone they wrap, and a dot was left at the end of a line. */}
+                {i < alsoAvailable.length - 1 && <span aria-hidden="true" className="hidden sm:inline">·</span>}
               </span>
             ))}
           </p>

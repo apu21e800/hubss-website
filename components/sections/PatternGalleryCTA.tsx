@@ -69,7 +69,7 @@ export default function PatternGalleryCTA() {
       </div>
 
       <div className="min-w-0 flex-1">
-        <p className="text-[11px] font-bold tracking-[0.2em] uppercase mb-0.5" style={{ color: "var(--accent-text-lg)" }}>
+        <p className="text-[11px] font-bold tracking-[0.2em] uppercase mb-0.5" style={{ color: "var(--text-muted)" }}>
           StreetPrint templates
         </p>
         {/* Eyebrow and title mirror the page it opens (/patterns). */}
@@ -84,7 +84,7 @@ export default function PatternGalleryCTA() {
       {/* Desktop: pill button. Mobile: plain arrow — the whole band is the link. */}
       <span
         className="hidden sm:inline-flex flex-shrink-0 items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold transition-transform duration-200 group-hover:translate-x-0.5"
-        style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", boxShadow: "0 4px 16px rgba(249,115,22,0.3)" }}
+        style={{ background: "var(--accent)", color: "var(--on-accent)", boxShadow: "0 4px 16px rgba(249,115,22,0.3)" }}
       >
         Browse patterns
         <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>

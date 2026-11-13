@@ -1,5 +1,5 @@
 import { HOMEPAGE_COPY, type AudienceCard } from "@/lib/homepage-copy";
-import Link from "next/link";
+import IntentLink from "@/components/ui/IntentLink";
 
 // The three cards' links, left to right. Their words (who each card is for
 // and its line) are in Studio since 7 Oct 2026: lib/homepage-copy.ts.
@@ -24,8 +24,11 @@ export default function PersonaEntryPoints({ cards = HOMEPAGE_COPY.audiences }: 
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-[var(--ink-06)]">
+          {/* IntentLink: these three sit just under the first screen, and a
+              plain Link there fetched /products and its first three card
+              photos (370 KB on a phone) before the visitor had moved. */}
           {PERSONAS.map((p) => (
-            <Link
+            <IntentLink
               key={p.label}
               href={p.href}
               className="group flex items-start gap-4 px-0 py-6 sm:px-6 sm:py-8 sm:first:pl-0 sm:last:pr-0 transition-colors duration-200"
@@ -53,7 +56,7 @@ export default function PersonaEntryPoints({ cards = HOMEPAGE_COPY.audiences }: 
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </span>
-            </Link>
+            </IntentLink>
           ))}
         </div>
       </div>

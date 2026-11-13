@@ -37,8 +37,9 @@ everything below:
 - The map: its look and how it works stay exactly as they are. The section is
   pinned to the pre-2.0 colours and type (`data-surface="classic"`, below).
 - The Product Portfolio Book reader and Lunch & Learn work as they do today.
-  The reader is pinned classic too. The Lunch & Learn card took the flat orange
-  and the grade token and nothing else.
+  Both are pinned to the classic dark, so their colours and labels are today's.
+  Both take 2.0's button (Charcoal words on the flat orange), and the Lunch &
+  Learn card's orange lost its yellow. Nothing else.
 - Doug's settled rounds: the names, the page-turn reader, the hero's book
   callout, "Ten systems, endless applications.", 60 minutes.
 - HUB's words: product facts (the book wins), Studio text, published articles.
@@ -48,7 +49,8 @@ everything below:
   captions.
 - The ten ad pages and /lunch-learn keep their first-screen rules (CLAUDE.md,
   Conversion Goals).
-- No page gets heavier on a phone than it is today (`scripts/hubss-2/weigh.mjs`).
+- No page gets heavier on a phone than it is today (`scripts/hubss-2/weigh.mjs`:
+  what a 390x844 phone at 3x fetches on load, and after reading to the foot).
 - Sanity is read only. Nothing goes to Buffer, Resend or Apollo.
 
 ## Decisions
@@ -121,7 +123,7 @@ changed:
 - From a tablet up nothing moved: each step meets its old formula there.
 
 Still to do: headings that set their own size (the projects lead story, a
-post's h2s, the card titles) join the scale; a section heading keeps one line
+post's h2s, the card titles, the printed-book form's h1) join the scale; a section heading keeps one line
 count across desktop widths ("For the toughest environments." is one line at
 1280 and two at 1440).
 
@@ -133,7 +135,7 @@ is a still line of names. Still to do: the entrances that play on load, the
 
 ### The home page
 
-8,900px at 1440 on main; 8,574 now (9,673 to about 9,200 at 390). Same sections
+8,900px at 1440 on main; 8,574 now (9,673 to 9,248 at 390). Same sections
 in the same order. Cut: the ticker's motion, four redundant labels, the orange
 glow and bloom in the hero, 16px of air above and below each section. The
 applications band is the night band. Target for the rollout: under 8,000.
@@ -145,12 +147,64 @@ Charcoal, like the footer. The panels keep the structure Vernon signed off on
 orange in a panel is what can be pressed. The phone menu sits on the same
 ground as the panels.
 
-### The map and the reader stay classic
+### The map, Lunch & Learn and the reader stay classic
 
 `data-surface="classic"` (and `[data-catalogue-route]`) carries the pre-2.0
-dark values, the old label and heading sizes and the old button, so those two
-blocks are the same to the pixel. Check after any token change:
-`scripts/hubss-2/shoot.mjs` before and after, and compare the map's block.
+dark values and the old label and heading sizes. On the map it carries the old
+button too (white words, the fill that ran to amber), so the map block is the
+same to the pixel: check with `scripts/hubss-2/map-same.mjs` after any token
+change. The Lunch & Learn card (`data-buttons="new"`) and the reader take
+2.0's button.
+
+What this leaves on the home page: three darks. The night band (applications),
+today's near-black (the map and Lunch & Learn, which sit together as they do
+on hubss.com), and Charcoal (the bar, the menus, the footer). And one button
+in the old style, the map's "Take the tour". Both are Vernon's to change,
+since they touch the map: let the map's band take the night blue, and let its
+button take Charcoal words.
+
+### One rule for the small capitals
+
+A small-capitals label is grey (`--text-muted`), or cream on a photograph. It
+is never orange: orange is the colour of action. Two things keep their colour,
+because the colour is their job:
+
+- A story's kicker names its section in the section's own colour (`StoryKicker`
+  in components/blog/BlogCard.tsx: Projects in the accent, Guides in the softer
+  tone). The home page's story cards follow it (`data-kicker`).
+- The classic blocks keep today's labels.
+
+`scripts/hubss-2/labels.mjs` reads 21 pages at 1440 and 390 and fails on any
+other orange small capitals. The review of block 1 found the rule half-applied
+("Lunch & Learn" orange in one card and grey in the band under it); the script
+then found seven more (the application card's "Specify", the contact hero, the
+printed-book form, the 404 page, the spec card, the PDF preview, the driveways
+band).
+
+### Fetching ahead only when reached for (`components/ui/IntentLink.tsx`)
+
+A plain Link fetches its page once it is within 200px of the screen, and that
+page's first photographs come with it. Measured on hubss.com, a 390x844 phone
+at 3x, the home page read to its foot: 3,015 KB, of which 598 were for other
+pages (467 KB of photographs, 131 KB of page data). The three entry cards
+under the hero sit just below the first screen. The /products card alone
+brought 13 KB of page and 355 KB of its three card photographs. On an
+844px-tall phone hubss.com's card is 4px outside that distance; on any taller
+phone it is inside. On this branch the page above the cards is shorter, so it
+was inside at 844 too, and the home page measured 370 KB heavier on load until
+this was found.
+
+The three cards now fetch on a pointer, a finger or the keyboard's focus
+(Next's own "hover-triggered prefetch"). Checked in a browser: nothing fetched
+before intent; fetched on hover, on focus and on touch; a click or a tap opens
+the page. The same change is PR #146 to main, waiting on Vernon's go (the two
+copies of IntentLink.tsx are the same file, so main merges back cleanly; the
+entry cards' file will ask for the branch's side).
+
+Not changed: every other link still fetches as it comes near the screen. For
+the rollout's weight pass, the same treatment lower down the home page would
+take off most of what is left of that 598 KB. It trades how quick a tap feels
+against how much a phone downloads, so it gets measured first.
 
 ## The preview
 
@@ -174,16 +228,34 @@ blocks are the same to the pixel. Check after any token change:
 
 | Script (`scripts/hubss-2/`) | What it holds |
 |---|---|
-| `overflow.mjs` | Nothing past the screen's edge on the slice pages, 320 to 1440. |
+| `overflow.mjs` | Nothing past the screen's edge, 320 to 1440 (a row made to swipe may start a gutter off the left edge; the page itself may not scroll sideways). |
 | `first-screen.mjs` | The ten ad pages' and /lunch-learn's first-screen rules, at CLAUDE.md's sizes (72 cells). |
 | `weigh.mjs` | No page heavier on a phone (390 at DPR 3) than on main. |
-| `map-same.mjs` | The map block is the same as on hubss.com, element by element. |
+| `map-same.mjs` | The map block is the same as on hubss.com, element by element, read once the map says it is ready and its photos are in. |
+| `labels.mjs` | No orange small-capitals label outside a kicker or a classic block. |
 | `type-census.mjs` | Every heading's size and line count at eight widths. |
 | `shoot.mjs` | The before-and-after pictures. |
 
-Block 1's numbers (13 Nov 2026): verify 16/16; overflow clean (5 pages, 9
-widths); first screen 72 of 72; weight equal or lower on all seven pages
-measured (home 1,607 to 1,605 KB on load); the map block the same.
+Block 1's numbers (13 Nov 2026, after the review's fixes): verify 16/16;
+overflow clean (13 pages, 9 widths); first screen 72 of 72; labels clean (21
+pages, two widths); the map block the same (672 elements at 1440, 9 at 390,
+none differ). Weight, on load and read to the foot, against main's build
+measured the same way:
+
+| Page | On load, KB | Read to the foot, KB |
+|---|---|---|
+| Home | 1,607 to 1,577 | 3,323 to 2,917 |
+| Product (TrafficPatternsXD) | 1,033 to 1,032 | 1,636 to 1,636 |
+| Application (crosswalks) | 1,012 to 1,012 | 1,106 to 1,105 |
+| Projects front | 925 to 923 | 1,210 to 1,208 |
+| A write-up | 938 to 937 | 1,142 to 1,142 |
+| Lunch & Learn | 829 to 828 | 1,031 to 1,030 |
+| The book's reader | 593 to 593 | 593 to 593 |
+
+The stylesheet is 24,389 bytes compressed against hubss.com's 24,488 (135 KB
+raw against 139): the new rules are paid for by the dead ones taken out
+(the grain, the ticker, five unused background classes, `.btn-primary`,
+`.card-eyebrow`, the gradient text, 25 token declarations nothing read).
 
 A trap that cost half an hour: `next start` renames its process to
 `next-server`, so `pkill -f "[n]ext start"` does not stop it. An old server
@@ -201,8 +273,13 @@ Nothing in Studio was changed. On this branch:
 1. The four small labels over the home page's section headings ("The systems",
    "Applications", "Projects", "On the ground") are not printed. Studio keeps
    them.
-2. "The job decides the system." prints in one colour. Its second half was
-   orange to yellow.
+
+Found by the review, not changed, for HUB to settle:
+
+- The product page says "150 mil (about 4 mm)"; the Toronto write-up says
+  "about 3.8 mm". One figure.
+- The home page's card dates the Toronto write-up Oct 29; the write-up itself
+  says Oct 30 (a time-zone slip between two components; on main too).
 
 Not changed, for Vernon to raise with HUB: Doug's note of 12 Nov 2026 on the
 review copy asks for the line under the home page's headline to read "Let us
@@ -215,8 +292,9 @@ help create your vision." It is his to change in Studio, on main.
   review, for the next small PR to main: a doubled "@" typo ("jane@@city.ca")
   is no longer redacted, a second address joined to a first can keep its bare
   domain, and the timing test's limit should be 50 ms, not 250.
-- Funnelled to main as its own PR, waiting on Vernon's go: #145, a product's
-  name no longer runs off a 320 or 360px phone (the `.h1-hero` step alone).
+- Funnelled to main as their own PRs, waiting on Vernon's go: #145, a
+  product's name no longer runs off a 320 or 360px phone (the `.h1-hero` step
+  alone); #146, the home page's three entry cards fetch on intent.
 - Shown to Vernon: the page "HUBSS 2.0 first slice" (before and after, three
   calls), linked from the 21e8 Motherboard with the keyed preview.
 - Tokens: the colour jobs, one dark list and one light list, the night band,
@@ -227,6 +305,26 @@ help create your vision." It is his to change in Studio, on main.
   section headers, the night band, the footer.
 - Carried by the tokens and the scale: the product, application, Projects and
   post pages (bar, footer, labels, buttons, headings on a phone).
+
+## From the review of block 1 (a city engineer on a phone, then Doug)
+
+Fixed before the slice was shown: the label rule applied everywhere, with a
+script that holds it; the home page's entry cards fetch on intent; "The job
+decides the system." keeps its accent, in the one orange; Lunch & Learn back
+to today's colours; the last yellow out of the card edges and rules; the names
+under the hero are one row to swipe on a phone (wrapped, they made six ragged
+lines); no dot left hanging at the end of a phone's line in "Also available";
+the two office numbers no longer touch their boxes at 320px.
+
+Left for the template passes:
+
+- Contact on a phone: the two office numbers are under the whole form, on the
+  second screen (forms first was the 5 Nov decision; a short line of numbers
+  above the form would keep both).
+- A product page on a phone: the spec sheets are about five screens down. A
+  link to them in the first-screen card.
+- "The work" tiles carry no town: captions under the photo, town and province
+  (the rollout's image pass).
 
 ## Next
 

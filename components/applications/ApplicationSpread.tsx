@@ -65,7 +65,7 @@ export default function ApplicationSpread({
       <div style={{ borderTop: "1px solid var(--border-color)" }}>
         <h3
           className="text-[12px] font-bold uppercase pt-7 pb-4"
-          style={{ color: "var(--accent-text-lg)", letterSpacing: "0.18em" }}
+          style={{ color: "var(--text-muted)", letterSpacing: "0.18em" }}
         >
           Specify
           <span className="sr-only"> these systems for {applicationName}</span>

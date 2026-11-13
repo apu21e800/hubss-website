@@ -49,7 +49,7 @@ export default function IdeaBookBand({ copy = HOMEPAGE_COPY.ideaBook }: { copy?:
             style={{ border: "1px solid var(--ink-12)", boxShadow: "0 10px 24px rgba(0,0,0,0.28)" }}
           />
           <div className="min-w-0 flex-1">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--accent-text-lg)" }}>
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--text-muted)" }}>
               {/* The volume only from sm up: on a phone the title wrapped as
                   "THE HUB PRODUCT BOOK ·" over "VOLUME 5" (QA sweep, 16 Oct 2026). */}
               {ideaBook.title.replace(/ · .*$/, "")}

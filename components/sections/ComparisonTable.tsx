@@ -33,7 +33,7 @@ export default function ComparisonTable() {
             viewport={{ once: true }}
             className="follow-nav lg:sticky lg:top-[calc(var(--nav-offset)+64px)]"
           >
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "var(--accent-text-lg)" }}>
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "var(--text-muted)" }}>
               Why HUB
             </p>
             <h2

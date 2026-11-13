@@ -40,7 +40,8 @@ export default function TrustedByMarquee() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="proof-row">
           <p className="eyebrow eyebrow-muted">Trusted by</p>
-          <ul className="proof-names">
+          {/* A row to swipe on a phone, so it can take the keyboard's focus too. */}
+          <ul className="proof-names" tabIndex={0} aria-label="Trusted by">
             {TRUSTED_BY.map((name) => (
               <li key={name}>{name}</li>
             ))}

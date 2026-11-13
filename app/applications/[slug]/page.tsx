@@ -299,7 +299,7 @@ export default async function ApplicationPage({ params }: Props) {
                 className="rounded-xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 mt-2 relative overflow-hidden"
                 style={{ background: "rgba(249,115,22,0.06)", border: "1px solid rgba(249,115,22,0.24)" }}
               >
-                <div className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl" style={{ background: "linear-gradient(180deg, #F97316, #EAB308)" }} />
+                <div className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl" style={{ background: "var(--orange)" }} />
                 <div className="relative pl-3">
                   <p className="font-bold text-lg leading-snug" style={{ color: "var(--text-primary)" }}>
                     {ask.prompt}
@@ -340,7 +340,7 @@ export default async function ApplicationPage({ params }: Props) {
                   markings at 1440x900), and the product sidebars lead with
                   the people and the ask (Vern, 17 Oct 2026). */}
               <div className="rounded-xl p-6 sm:p-7 relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)", boxShadow: "0 1px 2px rgba(0,0,0,0.04)" }}>
-                <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
+                <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "var(--orange)" }} />
                 <h2 className="font-bold text-base mb-1.5" style={{ color: "var(--text-primary)" }}>
                   Pricing and installers
                 </h2>
@@ -364,7 +364,7 @@ export default async function ApplicationPage({ params }: Props) {
               </div>
               {!spread && relatedProductData.length > 0 && (
                 <div className="rounded-xl p-6 sm:p-7 relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)", boxShadow: "0 1px 2px rgba(0,0,0,0.04)" }}>
-                  <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
+                  <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "var(--orange)" }} />
                   <h2 className="font-bold text-lg mb-4" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
                     Systems for {nameInSentence}
                   </h2>

@@ -264,7 +264,7 @@ export default async function AboutPage() {
             ].map((office) => (
               <div key={office.region} className="p-8 rounded-xl relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}>
                 <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "#f97316" }} />
-                <p className="text-xs font-semibold tracking-widest uppercase mb-3" style={{ color: "var(--accent-text-lg)" }}>{office.region}</p>
+                <p className="text-xs font-semibold tracking-widest uppercase mb-3" style={{ color: "var(--text-muted)" }}>{office.region}</p>
                 <h3 className="text-xl font-bold mb-1" style={{ color: "var(--text-primary)" }}>{office.city}</h3>
                 <p className="text-sm mb-5" style={{ color: "var(--text-faint)" }}>{office.contact}</p>
                 <div className="flex flex-wrap gap-1.5 mb-6">
@@ -286,7 +286,7 @@ export default async function AboutPage() {
       <div className="pb-20" style={{ background: "var(--bg-primary)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="pt-16" style={{ borderTop: "1px solid var(--border-color)" }}>
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "var(--accent-text-lg)" }}>Manufacturer partners</p>
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "var(--text-muted)" }}>Manufacturer partners</p>
             <h2 className="h2-section mb-4" style={{ color: "var(--text-primary)" }}>Who stands behind the systems</h2>
             <p className="text-base leading-relaxed max-w-2xl mb-8" style={{ color: "var(--text-faint)" }}>
               {partnersIntro}

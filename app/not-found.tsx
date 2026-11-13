@@ -48,7 +48,7 @@ export default async function NotFound() {
               fontWeight: 700,
               letterSpacing: "0.22em",
               textTransform: "uppercase",
-              color: "var(--accent-text-lg)",
+              color: "var(--text-muted)",
               marginBottom: 18,
             }}
           >
@@ -58,7 +58,7 @@ export default async function NotFound() {
             This page took a{" "}
             <span
               style={{
-                background: "linear-gradient(90deg, #F97316, #EAB308)",
+                background: "var(--orange)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",

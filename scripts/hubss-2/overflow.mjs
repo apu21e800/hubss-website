@@ -21,8 +21,13 @@ for (const w of WIDTHS) {
       for (const el of document.querySelectorAll("main h1, main h2, main h3, main p, main a, main button, main li, header *, nav a, nav button, footer a, footer p")) {
         const cs = getComputedStyle(el); if (cs.display === "none" || cs.visibility === "hidden") continue;
         const b = el.getBoundingClientRect(); if (!b.width || !b.height) continue;
-        // inside a sideways scroller or a clipped carousel is fine
-        let p = el.parentElement, scroller = false; while (p && p !== document.body) { const o = getComputedStyle(p).overflowX; if (o === "auto" || o === "scroll" || o === "hidden" || o === "clip") { const pb = p.getBoundingClientRect(); if (pb.right <= vw + 1 && pb.left >= -1) { scroller = true; break; } } p = p.parentElement; }
+        // Inside a clipped carousel that is itself on the screen is fine. So is a
+        // row made to swipe (overflow-x auto or scroll) when its far end is on
+        // the screen, so its last item can be reached: such a row may start a
+        // gutter's width off the left edge (the names under the home hero do),
+        // which shows nothing and scrolls nothing, since the page itself is
+        // checked below (doc against vw).
+        let p = el.parentElement, scroller = false; while (p && p !== document.body) { const o = getComputedStyle(p).overflowX; const pb = p.getBoundingClientRect(); if ((o === "hidden" || o === "clip") && pb.right <= vw + 1 && pb.left >= -1) { scroller = true; break; } if ((o === "auto" || o === "scroll") && pb.right <= vw + 1 && pb.left >= -32) { scroller = true; break; } p = p.parentElement; }
         if (scroller) continue;
         if (b.right > vw + 1.5 || b.left < -1.5) out.push(`${el.tagName.toLowerCase()}.${(typeof el.className === "string" ? el.className : "").split(" ").slice(0, 2).join(".")} "${(el.innerText || "").replace(/\s+/g, " ").slice(0, 34)}" right=${Math.round(b.right)} left=${Math.round(b.left)}`);
       }

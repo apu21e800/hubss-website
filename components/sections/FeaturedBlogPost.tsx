@@ -3,7 +3,7 @@ import { BLOG_NAME } from "@/lib/field-notes-taxonomy";
 import PhotoImage from "@/components/ui/PhotoImage";
 import { getAllPosts, pinnedPost } from "@/lib/blog";
 import PinnedLabel from "@/components/blog/PinnedLabel";
-import { badgeFor } from "@/lib/field-notes-taxonomy";
+import { badgeFor, sectionFor } from "@/lib/field-notes-taxonomy";
 import { altBesideTitle } from "@/lib/blog-taxonomy";
 import { HOMEPAGE_COPY, type SectionCopy } from "@/lib/homepage-copy";
 
@@ -223,9 +223,15 @@ export default async function FeaturedBlogPost({ copy = HOMEPAGE_COPY.insights }
                   </div>
                   {/* Content */}
                   <div className="flex flex-col p-6 flex-1">
+                    {/* The section's own colour, as the blog's kicker prints it
+                        (StoryKicker): Projects in the accent, Guides in the
+                        softer tone. data-kicker tells scripts/hubss-2/labels.mjs
+                        this is a kicker, the one small-capitals line that keeps
+                        its colour. */}
                     <span
+                      data-kicker
                       className="text-[11px] font-bold tracking-widest uppercase mb-3"
-                      style={{ color: "var(--accent-text-lg)" }}
+                      style={{ color: sectionFor(post.category).text }}
                     >
                       {badgeFor(post.category)}
                     </span>

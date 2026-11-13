@@ -139,7 +139,7 @@ export default function ProductSpecCard({
         >
           <p
             className="text-[11px] font-bold uppercase mb-1.5"
-            style={{ color: "var(--accent-text-lg)", letterSpacing: "0.16em" }}
+            style={{ color: "var(--text-muted)", letterSpacing: "0.16em" }}
           >
             You may also need · {entry.alsoNeed.heading}
           </p>

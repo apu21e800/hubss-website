@@ -164,7 +164,7 @@ function DocCard({
       )}
 
       <div className="flex-1 min-w-0">
-        <p className="text-[12px] font-bold tracking-[0.16em] uppercase mb-0.5" style={{ color: "var(--accent-text)" }}>
+        <p className="text-[12px] font-bold tracking-[0.16em] uppercase mb-0.5" style={{ color: "var(--text-muted)" }}>
           {doc.type}
         </p>
         <h3 className="text-[15.5px] font-semibold leading-snug truncate transition-colors group-hover:text-[var(--accent-text)]" style={{ color: "var(--text-primary)" }}>

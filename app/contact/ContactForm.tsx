@@ -109,7 +109,7 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
         <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-[auto_1fr] gap-x-12 lg:gap-x-16 gap-y-10 lg:gap-y-0">
           {/* Left, the words */}
           <div className="lg:pt-2">
-            <p className="eyebrow mb-3" style={{ color: "var(--accent-text-lg)" }}>{eyebrow}</p>
+            <p className="eyebrow eyebrow-photo mb-3">{eyebrow}</p>
             <h1 className="h1-page mb-5" style={{ color: "var(--text-primary)" }}>
               {heading}
             </h1>
@@ -305,7 +305,7 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
                   { region: "East office", ...offices.east },
                 ].map((office) => (
                   <div key={office.region}>
-                    <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--accent-text-lg)" }}>{office.region}</p>
+                    <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--text-muted)" }}>{office.region}</p>
                     <p className="text-sm font-medium mb-1" style={{ color: "var(--text-primary)" }}>{office.place}</p>
                     <a href={mailtoHref(office.email)} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 44 }}>{office.email}</a>
                     <a href={telHref(office.phone)} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 44 }}>{office.phone}</a>

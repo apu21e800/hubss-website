@@ -346,7 +346,11 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
   return (
     <section
       /* the brand's closing statement, not part of the reading */
-      data-surface="shell"
+      /* The classic dark (app/globals.css): Lunch & Learn keeps the colours
+         and labels it has on hubss.com today; data-buttons lets it take 2.0's
+         button, Charcoal words on the flat orange. */
+      data-surface="classic"
+      data-buttons="new"
       className={hero ? "ll-hero relative pt-6 pb-5 sm:pt-8 sm:pb-6 lg:pt-10 lg:pb-8" : "relative py-16 sm:py-20 lg:py-24"}
       style={{ background: "var(--bg-primary)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -811,7 +815,11 @@ function Band({ topic, from }: { topic?: string; from?: string }) {
   return (
     <section
       aria-labelledby="ll-band-heading"
-      data-surface="shell"
+      /* The classic dark (app/globals.css): Lunch & Learn keeps the colours
+         and labels it has on hubss.com today; data-buttons lets it take 2.0's
+         button, Charcoal words on the flat orange. */
+      data-surface="classic"
+      data-buttons="new"
       className="relative py-10 sm:py-12"
       style={{ background: "var(--bg-primary)", borderTop: "1px solid var(--border-color)" }}
     >

@@ -15,7 +15,15 @@ for (const [w, h] of [[1440, 900], [390, 844]]) {
     const page = await ctx.newPage();
     await page.goto(base + "/", { waitUntil: "load", timeout: 90000 });
     await page.locator("#map").scrollIntoViewIfNeeded();
-    await page.waitForTimeout(3500);
+    // Read both at the same moment in the map's life: once it says it is ready
+    // (CanadaMap sets window.__hubssMapReady on its first idle), and after the
+    // opening hint has faded. Read sooner, a slow network leaves the loading
+    // shield up on one side and the hint mid-fade, and they count as differences.
+    await page.waitForFunction(() => window.__hubssMapReady === true, null, { timeout: 30000 }).catch(() => {});
+    await page.waitForTimeout(6500);
+    // ...and once the list's photographs are in: a photo still on its way reads
+    // differently from one that has arrived (one run in four on 13 Nov 2026).
+    await page.waitForFunction(() => [...document.querySelectorAll("#map img")].filter((i) => i.getBoundingClientRect().width > 0).every((i) => i.complete), null, { timeout: 15000 }).catch(() => {});
     const out = await page.evaluate((props) => {
       const root = document.querySelector("#map"); const rows = {}; const seen = {};
       for (const el of root.querySelectorAll("*")) {

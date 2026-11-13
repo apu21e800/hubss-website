@@ -142,7 +142,24 @@ export function screenByRules(input: ScreenInput): ScreenVerdict {
 
 // ── What the model sees ──────────────────────────────────────────────────────
 
-const EMAIL_IN_TEXT = /[^\s<>()"',;:]+@[^\s<>()"',;:]+\.[a-z]{2,}/gi;
+/**
+ * An email address in free text. Two things keep it quick (13 Nov 2026):
+ * - Both halves stop at an "@". While either could hold one, a message of "@"
+ *   signs was tried at every split of every run: eight times longer for each
+ *   doubling, eleven to thirteen seconds for 4,000 of them, and the form takes
+ *   20,000 characters.
+ * - Each half is as long as an address can be: 64 characters before the "@",
+ *   255 after. With no limit, a long run with no "@" was read once from each
+ *   of its characters (0.2 s at 20,000). A longer run glued to an address
+ *   keeps its start; the address itself is still replaced.
+ * `npm run test:forms` times redact() at the form's full length.
+ *
+ * Do not add a rule about where a match may start (a lookbehind for the start
+ * of a word was tried and taken out the same day): two addresses joined by a
+ * character an address can hold, "a@city.ca/b@city.ca", are two matches, and
+ * the second starts in the middle of the run. It went to the model unredacted.
+ */
+const EMAIL_IN_TEXT = /[^\s<>()"',;:@]{1,64}@[^\s<>()"',;:@]{1,255}\.[a-z]{2,}/gi;
 const PHONE_IN_TEXT = /(?<![\d-])(?:\+?1[\s.-]?)?(?:\(\d{3}\)|\d{3})[\s.-]?\d{3}[\s.-]?\d{4}(?!\d)(?:\s*(?:x|ext\.?)\s*\d{1,5})?/gi;
 
 /** Phone numbers and email addresses out of free text before it leaves the site. */

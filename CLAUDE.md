@@ -1106,10 +1106,10 @@ use from a client side experience too."
 
 ## Editing from the review page (13 Nov 2026)
 Doug, 13 Nov, replying to the review email at 9:12 his time: "How do I edit
-the other posts?" Nobody answered until the afternoon, and his next email
-was "Vercel, Figma, Studio.... it's all a bit much to keep straight ... the
-original plan ... was to hand over a website that Cleve and I could easily
-work on, edit, and update." The page could be read and not changed.
+the other posts?" Nobody answered until the afternoon. The page could be
+read and not changed, and the way in was a search through the Studio's list.
+He also asked for fewer places to keep track of: two is the answer, this
+page and the Studio.
 - Every article card, on both links, has **Edit this article**: the
   Studio's own address for that article's form (lib/review-page.ts
   `editPath`, the intent link the editors' emails carry, without the host),

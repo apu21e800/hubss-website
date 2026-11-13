@@ -118,9 +118,9 @@ export default function ReviewView({ data, now, actionKey, action }: { data: Rev
 }
 
 /**
- * Doug's page only: the places HUB needs, and nothing else (13 Nov 2026; Doug:
- * "Vercel, Figma, Studio.... it's all a bit much to keep straight"). Two: this
- * page and the Studio. The email is how he hears there is something here.
+ * Doug's page only: the places HUB needs, and nothing else (13 Nov 2026: he
+ * asked for fewer places to keep track of). Two: this page and the Studio.
+ * The email is how he hears there is something here.
  */
 function WhereThingsAre() {
   const row = "pt-5 mt-5";

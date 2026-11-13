@@ -210,7 +210,15 @@ help create your vision." It is his to change in Studio, on main.
 
 ## Done (13 Nov 2026, block 1)
 
-- Step 0, apart from 2.0: PR #144, the forms' spam screen, merged and live.
+- Step 0, apart from 2.0: PR #144, the forms' spam screen, merged and live
+  (1:03 am Vancouver; hubss.com checked on commit c8fde2c). Left from its
+  review, for the next small PR to main: a doubled "@" typo ("jane@@city.ca")
+  is no longer redacted, a second address joined to a first can keep its bare
+  domain, and the timing test's limit should be 50 ms, not 250.
+- Funnelled to main as its own PR, waiting on Vernon's go: #145, a product's
+  name no longer runs off a 320 or 360px phone (the `.h1-hero` step alone).
+- Shown to Vernon: the page "HUBSS 2.0 first slice" (before and after, three
+  calls), linked from the 21e8 Motherboard with the keyed preview.
 - Tokens: the colour jobs, one dark list and one light list, the night band,
   the classic dark.
 - The type scale and the phone fixes above.

@@ -233,14 +233,18 @@ against how much a phone downloads, so it gets measured first.
 | `weigh.mjs` | No page heavier on a phone (390 at DPR 3) than on main. |
 | `map-same.mjs` | The map block is the same as on hubss.com, element by element, read once the map says it is ready and its photos are in. |
 | `labels.mjs` | No orange small-capitals label outside a kicker or a classic block. |
+| `seo-same.mjs` | What search reads is the same as on hubss.com: title, description, canonical, robots, share tags, h1, structured data, images with their alt text, link addresses. |
+| `a11y.mjs` | The accessibility checker at every impact, and the tap targets, beside hubss.com. |
 | `type-census.mjs` | Every heading's size and line count at eight widths. |
 | `shoot.mjs` | The before-and-after pictures. |
 
 Block 1's numbers (13 Nov 2026, after the review's fixes): verify 16/16;
 overflow clean (13 pages, 9 widths); first screen 72 of 72; labels clean (21
 pages, two widths); the map block the same (672 elements at 1440, 9 at 390,
-none differ). Weight, on load and read to the foot, against main's build
-measured the same way:
+none differ); what search reads the same on 21 pages; the accessibility
+checker and the tap targets clean on 11 pages at two widths, as on hubss.com.
+Weight, on load and read to the foot, against main's build measured the same
+way:
 
 | Page | On load, KB | Read to the foot, KB |
 |---|---|---|

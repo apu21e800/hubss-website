@@ -160,10 +160,10 @@ function WhereThingsAre() {
   );
 }
 
-/** A text link into the Studio, in its own tab so the review page stays open. */
+/** A text link into the Studio, in its own tab so the review page stays open; 44px tall under a finger. */
 function StudioLink({ href, children }: { href: string; children: ReactNode }) {
   return (
-    <a href={href} target="_blank" rel="noopener" className="link-arrow">
+    <a href={href} target="_blank" rel="noopener" className="link-arrow" data-tap="44">
       {children}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M5 12h14M12 5l7 7-7 7" />
@@ -269,10 +269,10 @@ function ArticleCard({ article, agency, controls }: { article: ReviewArticle; ag
             </div>
           </details>
         )}
-        <p className="mt-5">
+        <p className="mt-4">
           <StudioLink href={editPath(article.id)}>Edit this article</StudioLink>
         </p>
-        <p className="mt-2 text-[14px] max-w-xl" style={{ color: "var(--text-muted)" }}>
+        <p className="mt-1 text-[14px] max-w-xl" style={{ color: "var(--text-muted)" }}>
           Opens it in Studio. Change any word or photo: it saves as you go, and this page shows the change.
         </p>
         {agency && article.notes && (

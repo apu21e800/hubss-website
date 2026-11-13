@@ -1,5 +1,5 @@
 /**
- * POST /api/review/notify: "Send to Doug" and "Take it back" in the Studio
+ * POST /api/review/notify: "Send for review" and "Take it back" in the Studio
  * (sanity/components/ForReviewInput.tsx). Body: { ask }, the random key of a
  * private record the Studio has just made with the editor's own session
  * (lib/review-ask.ts): which article, and whether it was sent (true) or taken

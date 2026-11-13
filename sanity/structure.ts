@@ -46,6 +46,7 @@ import {
   BookIcon,
 } from "@sanity/icons";
 import GuidePane from "./components/GuidePane";
+import { REVIEWERS } from "./review-words";
 
 /** The first item's title: Doug's guide (lib/office-guide.ts). */
 export const GUIDE_ITEM_TITLE = "Start here: how to update the site";
@@ -78,14 +79,14 @@ export const structure: StructureResolver = (S) =>
       // ── Blog posts ───────────────────────────────────────────────────────────
       // The site's only copy of the blog (lib/blog.ts), shown on hubss.com as
       // "Projects" (BLOG_NAME). Newest first. New drafts land here unpublished;
-      // the list's line says "With Doug" while one waits on his review page.
+      // the list's line says "In review" while one waits for Doug and Cleve's OK.
       S.listItem()
         .id("insights")
         .title("Blog posts")
         .icon(EditIcon)
         .child(
           S.documentTypeList("blogPost")
-            .title("Blog posts · on the site as Projects · a new article goes to Doug for his OK before it goes live")
+            .title(`Blog posts · on the site as Projects · a new article goes to ${REVIEWERS} for their OK before it goes live`)
             .defaultOrdering([{ field: "publishedAt", direction: "desc" }])
         ),
 

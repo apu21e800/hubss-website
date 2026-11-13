@@ -33,6 +33,7 @@ import { EDIT_ON_THE_PAGE_TOOL, PAGE_ROUTES, documentPage } from "./sanity/studi
 import { EditOnThePageInput } from "./sanity/components/EditOnThePage";
 import { withoutLockedActions } from "./sanity/document-locks";
 import { BLOG_NAME } from "./lib/field-notes-taxonomy";
+import { IN_REVIEW, REVIEWERS } from "./sanity/review-words";
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? "9dbro2m1";
 const dataset   = process.env.NEXT_PUBLIC_SANITY_DATASET   ?? "production";
@@ -110,9 +111,9 @@ const mainDocuments = defineDocuments([
  * would sit in a draft still marked to go live by itself, at a time already
  * past, and the daily run would publish the half-made edit.
  *
- * And it leaves Doug's review (12 Nov 2026): an article sent to Doug goes
- * out with the switch off, so the live post doesn't read "With Doug" and its
- * next edit isn't sent to him by mistake (lib/review-notify.ts).
+ * And it leaves the review (12 Nov 2026): an article sent for review goes
+ * out with the switch off, so the live post doesn't read "In review" and its
+ * next edit isn't sent for review by mistake (lib/review-notify.ts).
  */
 function datedPublish(original: DocumentActionComponent): DocumentActionComponent {
   const Action: DocumentActionComponent = (props: DocumentActionProps) => {
@@ -142,14 +143,14 @@ function datedPublish(original: DocumentActionComponent): DocumentActionComponen
 }
 
 /**
- * "With Doug" beside a new article's status while it waits on his review
- * page (12 Nov 2026; sanity/components/ForReviewInput.tsx sends it). Gone
- * once it is taken back or goes live.
+ * "In review" beside a new article's status while it waits for Doug and
+ * Cleve's OK (12 Nov 2026; sanity/components/ForReviewInput.tsx sends it; the
+ * words: sanity/review-words.ts). Gone once it is taken back or goes live.
  */
 const WithDougBadge: DocumentBadgeComponent = (props) => {
   const draft = props.draft as { forReview?: boolean } | null;
   if (props.published || draft?.forReview !== true) return null;
-  return { label: "With Doug", title: "On Doug's review page until it goes live", color: "primary" };
+  return { label: IN_REVIEW, title: `With ${REVIEWERS} for their OK until it goes live`, color: "primary" };
 };
 
 /** The HUB wheel in Studio's top bar. */

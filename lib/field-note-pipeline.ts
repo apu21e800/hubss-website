@@ -246,7 +246,7 @@ async function notify(
     ...(reviewFirst()
       ? [
           "",
-          `Doug reviews first: read it in Studio or on your review page${agencyLink() ? ` (${agencyLink()})` : ""} and, when it reads right, press "Send to Doug" at the top of the draft (or "Put on Doug's page" on your review page). Doug gets an email with a link to it and his reply comes to you; neither publishes anything. Publish after his OK.`,
+          `Doug reviews first: read it in Studio or on your review page${agencyLink() ? ` (${agencyLink()})` : ""} and, when it reads right, press "Send for review" at the top of the draft (or "Put on Doug's page" on your review page). Doug and Cleve get an email with a link to it, you a copy, and their replies come to you; neither publishes anything. Publish after their OK.`,
         ]
       : []),
   ].join("\n");

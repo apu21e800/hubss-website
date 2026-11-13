@@ -52,7 +52,7 @@ export function reviewLinkEmails(links: { dougs: string; agency: string }, repla
         "",
         "Don't forward this email, and don't send Doug this link: it shows the drafts before you've read them, the checks' notes, and a button that puts things on his page. His link came in its own email.",
         "",
-        "Your link shows everything waiting: new drafts, with the checks' notes, and the social posts in Buffer. Read each draft and fix what needs it in Studio, then press \"Send to Doug\" at the top of the draft (or \"Put on Doug's page\" here: the same thing). Doug gets an email with a link to it, and his reply comes to you. Doug's link shows only what you sent him: every word and photo, no login. Nothing on either page publishes or posts.",
+        "Your link shows everything waiting: new drafts, with the checks' notes, and the social posts in Buffer. Read each draft and fix what needs it in Studio, then press \"Send for review\" at the top of the draft (or \"Put on Doug's page\" here: the same thing). Doug and Cleve get an email with a link to it, you a copy, and their replies come to you. Doug's link shows only what you sent him: every word and photo, no login. Nothing on either page publishes or posts.",
         "",
         "Doug reviews articles first: a new article waits until you publish it, and one written from Doug's job photos waits held. After his OK: Publish (or \"Scheduled\" on) in Studio. Social posts aren't held for him: an article's posts are written after it is live and queue in Buffer.",
         "",

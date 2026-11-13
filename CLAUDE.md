@@ -996,9 +996,9 @@ nailing the brand voice, he will leave it in our domain." lib/review-first.ts:
   is made, safe to pass on whole), and Vern's, marked not to forward. New
   keys get "the old one no longer opens". The drafter's, the social and the
   held-article emails repeat Vern's link with the step to take.
-- Vern's loop: read the draft (Studio or his link), fix it, press Send to
-  Doug (or Put on Doug's page); Doug is emailed, and replies to Vern; after
-  his OK, Publish (or Scheduled on). The guide:
+- Vern's loop: read the draft (Studio or his link), fix it, press Send for
+  review (or Put on Doug's page); Doug and Cleve are emailed, and reply to
+  Vern; after their OK, Publish (or Scheduled on). The guide:
   claude/HUBSS-content-review-2026-10.md in the Claude project.
 
 ## Doug's email and the review in Studio (12 Nov 2026)

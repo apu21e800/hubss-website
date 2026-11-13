@@ -14,7 +14,8 @@
  *
  * Pure data: safe in the Studio and on the site. `**bold**` marks a label,
  * written exactly as the Studio (or Doug's email, lib/review-notify.ts)
- * prints it. Updated 12 Nov 2026: Doug's email, and "Job photos". Plain words, as everything Doug
+ * prints it. Updated 12 Nov 2026: Doug's email, and "Job photos"; 13 Nov 2026: "Edit this
+ * article" on the review page's cards (Doug: "How do I edit the other posts?"). Plain words, as everything Doug
  * reads in the Studio: who does the work is "21e8" or "Vern", never how
  * (scripts/test-office-guide.ts checks every line, with the house style).
  */
@@ -96,6 +97,7 @@ export const OFFICE_GUIDE: OfficeGuideContent = {
       steps: [
         "Press **Read the article** in the email. Or, in the Studio, press **Open your review page** at the top of this guide.",
         "Read each article: every word and photo is there. The social posts already scheduled are listed too.",
+        "To change an article yourself, press **Edit this article** on its card. It opens here in the Studio: change any word or photo, and it saves as you go. The review page shows the change.",
         "Reply to the email with OK, or with what to change. Your reply goes to Vern.",
       ],
       next: [

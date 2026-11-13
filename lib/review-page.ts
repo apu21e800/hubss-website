@@ -314,3 +314,18 @@ export function reviewWhen(iso: string): string {
 
 /** The id a card carries on the page (lib/review-anchor.ts, which the Studio reads too). */
 export { anchorFor } from "@/lib/review-anchor";
+
+// ── editing an article from its card ────────────────────────────────────────
+
+/**
+ * Where "Edit this article" goes: the Studio's own address for the article's
+ * form (its intent link, the one the editors' emails carry: lib/project-posts.ts
+ * studioLink), without the host, so it opens on whichever site serves the page.
+ * Doug, 13 Nov 2026, on the review email: "How do I edit the other posts?" The
+ * page could be read and not changed; the way in was a search through the
+ * Studio's list. The Studio asks for a sign-in when there isn't one, then opens
+ * the article. A draft's id is "drafts.<id>"; the Studio is asked for the id.
+ */
+export function editPath(draftId: string): string {
+  return `/studio/intent/edit/id=${draftId.replace(/^drafts\./, "")};type=blogPost`;
+}

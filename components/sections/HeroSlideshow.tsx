@@ -105,7 +105,9 @@ export default function HeroSlideshow({
       data-hero
       data-sanity={editAttribute}
       className="relative w-full overflow-hidden sm:min-h-[88vh]"
-      style={{ background: "var(--bg-dark)" }}
+      // The ground the photograph fades into is the grade itself, so the hero
+      // is one block in either look (blue-black, or Charcoal's deep step).
+      style={{ background: "rgb(var(--grade))" }}
       aria-label="Hero"
     >
       {/* ── The photograph. On a phone (below sm) it is a 5:4 picture in the
@@ -170,7 +172,7 @@ export default function HeroSlideshow({
         className="absolute inset-0 sm:hidden"
         style={{
           background:
-            "linear-gradient(180deg, rgb(var(--grade) / 0.10) 0%, rgb(var(--grade) / 0) 25%, rgb(var(--grade) / 0) 72%, rgb(32 32 31 / 0.94) 100%)",
+            "linear-gradient(180deg, rgb(var(--grade) / 0.10) 0%, rgb(var(--grade) / 0) 25%, rgb(var(--grade) / 0) 72%, rgb(var(--grade) / 0.94) 100%)",
           zIndex: 2,
         }}
       />
@@ -240,11 +242,16 @@ export default function HeroSlideshow({
               <br />
               <span
                 style={{
-                  // One orange, HUB's (13 Nov 2026). It ran from orange to
-                  // yellow until then, and "Canvas." lost its edges over the
-                  // crosswalk's gold; the shadow keeps them.
-                  color: "var(--orange)",
-                  textShadow: "0 2px 14px rgba(0,0,0,0.5)",
+                  // HUB's signature, orange into yellow, as hubss.com has had
+                  // it (Vernon, 13 Nov 2026: "hubss like the use of the orange
+                  // yellow gradient in select areas like the H1").
+                  background: "linear-gradient(92deg, #F97316 0%, #FACC15 55%, #FDE047 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  // A dark shadow under the glow: "Canvas." is yellow over the
+                  // crosswalk's gold and green, and lost its edges there.
+                  filter: "drop-shadow(0 2px 10px rgba(0,0,0,0.45)) drop-shadow(0 0 24px rgba(249,115,22,0.18))",
                 }}
               >
                 {subheading}
@@ -280,7 +287,7 @@ export default function HeroSlideshow({
               <SeeTheWork
                 href={cta1Href}
                 className="btn-accent btn-lg"
-                style={{ ["--btn-shadow" as string]: "0 6px 22px rgba(0,0,0,0.35)" }}
+                style={{ ["--btn-shadow" as string]: "0 6px 28px rgba(249,115,22,0.42)" }}
               >
                 {cta1Label}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">

@@ -19,21 +19,29 @@
   --font-geist: '';
   --font-inter: '';
 
-  /* ─── HUBSS 2.0: every colour has a job (13 Nov 2026) ────────────────────
+  /* ─── Every colour has a job (13 Nov 2026) ───────────────────────────────
      Vernon, 12 Nov 2026: keep the blue (it works with the orange and gives
      the site its cinematic feel), add more of HUB's signature grey, choose
-     tastefully. Three colours, three jobs:
+     tastefully. 13 Nov, after a first pass: white words stay on the orange
+     button, HUB likes the orange-to-yellow gradient in select places like
+     the H1, the menus want to be darker, and the site should switch between
+     a Blue and a Grey look so Doug can choose (The two looks, below).
 
        Grey is the structure.  HUB Charcoal (#20201F, the official grey) is
-                               the ground of the bar, the menus, the footer
-                               and the dark bands; its lighter steps are the
-                               cards and hairlines on it. On paper the same
-                               family goes warm: stone and paper.
-       Blue is the cinema.     The grade over a photograph, the night band,
-                               the map. Never a button, never a label.
-       Orange is the action.   Buttons, links, the current item, focus. The
-                               words on an orange fill are Charcoal (5.8:1;
-                               white on it was 2.8:1).
+                               the footer, the dark bands and the cards on
+                               them, in both looks. On paper the same family
+                               goes warm: stone and paper.
+       Blue is the cinema.     In the Blue look: the bar, the menus, the grade
+                               over a photograph and the one band where
+                               photographs glow. In the Grey look those are
+                               Charcoal too. Never a button, never a label.
+       Orange is the action.   Buttons (white words on it, as HUB has always
+                               had them), links, the current item, focus.
+       Orange to yellow        is HUB's signature, and has three jobs: the
+                               accent line of a headline on a dark ground,
+                               the thin rule on top of an offer card, and the
+                               mark under the current tab or the card you
+                               point at. Nothing else is yellow.
 
      The raw values are here and only here. The blocks below hand them out
      by role (--bg-*, --text-*, --border-*), and a component reads the
@@ -41,34 +49,71 @@
   --charcoal:        #20201F;  /* HUB Charcoal, the official grey */
   --charcoal-deep:   #1B1B1A;  /* a step under it: the footer's base, a well */
   --charcoal-deeper: #171716;
+  --charcoal-well:   #121211;  /* the menus' ground in the Grey look: a well under the bar */
   --charcoal-raised: #2A2A28;  /* a card on Charcoal */
   --charcoal-lifted: #333331;  /* a card's inner surface, a hover */
   --charcoal-line:   #4D4D4C;  /* the hairline on Charcoal (Vernon, Aug 2026) */
   --stone:           #EFEDE7;  /* a quiet band on paper */
   --stone-line:      #DAD7CF;  /* the hairline on paper */
   --paper:           #FAF9F6;  /* the reading ground */
-  --night:           #0C1420;  /* the night band's ground */
+  --night:           #0C1420;  /* the night band's ground (the Blue look) */
   --night-raised:    #152032;
   --night-line:      #2B3A52;
-  --grade:           13 17 23; /* the dark blue over a photo hero, an rgb triple: rgb(var(--grade) / 0.8) */
-  --orange:          #F97316;  /* the one orange fill */
-  --orange-bright:   #FB923C;  /* a fill's hover; orange words on a dark ground */
+  --orange:          #F97316;  /* the one orange */
+  --orange-bright:   #FB923C;  /* orange words on a dark ground */
   --orange-deep:     #B83E0B;  /* orange words on paper (5.3:1) */
+  --yellow:          #EAB308;  /* the far end of the signature gradient, and nothing else */
 
-  /* Names older files still use. The yellow is out of the brand gradient
-     (HQ, 13 Nov 2026: the orange-to-yellow headline looked older than the
-     rest, and yellow is Thermo-Design's): the "gradient" is one orange. */
+  /* HUB's signature (see above for its three jobs). */
+  --gradient-brand: linear-gradient(90deg, var(--orange), var(--yellow));
+
+  /* Names older files still use. */
   --color-bg-primary: var(--charcoal);
   --color-orange:   var(--orange);
   --color-charcoal: var(--charcoal);
-  --color-amber:    #EAB308;
-  --gradient-brand: linear-gradient(90deg, var(--orange), var(--orange));
+  --color-amber:    var(--yellow);
   --bg-slate:       var(--night);
   --bg-slate-light: var(--night-raised);
   --color-blue-deep:  var(--night);
   --color-blue-mid:   var(--night);
   --color-blue-text:  #93C5FD;
   --color-off-white:  #F5F4F0;
+}
+
+/* ─── The two looks (13 Nov 2026) ────────────────────────────────────────
+   data-tone on <html>: "blue" (the default: the look hubss.com has had, with
+   more grey in it) or "grey". Vernon: "let's be able to toggle between a blue
+   and grey theme. The blue theme should still have dominant grey elements."
+   The switch is components/ui/ToneSwitch.tsx, on the review previews only;
+   ?tone=blue or ?tone=grey in an address sets it too, and it sticks (the
+   bootstrap in app/layout.tsx).
+
+   Only what differs between the looks is here: the bar and the menus, the
+   grade over a photograph, and the band where photographs glow (the night
+   surface, further down). The footer, the dark bands, the cards, paper and
+   stone are the same in both. The map, the Lunch & Learn card and the
+   book's reader are the same in both, and the same as before either.
+
+     --chrome-bar    the bar and the top of the phone menu
+     --chrome-menu   the menus and the phone menu's sheet: darker than the bar
+                     (Vernon: "the megamenu background color could be darker")
+     --grade         the dark over the home hero and a write-up's hero, an rgb
+                     triple: rgb(var(--grade) / 0.8). Also the ground the
+                     photograph fades into, so a hero is one block.
+     --grade-deep    the same for a product's, an application's and About's
+                     hero, which have always been a shade deeper */
+:root,
+[data-tone="blue"] {
+  --chrome-bar:  rgba(7,11,18,0.96);   /* as hubss.com has had it */
+  --chrome-menu: rgb(7,11,18);
+  --grade:       13 17 23;
+  --grade-deep:  8 13 22;
+}
+[data-tone="grey"] {
+  --chrome-bar:  rgba(32,32,31,0.97);  /* HUB Charcoal */
+  --chrome-menu: var(--charcoal-well);
+  --grade:       27 27 26;             /* Charcoal's deep step */
+  --grade-deep:  23 23 22;
 }
 
 /* ─── The roles, dark ────────────────────────────────────────────────────
@@ -87,7 +132,7 @@
      --text-*      copy, primary to hint. The greys are warm, like the ground
                    (they were Tailwind's blue-greys), and each clears 4.5:1
                    on the lightest surface it is painted on (#333331).
-     --on-accent   words on an orange fill: Charcoal (never flips)
+     --on-accent   words on an orange fill: white (never flips)
      --accent*     the orange: the fill is #F97316 in every theme; orange
                    WORDS are brighter on dark and deeper on paper so small
                    labels still clear AA
@@ -110,14 +155,15 @@
   --bg-card-hover: var(--charcoal-lifted);
   --bg-code: #2D2D2B;
   --bg-input: #232322;
-  --bg-nav: rgba(32,32,31,0.97);
+  --bg-nav: var(--chrome-bar);
+  --bg-menu: var(--chrome-menu);
   --text-primary: #F5F0EB;
   --text-body: #E2E0DB;
   --text-secondary: #B4B3AE;
   --text-muted: #A8A7A2;
   --text-faint: #A3A29D;
   --text-hint: #A3A29D;
-  --on-accent: var(--charcoal-deep);
+  --on-accent: #FFFFFF;
   --accent: var(--orange);
   --accent-text: var(--orange-bright);
   --accent-text-lg: var(--orange);
@@ -162,9 +208,10 @@
   color-scheme: dark;
 }
 
-/* The night band: the one dark ground that is blue. Photographs glow on it,
-   so it is where the site shows work in the dark (the home page's
-   applications). It carries no bar, menu or form: those are Charcoal's. */
+/* The night band: where the site shows work in the dark (the home page's
+   applications), because photographs glow on it. In the Blue look it is the
+   one dark ground that is blue; in the Grey look (the block after this one)
+   it is Charcoal's deepest steps. It carries no bar, menu or form. */
 [data-surface="night"] {
   --bg-deepest: #080D16;
   --bg-dark: #0A101A;
@@ -185,11 +232,31 @@
   --border-strong: #22304A;
   background-color: var(--bg-primary);
 }
+[data-tone="grey"] [data-surface="night"] {
+  --bg-deepest: #0E0E0D;
+  --bg-dark: #121211;
+  --bg-primary: var(--charcoal-deeper);
+  --bg-neutral: var(--charcoal-deeper);
+  --bg-section-asphalt: var(--charcoal-deep);
+  --bg-card-neutral: #1D1D1C;
+  --bg-card: var(--charcoal);
+  --bg-card-surface: var(--charcoal-raised);
+  --bg-card-hover: var(--charcoal-raised);
+  --bg-code: var(--charcoal);
+  --bg-input: #1A1A19;
+  --text-secondary: #B4B3AE;
+  --text-muted: #A8A7A2;
+  --text-faint: #A3A29D;
+  --text-hint: #A3A29D;
+  --border-color: #3F3F3D;
+  --border-strong: #333331;
+}
 
-/* The classic dark, exactly as it was before 13 Nov 2026, for the two things
-   that must not change with 2.0: the homepage map (Vernon: "don't mess with
-   the map") and the Product Portfolio Book's reader. A section inside one of
-   them that pins itself dark gets these values too. */
+/* The classic dark, exactly as it was before 13 Nov 2026, for the three
+   things that must not change, in either look: the homepage map (Vernon:
+   "don't mess with the map"), the Lunch & Learn card and the Product
+   Portfolio Book's reader. A section inside one of them that pins itself
+   dark gets these values too. */
 [data-surface="classic"],
 [data-surface="classic"] [data-surface="dark"],
 [data-catalogue-route],
@@ -219,17 +286,8 @@
 }
 
 /* The same promise for what the classic dark paints with shared classes:
-   its label and its heading keep the values they had. The orange button
-   keeps its old look too (white words, the fill that ran to amber) on the
-   map, which changes in nothing. The Lunch & Learn card and the reader may
-   take 2.0's button (HQ's brief: "the new type and buttons with a light
-   hand"): the card says so with data-buttons="new", the reader is simply
-   not named in the button rules. */
-[data-surface="classic"]:not([data-buttons="new"]),
-[data-surface="classic"]:not([data-buttons="new"]) [data-surface="dark"] {
-  --on-accent: #FFFFFF;
-  --accent-gradient: linear-gradient(135deg, #F97316 0%, #EA8C16 100%);
-}
+   its label and its heading keep the values they had. (The orange button
+   needs no rule here: it is the one hubss.com has always had, everywhere.) */
 [data-surface="classic"] .eyebrow {
   font-size: 13px;
   letter-spacing: 0.2em;
@@ -238,13 +296,14 @@
 [data-surface="classic"] .h2-section {
   font-size: clamp(2.25rem, 4vw, 3.5rem);
 }
+/* The Lunch & Learn page's title is the card's own h1: 40px on a phone, as on
+   hubss.com (the new scale would make it 36.66 at 390 and the card 10px
+   shorter; scripts/hubss-2/block-same.mjs measures it). */
+[data-surface="classic"] .h1-page {
+  font-size: clamp(2.5rem, 4vw, 4rem);
+}
 @media (max-width: 359px) {
   [data-surface="classic"] .h2-section { font-size: 1.875rem; }
-}
-[data-surface="classic"]:not([data-buttons="new"]) .btn-accent:hover {
-  background: var(--accent-gradient);
-  filter: brightness(1.08);
-  box-shadow: var(--btn-shadow, 0 0 #0000), 0 10px 30px rgba(249, 115, 22, 0.36);
 }
 
 /* ─── The roles, light ───────────────────────────────────────────────────
@@ -280,7 +339,7 @@
   --text-muted: #6B6862;
   --text-faint: #6A6762;
   --text-hint: #7D7A75;
-  --on-accent: var(--charcoal-deep);
+  --on-accent: #FFFFFF;
   --accent: var(--orange);
   --accent-text: var(--orange-deep);
   --accent-text-lg: var(--orange-deep);
@@ -445,11 +504,12 @@ html {
   --dur-1: 160ms;
   --dur-2: 260ms;
   --dur-3: 420ms;
-  /* The one orange fill, for every button that is orange. Flat since 13 Nov
-     2026: it ran to amber, and with a flat fill the label's contrast can be
-     measured (Charcoal on it, 5.8:1). The name is kept for the files that
-     use it. */
-  --accent-gradient: var(--orange);
+  /* The one orange fill, for every button that is orange: orange running a
+     little toward amber, white words on it, as hubss.com has had it. For a
+     day (13 Nov 2026) it was flat with Charcoal words, 5.8:1 against white's
+     2.8:1; Vernon kept the white ("I still like the white text on orange
+     button"). The contrast is his call and is on record in docs/HUBSS-2.md. */
+  --accent-gradient: linear-gradient(135deg, #F97316 0%, #EA8C16 100%);
 }
 
 /* Tailwind 4's preflight no longer gives <button> the hand cursor, and
@@ -1043,12 +1103,10 @@ p {
     padding: 0;
   }
 }
-/* Hover: the fill a step brighter and a soft dark shadow. No orange glow
-   since 13 Nov 2026: a button is orange enough. */
 .btn-accent:hover {
-  background: var(--orange-bright);
+  filter: brightness(1.08);
   transform: translateY(-1px);
-  box-shadow: var(--btn-shadow, 0 0 #0000), 0 8px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--btn-shadow, 0 0 #0000), 0 10px 30px rgba(249, 115, 22, 0.36);
 }
 .btn-accent:active,
 .btn-ghost:active {
@@ -2062,7 +2120,7 @@ html {
   margin-top: 22px;
   padding: 14px 0 22px;
   border-top: 1px solid var(--ink-08);
-  background: var(--bg-primary);
+  background: var(--bg-menu);
 }
 .mm-foot-row {
   display: flex;

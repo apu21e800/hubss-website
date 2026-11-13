@@ -346,11 +346,9 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
   return (
     <section
       /* the brand's closing statement, not part of the reading */
-      /* The classic dark (app/globals.css): Lunch & Learn keeps the colours
-         and labels it has on hubss.com today; data-buttons lets it take 2.0's
-         button, Charcoal words on the flat orange. */
+      /* The classic dark (app/globals.css): the Lunch & Learn card keeps the
+         colours, labels and button it has on hubss.com today, in both looks. */
       data-surface="classic"
-      data-buttons="new"
       className={hero ? "ll-hero relative pt-6 pb-5 sm:pt-8 sm:pb-6 lg:pt-10 lg:pb-8" : "relative py-16 sm:py-20 lg:py-24"}
       style={{ background: "var(--bg-primary)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -366,7 +364,7 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
             className="relative rounded-3xl overflow-hidden"
             style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)", boxShadow: "0 24px 80px rgba(0,0,0,0.35)" }}
           >
-            <div className="absolute top-0 left-0 right-0 h-1" style={{ background: "var(--orange)" }} />
+            <div className="absolute top-0 left-0 right-0 h-1" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
 
             <div className="grid grid-cols-1 lg:grid-cols-12">
               {/* Copy side */}
@@ -416,7 +414,7 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                     looks the same either way. */}
                 <Title className="ll-title h1-page mb-4" style={{ color: "var(--text-primary)" }}>
                   Specify with confidence.{" "}
-                  <span style={{ color: "var(--orange)" }}>
+                  <span style={{ background: "linear-gradient(92deg, #F97316 0%, #EAB308 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
                     Lunch is on us.
                   </span>
                 </Title>
@@ -483,7 +481,7 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                       <Link
                         href="/lunch-learn#book"
                         className="w-full font-semibold rounded-lg text-base transition-all inline-flex items-center justify-center gap-2"
-                        style={{ background: "var(--accent)", color: "var(--on-accent)", minHeight: 48 }}
+                        style={{ background: "#f97316", color: "var(--on-accent)", minHeight: 48 }}
                       >
                         Book a Lunch &amp; Learn
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -584,7 +582,7 @@ function Ticket() {
             className="lg:col-span-5 rounded-xl overflow-hidden flex flex-col"
             style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}
           >
-            <div className="px-6 py-4 flex items-center justify-between" style={{ background: "var(--accent)" }}>
+            <div className="px-6 py-4 flex items-center justify-between" style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)" }}>
               <span className="text-[12px] font-black tracking-[0.2em] uppercase text-[var(--text-primary)]">HUB · Lunch &amp; Learn</span>
               <span className="text-[12px] font-bold text-[var(--ink-85)]">Admits your whole team</span>
             </div>
@@ -709,7 +707,7 @@ function Proof() {
             <p className="text-[12px] font-bold tracking-[0.22em] uppercase mb-4" style={{ color: "var(--accent-text)" }}>Lunch &amp; Learn</p>
             <h2 className="font-black mb-5" style={{ fontSize: "clamp(2.1rem, 4.5vw, 3.4rem)", lineHeight: 0.98, letterSpacing: "-0.03em", color: "var(--text-primary)" }}>
               The teams that specify Canada&apos;s streets{" "}
-              <span style={{ color: "var(--orange)" }}>
+              <span style={{ background: "linear-gradient(92deg, #F97316 0%, #EAB308 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
                 learn over lunch.
               </span>
             </h2>
@@ -747,11 +745,11 @@ function Proof() {
           >
             <div className="relative rounded-xl overflow-hidden" style={{ aspectRatio: "5/4", border: "1px solid var(--border-color)", boxShadow: "0 20px 60px rgba(0,0,0,0.4)" }}>
               <Image src={IMG.src} alt={IMG.alt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw" />
-              <span className="absolute top-3 left-3 px-2.5 py-1 rounded-md text-[11px] font-black tracking-[0.14em] uppercase" style={{ background: "rgb(var(--grade) / 0.75)", color: "var(--accent-text)", border: "1px solid rgba(249,115,22,0.3)", backdropFilter: "blur(6px)" }}>
+              <span className="absolute top-3 left-3 px-2.5 py-1 rounded-md text-[11px] font-black tracking-[0.14em] uppercase" style={{ background: "rgba(7,11,18,0.75)", color: "var(--accent-text)", border: "1px solid rgba(249,115,22,0.3)", backdropFilter: "blur(6px)" }}>
                 StreetBond
               </span>
               {/* Caption keeps clear of Moose (right padding tracks his width) */}
-              <div className="absolute bottom-0 inset-x-0 pl-5 pr-[38%] sm:pr-[34%] py-3.5" style={{ background: "linear-gradient(to top, rgb(var(--grade) / 0.92) 0%, rgb(var(--grade) / 0.55) 70%, transparent 100%)" }}>
+              <div className="absolute bottom-0 inset-x-0 pl-5 pr-[38%] sm:pr-[34%] py-3.5" style={{ background: "linear-gradient(to top, rgba(7,11,18,0.92) 0%, rgba(7,11,18,0.55) 70%, transparent 100%)" }}>
                 <p className="text-[14.5px] font-semibold leading-snug" style={{ color: "var(--text-primary)" }}>The systems your team gets hands-on</p>
                 <p className="text-[12px] mt-0.5" style={{ color: "var(--ink-60)" }}>Coatings · thermoplastics · stamped asphalt</p>
               </div>
@@ -815,11 +813,9 @@ function Band({ topic, from }: { topic?: string; from?: string }) {
   return (
     <section
       aria-labelledby="ll-band-heading"
-      /* The classic dark (app/globals.css): Lunch & Learn keeps the colours
-         and labels it has on hubss.com today; data-buttons lets it take 2.0's
-         button, Charcoal words on the flat orange. */
+      /* The classic dark (app/globals.css): the Lunch & Learn card keeps the
+         colours, labels and button it has on hubss.com today, in both looks. */
       data-surface="classic"
-      data-buttons="new"
       className="relative py-10 sm:py-12"
       style={{ background: "var(--bg-primary)", borderTop: "1px solid var(--border-color)" }}
     >

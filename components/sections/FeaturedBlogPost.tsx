@@ -117,7 +117,7 @@ export default async function FeaturedBlogPost({ copy = HOMEPAGE_COPY.insights }
                 className="absolute inset-0 pointer-events-none"
                 style={{
                   background:
-                    "linear-gradient(to right, transparent 60%, rgba(8,13,22,0.6) 100%)",
+                    "linear-gradient(to right, transparent 60%, rgb(var(--grade-deep) / 0.6) 100%)",
                 }}
               />
               {/* No badge here. There was one — an orange tick reading "Real

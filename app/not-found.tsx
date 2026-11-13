@@ -58,7 +58,7 @@ export default async function NotFound() {
             This page took a{" "}
             <span
               style={{
-                background: "var(--orange)",
+                background: "var(--gradient-brand)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",

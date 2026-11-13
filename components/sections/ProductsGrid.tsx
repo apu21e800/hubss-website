@@ -188,7 +188,7 @@ export default function ProductsGrid({ products: source, copy = HOMEPAGE_COPY.sy
                       className="absolute inset-0 pointer-events-none"
                       style={{
                         background:
-                          "linear-gradient(to bottom, transparent 40%, rgba(15,20,32,0.75) 100%)",
+                          "linear-gradient(to bottom, transparent 40%, rgb(var(--grade) / 0.75) 100%)",
                       }}
                     />
                   </div>

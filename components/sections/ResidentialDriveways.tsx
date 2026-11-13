@@ -126,7 +126,7 @@ export default function ResidentialDriveways() {
             <div
               className="absolute inset-0 lg:hidden pointer-events-none"
               style={{
-                background: "linear-gradient(to top, rgba(15,20,32,0.65) 0%, transparent 50%)",
+                background: "linear-gradient(to top, rgb(var(--grade) / 0.65) 0%, transparent 50%)",
               }}
             />
           </div>

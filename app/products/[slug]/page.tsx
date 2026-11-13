@@ -301,8 +301,8 @@ export default async function ProductPage({ params }: Props) {
         ) : (
           <>
             <HeroPhoto photo={hero} position={heroPosition} className={heroColourClass(hero)} />
-            <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(8,13,22,0.12) 0%, rgba(8,13,22,0.04) 38%, rgba(8,13,22,0.34) 64%, rgba(8,13,22,0.82) 100%)" }} />
-            <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(8,13,22,0.46) 0%, rgba(8,13,22,0.16) 40%, transparent 62%)" }} />
+            <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgb(var(--grade-deep) / 0.12) 0%, rgb(var(--grade-deep) / 0.04) 38%, rgb(var(--grade-deep) / 0.34) 64%, rgb(var(--grade-deep) / 0.82) 100%)" }} />
+            <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgb(var(--grade-deep) / 0.46) 0%, rgb(var(--grade-deep) / 0.16) 40%, transparent 62%)" }} />
           </>
         )}
         <div className="absolute inset-0 flex items-end">
@@ -424,7 +424,7 @@ export default async function ProductPage({ params }: Props) {
             border: "1px solid rgba(249,115,22,0.24)",
           }}
         >
-          <div className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl" style={{ background: "var(--orange)" }} />
+          <div className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl" style={{ background: "linear-gradient(180deg, var(--orange), var(--yellow))" }} />
           <div className="relative pl-3">
             <p className="font-bold text-lg leading-snug" style={{ color: "var(--text-primary)" }}>
               {isRepairAsk ? `Talk to us about ${product.name}.` : `Specify ${product.name}.`}
@@ -523,7 +523,7 @@ export default async function ProductPage({ params }: Props) {
           <aside className="min-w-0">
             {sideSpecs.length > 0 && (
               <div className="follow-nav rounded-xl p-6 sm:p-7 lg:sticky lg:top-[calc(var(--nav-offset)+32px)] relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}>
-                <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "var(--orange)" }} />
+                <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "var(--gradient-brand)" }} />
                 <h2 className="font-bold text-lg mb-4" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
                   Details
                 </h2>

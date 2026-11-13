@@ -855,7 +855,7 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
           {/* ── The sheet: the sections and the pinned Lunch & Learn ───── */}
           <m.div
             className="drawer-sheet flex min-h-0 flex-1 flex-col"
-            style={{ background: "var(--bg-primary)" }}
+            style={{ background: "var(--bg-menu)" }}
             variants={reduce ? SHEET_FADE : SHEET_WIPE}
           >
             <div ref={bodyRef} className="drawer-body flex-1 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: "touch" } as React.CSSProperties}>
@@ -1000,7 +1000,7 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
               className="drawer-foot flex-shrink-0 px-4 sm:px-6 pt-3"
               style={{
                 borderTop: "1px solid var(--ink-08)",
-                background: "var(--bg-primary)",
+                background: "var(--bg-menu)",
                 paddingBottom: "max(12px, env(safe-area-inset-bottom))",
               }}
             >
@@ -1497,7 +1497,7 @@ export default function Nav() {
               className="absolute inset-x-0 top-full hidden lg:block"
               style={{
                 // Opaque: at 98.5% the hero headline under it showed through.
-                background: "var(--bg-primary)",
+                background: "var(--bg-menu)",
                 borderTop: "1px solid var(--ink-08)",
                 borderBottom: "1px solid var(--ink-10)",
                 boxShadow: "0 28px 60px rgba(0,0,0,0.55)",

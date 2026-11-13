@@ -40,7 +40,7 @@ export default function PricingStrip({
       style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}
       data-pricing-strip
     >
-      <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "var(--orange)" }} />
+      <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "var(--gradient-brand)" }} />
       <p className="font-bold text-base mb-2" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
         {heading}
       </p>

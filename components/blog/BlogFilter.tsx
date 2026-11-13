@@ -386,7 +386,7 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
           <button
             onClick={clearFilters}
             className="text-sm font-semibold px-5 rounded-lg inline-flex items-center"
-            style={{ background: "var(--accent)", color: "var(--on-accent)", minHeight: "44px" }}
+            style={{ background: "var(--accent-gradient)", color: "var(--on-accent)", minHeight: "44px" }}
           >
             Clear all filters
           </button>

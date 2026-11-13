@@ -1,19 +1,22 @@
 // HUBSS 2.0: the homepage map must not change ("don't mess with the map"). This reads
 // the computed colours, type and box of everything inside #map on two builds and lists
 // what differs. The map's own canvas is not compared.
-//   node scripts/hubss-2/map-same.mjs https://hubss.com http://localhost:4311
+//   node scripts/hubss-2/map-same.mjs https://hubss.com http://localhost:4311 [blue|grey]
+// The third word is the look to read the second site in (its ?tone=); the map must be
+// the same in both.
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
-const [a, b] = process.argv.slice(2);
+const [a, b, tone] = process.argv.slice(2);
 const PROPS = ["color", "backgroundColor", "backgroundImage", "borderTopColor", "borderTopWidth", "fontSize", "fontWeight", "letterSpacing", "lineHeight", "fontFamily", "paddingTop", "paddingBottom", "borderRadius", "boxShadow", "opacity"];
 const browser = await chromium.launch();
 let total = 0;
 for (const [w, h] of [[1440, 900], [390, 844]]) {
-  const read = async (base) => {
+  const read = async (base, withTone) => {
     const ctx = await browser.newContext({ viewport: { width: w, height: h }, isMobile: w < 500, hasTouch: w < 500 });
     const page = await ctx.newPage();
-    await page.goto(base + "/", { waitUntil: "load", timeout: 90000 });
+    let ok = false;
+    for (let t = 0; t < 4 && !ok; t++) { try { await page.goto(base + "/" + (withTone && tone ? `?tone=${tone}` : ""), { waitUntil: "load", timeout: 90000 }); ok = true; } catch { await page.waitForTimeout(4000); } }
     await page.locator("#map").scrollIntoViewIfNeeded();
     // Read both at the same moment in the map's life: once it says it is ready
     // (CanadaMap sets window.__hubssMapReady on its first idle), and after the
@@ -40,7 +43,7 @@ for (const [w, h] of [[1440, 900], [390, 844]]) {
     await ctx.close();
     return out;
   };
-  const [A, B] = [await read(a), await read(b)];
+  const [A, B] = [await read(a, false), await read(b, true)];
   const keys = new Set([...Object.keys(A), ...Object.keys(B)]);
   const diffs = [...keys].filter((k) => A[k] !== B[k]);
   total += diffs.length;
@@ -48,4 +51,4 @@ for (const [w, h] of [[1440, 900], [390, 844]]) {
   for (const k of diffs.slice(0, 8)) { const x = (A[k] || "(missing)").split(" ; "), y = (B[k] || "(missing)").split(" ; "); const which = x.map((v, i) => (v !== y[i] ? `${PROPS[i] ?? "box"}: ${v} -> ${y[i]}` : null)).filter(Boolean).slice(0, 3); console.log("   ", k.slice(0, 60), "|", which.join(" | ").slice(0, 200)); }
 }
 await browser.close();
-console.log(total ? `${total} differences` : "the map block is the same on both");
+console.log(total ? `${total} differences${tone ? " (" + tone + ")" : ""}` : `the map block is the same on both${tone ? " (" + tone + ")" : ""}`);

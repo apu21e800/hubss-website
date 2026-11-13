@@ -221,15 +221,15 @@ export default async function ApplicationPage({ params }: Props) {
           position={heroPosition}
           className={`${heroColourClass(hero)} ${isSanityImage(hero.src) ? "" : "max-sm:scale-(--hero-zoom) max-sm:origin-(--hero-origin)"}`}
         />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(8,13,22,0.12) 0%, rgba(8,13,22,0.04) 38%, rgba(8,13,22,0.36) 64%, rgba(8,13,22,0.84) 100%)" }} />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(8,13,22,0.46) 0%, rgba(8,13,22,0.16) 40%, transparent 62%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgb(var(--grade-deep) / 0.12) 0%, rgb(var(--grade-deep) / 0.04) 38%, rgb(var(--grade-deep) / 0.36) 64%, rgb(var(--grade-deep) / 0.84) 100%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgb(var(--grade-deep) / 0.46) 0%, rgb(var(--grade-deep) / 0.16) 40%, transparent 62%)" }} />
         {/* Phones only. On a phone the name wraps and the text block climbs to
             about 40% of the banner's height, where the scrims above are at
             their lightest: on LEED & Urban Heat Island the label and the first
             line of the name sat on a white planter at about 2.5:1 (QA, 28 Sep
             2026). This band darkens that height; from sm up it is not drawn,
             so the desktop photo keeps its colour. */}
-        <div className="absolute inset-0 sm:hidden" style={{ background: "linear-gradient(180deg, rgba(8,13,22,0) 16%, rgba(8,13,22,0.5) 34%, rgba(8,13,22,0.56) 62%, rgba(8,13,22,0.3) 100%)" }} />
+        <div className="absolute inset-0 sm:hidden" style={{ background: "linear-gradient(180deg, rgb(var(--grade-deep) / 0) 16%, rgb(var(--grade-deep) / 0.5) 34%, rgb(var(--grade-deep) / 0.56) 62%, rgb(var(--grade-deep) / 0.3) 100%)" }} />
         <div className="absolute inset-0 flex items-end">
           <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-14">
             {/* Cream, not orange: the orange label measured 2 to 3:1 over the
@@ -299,7 +299,7 @@ export default async function ApplicationPage({ params }: Props) {
                 className="rounded-xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 mt-2 relative overflow-hidden"
                 style={{ background: "rgba(249,115,22,0.06)", border: "1px solid rgba(249,115,22,0.24)" }}
               >
-                <div className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl" style={{ background: "var(--orange)" }} />
+                <div className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl" style={{ background: "linear-gradient(180deg, var(--orange), var(--yellow))" }} />
                 <div className="relative pl-3">
                   <p className="font-bold text-lg leading-snug" style={{ color: "var(--text-primary)" }}>
                     {ask.prompt}
@@ -340,7 +340,7 @@ export default async function ApplicationPage({ params }: Props) {
                   markings at 1440x900), and the product sidebars lead with
                   the people and the ask (Vern, 17 Oct 2026). */}
               <div className="rounded-xl p-6 sm:p-7 relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)", boxShadow: "0 1px 2px rgba(0,0,0,0.04)" }}>
-                <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "var(--orange)" }} />
+                <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "var(--gradient-brand)" }} />
                 <h2 className="font-bold text-base mb-1.5" style={{ color: "var(--text-primary)" }}>
                   Pricing and installers
                 </h2>
@@ -364,7 +364,7 @@ export default async function ApplicationPage({ params }: Props) {
               </div>
               {!spread && relatedProductData.length > 0 && (
                 <div className="rounded-xl p-6 sm:p-7 relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)", boxShadow: "0 1px 2px rgba(0,0,0,0.04)" }}>
-                  <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "var(--orange)" }} />
+                  <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "var(--gradient-brand)" }} />
                   <h2 className="font-bold text-lg mb-4" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
                     Systems for {nameInSentence}
                   </h2>

@@ -89,7 +89,7 @@ export default function PostConversion({ post }: { post: PostMeta }) {
           boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 18px 48px rgba(0,0,0,0.07)",
         }}
       >
-        <div className="absolute inset-x-0 top-0 h-[3px]" style={{ background: "var(--orange)" }} aria-hidden="true" />
+        <div className="absolute inset-x-0 top-0 h-[3px]" style={{ background: "var(--gradient-brand)" }} aria-hidden="true" />
         <p className="text-[12px] font-bold tracking-[0.18em] uppercase mb-3" style={{ color: section.text }}>
           Lunch &amp; Learn
         </p>
@@ -113,7 +113,7 @@ export default function PostConversion({ post }: { post: PostMeta }) {
             href={lunchLearnHref(topic, "insights")}
             className="inline-flex items-center justify-center gap-2 px-7 rounded-lg font-bold text-sm transition-all hover:brightness-110 active:scale-[0.98]"
             style={{
-              background: "var(--accent)",
+              background: "var(--accent-gradient)",
               color: "var(--on-accent)",
               boxShadow: "0 6px 20px rgba(249,115,22,0.28)",
               minHeight: 48,

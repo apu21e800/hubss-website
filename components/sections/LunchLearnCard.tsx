@@ -46,7 +46,7 @@ export default async function LunchLearnCard({
       className={`relative overflow-hidden rounded-xl ${row ? "p-5 sm:p-6" : "p-5"}`}
       style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)", boxShadow: "var(--card-shadow, 0 1px 2px rgba(0,0,0,0.06))" }}
     >
-      <div className="absolute inset-x-0 top-0 h-[3px]" style={{ background: "var(--orange)" }} aria-hidden="true" />
+      <div className="absolute inset-x-0 top-0 h-[3px]" style={{ background: "var(--gradient-brand)" }} aria-hidden="true" />
       <div className={row ? "flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6" : ""}>
         <div className={`flex items-center gap-3 ${row ? "sm:flex-1" : "mb-3"}`}>
           <span className="relative flex-shrink-0 w-12 h-12" aria-hidden="true">

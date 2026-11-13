@@ -127,8 +127,8 @@ export default async function AboutPage() {
             pavers, so the lower half now darkens sooner; the top is as it was. */}
         {/* 28 Sep 2026: the top third lighter again, so the photograph's
             colour shows above the type; the foot keeps the QA's darkness. */}
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(180deg, rgba(8,13,22,0.16) 0%, rgba(8,13,22,0.40) 42%, rgba(8,13,22,0.90) 100%)" }} />
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(92deg, rgba(8,13,22,0.52) 0%, rgba(8,13,22,0.22) 45%, transparent 70%)" }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(180deg, rgb(var(--grade-deep) / 0.16) 0%, rgb(var(--grade-deep) / 0.40) 42%, rgb(var(--grade-deep) / 0.90) 100%)" }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(92deg, rgb(var(--grade-deep) / 0.52) 0%, rgb(var(--grade-deep) / 0.22) 45%, transparent 70%)" }} />
         <div
           className="absolute bottom-0 left-0 right-0 h-[2px] pointer-events-none z-10"
           style={{ background: "linear-gradient(90deg, #F97316 0%, transparent 60%)" }}
@@ -143,7 +143,7 @@ export default async function AboutPage() {
               photo Studio supplies. */}
           <div
             className="flex w-fit max-w-full items-center gap-3 mb-4 rounded-md px-3 py-2"
-            style={{ background: "rgba(8,13,22,0.72)", backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)" }}
+            style={{ background: "rgb(var(--grade-deep) / 0.72)", backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)" }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

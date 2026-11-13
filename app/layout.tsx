@@ -26,6 +26,7 @@ import { NavMenuProvider } from "@/components/NavMenuProvider";
 import { NAV_MENU } from "@/lib/nav-menu";
 import { getSiteSettings } from "@/lib/sanity.queries";
 import { mailtoHref, telHref } from "@/lib/site-settings";
+import ToneSwitch from "@/components/ui/ToneSwitch";
 
 // Runs before first paint. Order: ?theme= in the URL (persisted, so a link
 // sticks as the reader navigates) → localStorage → the server's own
@@ -34,7 +35,19 @@ import { mailtoHref, telHref } from "@/lib/site-settings";
 // Mixed is the default as of 21 Sep, on Vern's call. The <html> tag ships with
 // data-theme="mixed" already on it, so a first-time visitor never sees a frame
 // of anything else and this script's only job is to honour a saved choice.
-const THEME_INIT = `(function(){try{var q=location.search,m=/[?&]theme=(dark|mixed|light)(?=[&#]|$)/.exec(q),t=m?m[1]:null;if(t){try{localStorage.setItem('hubss-theme',t)}catch(e){}}if(!t){try{t=localStorage.getItem('hubss-theme')}catch(e){}}if(t!=='mixed'&&t!=='light'&&t!=='dark'){t='mixed'}document.documentElement.setAttribute('data-theme',t)}catch(e){}})();`;
+//
+// The same again for the look (13 Nov 2026): ?tone=blue|grey → localStorage →
+// blue, on data-tone. The two looks are in app/globals.css; the switch that
+// sets it is components/ui/ToneSwitch.tsx, on the keyed preview only.
+const THEME_INIT = `(function(){try{var q=location.search,m=/[?&]theme=(dark|mixed|light)(?=[&#]|$)/.exec(q),t=m?m[1]:null;if(t){try{localStorage.setItem('hubss-theme',t)}catch(e){}}if(!t){try{t=localStorage.getItem('hubss-theme')}catch(e){}}if(t!=='mixed'&&t!=='light'&&t!=='dark'){t='mixed'}document.documentElement.setAttribute('data-theme',t)}catch(e){}try{var n=/[?&]tone=(blue|grey)(?=[&#]|$)/.exec(location.search),o=n?n[1]:null;if(o){try{localStorage.setItem('hubss-tone',o)}catch(e){}}if(!o){try{o=localStorage.getItem('hubss-tone')}catch(e){}}if(o!=='blue'&&o!=='grey'){o='blue'}document.documentElement.setAttribute('data-tone',o)}catch(e){}})();`;
+
+// The Blue / Grey switch is a review control: it shows on this branch's keyed
+// preview and on a local build, never on hubss.com, the review copy of main
+// or any other preview. When one look is chosen it becomes the default here
+// and in app/globals.css, and the switch and this script's second half go.
+const TONE_SWITCH =
+  process.env.VERCEL_ENV !== "production" &&
+  (!process.env.VERCEL || process.env.VERCEL_GIT_COMMIT_REF === "feat/hubss-2");
 
 const geist = Geist({ variable: "--font-geist", subsets: ["latin"] });
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], weight: ["300","400","500","600","700"] });
@@ -53,8 +66,9 @@ const SITE_DESCRIPTION =
 // other pages (DEFAULT_OG_IMAGE); point it here too.
 const OG_IMAGE = { url: "/images/og/default.jpg", width: 1200, height: 630, alt: "The UBC Musqueam crosswalk in Vancouver: Coast Salish artwork in coloured pavement by HUB Surface Systems" };
 
-/** The browser chrome's colour on a phone: the bar's charcoal. */
-export const viewport: Viewport = { themeColor: "#0b0b0b" };
+/** The browser chrome's colour on a phone: the bar's, in the Blue look (the
+ *  default). The switch repaints it for Grey (components/ui/ToneSwitch.tsx). */
+export const viewport: Viewport = { themeColor: "#070b12" };
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://hubss.com"),
@@ -128,7 +142,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     // its very bottom, and glided up for most of a second; a touch on the way
     // stopped it there (Vern and Doug, 23 Oct 2026: "some clicks start users
     // at the bottom of the page"). In-page anchors (#map) still glide.
-    <html lang="en-CA" data-theme="mixed" data-scroll-behavior="smooth" suppressHydrationWarning>
+    <html lang="en-CA" data-theme="mixed" data-tone="blue" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         {/* Theme bootstrap — runs before first paint so a saved "light" never
             flashes dark. Order: ?theme= in the URL (persisted, so a review link
@@ -191,6 +205,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           <NotInStudio>
             <CrispChat />
             {process.env.VERCEL_ENV !== "production" && <VercelToolbar />}
+            {/* Blue or Grey, for the review of 13 Nov 2026. */}
+            {TONE_SWITCH && <ToneSwitch />}
             <Analytics />
             <SpeedInsights />
             {/* Google Analytics for people: not for browsers driven by a

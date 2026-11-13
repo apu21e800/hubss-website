@@ -98,10 +98,15 @@ export default function ApplicationsGrid({ applications: source, copy = HOMEPAGE
                 {copy.headingAccent && (
                   <>
                     {" "}
-                    {/* The accent in HUB's one orange (13 Nov 2026; it ran
-                        orange to yellow), as on "Your Canvas." and "Lunch is
-                        on us." */}
-                    <span className="inline-block" style={{ color: "var(--orange)" }}>{copy.headingAccent}</span>
+                    {/* The accent in HUB's gradient, as on "Is Your Canvas."
+                        and "Lunch is on us.": a headline's accent on a dark
+                        ground is one of its three jobs (app/globals.css). */}
+                    <span className="inline-block" style={{
+                      background: "var(--gradient-brand)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                    }}>{copy.headingAccent}</span>
                   </>
                 )}
               </h2>
@@ -183,10 +188,10 @@ export default function ApplicationsGrid({ applications: source, copy = HOMEPAGE
                   }}
                 />
 
-                {/* Hover: a 2px orange line along the foot only — image foregrounded, no full overlay */}
+                {/* Hover: a 2px line in HUB's gradient along the foot only — image foregrounded, no full overlay */}
                 <span
                   className="absolute inset-x-0 bottom-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                  style={{ background: "var(--accent)" }}
+                  style={{ background: "var(--gradient-brand)" }}
                 />
 
                 <div className="absolute bottom-0 left-0 right-0 p-5 transition-transform duration-300 group-hover:-translate-y-0.5">

@@ -4,6 +4,7 @@ import { FIELD_NOTE_TYPES } from "../../lib/field-notes-taxonomy";
 import { bodyStyle, copyStyle, headingStyle } from "./_shared";
 import PinToTopInput from "../components/PinToTopInput";
 import ForReviewInput from "../components/ForReviewInput";
+import { IN_REVIEW } from "../review-words";
 
 /**
  * A Field Notes post. Since Sep 2026 this is the only copy of the blog: the
@@ -35,16 +36,17 @@ export default defineType({
 
   fields: [
     // ── Review and going live (12 Nov 2026) ─────────────────────────────────
-    // At the top of the form, where an editor looks first: Doug's review, then
+    // At the top of the form, where an editor looks first: the review, then
     // the schedule. Doug reads first (27 Oct 2026, lib/review-first.ts): once
-    // 21e8 has read a new draft it sends it to Doug, and it shows, words and
-    // photo, on his review page (app/review) until it is published. Since 12
-    // Nov 2026 the switch is a button (sanity/components/ForReviewInput.tsx)
-    // and sending it emails Doug a link (lib/review-notify.ts). Sending it
+    // 21e8 has read a new draft it sends it for review, and it shows, words
+    // and photo, on the review page (app/review) until it is published. Since
+    // 12 Nov 2026 the switch is a button (sanity/components/ForReviewInput.tsx)
+    // and sending it emails Doug and Cleve a link, Vern copied
+    // (lib/review-notify.ts; the button read Send to Doug until that evening). Sending it
     // publishes nothing; publishing switches it off (sanity.config.ts).
     defineField({
       name: "forReview",
-      title: "Doug's review",
+      title: "Review",
       type: "boolean",
       group: "content",
       fieldset: "release",
@@ -431,7 +433,7 @@ export default defineType({
     prepare: ({ title, publishedAt, category, media, scheduled, scheduledFor, pinned, forReview }) => ({
       title,
       subtitle: [
-        forReview ? "With Doug" : undefined,
+        forReview ? IN_REVIEW : undefined,
         pinned ? "Pinned" : undefined,
         category,
         scheduled && scheduledFor

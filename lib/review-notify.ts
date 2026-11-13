@@ -1,6 +1,11 @@
 /**
  * Doug hears when an article is waiting for him (12 Nov 2026; Vern: "it might
  * be ideal if he gets an email when there is a blog ready for him to review").
+ * Since that evening Cleve gets it too, and Vern a copy (Vern:
+ * "doug.bain@hubss.com, cleve.stordy, and vernon, all get notified"): one
+ * email to both, "Hi Doug and Cleve," and the Studio's button is "Send for
+ * review" (sanity/review-words.ts). The code keeps Doug's name (notifyDoug,
+ * dougsAddresses): labels change, names in code stay.
  *
  * Until then the step was Vern's to remember: switch on "Ready for Doug's
  * review" (or press "Put on Doug's page" on his own review page), then tell
@@ -10,7 +15,7 @@
  * where it waits. His reply goes to Vern, and Vern gets a copy of each one.
  *
  * Three ways in, one function (notifyDoug), so it never goes twice:
- *  - "Send to Doug" in the Studio (sanity/components/ForReviewInput.tsx,
+ *  - "Send for review" in the Studio (sanity/components/ForReviewInput.tsx,
  *    through POST /api/review/notify, app/api/review/notify/route.ts);
  *  - Vern's button on his review page (app/review/[key]/actions.ts);
  *  - the daily run (app/api/cron/social-drafts, notifyMissedReviews), the
@@ -32,9 +37,10 @@
  * the deployment's own secret, and a preview's or a laptop's would open
  * nothing on hubss.com. A send made anywhere else goes with the next daily
  * run. Off with REVIEW_FIRST=off (Doug no longer reviews) or
- * REVIEW_EMAIL_TO=off. REVIEW_EMAIL_TO is Doug's address
- * (doug.bain@hubss.com when not set); REVIEW_REPLY_TO is where his reply
- * goes (the first BLOG_DRAFT_NOTIFY address when not set).
+ * REVIEW_EMAIL_TO=off. REVIEW_EMAIL_TO is who reads (Doug and Cleve,
+ * REVIEW_ADDRESSES, when not set); REVIEW_REPLY_TO is where their replies go
+ * (the first BLOG_DRAFT_NOTIFY address when not set). Vern's copy goes to
+ * vernon@hubss.com and the editors (BLOG_DRAFT_NOTIFY), unseen by the others.
  */
 import { createHash } from "node:crypto";
 import type { SanityClient } from "@sanity/client";
@@ -46,8 +52,14 @@ import { ASK_KEY, ASK_PREFIX, ASK_TYPE } from "@/lib/review-ask";
 /** The record's type. sanity/components/ForReviewInput.tsx reads it by this name. */
 export const MAILED_TYPE = "reviewMailed";
 
-/** Doug's address when REVIEW_EMAIL_TO is not set: his own, at the East office. */
+/** Doug's address, at the East office. */
 export const DOUGS_ADDRESS = "doug.bain@hubss.com";
+
+/** Who the email goes to when REVIEW_EMAIL_TO is not set: Doug and Cleve (sanity/review-words.ts REVIEWERS names them). */
+export const REVIEW_ADDRESSES = [DOUGS_ADDRESS, "cleve.stordy@hubss.com"];
+
+/** Vern's copy of each email, besides the editors (BLOG_DRAFT_NOTIFY). */
+export const VERNS_ADDRESS = "vernon@hubss.com";
 
 /** Who signs the email: the name Doug knows the review by (his page says to reply to Vern). */
 const SIGNED = "Vern";
@@ -63,17 +75,17 @@ export function mailedRecordId(articleId: string): string {
   return `review.mailed-${createHash("sha256").update(publishedIdOf(articleId)).digest("hex").slice(0, 16)}`;
 }
 
-/** Doug's address(es), or none when the email is switched off. */
+/** Who the email goes to (Doug and Cleve), or none when it is switched off. */
 export function dougsAddresses(env: Record<string, string | undefined> = process.env): string[] {
   const v = (env.REVIEW_EMAIL_TO ?? "").trim();
   if (OFF.includes(v.toLowerCase())) return [];
-  return (v || DOUGS_ADDRESS)
+  return (v || REVIEW_ADDRESSES.join(","))
     .split(",")
     .map((s) => s.trim())
     .filter((s) => /^[^\s@,]+@[^\s@,]+\.[^\s@,]+$/.test(s));
 }
 
-/** Where Doug's reply goes: REVIEW_REPLY_TO, else the first editor (Vern). */
+/** Where their replies go: REVIEW_REPLY_TO, else the first editor (Vern). */
 export function replyToAddress(env: Record<string, string | undefined> = process.env): string | undefined {
   const v = (env.REVIEW_REPLY_TO ?? "").trim();
   if (v) return v;
@@ -94,6 +106,22 @@ export interface DougEmail {
   html: string;
 }
 
+/** Mailboxes that aren't a person: an address like these gets "Hello,". */
+const NOT_A_NAME = new Set(["info", "admin", "office", "sales", "hello", "contact", "team", "noreply", "review", "reviews", "web", "webmaster", "marketing", "accounts", "support"]);
+
+/**
+ * The greeting, from the addresses' first names: doug.bain@ and
+ * cleve.stordy@ make "Hi Doug and Cleve,". "Hello," when an address isn't a
+ * person's, so a changed REVIEW_EMAIL_TO never greets "Info".
+ */
+export function greetingFor(addresses: string[]): string {
+  const names = addresses.map((a) => (a.split("@")[0] ?? "").split(/[._+-]/)[0] ?? "");
+  if (!names.length || names.some((n) => !/^[a-z]{2,}$/i.test(n) || NOT_A_NAME.has(n.toLowerCase()))) return "Hello,";
+  const proper = [...new Set(names.map((n) => n[0].toUpperCase() + n.slice(1).toLowerCase()))];
+  const list = proper.length === 1 ? proper[0] : `${proper.slice(0, -1).join(", ")} and ${proper[proper.length - 1]}`;
+  return `Hi ${list},`;
+}
+
 const escapeHtml = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 /** One line of a title or excerpt: spaces tidied, no line breaks. */
@@ -110,9 +138,9 @@ export function shortExcerpt(s: string, max = 240): string {
 
 /**
  * The email, pure for `npm run test:review`: plain words, the article, one
- * button. `round` 2 and up: an article he has been sent before.
+ * button. `round` 2 and up: an article they have been sent before.
  */
-export function dougArticleEmail(article: { title: string; excerpt?: string | null; link: string }, round = 1): DougEmail {
+export function dougArticleEmail(article: { title: string; excerpt?: string | null; link: string }, round = 1, greeting = greetingFor(REVIEW_ADDRESSES)): DougEmail {
   const title = oneLine(article.title);
   const excerpt = shortExcerpt(article.excerpt ?? "");
   const again = round > 1;
@@ -122,7 +150,7 @@ export function dougArticleEmail(article: { title: string; excerpt?: string | nu
     : "A new article for hubss.com is ready for you to read:";
   const close = "Reply to this email with OK, or with anything you'd change. Nothing goes on the site without your OK.";
   const text = [
-    "Hi Doug,",
+    greeting,
     "",
     opening,
     "",
@@ -140,7 +168,7 @@ export function dougArticleEmail(article: { title: string; excerpt?: string | nu
     '<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head>',
     '<body style="margin:0;padding:0;background:#f4f2ee;">',
     '<div style="max-width:560px;margin:0 auto;padding:28px 20px 36px;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:1.5;color:#1f1f1f;">',
-    '<p style="margin:0 0 16px;">Hi Doug,</p>',
+    `<p style="margin:0 0 16px;">${escapeHtml(greeting)}</p>`,
     `<p style="margin:0 0 20px;">${escapeHtml(opening)}</p>`,
     '<div style="border-left:3px solid #F97316;padding:2px 0 2px 16px;margin:0 0 24px;">',
     `<p style="margin:0;font-size:19px;font-weight:700;line-height:1.3;">${escapeHtml(title)}</p>`,
@@ -293,11 +321,14 @@ async function finishRound(client: SanityClient, claim: Claim, sent: boolean, no
       else await sleep(400 * attempt);
     }
   }
-  if (sent) console.log(`[review] Doug was emailed about ${claim.draftId} (round ${claim.round})`);
+  if (sent) console.log(`[review] the review email went for ${claim.draftId} (round ${claim.round})`);
 }
 
 function mailTo(email: DougEmail): Mail {
-  return { to: dougsAddresses(), subject: email.subject, text: email.text, html: email.html, replyTo: replyToAddress(), bcc: editorAddresses(), from: DOUG_EMAIL_FROM };
+  const to = dougsAddresses();
+  // Vern's copy, unseen by the others: his own address and the editors', once each.
+  const bcc = [...new Set([VERNS_ADDRESS, ...editorAddresses()].map((a) => a.trim().toLowerCase()))].filter((a) => a && !to.map((t) => t.toLowerCase()).includes(a));
+  return { to, subject: email.subject, text: email.text, html: email.html, replyTo: replyToAddress(), bcc, from: DOUG_EMAIL_FROM };
 }
 
 /**
@@ -313,7 +344,7 @@ export async function notifyDoug(client: SanityClient, id: string, opts: NotifyO
   const now = opts.now ?? new Date();
   const claim = await claimRound(client, id, now, opts.waitMs ?? 0);
   if (typeof claim === "string") return claim;
-  const email = dougArticleEmail({ title: claim.title, excerpt: claim.excerpt, link: `${page}#${anchorFor("article", claim.draftId)}` }, claim.round);
+  const email = dougArticleEmail({ title: claim.title, excerpt: claim.excerpt, link: `${page}#${anchorFor("article", claim.draftId)}` }, claim.round, greetingFor(dougsAddresses()));
   const sent = (await (opts.send ?? sendMail)(mailTo(email), "review")).length > 0;
   await finishRound(client, claim, sent, now);
   return sent ? "sent" : "not sent";
@@ -326,19 +357,19 @@ const NUMBER_WORDS = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven",
  * the articles already on his page the first morning, or a few sent where the
  * Studio couldn't email. Each title goes to its card. Pure, for the tests.
  */
-export function dougDigestEmail(articles: { title: string; link: string }[], page: string): DougEmail {
+export function dougDigestEmail(articles: { title: string; link: string }[], page: string, greeting = greetingFor(REVIEW_ADDRESSES)): DougEmail {
   const count = NUMBER_WORDS[articles.length] ?? String(articles.length);
   const titles = articles.map((a) => ({ title: oneLine(a.title), link: a.link }));
   const subject = `${count} articles ready for your OK`;
   const opening = `${count} articles for hubss.com are ready for you to read:`;
   const close = "Reply to this email with OK, or with anything you'd change. Nothing goes on the site without your OK.";
-  const text = ["Hi Doug,", "", opening, "", ...titles.map((a) => `- ${a.title}`), "", `Read them here: ${page}`, "", close, "", SIGNED].join("\n");
+  const text = [greeting, "", opening, "", ...titles.map((a) => `- ${a.title}`), "", `Read them here: ${page}`, "", close, "", SIGNED].join("\n");
   const html = [
     "<!doctype html>",
     '<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head>',
     '<body style="margin:0;padding:0;background:#f4f2ee;">',
     '<div style="max-width:560px;margin:0 auto;padding:28px 20px 36px;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:1.5;color:#1f1f1f;">',
-    '<p style="margin:0 0 16px;">Hi Doug,</p>',
+    `<p style="margin:0 0 16px;">${escapeHtml(greeting)}</p>`,
     `<p style="margin:0 0 20px;">${escapeHtml(opening)}</p>`,
     '<div style="border-left:3px solid #F97316;padding:2px 0 2px 16px;margin:0 0 24px;">',
     ...titles.map((a, i) => `<p style="margin:${i ? "10px" : "0"} 0 0;font-size:17px;font-weight:700;line-height:1.3;"><a href="${escapeHtml(a.link)}" style="color:#1f1f1f;text-decoration:underline;">${escapeHtml(a.title)}</a></p>`),
@@ -437,7 +468,7 @@ const TIDY_PER_RUN = 25;
  * published since is cleared, so a send the Studio couldn't finish still
  * reaches Doug by the next morning. Its first morning, it is the email for
  * the articles already on his page. It also switches the review off on live
- * articles (staleReviewFlags), so none of them reads "With Doug" in the
+ * articles (staleReviewFlags), so none of them reads "In review" in the
  * Studio.
  */
 export async function notifyMissedReviews(
@@ -479,8 +510,8 @@ export async function notifyMissedReviews(
     const link = (c: Claim) => `${page}#${anchorFor("article", c.draftId)}`;
     const email =
       claims.length === 1
-        ? dougArticleEmail({ title: claims[0].title, excerpt: claims[0].excerpt, link: link(claims[0]) }, claims[0].round)
-        : dougDigestEmail(claims.map((c) => ({ title: c.title, link: link(c) })), page);
+        ? dougArticleEmail({ title: claims[0].title, excerpt: claims[0].excerpt, link: link(claims[0]) }, claims[0].round, greetingFor(dougsAddresses()))
+        : dougDigestEmail(claims.map((c) => ({ title: c.title, link: link(c) })), page, greetingFor(dougsAddresses()));
     const sent = (await (send ?? sendMail)(mailTo(email), "review")).length > 0;
     for (const claim of claims) {
       await finishRound(client, claim, sent, now);

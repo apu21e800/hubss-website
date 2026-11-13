@@ -6,7 +6,7 @@
  * key (sent in the form; Doug's page has no buttons, and his key is refused
  * here). It publishes nothing and posts nothing:
  *  - an article: `forReview` on its unpublished draft, the same field as
- *    "Send to Doug" in Studio, and Doug's email with it (lib/review-notify.ts);
+ *    "Send for review" in Studio, and the review email with it (lib/review-notify.ts);
  *  - a group of social posts: a private record (reviewTickId), never the
  *    Sent to Buffer record itself, which stays the pipeline's.
  * Every other id is refused before Sanity is asked. Next checks that the
@@ -40,7 +40,7 @@ export async function setOnDougsPage(formData: FormData): Promise<void> {
     if (doc?._type === "blogPost") {
       await client.patch(id).set({ forReview: on }).commit();
       console.log(`[review] ${id} ${on ? "put on" : "taken off"} Doug's page`);
-      // Doug's email, as "Send to Doug" in the Studio sends it (lib/review-notify.ts).
+      // The review email, as "Send for review" in the Studio sends it (lib/review-notify.ts).
       // A failure here is the morning run's to retry; the button's work is done.
       try {
         if (on) await notifyDoug(client, id);

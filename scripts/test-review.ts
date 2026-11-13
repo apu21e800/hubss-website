@@ -45,22 +45,26 @@ import {
   dougArticleEmail,
   dougDigestEmail,
   dougsAddresses,
+  greetingFor,
   MAILED_TYPE,
   mailedRecordId,
   notifyDoug,
   notifyMissedReviews,
   ASK_MAX_AGE_MS,
   replyToAddress,
+  REVIEW_ADDRESSES,
   takeAsk,
   sendsHere,
   shortExcerpt,
   staleReviewFlags,
+  VERNS_ADDRESS,
 } from "../lib/review-notify";
 import type { Mail } from "../lib/editor-mail";
 import { ASK_KEY, ASK_PREFIX, ASK_TYPE, newAskKey } from "../lib/review-ask";
 import type { SanityClient } from "@sanity/client";
 import { anchorFor as anchorForStudio } from "../lib/review-anchor";
 import { jobPhotosLine } from "../sanity/job-photos-line";
+import { IN_REVIEW, REVIEWERS, SEND_FOR_REVIEW } from "../sanity/review-words";
 
 let failures = 0;
 function check(name: string, fn: () => void) {
@@ -384,7 +388,8 @@ check("has the title, the opening line and the link to his page, at the article'
   }
   assert.ok(link.endsWith("#article-drafts-blogpost-milton-crosswalk"), "the card's own anchor");
   assert.match(first.html, /Read the article<\/a>/);
-  assert.match(first.text, /^Hi Doug,$/m);
+  assert.match(first.text, /^Hi Doug and Cleve,$/m);
+  assert.match(first.html, />Hi Doug and Cleve,<\/p>/);
   assert.match(first.text, /Reply to this email with OK/);
 });
 check("names no machinery and keeps the house style", () => {
@@ -429,15 +434,42 @@ check("a long excerpt is cut at a word", () => {
   assert.ok(!/\s\.\.\.$/.test(cut));
   assert.equal(shortExcerpt("Short and sweet."), "Short and sweet.");
 });
-check("comes from Vern at hubss.com, goes to Doug, and his reply goes to Vern", () => {
+check("comes from Vern at hubss.com, goes to Doug and Cleve, and their replies go to Vern", () => {
   assert.match(DOUG_EMAIL_FROM, /^Vern via hubss\.com <noreply@hubss\.com>$/);
   assert.equal(DOUGS_ADDRESS, "doug.bain@hubss.com");
-  assert.deepEqual(dougsAddresses({}), ["doug.bain@hubss.com"]);
+  assert.deepEqual(REVIEW_ADDRESSES, ["doug.bain@hubss.com", "cleve.stordy@hubss.com"]);
+  assert.equal(VERNS_ADDRESS, "vernon@hubss.com");
+  assert.deepEqual(dougsAddresses({}), ["doug.bain@hubss.com", "cleve.stordy@hubss.com"]);
+  assert.deepEqual(dougsAddresses({ REVIEW_EMAIL_TO: "doug.bain@hubss.com" }), ["doug.bain@hubss.com"]);
   assert.deepEqual(dougsAddresses({ REVIEW_EMAIL_TO: "off" }), []);
   assert.deepEqual(dougsAddresses({ REVIEW_EMAIL_TO: "a@hubss.com, not an address, b@hubss.com" }), ["a@hubss.com", "b@hubss.com"]);
   assert.equal(replyToAddress({ BLOG_DRAFT_NOTIFY: "vern@example.com, other@example.com" }), "vern@example.com");
   assert.equal(replyToAddress({ REVIEW_REPLY_TO: "reply@example.com", BLOG_DRAFT_NOTIFY: "vern@example.com" }), "reply@example.com");
   assert.equal(replyToAddress({}), undefined);
+});
+check("greets the people it goes to by first name, and a mailbox that isn't a person with Hello", () => {
+  assert.equal(greetingFor(REVIEW_ADDRESSES), "Hi Doug and Cleve,");
+  assert.equal(greetingFor(["doug.bain@hubss.com"]), "Hi Doug,");
+  assert.equal(greetingFor(["doug.bain@hubss.com", "cleve.stordy@hubss.com", "vernon@hubss.com"]), "Hi Doug, Cleve and Vernon,");
+  assert.equal(greetingFor(["info@hubss.com"]), "Hello,");
+  assert.equal(greetingFor(["doug.bain@hubss.com", "x9@hubss.com"]), "Hello,");
+  assert.equal(greetingFor([]), "Hello,");
+  assert.match(dougArticleEmail({ title: "T", link: "https://hubss.com/review/K" }, 1, "Hi Doug,").text, /^Hi Doug,$/m);
+  assert.match(dougDigestEmail([{ title: "a", link: "l" }, { title: "b", link: "l" }], "p").text, /^Hi Doug and Cleve,$/m);
+});
+check("the Studio names the same people the email goes to, and says what the button does", () => {
+  for (const address of REVIEW_ADDRESSES) {
+    const first = address.split(/[.@]/)[0];
+    assert.ok(REVIEWERS.includes(first[0].toUpperCase() + first.slice(1)), `REVIEWERS ("${REVIEWERS}") names ${first}`);
+  }
+  assert.equal(SEND_FOR_REVIEW, "Send for review");
+  assert.equal(IN_REVIEW, "In review");
+  const studio = ["sanity/components/ForReviewInput.tsx", "sanity.config.ts", "sanity/schemas/blogPost.ts", "sanity/job-photos-line.ts", "sanity/schemas/fieldPost.ts", "sanity/structure.ts"]
+    .map((f) => readFileSync(new URL(`../${f}`, import.meta.url), "utf8"))
+    .join("\n");
+  for (const old of ["Send to Doug", "With Doug", "Email Doug now", "View Doug's page", "to Doug for his OK"]) {
+    assert.ok(!studio.includes(`"${old}`) && !studio.includes(`>${old}`) && !studio.includes(`\`${old}`), `the Studio still prints "${old}"`);
+  }
 });
 check("only the production site sends (a preview's key would open nothing)", () => {
   assert.equal(sendsHere({ VERCEL_ENV: "production" }), true);
@@ -466,13 +498,13 @@ console.log("The job photos card (sanity/job-photos-line.ts)");
 check("says which way a job goes, before and after Publish", () => {
   assert.match(jobPhotosLine({ published: false, story: false, article: null, hasArticle: false }), /^Publish it and its photos go out in HUB's social posts/);
   assert.match(jobPhotosLine({ published: true, story: false, article: null, hasArticle: false }), /^Its photos go out in HUB's social posts/);
-  assert.match(jobPhotosLine({ published: false, story: true, article: null, hasArticle: false }), /once you publish it\. It goes to Doug to read before it goes live/);
+  assert.match(jobPhotosLine({ published: false, story: true, article: null, hasArticle: false }), /once you publish it\. It goes to Doug and Cleve to read before it goes live/);
   assert.match(jobPhotosLine({ published: true, story: true, article: null, hasArticle: false }), /in the next few days/);
 });
 check("and how far its article has got", () => {
   const a = (o: Partial<{ live: boolean; draft: boolean; withDoug: boolean }>) => ({ title: "Milton crosswalk", live: false, draft: false, withDoug: false, ...o });
   assert.match(jobPhotosLine({ published: true, story: true, article: a({ draft: true }), hasArticle: true }), /"Milton crosswalk"\. 21e8 is reading it/);
-  assert.match(jobPhotosLine({ published: true, story: true, article: a({ draft: true, withDoug: true }), hasArticle: true }), /on Doug's review page, waiting for his OK/);
+  assert.match(jobPhotosLine({ published: true, story: true, article: a({ draft: true, withDoug: true }), hasArticle: true }), /which is with Doug and Cleve, waiting for their OK\.$/);
   assert.match(jobPhotosLine({ published: true, story: true, article: a({ live: true }), hasArticle: true }), /which is on the site\.$/);
   assert.match(jobPhotosLine({ published: true, story: true, article: a({}), hasArticle: true }), /no longer in Blog posts/);
 });
@@ -588,15 +620,16 @@ function mailbox(ok = true) {
 
 async function storeTests() {
   console.log("notifyDoug against a stand-in Sanity (one email per round)");
-  await checkAsync("sends once, to Doug, with Vern on the reply and the copy, and records it", async () => {
+  await checkAsync("sends once, to Doug and Cleve, with Vern on the reply and the copy, and records it", async () => {
     const db = fakeSanity([article("drafts.blogpost-a")]);
     const box = mailbox();
     assert.equal(await notifyDoug(sanity(db), "blogpost-a", { send: box.send }), "sent");
     assert.equal(box.sent.length, 1);
     const [m] = box.sent;
-    assert.deepEqual(m.to, ["doug.bain@hubss.com"]);
+    assert.deepEqual(m.to, ["doug.bain@hubss.com", "cleve.stordy@hubss.com"]);
     assert.equal(m.replyTo, "vern@example.com");
-    assert.deepEqual(m.bcc, ["vern@example.com"]);
+    assert.deepEqual(m.bcc, ["vernon@hubss.com", "vern@example.com"], "Vern's copy, unseen by the others, once each");
+    assert.match(m.text, /^Hi Doug and Cleve,$/m);
     assert.equal(m.from, DOUG_EMAIL_FROM);
     assert.equal(m.subject, "Ready for your OK: A school crosswalk in Milton");
     assert.ok(m.text.includes(`${reviewLink()}#article-drafts-blogpost-a`), "his page, at the card");

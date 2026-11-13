@@ -2,6 +2,7 @@ import { defineField, defineType } from "sanity";
 import { ImagesIcon } from "@sanity/icons";
 import { copyStyle, galleryImageItem } from "./_shared";
 import JobPhotosInput from "../components/JobPhotosInput";
+import { REVIEWERS } from "../review-words";
 
 /**
  * A field post: photos of a finished job, straight from a phone, with the
@@ -32,7 +33,7 @@ import JobPhotosInput from "../components/JobPhotosInput";
 export default defineType({
   name: "fieldPost",
   title: "Job photos",
-  description: "Photos of a finished job and a line or two about it. Without the story, its photos go out in HUB's social posts. With the story, 21e8 writes the job up as a Projects article for the website, which goes to Doug for his OK. The post itself is not shown on the website.",
+  description: `Photos of a finished job and a line or two about it. Without the story, its photos go out in HUB's social posts. With the story, 21e8 writes the job up as a Projects article for the website, which goes to ${REVIEWERS} for their OK. The post itself is not shown on the website.`,
   type: "document",
   icon: ImagesIcon,
   components: { input: JobPhotosInput },
@@ -88,7 +89,7 @@ export default defineType({
       type: "text",
       rows: 8,
       description:
-        "Leave this empty and the photos go to social only. Fill it in and 21e8 writes the job up as a Projects article for the website and checks it; it goes to Doug for his OK, then on hubss.com, and its social posts follow. A few sentences or a list, in your own words: who the client was (if they can be named), what they needed, what went in and when, who installed it, anything about the design or the colours, and how it has held up. The article says nothing that isn't here, in the line above or on the system's page, so no guesses and no figures you aren't sure of. Leave out customers' phone numbers, emails and home addresses. A homeowner isn't named in the article, only the town.",
+        `Leave this empty and the photos go to social only. Fill it in and 21e8 writes the job up as a Projects article for the website and checks it; it goes to ${REVIEWERS} for their OK, then on hubss.com, and its social posts follow. A few sentences or a list, in your own words: who the client was (if they can be named), what they needed, what went in and when, who installed it, anything about the design or the colours, and how it has held up. The article says nothing that isn't here, in the line above or on the system's page, so no guesses and no figures you aren't sure of. Leave out customers' phone numbers, emails and home addresses. A homeowner isn't named in the article, only the town.`,
       validation: (r) => [r.max(4000).warning("That is a lot: a few sentences or a short list is enough"), copyStyle(r)],
     }),
     defineField({

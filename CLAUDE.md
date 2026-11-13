@@ -961,9 +961,9 @@ nailing the brand voice, he will leave it in our domain." lib/review-first.ts:
 - The review page, /review/<key> (app/review/[key]/page.tsx,
   components/review/ReviewView.tsx, lib/review-page.ts and its .server.ts),
   has two links. **Doug's** shows only what 21e8 has read and put on his
-  page: drafts with `forReview` ("Send to Doug" in Studio, "Doug's review"
+  page: drafts with `forReview` ("Send for review" in Studio, "Review"
   at the top of a blog post since 12 Nov 2026, and Vern's button write the
-  same field; it publishes nothing, and it emails Doug, below) and social
+  same field; it publishes nothing, and it emails Doug and Cleve, below) and social
   groups with a private `review.ok-<hash>` record (reviewTickId; never a
   change to the Sent to Buffer record), plus what is already set to go (a
   scheduled article, a queued post), with the run that will really publish
@@ -1006,24 +1006,38 @@ Vern, 12 Nov: "it's not clear to me how this process works with Doug, I don't
 see 'doug's review page'. it might be ideal if he gets an email when there is a
 blog ready for him to review ... this needs to be failsafe, and a pleasure to
 use from a client side experience too."
-- "Doug's review" is the first thing in a blog post's form, with Scheduled
-  and Goes live at, under "Review and going live" (the `release` fieldset in
+- "Review" is the first thing in a blog post's form, with Scheduled and
+  Goes live at, under "Review and going live" (the `release` fieldset in
   sanity/schemas/blogPost.ts). The switch is a panel
-  (sanity/components/ForReviewInput.tsx): a new article shows **Send to
-  Doug**; sent, it shows "With Doug. Emailed <when>.", **View Doug's page**
-  (his link, from the private record, at the article's card), **Email Doug
-  now** when no email went, and **Take it back**; a live article says the
-  review is for new articles. If the panel ever fails, Sanity's own switch
-  takes its place (QuietBoundary.tsx). The document shows a **With Doug**
-  badge (sanity.config.ts) and the list's line starts "With Doug".
-- Sending emails Doug (lib/review-notify.ts, notifyDoug): "Ready for your OK:
-  <title>", the title and opening line, a **Read the article** button to his
-  page at the article's card (lib/review-anchor.ts), "Reply to this email
-  with OK", signed Vern, From "Vern via hubss.com <noreply@hubss.com>", Reply-To
-  Vern (REVIEW_REPLY_TO, else the first BLOG_DRAFT_NOTIFY), Vern in Bcc. To
-  REVIEW_EMAIL_TO, doug.bain@hubss.com when unset; "off" stops it, and so does
-  REVIEW_FIRST=off. No machinery words (`npm run test:review`). The wording
-  is Vern's to approve (it goes to the client): change it only with his OK.
+  (sanity/components/ForReviewInput.tsx): a new article shows **Send for
+  review**; sent, it shows "In review. Emailed <when>.", **View the review
+  page** (Doug's link, from the private record, at the article's card),
+  **Send the email now** when no email went, and **Take it back**; a live
+  article says the review is for new articles. If the panel ever fails,
+  Sanity's own switch takes its place (QuietBoundary.tsx). The document
+  shows an **In review** badge (sanity.config.ts) and the list's line starts
+  "In review".
+- The names (the evening of 12 Nov 2026; Vern: "instead of 'Send to Doug'
+  button in blog post, say 'set review' or something better,
+  doug.bain@hubss.com, cleve.stordy, and vernon, all get notified"): the
+  button says what it does, not who it goes to (Doug sees the Studio too,
+  and "Send to Doug" read oddly there). The Studio's words are one file,
+  sanity/review-words.ts (REVIEWERS "Doug and Cleve", SEND_FOR_REVIEW,
+  IN_REVIEW); `npm run test:review` keeps REVIEWERS naming the addresses the
+  email goes to and fails on the old labels. Code names keep Doug's
+  (notifyDoug, dougsAddresses, forReview, Vern's "Put on Doug's page").
+- Sending emails Doug and Cleve (lib/review-notify.ts, notifyDoug), one email
+  to both: "Hi Doug and Cleve," (greetingFor, from the addresses' first
+  names; "Hello," for a mailbox that isn't a person), "Ready for your OK:
+  <title>", the title and opening line, a **Read the article** button to the
+  review page at the article's card (lib/review-anchor.ts), "Reply to this
+  email with OK", signed Vern, From "Vern via hubss.com <noreply@hubss.com>",
+  Reply-To Vern (REVIEW_REPLY_TO, else the first BLOG_DRAFT_NOTIFY). To
+  REVIEW_EMAIL_TO, REVIEW_ADDRESSES (doug.bain@ and cleve.stordy@hubss.com)
+  when unset; "off" stops it, and so does REVIEW_FIRST=off. Vern's copy is a
+  Bcc to vernon@hubss.com and the editors (BLOG_DRAFT_NOTIFY), once each. No
+  machinery words (`npm run test:review`). The wording is Vern's to approve
+  (it goes to the client): change it only with his OK.
 - Once per round: a private `review.mailed-<hash>` record per article
   (type reviewMailed, `articleId` the published id) is created before the
   email (a second press gets "busy" or "already sent"), marked sent or failed
@@ -1058,13 +1072,13 @@ use from a client side experience too."
   email has gone, so sending it again is always a new round (Vercel Agent's
   review of PR #141).
 - Publishing switches it off: Studio's Publish (datedPublish) and the daily
-  run's scheduled publish (toPublished), so a live post never reads "With
-  Doug" and its next edit isn't sent by mistake.
+  run's scheduled publish (toPublished), so a live post never reads "In
+  review" and its next edit isn't sent by mistake.
 - Job photos (sanity/components/JobPhotosInput.tsx, words in
   sanity/job-photos-line.ts): a card above the form says what Publish does
   (no story: its photos go out in HUB's social posts; a story: 21e8 writes
-  it up as an article, which goes to Doug) and how far the article has got
-  (with 21e8, with Doug, live), with **Open the article**. The list's line
+  it up as an article, which goes to Doug and Cleve) and how far the article
+  has got (with 21e8, with Doug and Cleve, live), with **Open the article**. The list's line
   says "Photos for social", "Story in: to be written up" or "Written up as an
   article". These words assume Doug reviews first: change them if
   REVIEW_FIRST goes off.

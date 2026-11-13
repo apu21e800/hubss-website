@@ -719,7 +719,7 @@ async function writeArticle(client: SanityClient, doc: ProjectSource, now: Date)
       `Read it: ${studioLink(liveId)}`,
       ...(forReview
         ? [
-            `- Read it in Studio or on your review page${page ? ` (${page})` : ""} and, when it reads right, press "Send to Doug" at the top of the draft (or "Put on Doug's page" on your review page). Doug gets an email with a link to it; his reply comes to you.`,
+            `- Read it in Studio or on your review page${page ? ` (${page})` : ""} and, when it reads right, press "Send for review" at the top of the draft (or "Put on Doug's page" on your review page). Doug and Cleve get an email with a link to it, you a copy; their replies come to you.`,
             `- After his OK, switch "Scheduled" on (it goes live ${when}, or at the next morning's run if that has passed) or press Publish.`,
           ]
         : []),
